@@ -7,12 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9917D9DA1B567E520081A796 /* MainRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9917D9D91B567E520081A796 /* MainRootViewController.swift */; };
+		9917D9DC1B5688850081A796 /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9917D9DB1B5688850081A796 /* MainNavigationController.swift */; };
+		9917D9DE1B569B180081A796 /* TodaysEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9917D9DD1B569B180081A796 /* TodaysEventsViewController.swift */; };
+		9917D9E01B56A7C20081A796 /* ThisWeekViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9917D9DF1B56A7C20081A796 /* ThisWeekViewController.swift */; };
+		9917D9E21B56A94F0081A796 /* MapEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9917D9E11B56A94F0081A796 /* MapEventsViewController.swift */; };
 		995032711B564B4400D792C5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032701B564B4400D792C5 /* AppDelegate.swift */; };
-		995032731B564B4400D792C5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032721B564B4400D792C5 /* ViewController.swift */; };
+		995032731B564B4400D792C5 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032721B564B4400D792C5 /* LoginViewController.swift */; };
 		995032761B564B4400D792C5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 995032741B564B4400D792C5 /* Main.storyboard */; };
 		995032781B564B4400D792C5 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 995032771B564B4400D792C5 /* Images.xcassets */; };
 		9950327B1B564B4400D792C5 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 995032791B564B4400D792C5 /* LaunchScreen.xib */; };
 		995032871B564B4400D792C5 /* YayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032861B564B4400D792C5 /* YayTests.swift */; };
+		995032931B56632700D792C5 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032921B56632700D792C5 /* StartViewController.swift */; };
+		995032951B566F3400D792C5 /* EventFinderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032941B566F3400D792C5 /* EventFinderViewController.swift */; };
+		995032971B5671B900D792C5 /* ChooseLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032961B5671B900D792C5 /* ChooseLocationViewController.swift */; };
+		995032991B56741700D792C5 /* CreateEmailAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032981B56741700D792C5 /* CreateEmailAccountViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -26,16 +35,25 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9917D9D91B567E520081A796 /* MainRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainRootViewController.swift; sourceTree = "<group>"; };
+		9917D9DB1B5688850081A796 /* MainNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainNavigationController.swift; sourceTree = "<group>"; };
+		9917D9DD1B569B180081A796 /* TodaysEventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodaysEventsViewController.swift; sourceTree = "<group>"; };
+		9917D9DF1B56A7C20081A796 /* ThisWeekViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThisWeekViewController.swift; sourceTree = "<group>"; };
+		9917D9E11B56A94F0081A796 /* MapEventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapEventsViewController.swift; sourceTree = "<group>"; };
 		9950326B1B564B4400D792C5 /* Yay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Yay.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9950326F1B564B4400D792C5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		995032701B564B4400D792C5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		995032721B564B4400D792C5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		995032721B564B4400D792C5 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		995032751B564B4400D792C5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		995032771B564B4400D792C5 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		9950327A1B564B4400D792C5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		995032801B564B4400D792C5 /* YayTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = YayTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		995032851B564B4400D792C5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		995032861B564B4400D792C5 /* YayTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YayTests.swift; sourceTree = "<group>"; };
+		995032921B56632700D792C5 /* StartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
+		995032941B566F3400D792C5 /* EventFinderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventFinderViewController.swift; sourceTree = "<group>"; };
+		995032961B5671B900D792C5 /* ChooseLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseLocationViewController.swift; sourceTree = "<group>"; };
+		995032981B56741700D792C5 /* CreateEmailAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateEmailAccountViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,8 +95,9 @@
 		9950326D1B564B4400D792C5 /* Yay */ = {
 			isa = PBXGroup;
 			children = (
+				995032911B5662C300D792C5 /* controllers */,
+				995032901B56595F00D792C5 /* util */,
 				995032701B564B4400D792C5 /* AppDelegate.swift */,
-				995032721B564B4400D792C5 /* ViewController.swift */,
 				995032741B564B4400D792C5 /* Main.storyboard */,
 				995032771B564B4400D792C5 /* Images.xcassets */,
 				995032791B564B4400D792C5 /* LaunchScreen.xib */,
@@ -110,6 +129,30 @@
 				995032851B564B4400D792C5 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		995032901B56595F00D792C5 /* util */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = util;
+			sourceTree = "<group>";
+		};
+		995032911B5662C300D792C5 /* controllers */ = {
+			isa = PBXGroup;
+			children = (
+				995032721B564B4400D792C5 /* LoginViewController.swift */,
+				995032921B56632700D792C5 /* StartViewController.swift */,
+				995032941B566F3400D792C5 /* EventFinderViewController.swift */,
+				995032961B5671B900D792C5 /* ChooseLocationViewController.swift */,
+				995032981B56741700D792C5 /* CreateEmailAccountViewController.swift */,
+				9917D9D91B567E520081A796 /* MainRootViewController.swift */,
+				9917D9DB1B5688850081A796 /* MainNavigationController.swift */,
+				9917D9DD1B569B180081A796 /* TodaysEventsViewController.swift */,
+				9917D9DF1B56A7C20081A796 /* ThisWeekViewController.swift */,
+				9917D9E11B56A94F0081A796 /* MapEventsViewController.swift */,
+			);
+			name = controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -212,8 +255,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				995032731B564B4400D792C5 /* ViewController.swift in Sources */,
+				9917D9DE1B569B180081A796 /* TodaysEventsViewController.swift in Sources */,
+				9917D9DA1B567E520081A796 /* MainRootViewController.swift in Sources */,
+				995032731B564B4400D792C5 /* LoginViewController.swift in Sources */,
 				995032711B564B4400D792C5 /* AppDelegate.swift in Sources */,
+				9917D9E01B56A7C20081A796 /* ThisWeekViewController.swift in Sources */,
+				995032931B56632700D792C5 /* StartViewController.swift in Sources */,
+				995032991B56741700D792C5 /* CreateEmailAccountViewController.swift in Sources */,
+				9917D9E21B56A94F0081A796 /* MapEventsViewController.swift in Sources */,
+				995032971B5671B900D792C5 /* ChooseLocationViewController.swift in Sources */,
+				995032951B566F3400D792C5 /* EventFinderViewController.swift in Sources */,
+				9917D9DC1B5688850081A796 /* MainNavigationController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
