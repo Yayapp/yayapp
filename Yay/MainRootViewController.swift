@@ -15,14 +15,11 @@ class MainRootViewController: UIViewController {
     @IBOutlet weak var segments: UISegmentedControl!
     
     var currentVC:UIViewController!
-    let isMapView = true
+    var isMapView = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-//        segments.addTarget(self, action: "valueChanged:", forControlEvents: UIControlEvents())
-//        let tapGesture:UITapGestureRecognizer = UITapGestureRecognizer() //initWithTarget:self action:@selector(touched:)];
-//        segments.addGestureRecognizer(tapGesture)
         segmentChanged(true)
     }
 
@@ -36,7 +33,16 @@ class MainRootViewController: UIViewController {
         var vc:UIViewController
         switch (segments.selectedSegmentIndex) {
         case 0: vc = self.storyboard!.instantiateViewControllerWithIdentifier("TodaysEventsViewController") as!TodaysEventsViewController
-        case 1: vc = self.storyboard!.instantiateViewControllerWithIdentifier("MapEventsViewController") as!MapEventsViewController
+        case 1:
+            if isMapView {
+                vc = self.storyboard!.instantiateViewControllerWithIdentifier("MapEventsViewController") as!MapEventsViewController
+                segments.setTitle("List", forSegmentAtIndex: 1)
+                isMapView = false
+            } else {
+                vc = self.storyboard!.instantiateViewControllerWithIdentifier("ListEventsViewController") as!ListEventsViewController
+                segments.setTitle("Map", forSegmentAtIndex: 1)
+                isMapView = true
+            }
         case 2: vc = self.storyboard!.instantiateViewControllerWithIdentifier("ThisWeekViewController") as!ThisWeekViewController
             
         default:
