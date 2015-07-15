@@ -157,7 +157,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0640;
-				ORGANIZATIONNAME = "Nerses Zakoyan";
+				ORGANIZATIONNAME = "YAY LLC";
 				TargetAttributes = {
 					9950326A1B564B4400D792C5 = {
 						CreatedOnToolsVersion = 6.4;
@@ -409,6 +409,7 @@
 				9950328C1B564B4400D792C5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9950328D1B564B4400D792C5 /* Build configuration list for PBXNativeTarget "YayTests" */ = {
 			isa = XCConfigurationList;
@@ -417,6 +418,7 @@
 				9950328F1B564B4400D792C5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
