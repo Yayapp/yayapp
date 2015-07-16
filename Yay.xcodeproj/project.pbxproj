@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6B1DA780438C05FDB62B1002 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7105D4583E2520B0628EF8C0 /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		9901A9681B57D81100947DB8 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9901A9671B57D81100947DB8 /* ProfileViewController.swift */; };
 		9917D9DA1B567E520081A796 /* MainRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9917D9D91B567E520081A796 /* MainRootViewController.swift */; };
 		9917D9DC1B5688850081A796 /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9917D9DB1B5688850081A796 /* MainNavigationController.swift */; };
 		9917D9DE1B569B180081A796 /* TodaysEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9917D9DD1B569B180081A796 /* TodaysEventsViewController.swift */; };
@@ -24,6 +26,7 @@
 		995032951B566F3400D792C5 /* EventFinderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032941B566F3400D792C5 /* EventFinderViewController.swift */; };
 		995032971B5671B900D792C5 /* ChooseLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032961B5671B900D792C5 /* ChooseLocationViewController.swift */; };
 		995032991B56741700D792C5 /* CreateEmailAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032981B56741700D792C5 /* CreateEmailAccountViewController.swift */; };
+		99FDE5411B57EB84004CE61B /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FDE5401B57EB84004CE61B /* SettingsTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +40,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		116D70F35B19AD9546398474 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		7105D4583E2520B0628EF8C0 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		87E5039D1AFE3D9446032CF4 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		9901A9641B57D55C00947DB8 /* Yay-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Yay-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
+		9901A9671B57D81100947DB8 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		9917D9D91B567E520081A796 /* MainRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainRootViewController.swift; sourceTree = "<group>"; };
 		9917D9DB1B5688850081A796 /* MainNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainNavigationController.swift; sourceTree = "<group>"; };
 		9917D9DD1B569B180081A796 /* TodaysEventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodaysEventsViewController.swift; sourceTree = "<group>"; };
@@ -58,6 +66,7 @@
 		995032941B566F3400D792C5 /* EventFinderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventFinderViewController.swift; sourceTree = "<group>"; };
 		995032961B5671B900D792C5 /* ChooseLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseLocationViewController.swift; sourceTree = "<group>"; };
 		995032981B56741700D792C5 /* CreateEmailAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateEmailAccountViewController.swift; sourceTree = "<group>"; };
+		99FDE5401B57EB84004CE61B /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +74,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6B1DA780438C05FDB62B1002 /* Pods.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,12 +88,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7F1CE1198C8FF0D6E40770ED /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				116D70F35B19AD9546398474 /* Pods.debug.xcconfig */,
+				87E5039D1AFE3D9446032CF4 /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		995032621B564B4400D792C5 = {
 			isa = PBXGroup;
 			children = (
 				9950326D1B564B4400D792C5 /* Yay */,
 				995032831B564B4400D792C5 /* YayTests */,
 				9950326C1B564B4400D792C5 /* Products */,
+				7F1CE1198C8FF0D6E40770ED /* Pods */,
+				FDEA8E2942B6E4C28740DB53 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -99,6 +120,7 @@
 		9950326D1B564B4400D792C5 /* Yay */ = {
 			isa = PBXGroup;
 			children = (
+				9901A9641B57D55C00947DB8 /* Yay-Bridging-Header.h */,
 				995032911B5662C300D792C5 /* controllers */,
 				995032901B56595F00D792C5 /* util */,
 				995032701B564B4400D792C5 /* AppDelegate.swift */,
@@ -157,8 +179,18 @@
 				9917D9E11B56A94F0081A796 /* MapEventsViewController.swift */,
 				9917D9E31B56B7830081A796 /* ListEventsViewController.swift */,
 				9917D9E51B56BB660081A796 /* EventDetailsViewController.swift */,
+				9901A9671B57D81100947DB8 /* ProfileViewController.swift */,
+				99FDE5401B57EB84004CE61B /* SettingsTableViewController.swift */,
 			);
 			name = controllers;
+			sourceTree = "<group>";
+		};
+		FDEA8E2942B6E4C28740DB53 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7105D4583E2520B0628EF8C0 /* Pods.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -168,9 +200,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9950328A1B564B4400D792C5 /* Build configuration list for PBXNativeTarget "Yay" */;
 			buildPhases = (
+				6115CB11EBC914CC354FCFB9 /* Check Pods Manifest.lock */,
 				995032671B564B4400D792C5 /* Sources */,
 				995032681B564B4400D792C5 /* Frameworks */,
 				995032691B564B4400D792C5 /* Resources */,
+				F8D664512B95833F3E06267E /* Embed Pods Frameworks */,
+				341618644D4D29C684606F4E /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -256,6 +291,54 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		341618644D4D29C684606F4E /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6115CB11EBC914CC354FCFB9 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		F8D664512B95833F3E06267E /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		995032671B564B4400D792C5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -265,12 +348,14 @@
 				9917D9E41B56B7830081A796 /* ListEventsViewController.swift in Sources */,
 				9917D9E61B56BB660081A796 /* EventDetailsViewController.swift in Sources */,
 				9917D9DA1B567E520081A796 /* MainRootViewController.swift in Sources */,
+				9901A9681B57D81100947DB8 /* ProfileViewController.swift in Sources */,
 				995032731B564B4400D792C5 /* LoginViewController.swift in Sources */,
 				995032711B564B4400D792C5 /* AppDelegate.swift in Sources */,
 				9917D9E01B56A7C20081A796 /* ThisWeekViewController.swift in Sources */,
 				995032931B56632700D792C5 /* StartViewController.swift in Sources */,
 				995032991B56741700D792C5 /* CreateEmailAccountViewController.swift in Sources */,
 				9917D9E21B56A94F0081A796 /* MapEventsViewController.swift in Sources */,
+				99FDE5411B57EB84004CE61B /* SettingsTableViewController.swift in Sources */,
 				995032971B5671B900D792C5 /* ChooseLocationViewController.swift in Sources */,
 				995032951B566F3400D792C5 /* EventFinderViewController.swift in Sources */,
 				9917D9DC1B5688850081A796 /* MainNavigationController.swift in Sources */,
@@ -398,21 +483,28 @@
 		};
 		9950328B1B564B4400D792C5 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 116D70F35B19AD9546398474 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = Yay/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Yay-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		9950328C1B564B4400D792C5 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 87E5039D1AFE3D9446032CF4 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = Yay/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Yay-Bridging-Header.h";
 			};
 			name = Release;
 		};

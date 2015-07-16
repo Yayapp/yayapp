@@ -7,9 +7,11 @@
 //
 
 import UIKit
+import MMDrawerController
 
 class MainRootViewController: UIViewController {
 
+    let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
     @IBOutlet weak var container: UIView!
     @IBOutlet weak var segments: UISegmentedControl!
@@ -51,6 +53,14 @@ class MainRootViewController: UIViewController {
         
         
         updateActiveViewController(vc)
+    }
+    
+    @IBAction func navigationDrawer(sender: AnyObject) {
+        appDelegate.centerContainer!.toggleDrawerSide(MMDrawerSide.Left, animated: true, completion: nil)
+    }
+    
+    func showSettings(){
+        performSegueWithIdentifier("settings", sender: nil)
     }
     
     func removeInactiveViewController(inactiveViewController: UIViewController?) {

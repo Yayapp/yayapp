@@ -7,15 +7,35 @@
 //
 
 import UIKit
+import MMDrawerController
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    var centerContainer: MMDrawerController?
+    var centerViewController:MainNavigationController!
+    var leftViewController:ProfileViewController!
+    var mainStoryBoard: UIStoryboard!
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        let rootViewController = self.window!.rootViewController
+        
+        mainStoryBoard = rootViewController?.storyboard
+        
+        centerViewController = mainStoryBoard.instantiateViewControllerWithIdentifier("MainNavigationController") as! MainNavigationController
+        
+        leftViewController = mainStoryBoard.instantiateViewControllerWithIdentifier("ProfileViewController") as! ProfileViewController
+        
+        let navLeft = UINavigationController(rootViewController: leftViewController)
+        
+        centerContainer = MMDrawerController(centerViewController: centerViewController, leftDrawerViewController: navLeft)
+        
+        centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.PanningCenterView
+        centerContainer?.closeDrawerGestureModeMask = MMCloseDrawerGestureMode.PanningCenterView
+        
         return true
     }
 

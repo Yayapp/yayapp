@@ -1,20 +1,22 @@
 //
-//  MainNavigationControllerViewController.swift
+//  ProfileViewController.swift
 //  Yay
 //
-//  Created by Nerses Zakoyan on 15.07.15.
+//  Created by Nerses Zakoyan on 16.07.15.
 //  Copyright (c) 2015 YAY LLC. All rights reserved.
 //
 
 import UIKit
 
-class MainNavigationController: UINavigationController {
+class ProfileViewController: UITableViewController {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
+    @IBOutlet weak var profileTable: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
         // Do any additional setup after loading the view.
     }
 
@@ -22,8 +24,13 @@ class MainNavigationController: UINavigationController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-   
-
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        switch (indexPath.row){
+        default: appDelegate.centerContainer!.closeDrawerAnimated(true, completion: nil)
+            (appDelegate.centerViewController.viewControllers[0] as! MainRootViewController).showSettings()
+        }
+    }
 
     /*
     // MARK: - Navigation
