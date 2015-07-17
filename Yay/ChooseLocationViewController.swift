@@ -7,13 +7,29 @@
 //
 
 import UIKit
+import MapKit
 
-class ChooseLocationViewController: UIViewController {
-
+class ChooseLocationViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate {
+    
+    @IBOutlet var mapView: MKMapView!
+    var lat: CLLocationDegrees?
+    var lon: CLLocationDegrees?
+    let locationManager = CLLocationManager()
+    var delegate: ChooseLocationDelegate!
+    var touchMapCoordinate: CLLocationCoordinate2D!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        locationManager.delegate = self
+        mapView.delegate = self
+        mapView.showsUserLocation = true
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        
+        var longPressRecogniser = UILongPressGestureRecognizer(target: self, action: "handleLongPress:")
+        
+        longPressRecogniser.minimumPressDuration = 1.0
+        mapView.addGestureRecognizer(longPressRecogniser)
     }
 
     override func didReceiveMemoryWarning() {
@@ -21,7 +37,30 @@ class ChooseLocationViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    @IBAction func ok(sender: AnyObject) {
+        if touchMapCoordinate != nil {
+            delegate.madeLocationChoice(touchMapCoordinate)
+        }
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    @IBAction func cancel(sender: AnyObject) {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
 
+    func handleLongPress(getstureRecognizer : UIGestureRecognizer){
+        if getstureRecognizer.state != .Began { return }
+        
+        let touchPoint = getstureRecognizer.locationInView(self.mapView)
+        touchMapCoordinate = mapView.convertPoint(touchPoint, toCoordinateFromView: mapView)
+        
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = touchMapCoordinate
+        
+        mapView.addAnnotation(annotation)
+    }
+    
+    
     /*
     // MARK: - Navigation
 
@@ -32,4 +71,7 @@ class ChooseLocationViewController: UIViewController {
     }
     */
 
+}
+protocol ChooseLocationDelegate : NSObjectProtocol {
+    func madeLocationChoice(coordinates: CLLocationCoordinate2D)
 }

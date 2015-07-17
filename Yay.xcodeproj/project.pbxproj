@@ -27,6 +27,8 @@
 		995032971B5671B900D792C5 /* ChooseLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032961B5671B900D792C5 /* ChooseLocationViewController.swift */; };
 		995032991B56741700D792C5 /* CreateEmailAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032981B56741700D792C5 /* CreateEmailAccountViewController.swift */; };
 		99FDE5411B57EB84004CE61B /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FDE5401B57EB84004CE61B /* SettingsTableViewController.swift */; };
+		99FDE5431B580E7D004CE61B /* CreateEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FDE5421B580E7D004CE61B /* CreateEventViewController.swift */; };
+		99FDE5451B58E972004CE61B /* ChooseDateTimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FDE5441B58E972004CE61B /* ChooseDateTimeViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +69,8 @@
 		995032961B5671B900D792C5 /* ChooseLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseLocationViewController.swift; sourceTree = "<group>"; };
 		995032981B56741700D792C5 /* CreateEmailAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateEmailAccountViewController.swift; sourceTree = "<group>"; };
 		99FDE5401B57EB84004CE61B /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
+		99FDE5421B580E7D004CE61B /* CreateEventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateEventViewController.swift; sourceTree = "<group>"; };
+		99FDE5441B58E972004CE61B /* ChooseDateTimeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseDateTimeViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,6 +185,8 @@
 				9917D9E51B56BB660081A796 /* EventDetailsViewController.swift */,
 				9901A9671B57D81100947DB8 /* ProfileViewController.swift */,
 				99FDE5401B57EB84004CE61B /* SettingsTableViewController.swift */,
+				99FDE5421B580E7D004CE61B /* CreateEventViewController.swift */,
+				99FDE5441B58E972004CE61B /* ChooseDateTimeViewController.swift */,
 			);
 			name = controllers;
 			sourceTree = "<group>";
@@ -345,6 +351,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9917D9DE1B569B180081A796 /* TodaysEventsViewController.swift in Sources */,
+				99FDE5451B58E972004CE61B /* ChooseDateTimeViewController.swift in Sources */,
 				9917D9E41B56B7830081A796 /* ListEventsViewController.swift in Sources */,
 				9917D9E61B56BB660081A796 /* EventDetailsViewController.swift in Sources */,
 				9917D9DA1B567E520081A796 /* MainRootViewController.swift in Sources */,
@@ -359,6 +366,7 @@
 				995032971B5671B900D792C5 /* ChooseLocationViewController.swift in Sources */,
 				995032951B566F3400D792C5 /* EventFinderViewController.swift in Sources */,
 				9917D9DC1B5688850081A796 /* MainNavigationController.swift in Sources */,
+				99FDE5431B580E7D004CE61B /* CreateEventViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
