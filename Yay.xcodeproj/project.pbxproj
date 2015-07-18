@@ -29,6 +29,8 @@
 		99FDE5411B57EB84004CE61B /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FDE5401B57EB84004CE61B /* SettingsTableViewController.swift */; };
 		99FDE5431B580E7D004CE61B /* CreateEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FDE5421B580E7D004CE61B /* CreateEventViewController.swift */; };
 		99FDE5451B58E972004CE61B /* ChooseDateTimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FDE5441B58E972004CE61B /* ChooseDateTimeViewController.swift */; };
+		99FDE5491B5A6F5B004CE61B /* EventPeopleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FDE5481B5A6F5B004CE61B /* EventPeopleTableViewController.swift */; };
+		99FDE54B1B5A74FF004CE61B /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FDE54A1B5A74FF004CE61B /* UserProfileViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +73,8 @@
 		99FDE5401B57EB84004CE61B /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		99FDE5421B580E7D004CE61B /* CreateEventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateEventViewController.swift; sourceTree = "<group>"; };
 		99FDE5441B58E972004CE61B /* ChooseDateTimeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseDateTimeViewController.swift; sourceTree = "<group>"; };
+		99FDE5481B5A6F5B004CE61B /* EventPeopleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventPeopleTableViewController.swift; sourceTree = "<group>"; };
+		99FDE54A1B5A74FF004CE61B /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,6 +191,8 @@
 				99FDE5401B57EB84004CE61B /* SettingsTableViewController.swift */,
 				99FDE5421B580E7D004CE61B /* CreateEventViewController.swift */,
 				99FDE5441B58E972004CE61B /* ChooseDateTimeViewController.swift */,
+				99FDE5481B5A6F5B004CE61B /* EventPeopleTableViewController.swift */,
+				99FDE54A1B5A74FF004CE61B /* UserProfileViewController.swift */,
 			);
 			name = controllers;
 			sourceTree = "<group>";
@@ -352,9 +358,11 @@
 			files = (
 				9917D9DE1B569B180081A796 /* TodaysEventsViewController.swift in Sources */,
 				99FDE5451B58E972004CE61B /* ChooseDateTimeViewController.swift in Sources */,
+				99FDE54B1B5A74FF004CE61B /* UserProfileViewController.swift in Sources */,
 				9917D9E41B56B7830081A796 /* ListEventsViewController.swift in Sources */,
 				9917D9E61B56BB660081A796 /* EventDetailsViewController.swift in Sources */,
 				9917D9DA1B567E520081A796 /* MainRootViewController.swift in Sources */,
+				99FDE5491B5A6F5B004CE61B /* EventPeopleTableViewController.swift in Sources */,
 				9901A9681B57D81100947DB8 /* ProfileViewController.swift in Sources */,
 				995032731B564B4400D792C5 /* LoginViewController.swift in Sources */,
 				995032711B564B4400D792C5 /* AppDelegate.swift in Sources */,

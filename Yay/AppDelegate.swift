@@ -8,6 +8,8 @@
 
 import UIKit
 import MMDrawerController
+import Parse
+import Bolts
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -20,6 +22,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var mainStoryBoard: UIStoryboard!
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        
+        Parse.setApplicationId("u64gQcVtoNGvpS2xq1OniHuumQ5jQJmI3TTbbP1Y",
+            clientKey: "CnO43FxXa3alSR42IeqJOq3pbLDlNwUd9lDH4kkK")
+        
+        PFAnalytics.trackAppOpenedWithLaunchOptions(launchOptions)
         
         let rootViewController = self.window!.rootViewController
         

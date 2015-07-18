@@ -1,18 +1,15 @@
 //
-//  TodaysEventsViewController.swift
+//  UserProfileViewController.swift
 //  Yay
 //
-//  Created by Nerses Zakoyan on 15.07.15.
+//  Created by Nerses Zakoyan on 18.07.15.
 //  Copyright (c) 2015 YAY LLC. All rights reserved.
 //
 
 import UIKit
-import MapKit
 
-class TodaysEventsViewController: UIViewController {
+class UserProfileViewController: UIViewController {
 
-    @IBOutlet var mapView: MKMapView!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -24,8 +21,7 @@ class TodaysEventsViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
- 
-    
+
     /*
     // MARK: - Navigation
 
