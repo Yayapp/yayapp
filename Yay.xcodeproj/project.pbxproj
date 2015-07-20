@@ -26,6 +26,9 @@
 		995032951B566F3400D792C5 /* EventFinderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032941B566F3400D792C5 /* EventFinderViewController.swift */; };
 		995032971B5671B900D792C5 /* ChooseLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032961B5671B900D792C5 /* ChooseLocationViewController.swift */; };
 		995032991B56741700D792C5 /* CreateEmailAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032981B56741700D792C5 /* CreateEmailAccountViewController.swift */; };
+		99EC40F61B5D397A0093E484 /* PatternValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EC40F51B5D397A0093E484 /* PatternValidator.swift */; };
+		99EC40F81B5D90630093E484 /* Prefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EC40F71B5D90630093E484 /* Prefs.swift */; };
+		99EC40FA1B5D916A0093E484 /* LoginType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EC40F91B5D916A0093E484 /* LoginType.swift */; };
 		99FDE5411B57EB84004CE61B /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FDE5401B57EB84004CE61B /* SettingsTableViewController.swift */; };
 		99FDE5431B580E7D004CE61B /* CreateEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FDE5421B580E7D004CE61B /* CreateEventViewController.swift */; };
 		99FDE5451B58E972004CE61B /* ChooseDateTimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FDE5441B58E972004CE61B /* ChooseDateTimeViewController.swift */; };
@@ -70,6 +73,9 @@
 		995032941B566F3400D792C5 /* EventFinderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventFinderViewController.swift; sourceTree = "<group>"; };
 		995032961B5671B900D792C5 /* ChooseLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseLocationViewController.swift; sourceTree = "<group>"; };
 		995032981B56741700D792C5 /* CreateEmailAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateEmailAccountViewController.swift; sourceTree = "<group>"; };
+		99EC40F51B5D397A0093E484 /* PatternValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatternValidator.swift; sourceTree = "<group>"; };
+		99EC40F71B5D90630093E484 /* Prefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Prefs.swift; sourceTree = "<group>"; };
+		99EC40F91B5D916A0093E484 /* LoginType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginType.swift; sourceTree = "<group>"; };
 		99FDE5401B57EB84004CE61B /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		99FDE5421B580E7D004CE61B /* CreateEventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateEventViewController.swift; sourceTree = "<group>"; };
 		99FDE5441B58E972004CE61B /* ChooseDateTimeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseDateTimeViewController.swift; sourceTree = "<group>"; };
@@ -168,6 +174,9 @@
 		995032901B56595F00D792C5 /* util */ = {
 			isa = PBXGroup;
 			children = (
+				99EC40F91B5D916A0093E484 /* LoginType.swift */,
+				99EC40F71B5D90630093E484 /* Prefs.swift */,
+				99EC40F51B5D397A0093E484 /* PatternValidator.swift */,
 			);
 			name = util;
 			sourceTree = "<group>";
@@ -356,7 +365,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				99EC40F81B5D90630093E484 /* Prefs.swift in Sources */,
 				9917D9DE1B569B180081A796 /* TodaysEventsViewController.swift in Sources */,
+				99EC40F61B5D397A0093E484 /* PatternValidator.swift in Sources */,
 				99FDE5451B58E972004CE61B /* ChooseDateTimeViewController.swift in Sources */,
 				99FDE54B1B5A74FF004CE61B /* UserProfileViewController.swift in Sources */,
 				9917D9E41B56B7830081A796 /* ListEventsViewController.swift in Sources */,
@@ -366,6 +377,7 @@
 				9901A9681B57D81100947DB8 /* ProfileViewController.swift in Sources */,
 				995032731B564B4400D792C5 /* LoginViewController.swift in Sources */,
 				995032711B564B4400D792C5 /* AppDelegate.swift in Sources */,
+				99EC40FA1B5D916A0093E484 /* LoginType.swift in Sources */,
 				9917D9E01B56A7C20081A796 /* ThisWeekViewController.swift in Sources */,
 				995032931B56632700D792C5 /* StartViewController.swift in Sources */,
 				995032991B56741700D792C5 /* CreateEmailAccountViewController.swift in Sources */,
