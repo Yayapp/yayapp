@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6B1DA780438C05FDB62B1002 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7105D4583E2520B0628EF8C0 /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		8B1531B71B5F90FB007A2EC7 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1531B61B5F90FB007A2EC7 /* Event.swift */; };
 		9901A9681B57D81100947DB8 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9901A9671B57D81100947DB8 /* ProfileViewController.swift */; };
 		9917D9DA1B567E520081A796 /* MainRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9917D9D91B567E520081A796 /* MainRootViewController.swift */; };
 		9917D9DC1B5688850081A796 /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9917D9DB1B5688850081A796 /* MainNavigationController.swift */; };
@@ -50,6 +51,7 @@
 		116D70F35B19AD9546398474 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		7105D4583E2520B0628EF8C0 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		87E5039D1AFE3D9446032CF4 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		8B1531B61B5F90FB007A2EC7 /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		9901A9641B57D55C00947DB8 /* Yay-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Yay-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		9901A9671B57D81100947DB8 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		9917D9D91B567E520081A796 /* MainRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainRootViewController.swift; sourceTree = "<group>"; };
@@ -111,6 +113,14 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		8B1531B51B5F90E1007A2EC7 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				8B1531B61B5F90FB007A2EC7 /* Event.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		995032621B564B4400D792C5 = {
 			isa = PBXGroup;
 			children = (
@@ -135,6 +145,7 @@
 			isa = PBXGroup;
 			children = (
 				9901A9641B57D55C00947DB8 /* Yay-Bridging-Header.h */,
+				8B1531B51B5F90E1007A2EC7 /* Models */,
 				995032911B5662C300D792C5 /* controllers */,
 				995032901B56595F00D792C5 /* util */,
 				995032701B564B4400D792C5 /* AppDelegate.swift */,
@@ -373,6 +384,7 @@
 				9917D9E41B56B7830081A796 /* ListEventsViewController.swift in Sources */,
 				9917D9E61B56BB660081A796 /* EventDetailsViewController.swift in Sources */,
 				9917D9DA1B567E520081A796 /* MainRootViewController.swift in Sources */,
+				8B1531B71B5F90FB007A2EC7 /* Event.swift in Sources */,
 				99FDE5491B5A6F5B004CE61B /* EventPeopleTableViewController.swift in Sources */,
 				9901A9681B57D81100947DB8 /* ProfileViewController.swift in Sources */,
 				995032731B564B4400D792C5 /* LoginViewController.swift in Sources */,
