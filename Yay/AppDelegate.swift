@@ -17,6 +17,14 @@ import ParseFacebookUtilsV4
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var layerClient: LYRClient!
+ 
+    let LayerAppIDString: NSURL! = NSURL(string: "")
+    let ParseAppIDString: String = "u64gQcVtoNGvpS2xq1OniHuumQ5jQJmI3TTbbP1Y"
+    let ParseClientKeyString: String = "CnO43FxXa3alSR42IeqJOq3pbLDlNwUd9lDH4kkK"
+    
+    //Please note, You must set `LYRConversation *conversation` as a property of the ViewController.
+    var conversation: LYRConversation!
 
     var centerContainer: MMDrawerController?
     var centerViewController:MainNavigationController!
@@ -24,17 +32,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var mainStoryBoard: UIStoryboard!
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        
-        
-        Parse.setApplicationId("u64gQcVtoNGvpS2xq1OniHuumQ5jQJmI3TTbbP1Y",
-            clientKey: "CnO43FxXa3alSR42IeqJOq3pbLDlNwUd9lDH4kkK")
-        
+        setupParse()
+        setupLayer()
         PFAnalytics.trackAppOpenedWithLaunchOptions(launchOptions)
         PFFacebookUtils.initializeFacebookWithApplicationLaunchOptions(launchOptions)
-     
         
-//        PFTwitterUtils.initializeWithConsumerKey("3r0IsGvrLLvchitCYLUcKVqCK",  consumerSecret:"76rgAwOz7YDcBPPhWB9jqLOx8HmkA0WxbGM97tcYrFTU2cMmEO")
-        
+        PFTwitterUtils.initializeWithConsumerKey("3r0IsGvrLLvchitCYLUcKVqCK",  consumerSecret:"76rgAwOz7YDcBPPhWB9jqLOx8HmkA0WxbGM97tcYrFTU2cMmEO")
         
         let rootViewController = self.window!.rootViewController
         
@@ -84,6 +87,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
-
+    func setupParse() {
+        // Enable Parse local data store for user persistence
+        Parse.enableLocalDatastore()
+        Parse.setApplicationId(ParseAppIDString, clientKey: ParseClientKeyString)
+        
+        
+        // Set default ACLs
+        let defaultACL: PFACL = PFACL()
+        defaultACL.setPublicReadAccess(true)
+        PFACL.setDefaultACL(defaultACL, withAccessForCurrentUser: true)
+    }
+    
+    func setupLayer() {
+//        layerClient = LYRClient(appID: LayerAppIDString)
+//        layerClient.autodownloadMIMETypes = NSSet(objects: ATLMIMETypeImagePNG, ATLMIMETypeImageJPEG, ATLMIMETypeImageJPEGPreview, ATLMIMETypeImageGIF, ATLMIMETypeImageGIFPreview, ATLMIMETypeLocation) as Set<NSObject>
+    }
 }
 
