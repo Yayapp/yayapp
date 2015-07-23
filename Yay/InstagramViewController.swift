@@ -40,7 +40,9 @@ class InstagramViewController: UIViewController, UIWebViewDelegate {
                 let urlString:String! = request.URL!.absoluteString
         
                 if let range:Range<String.Index> = urlString.rangeOfString("access_token=") {
+										let token = urlString.substringFromIndex(range.endIndex)
                     let engine = InstagramEngine.sharedEngine()
+										engine.accessToken = token
                     engine.getSelfUserDetailsWithSuccess({
                         (user:InstagramUser?) in
             
