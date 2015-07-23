@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ParseFacebookUtilsV4
 
 class LoginViewController: UIViewController, InstagramDelegate {
 

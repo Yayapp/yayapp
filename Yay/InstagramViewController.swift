@@ -44,8 +44,9 @@ class InstagramViewController: UIViewController, UIWebViewDelegate {
                     engine.getSelfUserDetailsWithSuccess({
                         (user:InstagramUser?) in
             
-                        self.delegate!.instagramSuccess(urlString.substringFromIndex(range.endIndex), user: user!)
+                        
                         self.dismissViewControllerAnimated(true, completion: nil)
+                        self.delegate!.instagramSuccess(urlString.substringFromIndex(range.endIndex), user: user!)
                         },
                         failure: {
                             (error:NSError?, statusCode:Int) in
