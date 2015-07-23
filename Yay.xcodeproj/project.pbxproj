@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		1677766AEFEAD1C56DEBE30B /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E5B76AEF60B1F139C52015C8 /* libPods.a */; };
-		6B1DA780438C05FDB62B1002 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7105D4583E2520B0628EF8C0 /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		8B1531B71B5F90FB007A2EC7 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1531B61B5F90FB007A2EC7 /* Event.swift */; };
 		8B1531B91B5F9A9E007A2EC7 /* ParseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1531B81B5F9A9E007A2EC7 /* ParseHelper.swift */; };
 		8B1531BB1B5FA963007A2EC7 /* CategoryType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1531BA1B5FA963007A2EC7 /* CategoryType.swift */; };
@@ -33,6 +32,7 @@
 		99EC40F61B5D397A0093E484 /* PatternValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EC40F51B5D397A0093E484 /* PatternValidator.swift */; };
 		99EC40F81B5D90630093E484 /* Prefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EC40F71B5D90630093E484 /* Prefs.swift */; };
 		99EC40FA1B5D916A0093E484 /* LoginType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EC40F91B5D916A0093E484 /* LoginType.swift */; };
+		99EC40FC1B5FFB4A0093E484 /* InstagramViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EC40FB1B5FFB490093E484 /* InstagramViewController.swift */; };
 		99FDE5411B57EB84004CE61B /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FDE5401B57EB84004CE61B /* SettingsTableViewController.swift */; };
 		99FDE5431B580E7D004CE61B /* CreateEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FDE5421B580E7D004CE61B /* CreateEventViewController.swift */; };
 		99FDE5451B58E972004CE61B /* ChooseDateTimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FDE5441B58E972004CE61B /* ChooseDateTimeViewController.swift */; };
@@ -82,6 +82,7 @@
 		99EC40F51B5D397A0093E484 /* PatternValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatternValidator.swift; sourceTree = "<group>"; };
 		99EC40F71B5D90630093E484 /* Prefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Prefs.swift; sourceTree = "<group>"; };
 		99EC40F91B5D916A0093E484 /* LoginType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginType.swift; sourceTree = "<group>"; };
+		99EC40FB1B5FFB490093E484 /* InstagramViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstagramViewController.swift; sourceTree = "<group>"; };
 		99FDE5401B57EB84004CE61B /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		99FDE5421B580E7D004CE61B /* CreateEventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateEventViewController.swift; sourceTree = "<group>"; };
 		99FDE5441B58E972004CE61B /* ChooseDateTimeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseDateTimeViewController.swift; sourceTree = "<group>"; };
@@ -220,6 +221,7 @@
 				99FDE5441B58E972004CE61B /* ChooseDateTimeViewController.swift */,
 				99FDE5481B5A6F5B004CE61B /* EventPeopleTableViewController.swift */,
 				99FDE54A1B5A74FF004CE61B /* UserProfileViewController.swift */,
+				99EC40FB1B5FFB490093E484 /* InstagramViewController.swift */,
 			);
 			name = controllers;
 			sourceTree = "<group>";
@@ -368,6 +370,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				99EC40F81B5D90630093E484 /* Prefs.swift in Sources */,
+				99EC40FC1B5FFB4A0093E484 /* InstagramViewController.swift in Sources */,
 				9917D9DE1B569B180081A796 /* TodaysEventsViewController.swift in Sources */,
 				99EC40F61B5D397A0093E484 /* PatternValidator.swift in Sources */,
 				99FDE5451B58E972004CE61B /* ChooseDateTimeViewController.swift in Sources */,

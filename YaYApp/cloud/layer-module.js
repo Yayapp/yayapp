@@ -1,4 +1,4 @@
-var signer = require("cloud/layer-parse-module/node_modules/jsrsasign/lib/jsrsasign.js");
+var signer = require("cloud/node_modules/jsrsasign/lib/jsrsasign.js");
 
 var layerProviderID = '';
 var layerKeyID = '';

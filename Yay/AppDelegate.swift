@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var layerClient: LYRClient!
  
-    let LayerAppIDString: NSURL! = NSURL(string: "")
+    let LayerAppIDString: NSURL! = NSURL(string: "layer:///apps/staging/325d25d4-305a-11e5-98db-7ceb2e015ed0")
     let ParseAppIDString: String = "u64gQcVtoNGvpS2xq1OniHuumQ5jQJmI3TTbbP1Y"
     let ParseClientKeyString: String = "CnO43FxXa3alSR42IeqJOq3pbLDlNwUd9lDH4kkK"
     
@@ -100,8 +100,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func setupLayer() {
-//        layerClient = LYRClient(appID: LayerAppIDString)
-//        layerClient.autodownloadMIMETypes = NSSet(objects: ATLMIMETypeImagePNG, ATLMIMETypeImageJPEG, ATLMIMETypeImageJPEGPreview, ATLMIMETypeImageGIF, ATLMIMETypeImageGIFPreview, ATLMIMETypeLocation) as Set<NSObject>
+        layerClient = LYRClient(appID: LayerAppIDString)
+        layerClient.autodownloadMIMETypes = NSSet(objects: ATLMIMETypeImagePNG, ATLMIMETypeImageJPEG, ATLMIMETypeImageJPEGPreview, ATLMIMETypeImageGIF, ATLMIMETypeImageGIFPreview, ATLMIMETypeLocation) as Set<NSObject>
+    }
+    
+    func authenticateInLayer(){
+        layerClient.requestAuthenticationNonceWithCompletion ({
+            (nonce:String?, error) in
+                        
+            // Upon reciept of nonce, post to your backend and acquire a Layer identityToken
+            if (nonce != nil) {
+                let user:PFUser = PFUser.currentUser()!
+                let userID:String = user.objectId!
+                var result:PFIdResultBlock? = nil
+                PFCloud.callFunctionInBackground("generateToken", withParameters:["nonce" : nonce!, "userID" : userID], block:{
+                    (token:AnyObject?, error:NSError?) in
+                    
+                    if (error != nil) {
+                        print(String(format: "Parse Cloud function failed to be called to generate token with error: %@", error!));
+                    }
+                    else{
+                        // Send the Identity Token to Layer to authenticate the user
+                        self.layerClient.authenticateWithIdentityToken(token as! String, completion:{
+                            (authenticatedUserID:String!, error:NSError?) in
+                            if (error != nil) {
+                                print(String(format: "Parse User failed to authenticate with token with error: %@", error!));
+                            }
+                            else{
+                                print("Parse User authenticated with Layer Identity Token");
+                            }
+                        })
+                    }
+                    
+                })
+            }
+        })
     }
 }
 

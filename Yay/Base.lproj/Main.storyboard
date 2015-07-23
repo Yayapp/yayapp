@@ -138,7 +138,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="zSP-ZQ-F6n" kind="show" id="ukd-ZU-iPd"/>
+                                    <action selector="instagramLogin:" destination="w48-1L-I7x" eventType="touchUpInside" id="dFl-BT-9nw"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Ql-3C-exM">
@@ -199,6 +199,40 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="F4i-3s-FUX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="713" y="318"/>
+        </scene>
+        <!--InstagramViewController-->
+        <scene sceneID="p4v-2T-Cky">
+            <objects>
+                <viewController storyboardIdentifier="InstagramViewController" title="InstagramViewController" id="PCO-f2-J8E" customClass="InstagramViewController" customModule="Yay" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="cmY-oG-6z8"/>
+                        <viewControllerLayoutGuide type="bottom" id="pGr-fl-sSs"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="aoP-Kr-vYa">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3az-9c-eR8">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </webView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="3az-9c-eR8" firstAttribute="top" secondItem="aoP-Kr-vYa" secondAttribute="top" id="YqQ-0t-iap"/>
+                            <constraint firstItem="3az-9c-eR8" firstAttribute="bottom" secondItem="pGr-fl-sSs" secondAttribute="top" id="dbB-06-jKg"/>
+                            <constraint firstItem="3az-9c-eR8" firstAttribute="leading" secondItem="aoP-Kr-vYa" secondAttribute="leading" id="dn8-TK-o6L"/>
+                            <constraint firstAttribute="trailing" secondItem="3az-9c-eR8" secondAttribute="trailing" id="ykB-NN-jQb"/>
+                        </constraints>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
+                    <connections>
+                        <outlet property="webView" destination="3az-9c-eR8" id="cEU-RH-YXb"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="KoK-UF-ucL" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="713" y="856"/>
         </scene>
         <!--Create Email Account View Controller-->
         <scene sceneID="REu-xn-OR8">
@@ -368,7 +402,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ojs-gv-DaP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="338" y="1115"/>
+            <point key="canvasLocation" x="338" y="1398"/>
         </scene>
         <!--Event Finder View Controller-->
         <scene sceneID="L7s-UX-3aJ">
@@ -1268,7 +1302,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R1V-nl-ep7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="690" y="1115"/>
+            <point key="canvasLocation" x="713" y="1398"/>
         </scene>
         <!--EventDetailsViewController-->
         <scene sceneID="cHW-R9-mPy">
@@ -1624,8 +1658,8 @@
         <image name="tutorial_background" width="848" height="552"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="8xc-xQ-cem"/>
-        <segue reference="dLE-is-Chf"/>
         <segue reference="EZX-TL-Xjb"/>
+        <segue reference="dLE-is-Chf"/>
+        <segue reference="Hwq-uS-NwG"/>
     </inferredMetricsTieBreakers>
 </document>

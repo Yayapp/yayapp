@@ -11,6 +11,7 @@ import UIKit
 
 class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate {
 
+    let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
     var animateDistance:CGFloat = 0.0
     
@@ -59,6 +60,7 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate {
                 alert.addButtonWithTitle("OK")
                 alert.show()
             } else {
+                self.appDelegate.authenticateInLayer()
                 self.performSegueWithIdentifier("proceed", sender: nil)
             }
         }
@@ -70,6 +72,7 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate {
             PFUser.logInWithUsernameInBackground(email.text, password:password1.text) {
                 (user: PFUser?, error: NSError?) -> Void in
                 if user != nil {
+                    self.appDelegate.authenticateInLayer()
                     Prefs.storeSessionId(user!.sessionToken!)
                     Prefs.storeLoginType(LoginType.FACEBOOK)
                     self.performSegueWithIdentifier("proceed", sender: nil)
