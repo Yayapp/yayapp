@@ -3,15 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "mark_flat_location_pointer_map_pointer.png"
+      "filename" : "mapicons_artsculture.png"
     },
     {
       "idiom" : "universal",
-      "scale" : "2x"
+      "scale" : "2x",
+      "filename" : "mapicons_artsculture_x2.png"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x"
+      "scale" : "3x",
+      "filename" : "mapicons_artsculture_x3.png"
     }
   ],
   "info" : {
