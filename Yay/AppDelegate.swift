@@ -7,11 +7,6 @@
 //
 
 import UIKit
-import MMDrawerController
-import Parse
-import Bolts
-import ParseFacebookUtilsV4
-
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
