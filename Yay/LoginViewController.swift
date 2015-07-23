@@ -86,7 +86,7 @@ class LoginViewController: UIViewController, InstagramDelegate {
                 self.appDelegate.authenticateInLayer()
                 Prefs.storeSessionId(pfuser!.sessionToken!)
                 Prefs.storeLoginType(LoginType.INSTAGRAM)
-                self.self.performSegueWithIdentifier("proceed", sender: nil)
+                self.performSegueWithIdentifier("proceed", sender: nil)
             } else {
                 if(error!.code == 101) {
                     var pfuser = PFUser()
