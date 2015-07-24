@@ -9,25 +9,26 @@
 import UIKit
 import MapKit
 
-class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLocationDelegate, UIPopoverPresentationControllerDelegate, UITextFieldDelegate {
+class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLocationDelegate, UIPopoverPresentationControllerDelegate, UITextFieldDelegate, UITextViewDelegate {
 
     var svos: CGPoint!
     var animateDistance:CGFloat = 0.0
     
     
+    @IBOutlet weak var limit: UITextField!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var guestsLimitTextField: UITextField!
     @IBOutlet weak var dateTimeButton: UIButton!
     @IBOutlet weak var location: UILabel!
     
     @IBOutlet weak var name: UITextField!
-    @IBOutlet weak var descr: UITextField!
+    @IBOutlet weak var descr: UITextView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         descr.delegate = self
         name.delegate = self
-        guestsLimitTextField.delegate = self
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -145,8 +146,23 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
         static let LANDSCAPE_KEYBOARD_HEIGHT : CGFloat = 162;
     }
     
-    
     func textFieldDidBeginEditing(textField: UITextField) {
+        textDidBeginEditing(textField)
+    }
+    
+    func textFieldDidEndEditing(textField: UITextField) {
+        textDidEndEditing()
+    }
+    
+    func textViewDidBeginEditing(textField: UITextView) {
+        textDidBeginEditing(textField)
+    }
+    
+    func textViewdDidEndEditing(textField: UITextView) {
+        textDidEndEditing()
+    }
+    
+    func textDidBeginEditing(textField: UIView) {
         let textFieldRect : CGRect = self.view.window!.convertRect(textField.bounds, fromView: textField)
         let viewRect : CGRect = self.view.window!.convertRect(self.view.bounds, fromView: self.view)
         
@@ -181,7 +197,7 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
     }
     
     
-    func textFieldDidEndEditing(textField: UITextField) {
+    func textDidEndEditing() {
         var viewFrame : CGRect = self.view.frame
         viewFrame.origin.y += animateDistance
         
@@ -196,6 +212,10 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
         
     }
     func textFieldShouldReturn(textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
+    }
+    func textViewShouldReturn(textField: UITextView) -> Bool {
         self.view.endEditing(true)
         return false
     }
