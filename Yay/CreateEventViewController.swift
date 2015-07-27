@@ -11,15 +11,17 @@ import MapKit
 
 class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLocationDelegate, UIPopoverPresentationControllerDelegate, UITextFieldDelegate, UITextViewDelegate {
 
-    var svos: CGPoint!
-    var animateDistance:CGFloat = 0.0
+    var longitude: Double?
+    var latitude: Double?
+    var chosenDate:NSDate?
     
+    var animateDistance:CGFloat = 0.0
+    var limitInt:Int=1
     
     @IBOutlet weak var limit: UITextField!
     @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var guestsLimitTextField: UITextField!
     @IBOutlet weak var dateTimeButton: UIButton!
-    @IBOutlet weak var location: UILabel!
+    @IBOutlet weak var location: UIButton!
     
     @IBOutlet weak var name: UITextField!
     @IBOutlet weak var descr: UITextView!
@@ -61,6 +63,7 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
     }
     
     func madeDateTimeChoice(date: NSDate){
+        chosenDate = date
         let formatter = NSDateFormatter()
         formatter.dateStyle = NSDateFormatterStyle.LongStyle
         formatter.timeStyle = .MediumStyle
@@ -70,6 +73,8 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
     }
     
     func madeLocationChoice(coordinates: CLLocationCoordinate2D){
+        latitude = coordinates.latitude
+        longitude = coordinates.longitude
         getLocationString(coordinates)
     }
 
@@ -96,7 +101,7 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
                 cityCountry.appendString(country)
             }
             if cityCountry.length>0 {
-                self.location.text=cityCountry as String
+                self.location.setTitle(cityCountry as String, forState: .Normal)
             }
         })
         
@@ -121,21 +126,6 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
         super.viewWillDisappear(animated)
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
-    
-    
-//    @IBAction func textFieldDidBeginEditing(textField: UITextField)
-//    {
-//        textField.resignFirstResponder()
-//        svos = scrollView.contentOffset;
-//        var pt: CGPoint!
-//        var rc:CGRect! = textField.bounds
-//        rc = textField.convertRect(rc, toView: scrollView)
-//        pt = rc.origin;
-//        pt.x = 0;
-//        pt.y = 300;
-//        //        rc.size.height = 400;
-//        scrollView.setContentOffset(pt, animated:true)
-//    }
    
     
     struct MoveKeyboard {
@@ -219,10 +209,28 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
         self.view.endEditing(true)
         return false
     }
-//    func textFieldDidEndEditing(textField: UITextField) {
-//        
-//        self.scrollView .setContentOffset(CGPointMake(0, 0), animated: true)
-//        self .viewDidLayoutSubviews()
-//    }
 
+    @IBAction func plusLimit(sender: AnyObject) {
+        if limitInt < 5 {
+            limitInt++
+            limit.text = "\(limitInt)"
+        }
+    }
+    @IBAction func minusLimit(sender: AnyObject) {
+        if limitInt > 1 {
+            limitInt--
+            limit.text = "\(limitInt)"
+        }
+    }
+    
+    @IBAction func cancel(sender: AnyObject) {
+        navigationController?.popViewControllerAnimated(true)
+    }
+
+    @IBAction func create(sender: AnyObject) {
+        if name.text.isEmpty {
+            MessageTo
+        }
+    }
+    
 }

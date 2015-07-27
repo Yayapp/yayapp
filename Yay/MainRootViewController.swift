@@ -12,15 +12,24 @@ class MainRootViewController: UIViewController {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
+    @IBOutlet weak var changeViewTypeButton: UIButton!
     @IBOutlet weak var container: UIView!
     @IBOutlet weak var segments: UISegmentedControl!
     
+    @IBOutlet weak var typeButton: UIButton!
     var currentVC:UIViewController!
     var isMapView = true
+    var eventsData:[Event]!=[]
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        let font = UIFont.boldSystemFontOfSize(20.0)
+        segments.setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.whiteColor(),NSFontAttributeName:font], forState: UIControlState.Selected)
+        segments.setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.whiteColor()], forState: UIControlState.Normal)
+        
+        
+//        segments.setBackgroundImage(UIImage(named: "submenu_highlightcolor"), forState: UIControlState.Selected , barMetrics: .Default)
+//        typeButton.setImage(UIImage(named: "submenu_highlightcolor"), forState: UIControlState.Normal)
         segmentChanged(true)
     }
 
@@ -31,25 +40,27 @@ class MainRootViewController: UIViewController {
     
 
     @IBAction func segmentChanged(sender: AnyObject) {
-        var vc:UIViewController
-        switch (segments.selectedSegmentIndex) {
-        case 0: vc = self.storyboard!.instantiateViewControllerWithIdentifier("TodaysEventsViewController") as!TodaysEventsViewController
-        case 1:
-            if isMapView {
-                vc = self.storyboard!.instantiateViewControllerWithIdentifier("MapEventsViewController") as!MapEventsViewController
-                segments.setTitle("List", forSegmentAtIndex: 1)
-                isMapView = false
-            } else {
-                vc = self.storyboard!.instantiateViewControllerWithIdentifier("ListEventsViewController") as!ListEventsViewController
-                segments.setTitle("Map", forSegmentAtIndex: 1)
-                isMapView = true
-            }
-        case 2: vc = self.storyboard!.instantiateViewControllerWithIdentifier("ThisWeekViewController") as!ThisWeekViewController
-            
-        default:
-            vc = self.storyboard!.instantiateViewControllerWithIdentifier("TodaysEventsViewController") as!TodaysEventsViewController
-            }
-        
+        var vc:EventsViewController
+        if (isMapView) {
+            vc = self.storyboard!.instantiateViewControllerWithIdentifier("MapEventsViewController") as! MapEventsViewController
+        } else {
+            vc = self.storyboard!.instantiateViewControllerWithIdentifier("ListEventsViewController") as! ListEventsViewController
+        }
+        if(segments.selectedSegmentIndex == 0) {
+            ParseHelper.getTodayEvents({
+                (eventsList:[Event]?, error:NSError?) in
+                if(error == nil) {
+                    vc.reloadAll(eventsList!)
+                }
+            })
+        } else {
+            ParseHelper.getThisWeekEvents({
+                (eventsList:[Event]?, error:NSError?) in
+                if(error == nil) {
+                    vc.reloadAll(eventsList!)
+                }
+            })
+        }
         
         updateActiveViewController(vc)
     }
@@ -60,6 +71,12 @@ class MainRootViewController: UIViewController {
     
     func showSettings(){
         performSegueWithIdentifier("settings", sender: nil)
+    }
+    
+    @IBAction func changeViewType(sender: AnyObject) {
+        changeViewTypeButton.tag = isMapView ? 1 : 0
+        isMapView = changeViewTypeButton.tag == 0
+        segmentChanged(true)
     }
     
     func removeInactiveViewController(inactiveViewController: UIViewController?) {

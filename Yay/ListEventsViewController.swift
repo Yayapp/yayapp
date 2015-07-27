@@ -8,12 +8,21 @@
 
 import UIKit
 
-class ListEventsViewController: UIViewController {
+class ListEventsViewController: EventsViewController, UITableViewDataSource, UITableViewDelegate {
 
+    
+    let dateFormatter = NSDateFormatter()
+    
+    
+    @IBOutlet weak var events: UITableView!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        dateFormatter.dateFormat = "EEE dd MMM 'at' H:mm"
+        events.delegate = self
+        events.dataSource = self
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -32,4 +41,37 @@ class ListEventsViewController: UIViewController {
     }
     */
 
+    override func reloadAll(eventsList:[Event]) {
+        eventsData = eventsList
+        events.reloadData()
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return eventsData.count
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
+        var cell = events.dequeueReusableCellWithIdentifier("Cell") as! EventsTableViewCell
+        let event:Event! = eventsData[indexPath.row]
+        
+        cell.title.text = event.name
+        
+//        cell.location.text = event.address
+        cell.date.text = dateFormatter.stringFromDate(event.startDate)
+        cell.howFar.text = "8.75km"
+        
+        cell.picture.file = event.photo
+        cell.picture.loadInBackground()
+        
+        return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let eventDetailsViewController = self.storyboard!.instantiateViewControllerWithIdentifier("EventDetailsViewController") as! EventDetailsViewController
+        eventDetailsViewController.event = eventsData[indexPath.row]
+        
+        navigationController?.pushViewController(eventDetailsViewController, animated: true)
+    }
+    
 }

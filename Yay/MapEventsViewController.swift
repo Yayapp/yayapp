@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class MapEventsViewController: UIViewController {
+class MapEventsViewController: EventsViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +22,9 @@ class MapEventsViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    override func reloadAll(events:[Event]) {
+        eventsData = events
+    }
 
     /*
     // MARK: - Navigation

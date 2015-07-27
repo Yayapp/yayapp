@@ -14,8 +14,6 @@
 		9901A9681B57D81100947DB8 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9901A9671B57D81100947DB8 /* ProfileViewController.swift */; };
 		9917D9DA1B567E520081A796 /* MainRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9917D9D91B567E520081A796 /* MainRootViewController.swift */; };
 		9917D9DC1B5688850081A796 /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9917D9DB1B5688850081A796 /* MainNavigationController.swift */; };
-		9917D9DE1B569B180081A796 /* TodaysEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9917D9DD1B569B180081A796 /* TodaysEventsViewController.swift */; };
-		9917D9E01B56A7C20081A796 /* ThisWeekViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9917D9DF1B56A7C20081A796 /* ThisWeekViewController.swift */; };
 		9917D9E21B56A94F0081A796 /* MapEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9917D9E11B56A94F0081A796 /* MapEventsViewController.swift */; };
 		9917D9E41B56B7830081A796 /* ListEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9917D9E31B56B7830081A796 /* ListEventsViewController.swift */; };
 		9917D9E61B56BB660081A796 /* EventDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9917D9E51B56BB660081A796 /* EventDetailsViewController.swift */; };
@@ -30,6 +28,8 @@
 		995032951B566F3400D792C5 /* EventFinderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032941B566F3400D792C5 /* EventFinderViewController.swift */; };
 		995032971B5671B900D792C5 /* ChooseLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032961B5671B900D792C5 /* ChooseLocationViewController.swift */; };
 		995032991B56741700D792C5 /* CreateEmailAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032981B56741700D792C5 /* CreateEmailAccountViewController.swift */; };
+		997C23881B6667F10070DDB2 /* EventsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997C23871B6667F10070DDB2 /* EventsTableViewCell.swift */; };
+		997C238B1B668CFB0070DDB2 /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997C238A1B668CFB0070DDB2 /* EventsViewController.swift */; };
 		99EC40F61B5D397A0093E484 /* PatternValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EC40F51B5D397A0093E484 /* PatternValidator.swift */; };
 		99EC40F81B5D90630093E484 /* Prefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EC40F71B5D90630093E484 /* Prefs.swift */; };
 		99EC40FA1B5D916A0093E484 /* LoginType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EC40F91B5D916A0093E484 /* LoginType.swift */; };
@@ -61,8 +61,6 @@
 		9901A9671B57D81100947DB8 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		9917D9D91B567E520081A796 /* MainRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainRootViewController.swift; sourceTree = "<group>"; };
 		9917D9DB1B5688850081A796 /* MainNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainNavigationController.swift; sourceTree = "<group>"; };
-		9917D9DD1B569B180081A796 /* TodaysEventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodaysEventsViewController.swift; sourceTree = "<group>"; };
-		9917D9DF1B56A7C20081A796 /* ThisWeekViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThisWeekViewController.swift; sourceTree = "<group>"; };
 		9917D9E11B56A94F0081A796 /* MapEventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapEventsViewController.swift; sourceTree = "<group>"; };
 		9917D9E31B56B7830081A796 /* ListEventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListEventsViewController.swift; sourceTree = "<group>"; };
 		9917D9E51B56BB660081A796 /* EventDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDetailsViewController.swift; sourceTree = "<group>"; };
@@ -81,6 +79,8 @@
 		995032941B566F3400D792C5 /* EventFinderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventFinderViewController.swift; sourceTree = "<group>"; };
 		995032961B5671B900D792C5 /* ChooseLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseLocationViewController.swift; sourceTree = "<group>"; };
 		995032981B56741700D792C5 /* CreateEmailAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateEmailAccountViewController.swift; sourceTree = "<group>"; };
+		997C23871B6667F10070DDB2 /* EventsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsTableViewCell.swift; sourceTree = "<group>"; };
+		997C238A1B668CFB0070DDB2 /* EventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
 		99EC40F51B5D397A0093E484 /* PatternValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatternValidator.swift; sourceTree = "<group>"; };
 		99EC40F71B5D90630093E484 /* Prefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Prefs.swift; sourceTree = "<group>"; };
 		99EC40F91B5D916A0093E484 /* LoginType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginType.swift; sourceTree = "<group>"; };
@@ -153,6 +153,7 @@
 			isa = PBXGroup;
 			children = (
 				9901A9641B57D55C00947DB8 /* Yay-Bridging-Header.h */,
+				997C23891B6668000070DDB2 /* views */,
 				8B1531B51B5F90E1007A2EC7 /* Models */,
 				995032911B5662C300D792C5 /* controllers */,
 				995032901B56595F00D792C5 /* util */,
@@ -212,10 +213,9 @@
 				995032981B56741700D792C5 /* CreateEmailAccountViewController.swift */,
 				9917D9D91B567E520081A796 /* MainRootViewController.swift */,
 				9917D9DB1B5688850081A796 /* MainNavigationController.swift */,
-				9917D9DD1B569B180081A796 /* TodaysEventsViewController.swift */,
-				9917D9DF1B56A7C20081A796 /* ThisWeekViewController.swift */,
 				9917D9E11B56A94F0081A796 /* MapEventsViewController.swift */,
 				9917D9E31B56B7830081A796 /* ListEventsViewController.swift */,
+				997C238A1B668CFB0070DDB2 /* EventsViewController.swift */,
 				9917D9E51B56BB660081A796 /* EventDetailsViewController.swift */,
 				9901A9671B57D81100947DB8 /* ProfileViewController.swift */,
 				99FDE5401B57EB84004CE61B /* SettingsTableViewController.swift */,
@@ -227,6 +227,14 @@
 				992C0E991B6166BF007B06BD /* ImportContactsViewController.swift */,
 			);
 			name = controllers;
+			sourceTree = "<group>";
+		};
+		997C23891B6668000070DDB2 /* views */ = {
+			isa = PBXGroup;
+			children = (
+				997C23871B6667F10070DDB2 /* EventsTableViewCell.swift */,
+			);
+			name = views;
 			sourceTree = "<group>";
 		};
 		FDEA8E2942B6E4C28740DB53 /* Frameworks */ = {
@@ -374,12 +382,13 @@
 			files = (
 				99EC40F81B5D90630093E484 /* Prefs.swift in Sources */,
 				99EC40FC1B5FFB4A0093E484 /* InstagramViewController.swift in Sources */,
-				9917D9DE1B569B180081A796 /* TodaysEventsViewController.swift in Sources */,
+				997C238B1B668CFB0070DDB2 /* EventsViewController.swift in Sources */,
 				99EC40F61B5D397A0093E484 /* PatternValidator.swift in Sources */,
 				99FDE5451B58E972004CE61B /* ChooseDateTimeViewController.swift in Sources */,
 				99FDE54B1B5A74FF004CE61B /* UserProfileViewController.swift in Sources */,
 				9917D9E41B56B7830081A796 /* ListEventsViewController.swift in Sources */,
 				9917D9E61B56BB660081A796 /* EventDetailsViewController.swift in Sources */,
+				997C23881B6667F10070DDB2 /* EventsTableViewCell.swift in Sources */,
 				9917D9DA1B567E520081A796 /* MainRootViewController.swift in Sources */,
 				8B1531B71B5F90FB007A2EC7 /* Event.swift in Sources */,
 				99FDE5491B5A6F5B004CE61B /* EventPeopleTableViewController.swift in Sources */,
@@ -387,7 +396,6 @@
 				995032731B564B4400D792C5 /* LoginViewController.swift in Sources */,
 				995032711B564B4400D792C5 /* AppDelegate.swift in Sources */,
 				99EC40FA1B5D916A0093E484 /* LoginType.swift in Sources */,
-				9917D9E01B56A7C20081A796 /* ThisWeekViewController.swift in Sources */,
 				995032931B56632700D792C5 /* StartViewController.swift in Sources */,
 				995032991B56741700D792C5 /* CreateEmailAccountViewController.swift in Sources */,
 				9917D9E21B56A94F0081A796 /* MapEventsViewController.swift in Sources */,

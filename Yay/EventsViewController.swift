@@ -1,17 +1,16 @@
 //
-//  TodaysEventsViewController.swift
+//  EventsViewController.swift
 //  Yay
 //
-//  Created by Nerses Zakoyan on 15.07.15.
+//  Created by Nerses Zakoyan on 27.07.15.
 //  Copyright (c) 2015 YAY LLC. All rights reserved.
 //
 
 import UIKit
-import MapKit
 
-class TodaysEventsViewController: UIViewController {
+class EventsViewController: UIViewController {
 
-    @IBOutlet var mapView: MKMapView!
+    var eventsData:[Event]=[]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,8 +23,9 @@ class TodaysEventsViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
- 
-    
+    func reloadAll(events:[Event]) {
+        
+    }
     /*
     // MARK: - Navigation
 
