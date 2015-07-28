@@ -23,7 +23,7 @@ class Event : PFObject, PFSubclassing {
 		return "Event"
 	}
 	
-	@NSManaged var category: String
+	@NSManaged var category: Category
 	@NSManaged var name: String
 	@NSManaged var owner: PFUser
 	@NSManaged var location: PFGeoPoint

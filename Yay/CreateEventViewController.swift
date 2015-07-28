@@ -229,7 +229,21 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
 
     @IBAction func create(sender: AnyObject) {
         if name.text.isEmpty {
-            MessageTo
+            MessageToUser.showDefaultErrorMessage("Please enter name")
+        } else if longitude == nil || latitude == nil {
+            MessageToUser.showDefaultErrorMessage("Please choose location")
+        } else if chosenDate == nil {
+            MessageToUser.showDefaultErrorMessage("Please choose date")
+        } else if descr.text.isEmpty {
+            MessageToUser.showDefaultErrorMessage("Please enter description")
+        } else {
+            var event = Event()
+            event.name = name.text
+            event.summary = descr.text
+//            event.category = CategoryType.DANCING
+            event.startDate = chosenDate!
+            event.location = PFGeoPoint(latitude: latitude!, longitude: longitude!)
+            ParseHelper.saveEvent(event)
         }
     }
     

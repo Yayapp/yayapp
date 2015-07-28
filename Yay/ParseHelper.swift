@@ -86,7 +86,7 @@ class ParseHelper {
 		var event = Event()
 		event.name = "test"
 		event.summary = "test description"
-		event.category = CategoryType.DANCING
+//		event.category = CategoryType.DANCING
 		event.startDate = NSDate()
 		
 		ParseHelper.saveEvent(event)
