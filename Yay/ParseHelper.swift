@@ -9,6 +9,8 @@
 import Foundation
 
 typealias EventsResultBlock = ([Event]?, NSError?) -> ()
+typealias CategoriesResultBlock = ([Category]?, NSError?) -> ()
+typealias EventPhotosResultBlock = ([EventPhoto]?, NSError?) -> ()
 
 class ParseHelper {
 	
@@ -80,13 +82,49 @@ class ParseHelper {
 	class func saveEvent (event: Event) {
 		event.saveInBackground();
 	}
+    
+    class func getCategories(block:CategoriesResultBlock?) {
+        var query = PFQuery(className:Category.parseClassName())
+        query.findObjectsInBackgroundWithBlock {
+            (objects: [AnyObject]?, error: NSError?) -> () in
+            
+            if error == nil {
+                if let objects = objects as? [Category] {
+                    block!(objects, error)
+                }
+            } else {
+                // Log details of the failure
+                println("Error: \(error!) \(error!.userInfo!)")
+                block!(nil, error)
+            }
+        }
+        
+    }
+    
+    class func getEventPhotos(block:EventPhotosResultBlock?) {
+        var query = PFQuery(className:EventPhoto.parseClassName())
+        query.findObjectsInBackgroundWithBlock {
+            (objects: [AnyObject]?, error: NSError?) -> () in
+            
+            if error == nil {
+                if let objects = objects as? [EventPhoto] {
+                    block!(objects, error)
+                }
+            } else {
+                // Log details of the failure
+                println("Error: \(error!) \(error!.userInfo!)")
+                block!(nil, error)
+            }
+        }
+        
+    }
 	
 	class func testingEvents() {
 		
 		var event = Event()
 		event.name = "test"
 		event.summary = "test description"
-//		event.category = CategoryType.DANCING
+		event.category = Category()
 		event.startDate = NSDate()
 		
 		ParseHelper.saveEvent(event)

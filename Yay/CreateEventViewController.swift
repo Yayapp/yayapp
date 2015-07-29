@@ -9,17 +9,22 @@
 import UIKit
 import MapKit
 
-class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLocationDelegate, UIPopoverPresentationControllerDelegate, UITextFieldDelegate, UITextViewDelegate {
+class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLocationDelegate, ChooseCategoryDelegate, ChooseEventPictureDelegate, UIPopoverPresentationControllerDelegate, UITextFieldDelegate, UITextViewDelegate {
 
+    let dateFormatter = NSDateFormatter()
+    
     var longitude: Double?
     var latitude: Double?
     var chosenDate:NSDate?
+    var chosenCategory:Category?
+    var chosenPhoto:PFFile?
     
     var animateDistance:CGFloat = 0.0
     var limitInt:Int=1
     
+    @IBOutlet weak var pickCategory: UIButton!
+    @IBOutlet weak var eventPhoto: UIButton!
     @IBOutlet weak var limit: UITextField!
-    @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var dateTimeButton: UIButton!
     @IBOutlet weak var location: UIButton!
     
@@ -30,7 +35,7 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
         super.viewDidLoad()
         descr.delegate = self
         name.delegate = self
-        
+        dateFormatter.dateFormat = "EEE dd MMM 'at' H:mm"
     }
 
     override func didReceiveMemoryWarning() {
@@ -62,13 +67,24 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
         presentViewController(map, animated: true, completion: nil)
     }
     
+    @IBAction func openPhotoPicker(sender: AnyObject) {
+        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ChooseEventPictureViewController") as! ChooseEventPictureViewController
+        vc.delegate = self
+        vc.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
+        presentViewController(vc, animated: true, completion: nil)
+    }
+    
+    @IBAction func openCategoryPicker(sender: AnyObject) {
+        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ChooseCategoryViewController") as! ChooseCategoryViewController
+        vc.delegate = self
+        vc.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
+        presentViewController(vc, animated: true, completion: nil)
+    }
+    
     func madeDateTimeChoice(date: NSDate){
         chosenDate = date
-        let formatter = NSDateFormatter()
-        formatter.dateStyle = NSDateFormatterStyle.LongStyle
-        formatter.timeStyle = .MediumStyle
         
-        let dateString = formatter.stringFromDate(date)
+        let dateString = dateFormatter.stringFromDate(date)
         dateTimeButton.setTitle(dateString, forState: UIControlState.Normal)
     }
     
@@ -76,6 +92,21 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
         latitude = coordinates.latitude
         longitude = coordinates.longitude
         getLocationString(coordinates)
+    }
+    
+    func madeEventPictureChoice(photo: PFFile, pickedPhoto: UIImage?) {
+        chosenPhoto = photo
+        if pickedPhoto != nil {
+            eventPhoto.setImage(pickedPhoto, forState: .Normal)
+        } else {
+            photo.getDataInBackgroundWithBlock({
+                (data:NSData?, error:NSError?) in
+                if(error == nil) {
+                    var image = UIImage(data:data!)
+                    self.eventPhoto.setImage(image, forState: .Normal)
+                }
+            })
+        }
     }
 
     func getLocationString(coordinates: CLLocationCoordinate2D){
@@ -105,6 +136,11 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
             }
         })
         
+    }
+    
+    func madeCategoryChoice(category: Category) {
+        chosenCategory = category
+        pickCategory.setTitle(category.name, forState: .Normal)
     }
 
     func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle
@@ -236,14 +272,20 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
             MessageToUser.showDefaultErrorMessage("Please choose date")
         } else if descr.text.isEmpty {
             MessageToUser.showDefaultErrorMessage("Please enter description")
+        } else if chosenCategory == nil {
+            MessageToUser.showDefaultErrorMessage("Please choose category")
+        } else if chosenPhoto == nil {
+            MessageToUser.showDefaultErrorMessage("Please choose photo")
         } else {
             var event = Event()
             event.name = name.text
             event.summary = descr.text
-//            event.category = CategoryType.DANCING
+            event.category = chosenCategory!
             event.startDate = chosenDate!
+            event.photo = chosenPhoto!
             event.location = PFGeoPoint(latitude: latitude!, longitude: longitude!)
             ParseHelper.saveEvent(event)
+            navigationController?.popViewControllerAnimated(true)
         }
     }
     

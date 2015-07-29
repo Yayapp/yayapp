@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "cancelevent_button.png"
+      "filename" : "cancel_button.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "cancelevent_button_x2.png"
+      "filename" : "cancel_button_x2.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "cancelevent_button_x3.png"
+      "filename" : "cancel_button_x3.png"
     }
   ],
   "info" : {
