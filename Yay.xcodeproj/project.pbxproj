@@ -28,6 +28,7 @@
 		995032951B566F3400D792C5 /* EventFinderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032941B566F3400D792C5 /* EventFinderViewController.swift */; };
 		995032971B5671B900D792C5 /* ChooseLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032961B5671B900D792C5 /* ChooseLocationViewController.swift */; };
 		995032991B56741700D792C5 /* CreateEmailAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032981B56741700D792C5 /* CreateEmailAccountViewController.swift */; };
+		995363491B693F4B00350133 /* CustomPointAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995363481B693F4B00350133 /* CustomPointAnnotation.swift */; };
 		997C23881B6667F10070DDB2 /* EventsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997C23871B6667F10070DDB2 /* EventsTableViewCell.swift */; };
 		997C238B1B668CFB0070DDB2 /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997C238A1B668CFB0070DDB2 /* EventsViewController.swift */; };
 		997C238D1B67889B0070DDB2 /* MessageToUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997C238C1B67889B0070DDB2 /* MessageToUser.swift */; };
@@ -85,6 +86,7 @@
 		995032941B566F3400D792C5 /* EventFinderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventFinderViewController.swift; sourceTree = "<group>"; };
 		995032961B5671B900D792C5 /* ChooseLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseLocationViewController.swift; sourceTree = "<group>"; };
 		995032981B56741700D792C5 /* CreateEmailAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateEmailAccountViewController.swift; sourceTree = "<group>"; };
+		995363481B693F4B00350133 /* CustomPointAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomPointAnnotation.swift; sourceTree = "<group>"; };
 		997C23871B6667F10070DDB2 /* EventsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsTableViewCell.swift; sourceTree = "<group>"; };
 		997C238A1B668CFB0070DDB2 /* EventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
 		997C238C1B67889B0070DDB2 /* MessageToUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageToUser.swift; sourceTree = "<group>"; };
@@ -251,6 +253,7 @@
 				997C23871B6667F10070DDB2 /* EventsTableViewCell.swift */,
 				997C23921B67B9960070DDB2 /* CategoryCollectionViewCell.swift */,
 				997C23981B67F6250070DDB2 /* EventPhotoTableViewCell.swift */,
+				995363481B693F4B00350133 /* CustomPointAnnotation.swift */,
 			);
 			name = views;
 			sourceTree = "<group>";
@@ -414,6 +417,7 @@
 				995032731B564B4400D792C5 /* LoginViewController.swift in Sources */,
 				995032711B564B4400D792C5 /* AppDelegate.swift in Sources */,
 				99EC40FA1B5D916A0093E484 /* LoginType.swift in Sources */,
+				995363491B693F4B00350133 /* CustomPointAnnotation.swift in Sources */,
 				995032931B56632700D792C5 /* StartViewController.swift in Sources */,
 				997C23931B67B9960070DDB2 /* CategoryCollectionViewCell.swift in Sources */,
 				995032991B56741700D792C5 /* CreateEmailAccountViewController.swift in Sources */,

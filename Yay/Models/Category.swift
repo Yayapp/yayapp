@@ -25,5 +25,6 @@ class Category : PFObject, PFSubclassing {
     
     @NSManaged var name: String
     @NSManaged var photo: PFFile
+    @NSManaged var icon: PFFile
     
 }
