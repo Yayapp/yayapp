@@ -49,7 +49,7 @@ class MapEventsViewController: EventsViewController, MKMapViewDelegate {
             pointAnnoation.coordinate = CLLocationCoordinate2D(latitude: item.location.latitude, longitude: item.location.longitude)
             pointAnnoation.title = item.name
             pointAnnoation.subtitle = item.summary
-            pointAnnoation.pinCustomImage = item.category["icon"] as! PFFile
+            pointAnnoation.event = item
             let annotationView = MKPinAnnotationView(annotation: pointAnnoation, reuseIdentifier: "pin")
             self.mapView.addAnnotation(annotationView.annotation)
         }
@@ -77,14 +77,21 @@ class MapEventsViewController: EventsViewController, MKMapViewDelegate {
         }
         
         let customPointAnnotation = annotation as! CustomPointAnnotation
-        customPointAnnotation.pinCustomImage.getDataInBackgroundWithBlock({
+        let image = customPointAnnotation.event.category["icon"] as! PFFile
+        image.getDataInBackgroundWithBlock({
             (data:NSData?, error:NSError?) in
             if(error == nil){
                 v.image = UIImage(data:data!)
             }
         })
-        
-        
         return v
+    }
+    
+    func mapView(mapView: MKMapView!, didSelectAnnotationView view: MKAnnotationView!) {
+        let customPointAnnotation = view.annotation as! CustomPointAnnotation
+        let eventDetailsViewController = self.storyboard!.instantiateViewControllerWithIdentifier("EventDetailsViewController") as! EventDetailsViewController
+        eventDetailsViewController.event = customPointAnnotation.event
+        
+        navigationController?.pushViewController(eventDetailsViewController, animated: true)
     }
 }

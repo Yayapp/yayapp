@@ -12,7 +12,7 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
 
     
     let dateFormatter = NSDateFormatter()
-    
+    var currentLocation:CLLocation?
     
     @IBOutlet weak var events: UITableView!
     
@@ -20,6 +20,15 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
     override func viewDidLoad() {
         super.viewDidLoad()
         dateFormatter.dateFormat = "EEE dd MMM 'at' H:mm"
+        
+        if let user = PFUser.currentUser() {
+            let currentPFLocation = user.objectForKey("location") as! PFGeoPoint
+            currentLocation = CLLocation(latitude: currentPFLocation.latitude, longitude: currentPFLocation.longitude)
+        } else {
+            currentLocation = CLLocation(latitude: TempUser.location!.latitude, longitude: TempUser.location!.longitude)
+        }
+        
+        
         events.delegate = self
         events.dataSource = self
         
@@ -55,11 +64,14 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
         var cell = events.dequeueReusableCellWithIdentifier("Cell") as! EventsTableViewCell
         let event:Event! = eventsData[indexPath.row]
         
+        let distanceBetween: CLLocationDistance = CLLocation(latitude: event.location.latitude, longitude: event.location.longitude).distanceFromLocation(currentLocation)
+        let distanceStr = String(format: "%.2f", distanceBetween/1000)
+        
         cell.title.text = event.name
         
 //        cell.location.text = event.address
         cell.date.text = dateFormatter.stringFromDate(event.startDate)
-        cell.howFar.text = "8.75km"
+        cell.howFar.text = distanceStr
         
         cell.picture.file = event.photo
         cell.picture.loadInBackground()

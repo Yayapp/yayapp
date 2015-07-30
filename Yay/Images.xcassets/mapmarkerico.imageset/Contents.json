@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "logo.png"
+      "filename" : "mapmarkerico.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "logo_x2.png"
+      "filename" : "mapmarkerico_x2.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "logo_x3.png"
+      "filename" : "mapmarkerico_x3.png"
     }
   ],
   "info" : {

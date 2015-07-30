@@ -17,6 +17,8 @@
 		9917D9E21B56A94F0081A796 /* MapEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9917D9E11B56A94F0081A796 /* MapEventsViewController.swift */; };
 		9917D9E41B56B7830081A796 /* ListEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9917D9E31B56B7830081A796 /* ListEventsViewController.swift */; };
 		9917D9E61B56BB660081A796 /* EventDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9917D9E51B56BB660081A796 /* EventDetailsViewController.swift */; };
+		99253FF41B6A67970078B668 /* TempUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99253FF31B6A67970078B668 /* TempUser.swift */; };
+		99253FF61B6ABBF40078B668 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99253FF51B6ABBF40078B668 /* Extensions.swift */; };
 		992C0E9A1B6166BF007B06BD /* ImportContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992C0E991B6166BF007B06BD /* ImportContactsViewController.swift */; };
 		995032711B564B4400D792C5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032701B564B4400D792C5 /* AppDelegate.swift */; };
 		995032731B564B4400D792C5 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032721B564B4400D792C5 /* LoginViewController.swift */; };
@@ -71,15 +73,17 @@
 		9917D9E11B56A94F0081A796 /* MapEventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapEventsViewController.swift; sourceTree = "<group>"; };
 		9917D9E31B56B7830081A796 /* ListEventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListEventsViewController.swift; sourceTree = "<group>"; };
 		9917D9E51B56BB660081A796 /* EventDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDetailsViewController.swift; sourceTree = "<group>"; };
+		99253FF31B6A67970078B668 /* TempUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempUser.swift; sourceTree = "<group>"; };
+		99253FF51B6ABBF40078B668 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		992C0E991B6166BF007B06BD /* ImportContactsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImportContactsViewController.swift; sourceTree = "<group>"; };
-		9950326B1B564B4400D792C5 /* Yay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Yay.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9950326B1B564B4400D792C5 /* Friendzy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Friendzy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9950326F1B564B4400D792C5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		995032701B564B4400D792C5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		995032721B564B4400D792C5 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		995032751B564B4400D792C5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		995032771B564B4400D792C5 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		9950327A1B564B4400D792C5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		995032801B564B4400D792C5 /* YayTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = YayTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		995032801B564B4400D792C5 /* FriendzyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FriendzyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		995032851B564B4400D792C5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		995032861B564B4400D792C5 /* YayTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YayTests.swift; sourceTree = "<group>"; };
 		995032921B56632700D792C5 /* StartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
@@ -141,6 +145,7 @@
 				8B1531B61B5F90FB007A2EC7 /* Event.swift */,
 				997C238E1B6791AE0070DDB2 /* Category.swift */,
 				997C23941B67BD060070DDB2 /* EventPhoto.swift */,
+				99253FF31B6A67970078B668 /* TempUser.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -159,8 +164,8 @@
 		9950326C1B564B4400D792C5 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				9950326B1B564B4400D792C5 /* Yay.app */,
-				995032801B564B4400D792C5 /* YayTests.xctest */,
+				9950326B1B564B4400D792C5 /* Friendzy.app */,
+				995032801B564B4400D792C5 /* FriendzyTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -216,6 +221,7 @@
 				99EC40F51B5D397A0093E484 /* PatternValidator.swift */,
 				8B1531BA1B5FA963007A2EC7 /* CategoryType.swift */,
 				8B1531B81B5F9A9E007A2EC7 /* ParseHelper.swift */,
+				99253FF51B6ABBF40078B668 /* Extensions.swift */,
 			);
 			name = util;
 			sourceTree = "<group>";
@@ -269,9 +275,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		9950326A1B564B4400D792C5 /* Yay */ = {
+		9950326A1B564B4400D792C5 /* Friendzy */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9950328A1B564B4400D792C5 /* Build configuration list for PBXNativeTarget "Yay" */;
+			buildConfigurationList = 9950328A1B564B4400D792C5 /* Build configuration list for PBXNativeTarget "Friendzy" */;
 			buildPhases = (
 				6115CB11EBC914CC354FCFB9 /* Check Pods Manifest.lock */,
 				995032671B564B4400D792C5 /* Sources */,
@@ -283,14 +289,14 @@
 			);
 			dependencies = (
 			);
-			name = Yay;
+			name = Friendzy;
 			productName = Yay;
-			productReference = 9950326B1B564B4400D792C5 /* Yay.app */;
+			productReference = 9950326B1B564B4400D792C5 /* Friendzy.app */;
 			productType = "com.apple.product-type.application";
 		};
-		9950327F1B564B4400D792C5 /* YayTests */ = {
+		9950327F1B564B4400D792C5 /* FriendzyTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9950328D1B564B4400D792C5 /* Build configuration list for PBXNativeTarget "YayTests" */;
+			buildConfigurationList = 9950328D1B564B4400D792C5 /* Build configuration list for PBXNativeTarget "FriendzyTests" */;
 			buildPhases = (
 				9950327C1B564B4400D792C5 /* Sources */,
 				9950327D1B564B4400D792C5 /* Frameworks */,
@@ -301,9 +307,9 @@
 			dependencies = (
 				995032821B564B4400D792C5 /* PBXTargetDependency */,
 			);
-			name = YayTests;
+			name = FriendzyTests;
 			productName = YayTests;
-			productReference = 995032801B564B4400D792C5 /* YayTests.xctest */;
+			productReference = 995032801B564B4400D792C5 /* FriendzyTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -313,7 +319,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0640;
-				ORGANIZATIONNAME = "YAY LLC";
+				ORGANIZATIONNAME = "KrazyLab LLC";
 				TargetAttributes = {
 					9950326A1B564B4400D792C5 = {
 						CreatedOnToolsVersion = 6.4;
@@ -324,7 +330,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 995032661B564B4400D792C5 /* Build configuration list for PBXProject "Yay" */;
+			buildConfigurationList = 995032661B564B4400D792C5 /* Build configuration list for PBXProject "Friendzy" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -337,8 +343,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				9950326A1B564B4400D792C5 /* Yay */,
-				9950327F1B564B4400D792C5 /* YayTests */,
+				9950326A1B564B4400D792C5 /* Friendzy */,
+				9950327F1B564B4400D792C5 /* FriendzyTests */,
 			);
 		};
 /* End PBXProject section */
@@ -420,11 +426,13 @@
 				995363491B693F4B00350133 /* CustomPointAnnotation.swift in Sources */,
 				995032931B56632700D792C5 /* StartViewController.swift in Sources */,
 				997C23931B67B9960070DDB2 /* CategoryCollectionViewCell.swift in Sources */,
+				99253FF61B6ABBF40078B668 /* Extensions.swift in Sources */,
 				995032991B56741700D792C5 /* CreateEmailAccountViewController.swift in Sources */,
 				9917D9E21B56A94F0081A796 /* MapEventsViewController.swift in Sources */,
 				997C23911B67B42D0070DDB2 /* ChooseCategoryViewController.swift in Sources */,
 				8B1531BB1B5FA963007A2EC7 /* CategoryType.swift in Sources */,
 				992C0E9A1B6166BF007B06BD /* ImportContactsViewController.swift in Sources */,
+				99253FF41B6A67970078B668 /* TempUser.swift in Sources */,
 				99FDE5411B57EB84004CE61B /* SettingsTableViewController.swift in Sources */,
 				995032971B5671B900D792C5 /* ChooseLocationViewController.swift in Sources */,
 				995032951B566F3400D792C5 /* EventFinderViewController.swift in Sources */,
@@ -451,7 +459,7 @@
 /* Begin PBXTargetDependency section */
 		995032821B564B4400D792C5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 9950326A1B564B4400D792C5 /* Yay */;
+			target = 9950326A1B564B4400D792C5 /* Friendzy */;
 			targetProxy = 995032811B564B4400D792C5 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -565,7 +573,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = Yay/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Friendzy;
 				SWIFT_OBJC_BRIDGING_HEADER = "Yay-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -579,7 +587,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = Yay/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Friendzy;
 				SWIFT_OBJC_BRIDGING_HEADER = "Yay-Bridging-Header.h";
 			};
 			name = Release;
@@ -598,7 +606,7 @@
 				);
 				INFOPLIST_FILE = YayTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = FriendzyTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Yay.app/Yay";
 			};
 			name = Debug;
@@ -613,7 +621,7 @@
 				);
 				INFOPLIST_FILE = YayTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = FriendzyTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Yay.app/Yay";
 			};
 			name = Release;
@@ -621,7 +629,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		995032661B564B4400D792C5 /* Build configuration list for PBXProject "Yay" */ = {
+		995032661B564B4400D792C5 /* Build configuration list for PBXProject "Friendzy" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				995032881B564B4400D792C5 /* Debug */,
@@ -630,7 +638,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		9950328A1B564B4400D792C5 /* Build configuration list for PBXNativeTarget "Yay" */ = {
+		9950328A1B564B4400D792C5 /* Build configuration list for PBXNativeTarget "Friendzy" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9950328B1B564B4400D792C5 /* Debug */,
@@ -639,7 +647,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		9950328D1B564B4400D792C5 /* Build configuration list for PBXNativeTarget "YayTests" */ = {
+		9950328D1B564B4400D792C5 /* Build configuration list for PBXNativeTarget "FriendzyTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9950328E1B564B4400D792C5 /* Debug */,

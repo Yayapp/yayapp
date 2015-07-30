@@ -9,5 +9,5 @@
 import UIKit
 
 class CustomPointAnnotation: MKPointAnnotation {
-   var pinCustomImage:PFFile!
+   var event:Event!
 }

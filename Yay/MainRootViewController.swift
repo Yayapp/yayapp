@@ -8,21 +8,36 @@
 
 import UIKit
 
-class MainRootViewController: UIViewController {
+class MainRootViewController: UIViewController, ChooseCategoryDelegate {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    var rightSwitchBarButtonItem:UIBarButtonItem?
     
-    @IBOutlet weak var changeViewTypeButton: UIButton!
     @IBOutlet weak var container: UIView!
     @IBOutlet weak var segments: UISegmentedControl!
     
-    @IBOutlet weak var typeButton: UIButton!
     var currentVC:UIViewController!
     var isMapView = true
     var eventsData:[Event]!=[]
+    var chosenCategory:Category?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        var rightChatBarButtonItem:UIBarButtonItem = UIBarButtonItem(image:UIImage(named: "topbar_chatico"), style: UIBarButtonItemStyle.Plain, target: self, action: "chatTapped:")
+        
+        rightChatBarButtonItem.tintColor = UIColor.whiteColor()
+       
+        rightSwitchBarButtonItem = UIBarButtonItem(image:UIImage(named: "listico"), style: UIBarButtonItemStyle.Plain, target: self, action: "switchTapped:")
+        
+        rightSwitchBarButtonItem!.tintColor = UIColor.whiteColor()
+        
+        
+        self.navigationItem.setRightBarButtonItems([rightChatBarButtonItem,rightSwitchBarButtonItem!], animated: true)
+        
+        
+        
+        
         let font = UIFont.boldSystemFontOfSize(20.0)
         segments.setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.whiteColor(),NSFontAttributeName:font], forState: UIControlState.Selected)
         segments.setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.whiteColor()], forState: UIControlState.Normal)
@@ -47,14 +62,14 @@ class MainRootViewController: UIViewController {
             vc = self.storyboard!.instantiateViewControllerWithIdentifier("ListEventsViewController") as! ListEventsViewController
         }
         if(segments.selectedSegmentIndex == 0) {
-            ParseHelper.getTodayEvents({
+            ParseHelper.getTodayEvents(chosenCategory, block: {
                 (eventsList:[Event]?, error:NSError?) in
                 if(error == nil) {
                     vc.reloadAll(eventsList!)
                 }
             })
         } else {
-            ParseHelper.getThisWeekEvents({
+            ParseHelper.getThisWeekEvents(chosenCategory, block: {
                 (eventsList:[Event]?, error:NSError?) in
                 if(error == nil) {
                     vc.reloadAll(eventsList!)
@@ -73,9 +88,16 @@ class MainRootViewController: UIViewController {
         performSegueWithIdentifier("settings", sender: nil)
     }
     
-    @IBAction func changeViewType(sender: AnyObject) {
-        changeViewTypeButton.tag = isMapView ? 1 : 0
-        isMapView = changeViewTypeButton.tag == 0
+    @IBAction func openCategoryPicker(sender: AnyObject) {
+        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ChooseCategoryViewController") as! ChooseCategoryViewController
+        vc.delegate = self
+        vc.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
+        presentViewController(vc, animated: true, completion: nil)
+    }
+    
+    
+    func madeCategoryChoice(category: Category) {
+        chosenCategory = category
         segmentChanged(true)
     }
     
@@ -103,5 +125,18 @@ class MainRootViewController: UIViewController {
         currentVC = activeViewController
     }
 
+    func switchTapped(sender:UIButton) {
+        isMapView = !isMapView
+        if isMapView {
+            rightSwitchBarButtonItem!.image = UIImage(named: "listico")
+        } else {
+            rightSwitchBarButtonItem!.image = UIImage(named: "mapmarkerico")
+        }
+        segmentChanged(true)
+    }
+   
+    func chatTapped (sender:UIButton) {
+        println("add pressed")
+    }
 
 }

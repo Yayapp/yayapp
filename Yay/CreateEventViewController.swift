@@ -94,6 +94,12 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
         getLocationString(coordinates)
     }
     
+    
+    func madeCategoryChoice(category: Category) {
+        chosenCategory = category
+        pickCategory.setTitle(category.name, forState: .Normal)
+    }
+    
     func madeEventPictureChoice(photo: PFFile, pickedPhoto: UIImage?) {
         chosenPhoto = photo
         if pickedPhoto != nil {
@@ -138,10 +144,6 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
         
     }
     
-    func madeCategoryChoice(category: Category) {
-        chosenCategory = category
-        pickCategory.setTitle(category.name, forState: .Normal)
-    }
 
     func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle
     {

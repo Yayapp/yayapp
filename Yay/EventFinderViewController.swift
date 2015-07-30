@@ -13,12 +13,37 @@ class EventFinderViewController: UIViewController, ChooseLocationDelegate {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
-    @IBOutlet weak var location: UILabel!
+    var isRotating = false
+    var shouldStopRotating = false
+    
+    @IBOutlet weak var searchingAnimation: UIImageView!
+    @IBOutlet weak var location: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        if self.isRotating == false {
+            self.searchingAnimation.rotate360Degrees(completionDelegate: self)
+            self.isRotating = true
+        }
+        
+        PFGeoPoint.geoPointForCurrentLocationInBackground( {
+            (geoPoint:PFGeoPoint?, error:NSError?) in
+            if (error == nil) {
+                if PFUser.currentUser() != nil {
+                   PFUser.currentUser()!.setObject(geoPoint!, forKey:"location")
+                    PFUser.currentUser()!.saveInBackground()
+                } else {
+                    TempUser.location = CLLocationCoordinate2D(latitude: geoPoint!.latitude, longitude: geoPoint!.longitude)
+                }
+                self.shouldStopRotating = true
+                self.goToMain()
+            } else {
+                MessageToUser.showDefaultErrorMessage("Can't retreive location automatically. Please choose location manually")
+                self.shouldStopRotating = true
+            }
+        })
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -26,8 +51,20 @@ class EventFinderViewController: UIViewController, ChooseLocationDelegate {
         // Dispose of any resources that can be recreated.
     }
     
+    override func animationDidStop(anim: CAAnimation!, finished flag: Bool) {
+        if self.shouldStopRotating == false {
+            self.searchingAnimation.rotate360Degrees(completionDelegate: self)
+        } else {
+            self.reset()
+        }
+    }
+    
+    func reset() {
+        self.isRotating = false
+        self.shouldStopRotating = false
+    }
 
-    @IBAction func goToMain(sender: AnyObject) {
+    func goToMain() {
         appDelegate.window!.rootViewController = appDelegate.centerContainer
         appDelegate.window!.makeKeyAndVisible()
     }
@@ -42,9 +79,14 @@ class EventFinderViewController: UIViewController, ChooseLocationDelegate {
     
     func madeLocationChoice(coordinates: CLLocationCoordinate2D){
         getLocationString(coordinates)
-        let user = PFUser.currentUser()
-        user?.setObject(PFGeoPoint(latitude: coordinates.latitude, longitude: coordinates.longitude), forKey: "location")
-        user?.save()
+        
+        if let user = PFUser.currentUser() {
+            user.setObject(PFGeoPoint(latitude: coordinates.latitude, longitude: coordinates.longitude), forKey: "location")
+            user.save()
+        } else {
+            TempUser.location = coordinates
+        }
+        goToMain()
     }
     
     func getLocationString(coordinates: CLLocationCoordinate2D){
@@ -70,9 +112,11 @@ class EventFinderViewController: UIViewController, ChooseLocationDelegate {
                 cityCountry.appendString(country)
             }
             if cityCountry.length>0 {
-                self.location.text=cityCountry as String
+                self.location.setTitle(cityCountry as String, forState: .Normal)
             }
         })
         
     }
+    
 }
+

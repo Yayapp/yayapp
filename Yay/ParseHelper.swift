@@ -15,7 +15,7 @@ typealias EventPhotosResultBlock = ([EventPhoto]?, NSError?) -> ()
 class ParseHelper {
 	
 
-	class func getTodayEvents(block:EventsResultBlock?) {
+	class func getTodayEvents(category:Category?, block:EventsResultBlock?) {
 
         let today = NSDate()
         
@@ -29,6 +29,11 @@ class ParseHelper {
 		var query = PFQuery(className:Event.parseClassName())
         query.whereKey("startDate", greaterThan: today)
         query.whereKey("startDate", lessThanOrEqualTo: endToday!)
+        
+        if (category != nil) {
+            query.whereKey("category", equalTo: category!)
+        }
+        
 		query.findObjectsInBackgroundWithBlock {
 			(objects: [AnyObject]?, error: NSError?) -> () in
 			
@@ -45,7 +50,7 @@ class ParseHelper {
 
 	}
     
-    class func getThisWeekEvents(block:EventsResultBlock?) {
+    class func getThisWeekEvents(category:Category?, block:EventsResultBlock?) {
         
         let today = NSDate()
         
@@ -63,6 +68,11 @@ class ParseHelper {
         var query = PFQuery(className:Event.parseClassName())
         query.whereKey("startDate", greaterThan: today)
         query.whereKey("startDate", lessThanOrEqualTo: endWeek!)
+        
+        if (category != nil) {
+            query.whereKey("category", equalTo: category!)
+        }
+        
         query.findObjectsInBackgroundWithBlock {
             (objects: [AnyObject]?, error: NSError?) -> () in
             

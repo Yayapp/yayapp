@@ -80,7 +80,7 @@ class LoginViewController: UIViewController, InstagramDelegate {
     
     func instagramSuccess(token:String, user:InstagramUser) {
         
-        PFUser.logInWithUsernameInBackground(user.username, password: "\(user.username.hashValue)") {
+        PFUser.logInWithUsernameInBackground(user.username, password: "\(user.username.MD5())") {
             (pfuser: PFUser?, error: NSError?) -> Void in
             if pfuser != nil {
                 self.appDelegate.authenticateInLayer()
@@ -92,7 +92,7 @@ class LoginViewController: UIViewController, InstagramDelegate {
                     var pfuser = PFUser()
                     pfuser["name"] = user.fullName
                     pfuser["token"] = token
-                    pfuser.password = "\(user.username.hashValue)"
+                    pfuser.password = "\(user.username.MD5())"
                     pfuser.username = user.username
                     pfuser.signUpInBackgroundWithBlock {
                         (succeeded: Bool, error: NSError?) -> Void in
