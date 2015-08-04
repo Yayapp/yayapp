@@ -19,6 +19,7 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var email: UITextField!
     
+    @IBOutlet weak var email2: UITextField!
     @IBOutlet weak var password1: UITextField!
     
     @IBOutlet weak var password2: UITextField!
@@ -27,24 +28,30 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var switchToRegister: UIButton!
     @IBOutlet weak var createAccount: UIButton!
     @IBOutlet weak var signIn: UIButton!
+    @IBOutlet weak var accountExist: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+       
         name.delegate = self
         email.delegate = self
+        email2.delegate = self
         password1.delegate = self
         password2.delegate = self
         switchToRegister(true)
     }
 
+    override func prefersStatusBarHidden() -> Bool {
+        return true
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
 
     @IBAction func createAccount(sender: AnyObject) {
-        if !email.text.isEmpty && PatternValidator.validate(email.text, patternString: PatternValidator.EMAIL_PATTERN) && !password1.text.isEmpty && password1.text == password2.text {
+        if !email.text.isEmpty && PatternValidator.validate(email.text, patternString: PatternValidator.EMAIL_PATTERN) && email.text == email2.text && !password1.text.isEmpty && password1.text == password2.text {
             
         var user = PFUser()
         user["name"] = name.text
@@ -87,6 +94,9 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    @IBAction func close(sender: AnyObject) {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
     @IBAction func switchToRegister(sender: AnyObject) {
         switchToRegister.hidden = true
         switchToLogin.hidden = false
@@ -94,7 +104,8 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate {
         createAccount.hidden = false
         name.hidden = false
         password2.hidden = false
-        
+        email2.hidden = false
+        accountExist.text = "Already have an account?"
     }
 
     @IBAction func switchToLogin(sender: AnyObject) {
@@ -104,6 +115,8 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate {
         createAccount.hidden = true
         name.hidden = true
         password2.hidden = true
+        email2.hidden = true
+        accountExist.text = "Don't have an account?"
     }
     
     

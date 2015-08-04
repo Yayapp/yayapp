@@ -12,12 +12,18 @@ class ProfileViewController: UITableViewController {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
+    @IBOutlet weak var avatar: PFImageView!
     @IBOutlet weak var profileTable: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: false)
-        // Do any additional setup after loading the view.
+        
+        let avatarfile = PFUser.currentUser()?.objectForKey("avatar") as? PFFile
+        if(avatarfile != nil) {
+            avatar.file = avatarfile
+            avatar.loadInBackground()
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -27,8 +33,16 @@ class ProfileViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         switch (indexPath.row){
+        case 0 : appDelegate.centerContainer!.closeDrawerAnimated(true, completion: nil)
+        (appDelegate.centerViewController.viewControllers[0] as! MainRootViewController).showProfile()
+        case 1 : appDelegate.centerContainer!.closeDrawerAnimated(true, completion: nil)
+        (appDelegate.centerViewController.viewControllers[0] as! MainRootViewController).showSettings()
+        case 2 : appDelegate.centerContainer!.closeDrawerAnimated(true, completion: nil)
+        (appDelegate.centerViewController.viewControllers[0] as! MainRootViewController).showUpcomingEvents()
+        case 3 : appDelegate.centerContainer!.closeDrawerAnimated(true, completion: nil)
+        (appDelegate.centerViewController.viewControllers[0] as! MainRootViewController).showPastEvents()
         default: appDelegate.centerContainer!.closeDrawerAnimated(true, completion: nil)
-            (appDelegate.centerViewController.viewControllers[0] as! MainRootViewController).showSettings()
+            (appDelegate.centerViewController.viewControllers[0] as! MainRootViewController).showProfile()
         }
     }
 

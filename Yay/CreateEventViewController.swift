@@ -285,6 +285,7 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
             event.category = chosenCategory!
             event.startDate = chosenDate!
             event.photo = chosenPhoto!
+            event.owner = PFUser.currentUser()!
             event.location = PFGeoPoint(latitude: latitude!, longitude: longitude!)
             ParseHelper.saveEvent(event)
             navigationController?.popViewControllerAnimated(true)

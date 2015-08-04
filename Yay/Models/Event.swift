@@ -31,5 +31,6 @@ class Event : PFObject, PFSubclassing {
 	@NSManaged var startDate: NSDate
 	@NSManaged var summary: String
 	@NSManaged var photo: PFFile
+    @NSManaged var attendees: [PFUser]
 	
 }

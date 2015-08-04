@@ -10,6 +10,8 @@ import UIKit
 
 class UserProfileViewController: UIViewController {
 
+    var user:PFUser!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

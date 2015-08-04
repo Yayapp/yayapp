@@ -19,7 +19,6 @@
 		9917D9E61B56BB660081A796 /* EventDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9917D9E51B56BB660081A796 /* EventDetailsViewController.swift */; };
 		99253FF41B6A67970078B668 /* TempUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99253FF31B6A67970078B668 /* TempUser.swift */; };
 		99253FF61B6ABBF40078B668 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99253FF51B6ABBF40078B668 /* Extensions.swift */; };
-		992C0E9A1B6166BF007B06BD /* ImportContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992C0E991B6166BF007B06BD /* ImportContactsViewController.swift */; };
 		995032711B564B4400D792C5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032701B564B4400D792C5 /* AppDelegate.swift */; };
 		995032731B564B4400D792C5 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032721B564B4400D792C5 /* LoginViewController.swift */; };
 		995032761B564B4400D792C5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 995032741B564B4400D792C5 /* Main.storyboard */; };
@@ -75,7 +74,6 @@
 		9917D9E51B56BB660081A796 /* EventDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDetailsViewController.swift; sourceTree = "<group>"; };
 		99253FF31B6A67970078B668 /* TempUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempUser.swift; sourceTree = "<group>"; };
 		99253FF51B6ABBF40078B668 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		992C0E991B6166BF007B06BD /* ImportContactsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImportContactsViewController.swift; sourceTree = "<group>"; };
 		9950326B1B564B4400D792C5 /* Friendzy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Friendzy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9950326F1B564B4400D792C5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		995032701B564B4400D792C5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -246,7 +244,6 @@
 				99FDE5441B58E972004CE61B /* ChooseDateTimeViewController.swift */,
 				99FDE54A1B5A74FF004CE61B /* UserProfileViewController.swift */,
 				99EC40FB1B5FFB490093E484 /* InstagramViewController.swift */,
-				992C0E991B6166BF007B06BD /* ImportContactsViewController.swift */,
 				997C23901B67B42D0070DDB2 /* ChooseCategoryViewController.swift */,
 				997C23961B67EFCD0070DDB2 /* ChooseEventPictureViewController.swift */,
 			);
@@ -431,7 +428,6 @@
 				9917D9E21B56A94F0081A796 /* MapEventsViewController.swift in Sources */,
 				997C23911B67B42D0070DDB2 /* ChooseCategoryViewController.swift in Sources */,
 				8B1531BB1B5FA963007A2EC7 /* CategoryType.swift in Sources */,
-				992C0E9A1B6166BF007B06BD /* ImportContactsViewController.swift in Sources */,
 				99253FF41B6A67970078B668 /* TempUser.swift in Sources */,
 				99FDE5411B57EB84004CE61B /* SettingsTableViewController.swift in Sources */,
 				995032971B5671B900D792C5 /* ChooseLocationViewController.swift in Sources */,

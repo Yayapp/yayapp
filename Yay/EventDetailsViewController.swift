@@ -13,6 +13,7 @@ class EventDetailsViewController: UIViewController {
     var event:Event!
     let dateFormatter = NSDateFormatter()
     var currentLocation:CLLocation!
+    var attendeeButtons:[UIButton]!
     
     @IBOutlet weak var photo: PFImageView!
     @IBOutlet weak var name: UILabel!
@@ -24,9 +25,21 @@ class EventDetailsViewController: UIViewController {
     
     @IBOutlet weak var distance: UILabel!
     
+    @IBOutlet weak var author: UIButton!
+    
+    @IBOutlet weak var attended1: UIButton!
+    
+    @IBOutlet weak var attended2: UIButton!
+    
+    @IBOutlet weak var attended3: UIButton!
+    
+    @IBOutlet weak var attended4: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        attendeeButtons = [attended1,attended2,attended3,attended4]
+        
+        
         dateFormatter.dateFormat = "EEE dd MMM 'at' H:mm"
         
         if let user = PFUser.currentUser() {
@@ -44,6 +57,34 @@ class EventDetailsViewController: UIViewController {
         photo.file = event.photo
         photo.loadInBackground()
         date.text = dateFormatter.stringFromDate(event.startDate)
+        let avatar = event.owner["avatar"] as? PFFile
+        if(avatar != nil) {
+            avatar!.getDataInBackgroundWithBlock({
+                (data:NSData?, error:NSError?) in
+                if(error == nil) {
+                    var image = UIImage(data:data!)
+                    self.author.setImage(image, forState: .Normal)
+                }
+            })
+        }
+        
+        
+//        for (index, attendee) in enumerate(event.attendees) {
+//            let attendeeButton = attendeeButtons[index]
+//            
+//            attendeeButton.addTarget(self, action: "attendeeProfile:", forControlEvents: .TouchUpInside)
+//            attendeeButton.tag = index
+//            let attendeeAvatar = attendee["avatar"] as? PFFile
+//            if(attendeeAvatar != nil) {
+//                attendeeAvatar!.getDataInBackgroundWithBlock({
+//                    (data:NSData?, error:NSError?) in
+//                    if(error == nil) {
+//                        var image = UIImage(data:data!)
+//                        attendeeButton.setImage(image, forState: .Normal)
+//                    }
+//                })
+//            }
+//        }
         
         distance.text = "\(distanceStr)km"
         getLocationString(event.location.latitude, longitude: event.location.longitude)
@@ -93,4 +134,19 @@ class EventDetailsViewController: UIViewController {
         })
         
     }
+    
+    @IBAction func authorProfile(sender: AnyObject) {
+        let userProfileViewController = self.storyboard!.instantiateViewControllerWithIdentifier("UserProfileViewController") as! UserProfileViewController
+        userProfileViewController.user = event.owner
+        
+        navigationController?.pushViewController(userProfileViewController, animated: true)
+    }
+    
+    @IBAction func attendeeProfile(sender: AnyObject) {
+        let userProfileViewController = self.storyboard!.instantiateViewControllerWithIdentifier("UserProfileViewController") as! UserProfileViewController
+        userProfileViewController.user = event.attendees[sender.tag]
+        
+        navigationController?.pushViewController(userProfileViewController, animated: true)
+    }
+    
 }

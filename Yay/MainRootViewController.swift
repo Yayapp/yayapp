@@ -84,8 +84,22 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
         appDelegate.centerContainer!.toggleDrawerSide(MMDrawerSide.Left, animated: true, completion: nil)
     }
     
+    func showProfile(){
+        performSegueWithIdentifier("profile", sender: nil)
+    }
+    
     func showSettings(){
         performSegueWithIdentifier("settings", sender: nil)
+    }
+    
+    func showUpcomingEvents(){
+        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ListEventsViewController") as! ListEventsViewController
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func showPastEvents(){
+        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ListEventsViewController") as! ListEventsViewController
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     @IBAction func openCategoryPicker(sender: AnyObject) {
