@@ -85,7 +85,9 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
     }
     
     func showProfile(){
-        performSegueWithIdentifier("profile", sender: nil)
+        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("UserProfileViewController") as! UserProfileViewController
+        vc.user = PFUser.currentUser()
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     func showSettings(){

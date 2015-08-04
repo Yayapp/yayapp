@@ -24,18 +24,52 @@ class LoginViewController: UIViewController, InstagramDelegate {
 
  
     @IBAction func facebookLogin(sender: AnyObject) {
-        let permissions:[String] = ["user_about_me", "user_relationships", "user_birthday", "user_location"]
+        let permissions:[String] = ["email","user_about_me", "user_relationships", "user_birthday", "user_location"]
         PFFacebookUtils.logInInBackgroundWithReadPermissions(permissions) {
             (user: PFUser?, error: NSError?) -> Void in
             if let user = user {
                 self.appDelegate.authenticateInLayer()
                 Prefs.storeSessionId(user.sessionToken!)
                 Prefs.storeLoginType(LoginType.FACEBOOK)
-                if user.isNew {
-                    self.performSegueWithIdentifier("proceed", sender: nil)
-                } else {
-                    self.performSegueWithIdentifier("proceed", sender: nil)
+                
+                if (FBSDKAccessToken.currentAccessToken() != nil){
+                    
+                    var userProfileRequestParams = [ "fields" : "id, name, email, picture, about"]
+                    let userProfileRequest = FBSDKGraphRequest(graphPath: "me", parameters: userProfileRequestParams)
+                    let graphConnection = FBSDKGraphRequestConnection()
+                    graphConnection.addRequest(userProfileRequest, completionHandler: { (connection: FBSDKGraphRequestConnection!, result: AnyObject!, error: NSError!) -> Void in
+                        if(error != nil){
+                            println(error)
+                        }
+                        else {
+                            let fbEmail = result.objectForKey("email") as! String
+                            let fbUserId = result.objectForKey("id") as! String
+                            var url:NSURL = NSURL(string:result.objectForKey("picture")?.objectForKey("data")?.objectForKey("url") as! String)!
+                            var err: NSError?
+                            var imageData :NSData = NSData(contentsOfURL: url, options: NSDataReadingOptions.DataReadingMappedIfSafe, error: &err)!
+                            
+                            var imageFile = PFFile(name: "image.jpg", data: imageData) as PFFile
+                            
+                            
+                                PFUser.currentUser()?.setObject(result.objectForKey("email")!, forKey: "email")
+                                PFUser.currentUser()?.setObject(result.objectForKey("name")!, forKey: "name")
+//                                PFUser.currentUser()?.setObject(result.objectForKey("about")?!, forKey: "about")
+                                PFUser.currentUser()?.setObject(imageFile, forKey: "avatar")
+                                PFUser.currentUser()?.saveEventually(nil)
+                            
+                            println("Email: \(fbEmail)")
+                            println("FBUserId: \(fbUserId)")
+                            if user.isNew {
+                                self.performSegueWithIdentifier("proceed", sender: nil)
+                            } else {
+                                self.performSegueWithIdentifier("proceed", sender: nil)
+                            }
+                        }
+                    })
+                    graphConnection.start()
                 }
+                
+                
             } else {
                 let alert = UIAlertView()
                 alert.title = "Ooops"
