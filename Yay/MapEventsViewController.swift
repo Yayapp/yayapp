@@ -42,16 +42,17 @@ class MapEventsViewController: EventsViewController, MKMapViewDelegate {
         
         for item in eventsData{
             
-            item.category.fetch()
-            
-            let pointAnnoation = CustomPointAnnotation()
-            
-            pointAnnoation.coordinate = CLLocationCoordinate2D(latitude: item.location.latitude, longitude: item.location.longitude)
-            pointAnnoation.title = item.name
-            pointAnnoation.subtitle = item.summary
-            pointAnnoation.event = item
-            let annotationView = MKPinAnnotationView(annotation: pointAnnoation, reuseIdentifier: "pin")
-            self.mapView.addAnnotation(annotationView.annotation)
+            item.category.fetchInBackgroundWithBlock({
+                (result, error) in
+                let pointAnnoation = CustomPointAnnotation()
+                
+                pointAnnoation.coordinate = CLLocationCoordinate2D(latitude: item.location.latitude, longitude: item.location.longitude)
+                pointAnnoation.title = item.name
+                pointAnnoation.subtitle = item.summary
+                pointAnnoation.event = item
+                let annotationView = MKPinAnnotationView(annotation: pointAnnoation, reuseIdentifier: "pin")
+                self.mapView.addAnnotation(annotationView.annotation)
+            })
         }
     }
 

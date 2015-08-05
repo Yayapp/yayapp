@@ -28,6 +28,7 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
     @IBOutlet weak var dateTimeButton: UIButton!
     @IBOutlet weak var location: UIButton!
     
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
     @IBOutlet weak var name: UITextField!
     @IBOutlet weak var descr: UITextView!
     
@@ -266,6 +267,7 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
     }
 
     @IBAction func create(sender: AnyObject) {
+        
         if name.text.isEmpty {
             MessageToUser.showDefaultErrorMessage("Please enter name")
         } else if longitude == nil || latitude == nil {
@@ -279,6 +281,7 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
         } else if chosenPhoto == nil {
             MessageToUser.showDefaultErrorMessage("Please choose photo")
         } else {
+            spinner.startAnimating()
             var event = Event()
             event.name = name.text
             event.summary = descr.text
@@ -287,8 +290,15 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
             event.photo = chosenPhoto!
             event.owner = PFUser.currentUser()!
             event.location = PFGeoPoint(latitude: latitude!, longitude: longitude!)
-            ParseHelper.saveEvent(event)
-            navigationController?.popViewControllerAnimated(true)
+            event.attendees = []
+            event.saveInBackgroundWithBlock({
+                (result, error) in
+                if error == nil {
+                    self.spinner.stopAnimating()
+                    self.navigationController?.popViewControllerAnimated(true)
+                }
+            })
+            
         }
     }
     

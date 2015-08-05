@@ -65,8 +65,13 @@ class EventFinderViewController: UIViewController, ChooseLocationDelegate {
     }
 
     func goToMain() {
-        appDelegate.window!.rootViewController = appDelegate.centerContainer
-        appDelegate.window!.makeKeyAndVisible()
+        if((PFUser.currentUser()) != nil) {
+            appDelegate.window!.rootViewController = appDelegate.centerContainer
+            appDelegate.window!.makeKeyAndVisible()
+        } else {
+            let main = self.storyboard!.instantiateViewControllerWithIdentifier("MainNavigationController") as! MainNavigationController
+            presentViewController(main, animated: true, completion: nil)
+        }
     }
     
     @IBAction func openLocationPicker(sender: AnyObject) {

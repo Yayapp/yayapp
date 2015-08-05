@@ -15,6 +15,7 @@ class EventDetailsViewController: UIViewController {
     var currentLocation:CLLocation!
     var attendeeButtons:[UIButton]!
     
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
     @IBOutlet weak var photo: PFImageView!
     @IBOutlet weak var name: UILabel!
     
@@ -38,7 +39,6 @@ class EventDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         attendeeButtons = [attended1,attended2,attended3,attended4]
-        
         
         dateFormatter.dateFormat = "EEE dd MMM 'at' H:mm"
         
@@ -69,22 +69,22 @@ class EventDetailsViewController: UIViewController {
         }
         
         
-//        for (index, attendee) in enumerate(event.attendees) {
-//            let attendeeButton = attendeeButtons[index]
-//            
-//            attendeeButton.addTarget(self, action: "attendeeProfile:", forControlEvents: .TouchUpInside)
-//            attendeeButton.tag = index
-//            let attendeeAvatar = attendee["avatar"] as? PFFile
-//            if(attendeeAvatar != nil) {
-//                attendeeAvatar!.getDataInBackgroundWithBlock({
-//                    (data:NSData?, error:NSError?) in
-//                    if(error == nil) {
-//                        var image = UIImage(data:data!)
-//                        attendeeButton.setImage(image, forState: .Normal)
-//                    }
-//                })
-//            }
-//        }
+        for (index, attendee) in enumerate(event.attendees) {
+            let attendeeButton = attendeeButtons[index]
+            
+            attendeeButton.addTarget(self, action: "attendeeProfile:", forControlEvents: .TouchUpInside)
+            attendeeButton.tag = index
+            let attendeeAvatar = attendee["avatar"] as? PFFile
+            if(attendeeAvatar != nil) {
+                attendeeAvatar!.getDataInBackgroundWithBlock({
+                    (data:NSData?, error:NSError?) in
+                    if(error == nil) {
+                        var image = UIImage(data:data!)
+                        attendeeButton.setImage(image, forState: .Normal)
+                    }
+                })
+            }
+        }
         
         distance.text = "\(distanceStr)km"
         getLocationString(event.location.latitude, longitude: event.location.longitude)
@@ -106,6 +106,29 @@ class EventDetailsViewController: UIViewController {
     }
     */
 
+    @IBAction func attend(sender: AnyObject) {
+        spinner.startAnimating()
+        event.fetchIfNeededInBackgroundWithBlock({
+            (result, error) in
+            self.event.addObject(PFUser.currentUser()!, forKey: "attendees")
+            self.event.saveInBackgroundWithBlock({
+                (result, error) in
+                PFUser.currentUser()!.fetchIfNeededInBackgroundWithBlock({
+                    (result, error) in
+                    PFUser.currentUser()!.addObject(self.event, forKey: "attended")
+                    PFUser.currentUser()!.saveInBackgroundWithBlock({
+                        (result, error) in
+                        self.spinner.stopAnimating()
+                    })
+                })
+            })
+        })
+       
+        
+        
+        
+    }
+    
     func getLocationString(latitude: Double, longitude: Double){
         let geoCoder = CLGeocoder()
         let cllocation = CLLocation(latitude: latitude, longitude: longitude)

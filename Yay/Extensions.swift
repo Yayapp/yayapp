@@ -22,6 +22,19 @@ extension String {
     }
 }
 
+extension Array {
+    func combine(separator: String) -> String{
+        var str : String = ""
+        for (idx, item) in enumerate(self) {
+            str += "\(item)"
+            if idx < self.count-1 {
+                str += separator
+            }
+        }
+        return str
+    }
+}
+
 extension UIView {
     func rotate360Degrees(duration: CFTimeInterval = 1.0, completionDelegate: AnyObject? = nil) {
         let rotateAnimation = CABasicAnimation(keyPath: "transform.rotation")

@@ -55,9 +55,12 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate {
             
         var user = PFUser()
         user["name"] = name.text
+        user["attended"] = []
+        user["interests"] = []
         user.password = password2.text
         user.email = email.text
         user.username = email.text
+            
         user.signUpInBackgroundWithBlock {
             (succeeded: Bool, error: NSError?) -> Void in
             if let error = error {

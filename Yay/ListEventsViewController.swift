@@ -10,6 +10,7 @@ import UIKit
 
 class ListEventsViewController: EventsViewController, UITableViewDataSource, UITableViewDelegate {
 
+    var eventsFirst:[Event]?
     
     let dateFormatter = NSDateFormatter()
     var currentLocation:CLLocation?
@@ -28,10 +29,12 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
             currentLocation = CLLocation(latitude: TempUser.location!.latitude, longitude: TempUser.location!.longitude)
         }
         
-        
         events.delegate = self
         events.dataSource = self
         
+        if (eventsFirst != nil) {
+            reloadAll(eventsFirst!)
+        }
     }
 
     override func didReceiveMemoryWarning() {

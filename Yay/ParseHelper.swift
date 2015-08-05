@@ -88,10 +88,7 @@ class ParseHelper {
         }
         
     }
-	
-	class func saveEvent (event: Event) {
-		event.saveInBackground();
-	}
+
     
     class func getCategories(block:CategoriesResultBlock?) {
         var query = PFQuery(className:Category.parseClassName())
@@ -137,7 +134,7 @@ class ParseHelper {
 		event.category = Category()
 		event.startDate = NSDate()
 		
-		ParseHelper.saveEvent(event)
+//		ParseHelper.saveEvent(event)
 		
 //		ParseHelper.getAllEvents {
 //			(events: [Event]?, error: NSError?) -> () in

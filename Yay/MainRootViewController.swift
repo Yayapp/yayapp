@@ -13,8 +13,11 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     var rightSwitchBarButtonItem:UIBarButtonItem?
     
+    @IBOutlet weak var profileButton: UIBarButtonItem!
     @IBOutlet weak var container: UIView!
     @IBOutlet weak var segments: UISegmentedControl!
+    
+    @IBOutlet weak var createEvent: UIButton!
     
     var currentVC:UIViewController!
     var isMapView = true
@@ -23,20 +26,22 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    
+        var buttonItems:[UIBarButtonItem]=[]
         
-        var rightChatBarButtonItem:UIBarButtonItem = UIBarButtonItem(image:UIImage(named: "topbar_chatico"), style: UIBarButtonItemStyle.Plain, target: self, action: "chatTapped:")
+        if (PFUser.currentUser() != nil) {
+            createEvent.hidden = false
+            var rightChatBarButtonItem:UIBarButtonItem = UIBarButtonItem(image:UIImage(named: "topbar_chatico"), style: UIBarButtonItemStyle.Plain, target: self, action: "chatTapped:")
+            rightChatBarButtonItem.tintColor = UIColor.whiteColor()
+            buttonItems.append(rightChatBarButtonItem)
+        }
+            
         
-        rightChatBarButtonItem.tintColor = UIColor.whiteColor()
-       
         rightSwitchBarButtonItem = UIBarButtonItem(image:UIImage(named: "listico"), style: UIBarButtonItemStyle.Plain, target: self, action: "switchTapped:")
-        
         rightSwitchBarButtonItem!.tintColor = UIColor.whiteColor()
+        buttonItems.append(rightSwitchBarButtonItem!)
         
-        
-        self.navigationItem.setRightBarButtonItems([rightChatBarButtonItem,rightSwitchBarButtonItem!], animated: true)
-        
-        
-        
+        self.navigationItem.setRightBarButtonItems(buttonItems, animated: true)
         
         let font = UIFont.boldSystemFontOfSize(20.0)
         segments.setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.whiteColor(),NSFontAttributeName:font], forState: UIControlState.Selected)
@@ -81,7 +86,12 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
     }
     
     @IBAction func navigationDrawer(sender: AnyObject) {
-        appDelegate.centerContainer!.toggleDrawerSide(MMDrawerSide.Left, animated: true, completion: nil)
+        if (PFUser.currentUser() != nil) {
+            appDelegate.centerContainer!.toggleDrawerSide(MMDrawerSide.Left, animated: true, completion: nil)
+        } else {
+            let loginViewController = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
+            navigationController?.pushViewController(loginViewController, animated: true)
+        }
     }
     
     func showProfile(){
@@ -95,13 +105,30 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
     }
     
     func showUpcomingEvents(){
-        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ListEventsViewController") as! ListEventsViewController
-        navigationController?.pushViewController(vc, animated: true)
+//        PFUser.currentUser()?.fetchIfNeededInBackgroundWithBlock({
+//            (result, error) in
+//            let eve:[Event] = PFUser.currentUser()!.objectForKey("attended") as! [Event]
+//            let events:[Event] = eve.filter{$0.startDate.timeIntervalSinceReferenceDate >= NSDate().timeIntervalSinceReferenceDate}
+//            
+//            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ListEventsViewController") as! ListEventsViewController
+//            vc.eventsFirst = events
+//            self.navigationController?.pushViewController(vc, animated: true)
+//        })
     }
     
     func showPastEvents(){
-        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ListEventsViewController") as! ListEventsViewController
-        navigationController?.pushViewController(vc, animated: true)
+//        PFUser.currentUser()?.fetchIfNeededInBackgroundWithBlock({
+//            (result, error) in
+//            let eve:[Event] = (PFUser.currentUser()!.objectForKey("attended") as! [Event])
+//            let events:[Event] = eve.filter({
+//                
+//                ($0 as Event).startDate.timeIntervalSinceReferenceDate < NSDate().timeIntervalSinceReferenceDate})
+//            
+//            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ListEventsViewController") as! ListEventsViewController
+//            vc.eventsFirst = events
+//            self.navigationController?.pushViewController(vc, animated: true)
+//        })
+        
     }
     
     @IBAction func openCategoryPicker(sender: AnyObject) {

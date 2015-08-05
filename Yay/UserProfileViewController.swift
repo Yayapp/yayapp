@@ -29,6 +29,24 @@ class UserProfileViewController: UITableViewController {
         let currentPFLocation = user.objectForKey("location") as! PFGeoPoint
         getLocationString(currentPFLocation.latitude, longitude: currentPFLocation.longitude)
         
+        PFUser.currentUser()!.fetchIfNeededInBackgroundWithBlock({
+            (result, error) in
+            if (error == nil) {
+                let events = PFUser.currentUser()!.objectForKey("attended") as! [Event]
+                let evcount = events.count
+                let categories = PFUser.currentUser()!.objectForKey("interests") as! [Category]
+                var interests:[String] = []
+                for category in categories {
+                    interests.append(category.name)
+                }
+                let interestsStr:String = ", ".join(interests)
+                self.eventsCount.text = "\(evcount) Events"
+                self.interests.text = "\(self.interests.text!) \(interestsStr)"
+            }
+        })
+        
+        
+        
         let avatarfile = user.objectForKey("avatar") as? PFFile
         if(avatarfile != nil) {
             avatar.file = avatarfile

@@ -14,7 +14,7 @@ class LoginViewController: UIViewController, InstagramDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
 
     override func didReceiveMemoryWarning() {
@@ -54,6 +54,8 @@ class LoginViewController: UIViewController, InstagramDelegate {
                                 PFUser.currentUser()?.setObject(result.objectForKey("email")!, forKey: "email")
                                 PFUser.currentUser()?.setObject(result.objectForKey("name")!, forKey: "name")
 //                                PFUser.currentUser()?.setObject(result.objectForKey("about")?!, forKey: "about")
+                            PFUser.currentUser()?.setObject([], forKey: "attended")
+                            PFUser.currentUser()?.setObject([], forKey: "interests")
                                 PFUser.currentUser()?.setObject(imageFile, forKey: "avatar")
                                 PFUser.currentUser()?.saveEventually(nil)
                             
@@ -89,6 +91,9 @@ class LoginViewController: UIViewController, InstagramDelegate {
                 Prefs.storeSessionId(user.sessionToken!)
                 Prefs.storeLoginType(LoginType.TWITTER)
                 if user.isNew {
+                    PFUser.currentUser()?.setObject([], forKey: "attended")
+                    PFUser.currentUser()?.setObject([], forKey: "interests")
+                    PFUser.currentUser()?.saveEventually(nil)
                     self.performSegueWithIdentifier("proceed", sender: nil)
                 } else {
                     self.performSegueWithIdentifier("proceed", sender: nil)
@@ -126,6 +131,8 @@ class LoginViewController: UIViewController, InstagramDelegate {
                     var pfuser = PFUser()
                     pfuser["name"] = user.fullName
                     pfuser["token"] = token
+                    pfuser["attended"] = []
+                    pfuser["interests"] = []
                     pfuser.password = "\(user.username.MD5())"
                     pfuser.username = user.username
                     pfuser.signUpInBackgroundWithBlock {
