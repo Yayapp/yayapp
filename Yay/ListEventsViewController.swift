@@ -66,7 +66,6 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
         
         var cell = events.dequeueReusableCellWithIdentifier("Cell") as! EventsTableViewCell
         let event:Event! = eventsData[indexPath.row]
-        
         let distanceBetween: CLLocationDistance = CLLocation(latitude: event.location.latitude, longitude: event.location.longitude).distanceFromLocation(currentLocation)
         let distanceStr = String(format: "%.2f", distanceBetween/1000)
         

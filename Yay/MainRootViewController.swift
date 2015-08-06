@@ -105,30 +105,23 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
     }
     
     func showUpcomingEvents(){
-//        PFUser.currentUser()?.fetchIfNeededInBackgroundWithBlock({
-//            (result, error) in
-//            let eve:[Event] = PFUser.currentUser()!.objectForKey("attended") as! [Event]
-//            let events:[Event] = eve.filter{$0.startDate.timeIntervalSinceReferenceDate >= NSDate().timeIntervalSinceReferenceDate}
-//            
-//            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ListEventsViewController") as! ListEventsViewController
-//            vc.eventsFirst = events
-//            self.navigationController?.pushViewController(vc, animated: true)
-//        })
+        ParseHelper.getUpcomingPastEvents(PFUser.currentUser()!, upcoming: true, block: {
+            result, error in
+            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ListEventsViewController") as! ListEventsViewController
+            vc.eventsFirst = result
+            vc.title = "UPCOMING EVENTS"
+            self.navigationController?.pushViewController(vc, animated: true)
+        })
     }
     
     func showPastEvents(){
-//        PFUser.currentUser()?.fetchIfNeededInBackgroundWithBlock({
-//            (result, error) in
-//            let eve:[Event] = (PFUser.currentUser()!.objectForKey("attended") as! [Event])
-//            let events:[Event] = eve.filter({
-//                
-//                ($0 as Event).startDate.timeIntervalSinceReferenceDate < NSDate().timeIntervalSinceReferenceDate})
-//            
-//            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ListEventsViewController") as! ListEventsViewController
-//            vc.eventsFirst = events
-//            self.navigationController?.pushViewController(vc, animated: true)
-//        })
-        
+        ParseHelper.getUpcomingPastEvents(PFUser.currentUser()!, upcoming: false, block: {
+            result, error in
+            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ListEventsViewController") as! ListEventsViewController
+            vc.eventsFirst = result
+            vc.title = "PAST EVENTS"
+            self.navigationController?.pushViewController(vc, animated: true)
+        })
     }
     
     @IBAction func openCategoryPicker(sender: AnyObject) {

@@ -8,13 +8,17 @@
 
 import UIKit
 
-class UserProfileViewController: UITableViewController {
-
+class UserProfileViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, ChooseCategoryDelegate {
+    
+   
+    let picker = UIImagePickerController()
+    
     var user:PFUser!
     
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var location: UILabel!
     
+    @IBOutlet weak var uploadPhoto: UIButton!
     @IBOutlet weak var avatar: PFImageView!
     @IBOutlet weak var eventsCount: UILabel!
     @IBOutlet weak var interests: UILabel!
@@ -24,26 +28,47 @@ class UserProfileViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        picker.delegate = self
+        tableView.estimatedRowHeight = 100.0
+        tableView.rowHeight = UITableViewAutomaticDimension
         name.text = user.objectForKey("name") as? String
+        
+        if(PFUser.currentUser()?.objectId == user.objectId) {
+            uploadPhoto.hidden = false
+        }
         
         let currentPFLocation = user.objectForKey("location") as! PFGeoPoint
         getLocationString(currentPFLocation.latitude, longitude: currentPFLocation.longitude)
         
-        PFUser.currentUser()!.fetchIfNeededInBackgroundWithBlock({
-            (result, error) in
-            if (error == nil) {
-                let events = PFUser.currentUser()!.objectForKey("attended") as! [Event]
-                let evcount = events.count
-                let categories = PFUser.currentUser()!.objectForKey("interests") as! [Category]
+        ParseHelper.getUpcomingPastEvents(user, upcoming: nil, block: {
+            result, error in
+            if error == nil {
+                self.eventsCount.text = "\(result!.count) Events"
+            }
+        })
+        
+        var query = PFUser.query()
+        query!.whereKey("objectId", equalTo: user.objectId!)
+        query!.includeKey("interests")
+        query!.findObjectsInBackgroundWithBlock({
+            (users:[AnyObject]?, error:NSError?) in
+            
+            if error == nil {
+                let user = users as! [PFUser]
+                let categories:[PFObject] = user.first!.objectForKey("interests") as! [PFObject]
                 var interests:[String] = []
                 for category in categories {
-                    interests.append(category.name)
+                    interests.append(category["name"] as! String)
                 }
                 let interestsStr:String = ", ".join(interests)
-                self.eventsCount.text = "\(evcount) Events"
+                //
                 self.interests.text = "\(self.interests.text!) \(interestsStr)"
             }
         })
+        
+      
+        
+        
         
         
         
@@ -107,9 +132,83 @@ class UserProfileViewController: UITableViewController {
         
     }
     
-    @IBAction func uploadPhoto(sender: AnyObject) {
+    func madeCategoryChoice(category: Category) {
+        user.fetchIfNeededInBackgroundWithBlock({
+            (result, error) in
+            if (error == nil) {
+                
+                let categories = self.user.objectForKey("interests") as! [Category]
+                var interests:[String] = []
+                for category in categories {
+                    interests.append(category.name)
+                }
+                let interestsStr:String = ", ".join(interests)
+                //
+                self.interests.text = "\(self.interests.text!) \(interestsStr)"
+            }
+        })
         
+        
+        PFUser.currentUser()!.fetchIfNeededInBackgroundWithBlock({
+            (result, error) in
+            PFUser.currentUser()!.addObject(category, forKey: "interests")
+            PFUser.currentUser()!.saveInBackgroundWithBlock({
+                (result, error) in
+                let categories = PFUser.currentUser()!.objectForKey("interests") as! [Category]
+                var interests:[String] = []
+                for category in categories {
+                    interests.append(category.name)
+                }
+                let interestsStr:String = ", ".join(interests)
+                //
+                self.interests.text = "\(self.interests.text!) \(interestsStr)"
+            })
+        })
     }
     
+    func openCategoryPicker() {
+        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ChooseCategoryViewController") as! ChooseCategoryViewController
+        vc.delegate = self
+        vc.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
+        presentViewController(vc, animated: true, completion: nil)
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if (PFUser.currentUser()?.objectId == user.objectId && indexPath.row == 1){
+            openCategoryPicker()
+        }
+    }
+    
+    @IBAction func uploadPhoto(sender: AnyObject) {
+        picker.allowsEditing = true
+        picker.sourceType = UIImagePickerControllerSourceType.Camera
+        picker.cameraCaptureMode = .Photo
+        picker.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
+        picker.showsCameraControls = true;
+        presentViewController(picker, animated: true, completion: nil)
+    }
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+        let pickedImage:UIImage = info[UIImagePickerControllerEditedImage] as! UIImage
+        let imageData = UIImagePNGRepresentation(pickedImage)
+        let imageFile:PFFile = PFFile(data: imageData)
+        avatar.file = imageFile
+        avatar.loadInBackground()
+        PFUser.currentUser()!.setObject(imageFile, forKey: "avatar")
+        PFUser.currentUser()!.saveInBackgroundWithBlock({
+            result, error in
+            self.dismissViewControllerAnimated(true, completion: nil)
+        })
+    }
+    //What to do if the image picker cancels.
+    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func noCamera(){
+        let alertVC = UIAlertController(title: "No Camera", message: "Sorry, this device has no camera", preferredStyle: .Alert)
+        let okAction = UIAlertAction(title: "OK", style:.Default, handler: nil)
+        alertVC.addAction(okAction)
+        presentViewController(alertVC, animated: true, completion: nil)
+    }
     
 }

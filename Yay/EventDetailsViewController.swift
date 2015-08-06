@@ -14,6 +14,7 @@ class EventDetailsViewController: UIViewController {
     let dateFormatter = NSDateFormatter()
     var currentLocation:CLLocation!
     var attendeeButtons:[UIButton]!
+    var attendees:[PFUser] = []
     
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     @IBOutlet weak var photo: PFImageView!
@@ -28,6 +29,7 @@ class EventDetailsViewController: UIViewController {
     
     @IBOutlet weak var author: UIButton!
     
+    @IBOutlet weak var attend: UIButton!
     @IBOutlet weak var attended1: UIButton!
     
     @IBOutlet weak var attended2: UIButton!
@@ -39,12 +41,17 @@ class EventDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         attendeeButtons = [attended1,attended2,attended3,attended4]
+        attendees = event.attendees.filter({$0.objectId != self.event.owner.objectId})
+        
         
         dateFormatter.dateFormat = "EEE dd MMM 'at' H:mm"
         
         if let user = PFUser.currentUser() {
             let currentPFLocation = user.objectForKey("location") as! PFGeoPoint
             currentLocation = CLLocation(latitude: currentPFLocation.latitude, longitude: currentPFLocation.longitude)
+            if event.attendees.filter({$0.objectId == user.objectId}).count == 0 && event.limit>event.attendees.count {
+                attend.hidden = false
+            }
         } else {
             currentLocation = CLLocation(latitude: TempUser.location!.latitude, longitude: TempUser.location!.longitude)
         }
@@ -69,7 +76,7 @@ class EventDetailsViewController: UIViewController {
         }
         
         
-        for (index, attendee) in enumerate(event.attendees) {
+        for (index, attendee) in enumerate(attendees) {
             let attendeeButton = attendeeButtons[index]
             
             attendeeButton.addTarget(self, action: "attendeeProfile:", forControlEvents: .TouchUpInside)
@@ -113,20 +120,10 @@ class EventDetailsViewController: UIViewController {
             self.event.addObject(PFUser.currentUser()!, forKey: "attendees")
             self.event.saveInBackgroundWithBlock({
                 (result, error) in
-                PFUser.currentUser()!.fetchIfNeededInBackgroundWithBlock({
-                    (result, error) in
-                    PFUser.currentUser()!.addObject(self.event, forKey: "attended")
-                    PFUser.currentUser()!.saveInBackgroundWithBlock({
-                        (result, error) in
-                        self.spinner.stopAnimating()
-                    })
-                })
+                self.spinner.stopAnimating()
+                self.attend.hidden = true
             })
         })
-       
-        
-        
-        
     }
     
     func getLocationString(latitude: Double, longitude: Double){
@@ -167,7 +164,7 @@ class EventDetailsViewController: UIViewController {
     
     @IBAction func attendeeProfile(sender: AnyObject) {
         let userProfileViewController = self.storyboard!.instantiateViewControllerWithIdentifier("UserProfileViewController") as! UserProfileViewController
-        userProfileViewController.user = event.attendees[sender.tag]
+        userProfileViewController.user = attendees[sender.tag]
         
         navigationController?.pushViewController(userProfileViewController, animated: true)
     }

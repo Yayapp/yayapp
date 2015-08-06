@@ -848,20 +848,6 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="AdA-ps-VNU">
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="AdA-ps-VNU" id="hRj-Om-Azi">
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Profile" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lcx-Q1-zgH">
-                                                    <rect key="frame" x="8" y="11" width="49" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                             <tableViewSection headerTitle="LEGAL" id="9ZL-Ov-oc2">
@@ -892,6 +878,16 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection headerTitle="DISTANCE RANGE" id="eZH-JP-WBX">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="90" id="DpU-5g-75A">
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="DpU-5g-75A" id="cOD-Bi-yTc">
+                                            <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </cells>
@@ -1356,14 +1352,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="addeventphoto" translatesAutoresizingMaskIntoConstraints="NO" id="lQK-S1-GFC">
-                                <rect key="frame" x="0.0" y="64" width="320" height="192"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="addeventphoto" translatesAutoresizingMaskIntoConstraints="NO" id="lQK-S1-GFC">
+                                <rect key="frame" x="0.0" y="64" width="320" height="227"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="lQK-S1-GFC" secondAttribute="height" multiplier="160:113" constant="48.141592920354014" id="qsg-F9-b8B"/>
                                 </constraints>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" alpha="0.10000000000000001" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="createevent_descriptionbackground" translatesAutoresizingMaskIntoConstraints="NO" id="u7N-nB-5HN">
-                                <rect key="frame" x="0.0" y="256" width="320" height="145"/>
+                            <imageView userInteractionEnabled="NO" alpha="0.10000000000000001" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="createevent_descriptionbackground" translatesAutoresizingMaskIntoConstraints="NO" id="u7N-nB-5HN">
+                                <rect key="frame" x="0.0" y="289" width="320" height="112"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="u7N-nB-5HN" secondAttribute="height" multiplier="64:29" id="y3f-30-xub"/>
@@ -1453,8 +1449,8 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.24999999999999967" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OMs-22-tqc">
-                                <rect key="frame" x="8" y="264" width="304" height="128"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.24999999999999967" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OMs-22-tqc">
+                                <rect key="frame" x="8" y="299" width="304" height="93"/>
                                 <color key="backgroundColor" red="0.22745098039215686" green="0.28627450980392155" blue="0.32941176470588235" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="OMs-22-tqc" secondAttribute="height" multiplier="19:8" id="J5a-U4-nG8"/>
@@ -1529,6 +1525,9 @@
                                     <action selector="plusLimit:" destination="QtT-Q2-qgG" eventType="touchUpInside" id="dl0-cF-bqn"/>
                                 </connections>
                             </button>
+                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" minimumValueImage="agepref_icon" translatesAutoresizingMaskIntoConstraints="NO" id="GCD-bJ-NVH">
+                                <rect key="frame" x="101" y="256" width="118" height="31"/>
+                            </slider>
                         </subviews>
                         <color key="backgroundColor" red="0.054901960780000002" green="0.10980392160000001" blue="0.1215686275" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -1876,7 +1875,7 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SeM-eT-uRk">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SeM-eT-uRk">
                                 <rect key="frame" x="135" y="410" width="50" height="50"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -1948,6 +1947,7 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
+                        <outlet property="attend" destination="SeM-eT-uRk" id="9JM-Hb-DN7"/>
                         <outlet property="attended1" destination="bL5-qP-73L" id="SNS-ay-laN"/>
                         <outlet property="attended2" destination="Nrt-A6-Qrl" id="AYr-Cx-0k1"/>
                         <outlet property="attended3" destination="w5p-xO-2ZB" id="PId-sa-Js4"/>
@@ -2137,19 +2137,22 @@
                                                         <constraint firstAttribute="width" secondItem="aae-fO-q2e" secondAttribute="height" multiplier="1:1" id="5dY-6y-SAN"/>
                                                     </constraints>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Interests:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LaN-hr-ord">
-                                                    <rect key="frame" x="46" y="10" width="266" height="24"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Interests: " lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LaN-hr-ord">
+                                                    <rect key="frame" x="45" y="0.0" width="267" height="43"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="43" id="e6p-8G-qTD"/>
+                                                    </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="LaN-hr-ord" firstAttribute="top" secondItem="EnH-tY-gEV" secondAttribute="topMargin" constant="2" id="9Bz-ug-j4V"/>
+                                                <constraint firstItem="LaN-hr-ord" firstAttribute="top" secondItem="EnH-tY-gEV" secondAttribute="topMargin" constant="-8" id="9Bz-ug-j4V"/>
                                                 <constraint firstItem="aae-fO-q2e" firstAttribute="leading" secondItem="EnH-tY-gEV" secondAttribute="leading" constant="8" id="Dpq-wy-mo0"/>
                                                 <constraint firstItem="aae-fO-q2e" firstAttribute="top" secondItem="EnH-tY-gEV" secondAttribute="top" constant="7" id="L2G-Vf-tq3"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="LaN-hr-ord" secondAttribute="bottom" constant="1" id="n4L-2Z-1RI"/>
-                                                <constraint firstItem="LaN-hr-ord" firstAttribute="leading" secondItem="aae-fO-q2e" secondAttribute="trailing" constant="8" id="pBD-kA-Yqt"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="LaN-hr-ord" secondAttribute="bottom" constant="-8" id="n4L-2Z-1RI"/>
+                                                <constraint firstItem="LaN-hr-ord" firstAttribute="leading" secondItem="aae-fO-q2e" secondAttribute="trailing" constant="7" id="pBD-kA-Yqt"/>
                                                 <constraint firstAttribute="bottom" secondItem="aae-fO-q2e" secondAttribute="bottom" constant="6" id="vQO-PY-nNK"/>
                                                 <constraint firstItem="LaN-hr-ord" firstAttribute="trailing" secondItem="EnH-tY-gEV" secondAttribute="trailingMargin" id="wCU-w2-5bK"/>
                                             </constraints>
@@ -2208,6 +2211,7 @@
                         <outlet property="interests" destination="LaN-hr-ord" id="Bb7-fR-pzX"/>
                         <outlet property="location" destination="YC7-09-l41" id="kUX-6O-yLK"/>
                         <outlet property="name" destination="AlA-MP-Cy3" id="2xK-sg-2hb"/>
+                        <outlet property="uploadPhoto" destination="Rgc-Lt-xe2" id="wjS-nJ-l4F"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9zb-gS-Rd0" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2222,6 +2226,7 @@
         <image name="aboutTheuserico" width="29" height="29"/>
         <image name="addevent_button" width="83" height="83"/>
         <image name="addeventphoto" width="640" height="427"/>
+        <image name="agepref_icon" width="30" height="32"/>
         <image name="calendarico" width="30" height="32"/>
         <image name="cancelevent_button" width="75" height="75"/>
         <image name="categoriesico" width="30" height="30"/>

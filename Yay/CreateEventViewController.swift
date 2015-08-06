@@ -288,17 +288,21 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
             event.category = chosenCategory!
             event.startDate = chosenDate!
             event.photo = chosenPhoto!
+            event.limit = limitInt
             event.owner = PFUser.currentUser()!
             event.location = PFGeoPoint(latitude: latitude!, longitude: longitude!)
             event.attendees = []
             event.saveInBackgroundWithBlock({
                 (result, error) in
                 if error == nil {
-                    self.spinner.stopAnimating()
-                    self.navigationController?.popViewControllerAnimated(true)
+                    event.addObject(PFUser.currentUser()!, forKey: "attendees")
+                    event.saveInBackgroundWithBlock({
+                        (result, error) in
+                        self.spinner.stopAnimating()
+                        self.navigationController?.popViewControllerAnimated(true)
+                    })
                 }
             })
-            
         }
     }
     

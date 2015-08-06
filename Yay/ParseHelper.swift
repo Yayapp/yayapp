@@ -89,6 +89,33 @@ class ParseHelper {
         
     }
 
+    class func getUpcomingPastEvents(user: PFUser, upcoming:Bool?, block:EventsResultBlock?) {
+        
+        let today = NSDate()
+        var query = PFQuery(className:Event.parseClassName())
+        query.whereKey("attendees", equalTo:user)
+        if(upcoming != nil) {
+            if (upcoming == true) {
+                query.whereKey("startDate", greaterThanOrEqualTo: today)
+            } else {
+                query.whereKey("startDate", lessThan: today)
+            }
+        }
+        query.findObjectsInBackgroundWithBlock {
+            (objects: [AnyObject]?, error: NSError?) -> () in
+            
+            if error == nil {
+                if let objects = objects as? [Event] {
+                    block!(objects, error)
+                }
+            } else {
+                // Log details of the failure
+                println("Error: \(error!) \(error!.userInfo!)")
+                block!(nil, error)
+            }
+        }
+        
+    }
     
     class func getCategories(block:CategoriesResultBlock?) {
         var query = PFQuery(className:Category.parseClassName())

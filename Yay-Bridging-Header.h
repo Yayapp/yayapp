@@ -8,6 +8,7 @@
 #import <LayerKit/LayerKit.h>
 #import <Parse/Parse.h>
 #import <ParseUI/ParseUI.h>
+#import <Parse/PFObject+Subclass.h>
 #import <SVProgressHUD/SVProgressHUD.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
