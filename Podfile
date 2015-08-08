@@ -13,3 +13,4 @@ pod 'LayerKit'
 pod 'SVProgressHUD'
 pod 'Atlas'
 pod 'InstagramKit', '~> 3.0'
+pod "TTRangeSlider"

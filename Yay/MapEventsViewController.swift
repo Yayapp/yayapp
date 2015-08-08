@@ -22,10 +22,11 @@ class MapEventsViewController: EventsViewController, MKMapViewDelegate {
         let user = PFUser.currentUser()
         
         let location:PFGeoPoint? = user?.objectForKey("location") as? PFGeoPoint
+        let distance = user?.objectForKey("distance") as? Double
         if location != nil {
             let center:CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: location!.latitude , longitude: location!.longitude)
             
-            let coordinateRegion = MKCoordinateRegionMakeWithDistance(center, regionRadius * 20.0, regionRadius * 20.0)
+            let coordinateRegion = MKCoordinateRegionMakeWithDistance(center, regionRadius * distance!, regionRadius * distance!)
             
             self.mapView.setRegion(coordinateRegion, animated: true)
         }

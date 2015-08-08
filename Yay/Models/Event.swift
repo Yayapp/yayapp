@@ -32,6 +32,8 @@ class Event : PFObject, PFSubclassing {
 	@NSManaged var summary: String
 	@NSManaged var photo: PFFile
     @NSManaged var limit: Int
+    @NSManaged var minAge: Int
+    @NSManaged var maxAge: Int
     @NSManaged var attendees: [PFUser]
 	
 }

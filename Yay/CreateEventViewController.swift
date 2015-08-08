@@ -9,10 +9,13 @@
 import UIKit
 import MapKit
 
-class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLocationDelegate, ChooseCategoryDelegate, ChooseEventPictureDelegate, UIPopoverPresentationControllerDelegate, UITextFieldDelegate, UITextViewDelegate {
+class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLocationDelegate, ChooseCategoryDelegate, ChooseEventPictureDelegate, UIPopoverPresentationControllerDelegate, UITextFieldDelegate, UITextViewDelegate, TTRangeSliderDelegate {
 
-    let dateFormatter = NSDateFormatter()
+    let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
+    let dateFormatter = NSDateFormatter()
+    var minAge:Int! = 16
+    var maxAge:Int! = 99
     var longitude: Double?
     var latitude: Double?
     var chosenDate:NSDate?
@@ -28,21 +31,34 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
     @IBOutlet weak var dateTimeButton: UIButton!
     @IBOutlet weak var location: UIButton!
     
+    @IBOutlet weak var rangeSlider: TTRangeSlider!
+    @IBOutlet weak var rangeLabel: UILabel!
+    @IBOutlet weak var sliderContainer: UIView!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     @IBOutlet weak var name: UITextField!
     @IBOutlet weak var descr: UITextView!
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         descr.delegate = self
         name.delegate = self
         dateFormatter.dateFormat = "EEE dd MMM 'at' H:mm"
+        rangeSlider.delegate = self
+        appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.None
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         
     }
+    
+    func rangeSlider(sender:TTRangeSlider, didChangeSelectedMinimumValue selectedMinimum:Float, andMaximumValue selectedMaximum:Float){
+        minAge = Int(selectedMinimum)
+        maxAge = Int(selectedMaximum)
+        rangeLabel.text = "\(Int(selectedMinimum))-\(Int(selectedMaximum))"
+    }
+  
     
     @IBAction func openDateTimePicker(sender: AnyObject) {
         let map = self.storyboard!.instantiateViewControllerWithIdentifier("ChooseDateTimeViewController") as! ChooseDateTimeViewController
@@ -289,6 +305,8 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
             event.startDate = chosenDate!
             event.photo = chosenPhoto!
             event.limit = limitInt
+            event.minAge = minAge
+            event.maxAge = maxAge
             event.owner = PFUser.currentUser()!
             event.location = PFGeoPoint(latitude: latitude!, longitude: longitude!)
             event.attendees = []
@@ -305,5 +323,7 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
             })
         }
     }
-    
+    deinit {
+        appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.PanningCenterView
+    }
 }

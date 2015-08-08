@@ -15,8 +15,11 @@ typealias EventPhotosResultBlock = ([EventPhoto]?, NSError?) -> ()
 class ParseHelper {
 	
 
-	class func getTodayEvents(category:Category?, block:EventsResultBlock?) {
+    class func getTodayEvents(user:PFUser, category:Category?, block:EventsResultBlock?) {
 
+        let location:PFGeoPoint? = user.objectForKey("location") as? PFGeoPoint
+        let distance = user.objectForKey("distance") as? Double
+        
         let today = NSDate()
         
         let cal = NSCalendar.currentCalendar()
@@ -29,6 +32,13 @@ class ParseHelper {
 		var query = PFQuery(className:Event.parseClassName())
         query.whereKey("startDate", greaterThan: today)
         query.whereKey("startDate", lessThanOrEqualTo: endToday!)
+        query.whereKey("location", nearGeoPoint: location!, withinKilometers: distance!)
+        if let dob = user["dob"] as? NSDate {
+            let age = NSCalendar.currentCalendar().component(NSCalendarUnit.CalendarUnitYear, fromDate: dob )
+            query.whereKey("minAge", lessThanOrEqualTo: age)
+            query.whereKey("maxAge", greaterThanOrEqualTo: age)
+        }
+        
         
         if (category != nil) {
             query.whereKey("category", equalTo: category!)
@@ -50,7 +60,9 @@ class ParseHelper {
 
 	}
     
-    class func getThisWeekEvents(category:Category?, block:EventsResultBlock?) {
+    class func getThisWeekEvents(user:PFUser, category:Category?, block:EventsResultBlock?) {
+        let location:PFGeoPoint? = user.objectForKey("location") as? PFGeoPoint
+        let distance = user.objectForKey("distance") as? Double
         
         let today = NSDate()
         
@@ -68,6 +80,12 @@ class ParseHelper {
         var query = PFQuery(className:Event.parseClassName())
         query.whereKey("startDate", greaterThan: today)
         query.whereKey("startDate", lessThanOrEqualTo: endWeek!)
+        query.whereKey("location", nearGeoPoint: location!, withinKilometers: distance!)
+        if let dob = user["dob"] as? NSDate {
+            let age = NSCalendar.currentCalendar().component(NSCalendarUnit.CalendarUnitYear, fromDate: dob )
+            query.whereKey("minAge", lessThanOrEqualTo: age)
+            query.whereKey("maxAge", greaterThanOrEqualTo: age)
+        }
         
         if (category != nil) {
             query.whereKey("category", equalTo: category!)

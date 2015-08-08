@@ -16,3 +16,4 @@
 #import <InstagramKit/InstagramKit.h>
 #import <AFNetworking/AFNetworking.h>
 #import <CommonCrypto/CommonCrypto.h>
+#import <TTRangeSlider/TTRangeSlider.h>

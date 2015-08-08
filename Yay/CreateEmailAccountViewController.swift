@@ -56,6 +56,10 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate {
         var user = PFUser()
         user["name"] = name.text
         user["interests"] = []
+        user["distance"] = 10
+        user["attAccepted"] = true
+        user["eventNearby"] = true
+        user["newMessage"] = true
         user.password = password2.text
         user.email = email.text
         user.username = email.text

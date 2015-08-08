@@ -67,14 +67,14 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
             vc = self.storyboard!.instantiateViewControllerWithIdentifier("ListEventsViewController") as! ListEventsViewController
         }
         if(segments.selectedSegmentIndex == 0) {
-            ParseHelper.getTodayEvents(chosenCategory, block: {
+            ParseHelper.getTodayEvents(PFUser.currentUser()!, category: chosenCategory, block: {
                 (eventsList:[Event]?, error:NSError?) in
                 if(error == nil) {
                     vc.reloadAll(eventsList!)
                 }
             })
         } else {
-            ParseHelper.getThisWeekEvents(chosenCategory, block: {
+            ParseHelper.getThisWeekEvents(PFUser.currentUser()!, category: chosenCategory, block: {
                 (eventsList:[Event]?, error:NSError?) in
                 if(error == nil) {
                     vc.reloadAll(eventsList!)

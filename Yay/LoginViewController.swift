@@ -56,8 +56,12 @@ class LoginViewController: UIViewController, InstagramDelegate {
 //                                PFUser.currentUser()?.setObject(result.objectForKey("about")?!, forKey: "about")
                       
                             PFUser.currentUser()?.setObject([], forKey: "interests")
-                                PFUser.currentUser()?.setObject(imageFile, forKey: "avatar")
-                                PFUser.currentUser()?.saveEventually(nil)
+                            PFUser.currentUser()?.setObject(true, forKey: "attAccepted")
+                            PFUser.currentUser()?.setObject(true, forKey: "eventNearby")
+                            PFUser.currentUser()?.setObject(true, forKey: "newMessage")
+                            PFUser.currentUser()?.setObject(10, forKey: "distance")
+                            PFUser.currentUser()?.setObject(imageFile, forKey: "avatar")
+                            PFUser.currentUser()?.saveEventually(nil)
                             
                             println("Email: \(fbEmail)")
                             println("FBUserId: \(fbUserId)")
@@ -92,7 +96,11 @@ class LoginViewController: UIViewController, InstagramDelegate {
                 Prefs.storeLoginType(LoginType.TWITTER)
                 if user.isNew {
                  
+                    PFUser.currentUser()?.setObject(true, forKey: "attAccepted")
+                    PFUser.currentUser()?.setObject(true, forKey: "eventNearby")
+                    PFUser.currentUser()?.setObject(true, forKey: "newMessage")
                     PFUser.currentUser()?.setObject([], forKey: "interests")
+                    PFUser.currentUser()?.setObject(10, forKey: "distance")
                     PFUser.currentUser()?.saveEventually(nil)
                     self.performSegueWithIdentifier("proceed", sender: nil)
                 } else {
@@ -131,8 +139,11 @@ class LoginViewController: UIViewController, InstagramDelegate {
                     var pfuser = PFUser()
                     pfuser["name"] = user.fullName
                     pfuser["token"] = token
-                  
+                    pfuser["distance"] = 10
                     pfuser["interests"] = []
+                    pfuser["attAccepted"] = true
+                    pfuser["eventNearby"] = true
+                    pfuser["newMessage"] = true
                     pfuser.password = "\(user.username.MD5())"
                     pfuser.username = user.username
                     pfuser.signUpInBackgroundWithBlock {
