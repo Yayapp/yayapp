@@ -20,7 +20,7 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
     @IBOutlet weak var createEvent: UIButton!
     
     var currentVC:UIViewController!
-    var isMapView = true
+    var isMapView = false
     var eventsData:[Event]!=[]
     var chosenCategory:Category?
     
@@ -37,7 +37,7 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
         }
             
         
-        rightSwitchBarButtonItem = UIBarButtonItem(image:UIImage(named: "listico"), style: UIBarButtonItemStyle.Plain, target: self, action: "switchTapped:")
+        rightSwitchBarButtonItem = UIBarButtonItem(image:UIImage(named: "mapmarkerico"), style: UIBarButtonItemStyle.Plain, target: self, action: "switchTapped:")
         rightSwitchBarButtonItem!.tintColor = UIColor.whiteColor()
         buttonItems.append(rightSwitchBarButtonItem!)
         
@@ -67,14 +67,14 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
             vc = self.storyboard!.instantiateViewControllerWithIdentifier("ListEventsViewController") as! ListEventsViewController
         }
         if(segments.selectedSegmentIndex == 0) {
-            ParseHelper.getTodayEvents(PFUser.currentUser()!, category: chosenCategory, block: {
+            ParseHelper.getTodayEvents(PFUser.currentUser(), category: chosenCategory, block: {
                 (eventsList:[Event]?, error:NSError?) in
                 if(error == nil) {
                     vc.reloadAll(eventsList!)
                 }
             })
         } else {
-            ParseHelper.getThisWeekEvents(PFUser.currentUser()!, category: chosenCategory, block: {
+            ParseHelper.getThisWeekEvents(PFUser.currentUser(), category: chosenCategory, block: {
                 (eventsList:[Event]?, error:NSError?) in
                 if(error == nil) {
                     vc.reloadAll(eventsList!)

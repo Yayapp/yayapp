@@ -261,17 +261,27 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
         return false
     }
     func textViewShouldReturn(textField: UITextView) -> Bool {
-        self.view.endEditing(true)
-        return false
+        textField.resignFirstResponder()
+        return true
+    }
+    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+        if(text == "\n") {
+           
+            textView.resignFirstResponder()
+            return false
+        }
+        return true
     }
 
     @IBAction func plusLimit(sender: AnyObject) {
+        limit.textColor = UIColor.whiteColor()
         if limitInt < 5 {
             limitInt++
             limit.text = "\(limitInt)"
         }
     }
     @IBAction func minusLimit(sender: AnyObject) {
+        limit.textColor = UIColor.whiteColor()
         if limitInt > 1 {
             limitInt--
             limit.text = "\(limitInt)"

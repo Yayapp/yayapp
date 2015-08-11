@@ -14,11 +14,13 @@ class ProfileViewController: UITableViewController {
     
     @IBOutlet weak var avatar: PFImageView!
     @IBOutlet weak var profileTable: UITableView!
+    @IBOutlet weak var name: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         
+        name.text = PFUser.currentUser()!.objectForKey("name") as! String
         let avatarfile = PFUser.currentUser()?.objectForKey("avatar") as? PFFile
         if(avatarfile != nil) {
             avatar.file = avatarfile

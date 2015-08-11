@@ -468,7 +468,7 @@
                                 </constraints>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done" secureTextEntry="YES"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MuE-5F-rE0">
                                 <rect key="frame" x="110" y="335" width="100" height="50"/>
@@ -530,7 +530,7 @@
                                 </constraints>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done" secureTextEntry="YES"/>
                             </textField>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="lAD-9E-anf">
                                 <rect key="frame" x="130" y="77" width="60" height="60"/>
@@ -1124,13 +1124,25 @@
                                         <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                                     </userDefinedRuntimeAttributes>
                                 </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wry-kM-0Wy">
+                                    <rect key="frame" x="8" y="217" width="304" height="25"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="25" id="pfq-Om-NdV"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstItem="QDv-1B-WZJ" firstAttribute="leading" secondItem="Mf5-3V-PBp" secondAttribute="leading" id="6GA-Mt-3m0"/>
                                 <constraint firstAttribute="centerY" secondItem="yig-Rz-1MH" secondAttribute="centerY" id="B5M-hG-uER"/>
+                                <constraint firstAttribute="bottom" secondItem="wry-kM-0Wy" secondAttribute="bottom" constant="8" id="DGA-RE-f2m"/>
                                 <constraint firstAttribute="trailing" secondItem="QDv-1B-WZJ" secondAttribute="trailing" id="UcN-1e-R6w"/>
                                 <constraint firstItem="QDv-1B-WZJ" firstAttribute="top" secondItem="Mf5-3V-PBp" secondAttribute="top" id="WNZ-by-bOe"/>
+                                <constraint firstAttribute="trailing" secondItem="wry-kM-0Wy" secondAttribute="trailing" constant="8" id="f6c-eG-q3M"/>
+                                <constraint firstItem="wry-kM-0Wy" firstAttribute="leading" secondItem="Mf5-3V-PBp" secondAttribute="leading" constant="8" id="fhm-VF-vGG"/>
                                 <constraint firstItem="yig-Rz-1MH" firstAttribute="centerX" secondItem="QDv-1B-WZJ" secondAttribute="centerX" id="mV4-Vc-GvS"/>
                                 <constraint firstAttribute="bottom" secondItem="QDv-1B-WZJ" secondAttribute="bottom" id="wXA-IJ-6tn"/>
                             </constraints>
@@ -1276,6 +1288,7 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="avatar" destination="yig-Rz-1MH" id="q9B-Lf-zsJ"/>
+                        <outlet property="name" destination="wry-kM-0Wy" id="A1y-LJ-f2A"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vUn-YE-sZI" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1509,7 +1522,7 @@
                                 </constraints>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ecn-ay-VBY">
                                 <rect key="frame" x="235" y="223" width="25" height="25"/>
@@ -1655,7 +1668,7 @@
                                 </constraints>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                         <integer key="value" value="10"/>
@@ -2406,7 +2419,7 @@
         <image name="userico" width="31" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="dCM-D0-qCd"/>
         <segue reference="dLE-is-Chf"/>
+        <segue reference="NDv-lM-SCZ"/>
     </inferredMetricsTieBreakers>
 </document>
