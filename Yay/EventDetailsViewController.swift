@@ -10,11 +10,14 @@ import UIKit
 
 class EventDetailsViewController: UIViewController {
 
+    let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    
     var event:Event!
     let dateFormatter = NSDateFormatter()
     var currentLocation:CLLocation!
     var attendeeButtons:[UIButton]!
     var attendees:[PFUser] = []
+    var conversation:LYRConversation!
     
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     @IBOutlet weak var photo: PFImageView!
@@ -26,6 +29,9 @@ class EventDetailsViewController: UIViewController {
     @IBOutlet weak var date: UILabel!
     
     @IBOutlet weak var distance: UILabel!
+    
+    @IBOutlet weak var chatButton: UIButton!
+    @IBOutlet weak var inviteButton: UIButton!
     
     @IBOutlet weak var author: UIButton!
     
@@ -49,9 +55,23 @@ class EventDetailsViewController: UIViewController {
         if let user = PFUser.currentUser() {
             let currentPFLocation = user.objectForKey("location") as! PFGeoPoint
             currentLocation = CLLocation(latitude: currentPFLocation.latitude, longitude: currentPFLocation.longitude)
-            if event.attendees.filter({$0.objectId == user.objectId}).count == 0 && event.limit>event.attendees.count {
+            let attendedThisEvent = !(event.attendees.filter({$0.objectId == user.objectId}).count == 0)
+            if !attendedThisEvent && event.limit>event.attendees.count {
                 attend.hidden = false
             }
+            if !attendedThisEvent {
+                chatButton.enabled = false
+                inviteButton.enabled = false
+            }
+            
+                let query:LYRQuery = LYRQuery(queryableClass: LYRConversation.self)
+            query.limit = 100
+//            query.predicate = LYRPredicate(property: "identifier", predicateOperator:LYRPredicateOperator.IsEqualTo, value:NSURL(string:event.conversation))
+                var error:NSError?
+                appDelegate.layerClient.isConnected
+//            let conversations = appDelegate.layerClient.executeQuery(query, error:&error).array as! [LYRConversation]
+                conversation = appDelegate.layerClient.executeQuery(query, error:&error).firstObject as? LYRConversation
+            
         } else {
             currentLocation = CLLocation(latitude: TempUser.location!.latitude, longitude: TempUser.location!.longitude)
         }
@@ -64,16 +84,20 @@ class EventDetailsViewController: UIViewController {
         photo.file = event.photo
         photo.loadInBackground()
         date.text = dateFormatter.stringFromDate(event.startDate)
-        let avatar = event.owner["avatar"] as? PFFile
-        if(avatar != nil) {
-            avatar!.getDataInBackgroundWithBlock({
-                (data:NSData?, error:NSError?) in
-                if(error == nil) {
-                    var image = UIImage(data:data!)
-                    self.author.setImage(image, forState: .Normal)
-                }
-            })
-        }
+        
+        event.owner.fetchIfNeededInBackgroundWithBlock({
+            result, error in
+            if let avatar = self.event.owner["avatar"] as? PFFile {
+                avatar.getDataInBackgroundWithBlock({
+                    (data:NSData?, error:NSError?) in
+                    if(error == nil) {
+                        var image = UIImage(data:data!)
+                        self.author.setImage(image, forState: .Normal)
+                    }
+                })
+            }
+        })
+        
         
         
         for (index, attendee) in enumerate(attendees) {
@@ -122,6 +146,10 @@ class EventDetailsViewController: UIViewController {
                 (result, error) in
                 self.spinner.stopAnimating()
                 self.attend.hidden = true
+                var errors:NSError?
+                var set = NSMutableSet()
+                set.addObject(self.appDelegate.layerClient.authenticatedUserID)
+                self.conversation.addParticipants(set as Set<NSObject>, error: &errors)
             })
         })
     }
@@ -152,6 +180,18 @@ class EventDetailsViewController: UIViewController {
                 self.location.text = cityCountry as String
             }
         })
+        
+    }
+    
+    @IBAction func chat(sender: AnyObject) {
+        let controller = ConversationViewController(layerClient: appDelegate.layerClient)
+        controller.conversation = conversation
+        controller.displaysAddressBar = false
+        self.navigationController!.pushViewController(controller, animated: true)
+    }
+    
+    
+    @IBAction func invite(sender: AnyObject) {
         
     }
     

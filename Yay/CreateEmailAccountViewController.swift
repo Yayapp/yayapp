@@ -87,7 +87,7 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate {
                 if user != nil {
                     self.appDelegate.authenticateInLayer()
                     Prefs.storeSessionId(user!.sessionToken!)
-                    Prefs.storeLoginType(LoginType.FACEBOOK)
+                    Prefs.storeLoginType(LoginType.MAIL)
                     self.performSegueWithIdentifier("proceed", sender: nil)
                 } else {
                     let alert = UIAlertView()

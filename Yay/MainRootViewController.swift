@@ -172,7 +172,8 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
     }
    
     func chatTapped (sender:UIButton) {
-        println("add pressed")
+        let controller: ConversationListViewController = ConversationListViewController(layerClient: appDelegate.layerClient)
+        navigationController?.pushViewController(controller, animated: true)
     }
 
 }

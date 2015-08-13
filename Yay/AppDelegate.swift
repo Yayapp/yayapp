@@ -26,7 +26,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var leftViewController:ProfileViewController!
     var mainStoryBoard: UIStoryboard!
 
+
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        
+        
+        // Checking if app is running iOS 8
+        if (application.respondsToSelector("registerForRemoteNotifications")) {
+            // Register device for iOS8
+            let notificationSettings:UIUserNotificationSettings = UIUserNotificationSettings(forTypes: UIUserNotificationType.Alert | UIUserNotificationType.Badge | UIUserNotificationType.Sound, categories:nil)
+            application.registerUserNotificationSettings(notificationSettings)
+            application.registerForRemoteNotifications()
+        } else {
+            // Register device for iOS7
+            application.registerForRemoteNotificationTypes(UIRemoteNotificationType.Alert | UIRemoteNotificationType.Sound | UIRemoteNotificationType.Badge)
+        }
+        
         Category.registerSubclass()
         EventPhoto.registerSubclass()
         Event.registerSubclass()
@@ -54,7 +68,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         centerContainer?.closeDrawerGestureModeMask = MMCloseDrawerGestureMode.PanningCenterView
         
         if (PFUser.currentUser() != nil) {
-            
+                authenticateInLayer()
                 window!.rootViewController = centerContainer
                 window!.makeKeyAndVisible()
           
@@ -63,6 +77,77 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
+    
+    func application( application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData ) {
+        
+        
+        var characterSet: NSCharacterSet = NSCharacterSet( charactersInString: "<>" )
+        
+        var deviceTokenString: String = ( deviceToken.description as NSString )
+            .stringByTrimmingCharactersInSet( characterSet )
+            .stringByReplacingOccurrencesOfString( " ", withString: "" ) as String
+        
+        var error:NSError?
+        let success:Bool = self.layerClient.updateRemoteNotificationDeviceToken(deviceToken, error: &error)
+        if (success) {
+            println("Application did register for remote notifications")
+        } else {
+            println(String(format: "Error updating Layer device token for push:%@", error!))
+        }
+        
+        // Store the deviceToken in the current installation and save it to Parse.
+        let currentInstallation:PFInstallation = PFInstallation.currentInstallation()
+        currentInstallation.setDeviceTokenFromData(deviceToken)
+        currentInstallation.channels = ["global"]
+        currentInstallation.saveInBackground()
+    }
+    
+    
+    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
+        var error:NSError?
+        
+        let success:Bool = self.layerClient.synchronizeWithRemoteNotification(userInfo, completion: {
+            (changes:[AnyObject]!, error) in
+            if (changes != nil) {
+                if (changes.count>0) {
+//                    message = self.messageFromRemoteNotification(userInfo)
+                    completionHandler(UIBackgroundFetchResult.NewData);
+                } else {
+                    completionHandler(UIBackgroundFetchResult.NoData);
+                }
+            } else {
+                completionHandler(UIBackgroundFetchResult.Failed);
+            }
+        })
+        if (!success) {
+            completionHandler(UIBackgroundFetchResult.NoData)
+        }
+        PFPush.handlePush(userInfo)
+    }
+    
+    func messageFromRemoteNotification(remoteNotification:NSDictionary) -> LYRMessage {
+        let LQSPushMessageIdentifierKeyPath:String = "layer.message_identifier"
+        
+        // Retrieve message URL from Push Notification
+        let messageURL:NSURL = NSURL(string:remoteNotification.valueForKeyPath(LQSPushMessageIdentifierKeyPath) as! String)!
+        
+        // Retrieve LYRMessage from Message URL
+        let query:LYRQuery = LYRQuery(queryableClass:LYRMessage.classForCoder())
+        query.predicate = LYRPredicate(property:"identifier", predicateOperator:LYRPredicateOperator.IsIn, value: NSSet(object:messageURL))
+        
+        var error:NSError?
+        let messages:NSOrderedSet? = self.layerClient.executeQuery(query, error:&error)
+        if (messages != nil) {
+            //            NSLog(@"Query contains %lu messages", (unsigned long)messages.count);
+            let message:LYRMessage = messages!.firstObject! as! LYRMessage
+            let messagePart:LYRMessagePart = message.parts[0] as! LYRMessagePart
+            //            NSLog(@"Pushed Message Contents: %@", [[NSString alloc] initWithData:messagePart.data encoding:NSUTF8StringEncoding]);
+        } else {
+            //            NSLog(@"Query failed with error %@", error);
+        }
+        
+        return messages!.firstObject! as! LYRMessage
+    }
     
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

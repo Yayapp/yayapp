@@ -324,6 +324,15 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
                 (result, error) in
                 if error == nil {
                     event.addObject(PFUser.currentUser()!, forKey: "attendees")
+                    var errors:NSError?
+                    let conversation = self.appDelegate.layerClient.newConversationWithParticipants(NSSet(object:PFUser.currentUser()!.objectId!) as Set<NSObject>, options: nil, error: &errors)
+                    if  conversation == nil {
+                        println("New Conversation creation failed: \(error)")
+                    }
+                    
+                    conversation.setValue(self.name.text, forMetadataAtKeyPath: "name")
+                    event.conversation = conversation.identifier.absoluteString!
+                    
                     event.saveInBackgroundWithBlock({
                         (result, error) in
                         self.spinner.stopAnimating()

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -9,7 +10,7 @@
         <!--Start View Controller-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
-                <viewController storyboardIdentifier="StartViewController" id="vXZ-lx-hvc" customClass="StartViewController" customModule="Friendzy" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="StartViewController" id="vXZ-lx-hvc" customClass="StartViewController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
@@ -103,7 +104,7 @@
         <!--Login View Controller-->
         <scene sceneID="oB6-Gp-cFy">
             <objects>
-                <viewController storyboardIdentifier="LoginViewController" id="w48-1L-I7x" customClass="LoginViewController" customModule="Friendzy" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginViewController" id="w48-1L-I7x" customClass="LoginViewController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="3G4-Ug-rF4"/>
                         <viewControllerLayoutGuide type="bottom" id="ZCd-pd-w2f"/>
@@ -115,15 +116,6 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launch" translatesAutoresizingMaskIntoConstraints="NO" id="6OP-RW-81i">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To start attending Events, Sign Up." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="HHD-TW-OJi">
-                                <rect key="frame" x="89" y="28" width="142" height="57"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="HHD-TW-OJi" secondAttribute="height" multiplier="142:57" id="TWZ-zE-4RV"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="87P-If-gCi">
                                 <rect key="frame" x="135" y="195" width="50" height="50"/>
                                 <constraints>
@@ -181,6 +173,15 @@
                                     <action selector="facebookLogin:" destination="w48-1L-I7x" eventType="touchUpInside" id="pvg-Tz-VQs"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Login/Signup to make it Happen" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="HHD-TW-OJi">
+                                <rect key="frame" x="16" y="28" width="288" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="HHD-TW-OJi" secondAttribute="height" multiplier="142:57" constant="200.80701754385964" id="TWZ-zE-4RV"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -191,9 +192,9 @@
                             <constraint firstAttribute="centerX" secondItem="9Ql-3C-exM" secondAttribute="centerX" id="DfK-oi-8TF"/>
                             <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="EDp-g3-c28" secondAttribute="trailing" constant="119" id="Ewj-qA-8lq"/>
                             <constraint firstItem="0rW-hd-Pih" firstAttribute="top" secondItem="GJa-et-hcW" secondAttribute="bottom" constant="30" id="Fxh-NX-fI4"/>
-                            <constraint firstItem="HHD-TW-OJi" firstAttribute="leading" secondItem="5hN-hD-Uk6" secondAttribute="leadingMargin" constant="73" id="GRx-AD-A7N"/>
-                            <constraint firstItem="EDp-g3-c28" firstAttribute="top" secondItem="HHD-TW-OJi" secondAttribute="bottom" constant="30" id="KtS-uI-2e4"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="HHD-TW-OJi" secondAttribute="trailing" constant="73" id="LDb-1x-79K"/>
+                            <constraint firstItem="HHD-TW-OJi" firstAttribute="leading" secondItem="5hN-hD-Uk6" secondAttribute="leadingMargin" id="GRx-AD-A7N"/>
+                            <constraint firstItem="EDp-g3-c28" firstAttribute="top" secondItem="HHD-TW-OJi" secondAttribute="bottom" constant="52" id="KtS-uI-2e4"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="HHD-TW-OJi" secondAttribute="trailing" id="LDb-1x-79K"/>
                             <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="GJa-et-hcW" secondAttribute="trailing" constant="136" id="MU6-iP-a93"/>
                             <constraint firstItem="EDp-g3-c28" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="5hN-hD-Uk6" secondAttribute="leadingMargin" constant="119" id="ORj-4z-9Wi"/>
                             <constraint firstItem="6OP-RW-81i" firstAttribute="top" secondItem="5hN-hD-Uk6" secondAttribute="top" id="RhH-1c-6iK"/>
@@ -225,7 +226,7 @@
         <!--ChooseCategoryViewController-->
         <scene sceneID="ExU-Wa-20j">
             <objects>
-                <viewController storyboardIdentifier="ChooseCategoryViewController" title="ChooseCategoryViewController" id="IiD-JG-thR" customClass="ChooseCategoryViewController" customModule="Friendzy" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ChooseCategoryViewController" title="ChooseCategoryViewController" id="IiD-JG-thR" customClass="ChooseCategoryViewController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="eiW-9b-GWd"/>
                         <viewControllerLayoutGuide type="bottom" id="hm8-u3-msq"/>
@@ -244,7 +245,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="f7H-ek-OOD" customClass="CategoryCollectionViewCell" customModule="Friendzy" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="f7H-ek-OOD" customClass="CategoryCollectionViewCell" customModule="Friendzi" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -309,7 +310,7 @@
         <!--ChooseEventPictureViewController-->
         <scene sceneID="eTU-vh-rO9">
             <objects>
-                <viewController storyboardIdentifier="ChooseEventPictureViewController" title="ChooseEventPictureViewController" id="AyL-z7-NAd" customClass="ChooseEventPictureViewController" customModule="Friendzy" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ChooseEventPictureViewController" title="ChooseEventPictureViewController" id="AyL-z7-NAd" customClass="ChooseEventPictureViewController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="CoM-Bb-HRC"/>
                         <viewControllerLayoutGuide type="bottom" id="M5g-DD-c1m"/>
@@ -322,7 +323,7 @@
                                 <rect key="frame" x="0.0" y="134" width="320" height="346"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" restorationIdentifier="Cell" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" rowHeight="134" id="Xwf-GJ-kAv" customClass="EventPhotoTableViewCell" customModule="Friendzy" customModuleProvider="target">
+                                    <tableViewCell contentMode="scaleToFill" restorationIdentifier="Cell" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" rowHeight="134" id="Xwf-GJ-kAv" customClass="EventPhotoTableViewCell" customModule="Friendzi" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Xwf-GJ-kAv" id="erZ-Ha-vck">
@@ -397,7 +398,7 @@
         <!--InstagramViewController-->
         <scene sceneID="p4v-2T-Cky">
             <objects>
-                <viewController storyboardIdentifier="InstagramViewController" title="InstagramViewController" id="PCO-f2-J8E" customClass="InstagramViewController" customModule="Friendzy" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="InstagramViewController" title="InstagramViewController" id="PCO-f2-J8E" customClass="InstagramViewController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="cmY-oG-6z8"/>
                         <viewControllerLayoutGuide type="bottom" id="pGr-fl-sSs"/>
@@ -431,7 +432,7 @@
         <!--Create Email Account View Controller-->
         <scene sceneID="REu-xn-OR8">
             <objects>
-                <viewController storyboardIdentifier="CreateEmailAccountViewController" id="yIt-h0-NIl" customClass="CreateEmailAccountViewController" customModule="Friendzy" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CreateEmailAccountViewController" id="yIt-h0-NIl" customClass="CreateEmailAccountViewController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="vWb-uu-Zfn"/>
                         <viewControllerLayoutGuide type="bottom" id="XAs-Mw-8Z3"/>
@@ -636,7 +637,7 @@
         <!--Choose Location View Controller-->
         <scene sceneID="Unn-E5-WSf">
             <objects>
-                <viewController storyboardIdentifier="ChooseLocationViewController" id="WwF-dR-72f" customClass="ChooseLocationViewController" customModule="Friendzy" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ChooseLocationViewController" id="WwF-dR-72f" customClass="ChooseLocationViewController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="qH7-co-c9L"/>
                         <viewControllerLayoutGuide type="bottom" id="QsJ-fP-t3o"/>
@@ -695,7 +696,7 @@
         <!--Event Finder View Controller-->
         <scene sceneID="L7s-UX-3aJ">
             <objects>
-                <viewController storyboardIdentifier="EventFinderViewController" id="zSP-ZQ-F6n" customClass="EventFinderViewController" customModule="Friendzy" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EventFinderViewController" id="zSP-ZQ-F6n" customClass="EventFinderViewController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="bnp-oS-gTA"/>
                         <viewControllerLayoutGuide type="bottom" id="Abw-Pv-e2n"/>
@@ -707,7 +708,7 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="G9V-nP-w0J">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Searching" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HK6-0X-9kn">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Searching" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HK6-0X-9kn">
                                 <rect key="frame" x="16" y="115" width="288" height="22"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="HK6-0X-9kn" secondAttribute="height" multiplier="144:11" id="DDF-tM-Vkf"/>
@@ -722,7 +723,7 @@
                                     <constraint firstAttribute="width" secondItem="8al-Yo-MZ2" secondAttribute="height" multiplier="1:1" id="yBt-sZ-Lzp"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Friendzy" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hgG-Zm-dGW">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Friendzy" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hgG-Zm-dGW">
                                 <rect key="frame" x="16" y="28" width="288" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="hgG-Zm-dGW" secondAttribute="height" multiplier="144:17" id="VKH-47-YEq"/>
@@ -789,7 +790,7 @@
         <!--Settings-->
         <scene sceneID="b7c-TB-A5v">
             <objects>
-                <tableViewController storyboardIdentifier="SettingsTableViewController" title="Settings" id="wNN-no-eq9" customClass="SettingsTableViewController" customModule="Friendzy" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="SettingsTableViewController" title="Settings" id="wNN-no-eq9" customClass="SettingsTableViewController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" sectionIndexMinimumDisplayRowCount="4" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="5Dh-FF-d8G">
                         <rect key="frame" x="0.0" y="64" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -989,7 +990,7 @@
         <!--MainRootViewController-->
         <scene sceneID="9tA-yk-bde">
             <objects>
-                <viewController storyboardIdentifier="MainRootViewController" title="MainRootViewController" id="oZ6-y1-Cce" customClass="MainRootViewController" customModule="Friendzy" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MainRootViewController" title="MainRootViewController" id="oZ6-y1-Cce" customClass="MainRootViewController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="4My-Ne-xe7"/>
                         <viewControllerLayoutGuide type="bottom" id="643-jA-NpC"/>
@@ -1092,7 +1093,7 @@
         <!--ProfileViewController-->
         <scene sceneID="a20-kn-ccW">
             <objects>
-                <tableViewController storyboardIdentifier="ProfileViewController" title="ProfileViewController" id="g0A-ws-qZG" customClass="ProfileViewController" customModule="Friendzy" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="ProfileViewController" title="ProfileViewController" id="g0A-ws-qZG" customClass="ProfileViewController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" sectionIndexMinimumDisplayRowCount="4" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="m5g-kW-bBT">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1298,7 +1299,7 @@
         <!--ListEventsViewController-->
         <scene sceneID="naW-HK-daC">
             <objects>
-                <viewController storyboardIdentifier="ListEventsViewController" title="ListEventsViewController" id="JZE-rl-u8s" customClass="ListEventsViewController" customModule="Friendzy" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ListEventsViewController" title="ListEventsViewController" id="JZE-rl-u8s" customClass="ListEventsViewController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="5vD-6H-iQx"/>
                         <viewControllerLayoutGuide type="bottom" id="dfR-Eg-mxG"/>
@@ -1311,7 +1312,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" rowHeight="151" id="ceK-gh-WdT" customClass="EventsTableViewCell" customModule="Friendzy" customModuleProvider="target">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" rowHeight="151" id="ceK-gh-WdT" customClass="EventsTableViewCell" customModule="Friendzi" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ceK-gh-WdT" id="KY3-mf-Zec">
@@ -1405,7 +1406,7 @@
         <!--MapEventsViewController-->
         <scene sceneID="sPY-ok-FKH">
             <objects>
-                <viewController storyboardIdentifier="MapEventsViewController" title="MapEventsViewController" id="XvB-cz-oAq" customClass="MapEventsViewController" customModule="Friendzy" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MapEventsViewController" title="MapEventsViewController" id="XvB-cz-oAq" customClass="MapEventsViewController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="rul-MO-ByG"/>
                         <viewControllerLayoutGuide type="bottom" id="gGa-aJ-7RV"/>
@@ -1438,7 +1439,7 @@
         <!--Create Event-->
         <scene sceneID="Gcm-px-fp8">
             <objects>
-                <viewController storyboardIdentifier="CreateEventViewController" title="Create Event" id="QtT-Q2-qgG" customClass="CreateEventViewController" customModule="Friendzy" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CreateEventViewController" title="Create Event" id="QtT-Q2-qgG" customClass="CreateEventViewController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Ecq-LV-IZ2"/>
                         <viewControllerLayoutGuide type="bottom" id="laF-xS-jRd"/>
@@ -1537,7 +1538,7 @@
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="1" textAlignment="center" minimumFontSize="17" background="NrOfAttendees_number" translatesAutoresizingMaskIntoConstraints="NO" id="oyx-E2-WSM">
-                                <rect key="frame" x="261" y="224" width="27" height="23"/>
+                                <rect key="frame" x="260" y="223" width="27" height="23"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="oyx-E2-WSM" secondAttribute="height" multiplier="27:23" id="Ve7-V5-HGn"/>
                                 </constraints>
@@ -1755,7 +1756,7 @@
         <!--ChooseDateTimeViewController-->
         <scene sceneID="jX0-CE-TdZ">
             <objects>
-                <viewController storyboardIdentifier="ChooseDateTimeViewController" title="ChooseDateTimeViewController" providesPresentationContextTransitionStyle="YES" modalTransitionStyle="flipHorizontal" modalPresentationStyle="formSheet" id="wMh-01-dMe" customClass="ChooseDateTimeViewController" customModule="Friendzy" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ChooseDateTimeViewController" title="ChooseDateTimeViewController" providesPresentationContextTransitionStyle="YES" modalTransitionStyle="flipHorizontal" modalPresentationStyle="formSheet" id="wMh-01-dMe" customClass="ChooseDateTimeViewController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="LLb-z3-WQD"/>
                         <viewControllerLayoutGuide type="bottom" id="7jb-Fc-LVZ"/>
@@ -1820,7 +1821,7 @@
         <!--EventDetailsViewController-->
         <scene sceneID="cHW-R9-mPy">
             <objects>
-                <viewController storyboardIdentifier="EventDetailsViewController" title="EventDetailsViewController" id="mnu-Sh-eEp" customClass="EventDetailsViewController" customModule="Friendzy" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EventDetailsViewController" title="EventDetailsViewController" id="mnu-Sh-eEp" customClass="EventDetailsViewController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="V8Y-Y7-bHR"/>
                         <viewControllerLayoutGuide type="bottom" id="IJf-fT-eoo"/>
@@ -1845,6 +1846,9 @@
                                         <state key="normal" image="chatico">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="chat:" destination="mnu-Sh-eEp" eventType="touchUpInside" id="kM6-ev-acu"/>
+                                        </connections>
                                     </button>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="F2a-HC-90R">
                                         <rect key="frame" x="159" y="8" width="1" height="29"/>
@@ -1857,9 +1861,13 @@
                                         <rect key="frame" x="168" y="0.0" width="152" height="45"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <state key="normal" image="seefriendsico">
+                                        <state key="normal" title="+1">
+                                            <color key="titleColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="invite:" destination="mnu-Sh-eEp" eventType="touchUpInside" id="5Yd-eb-1Wb"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -2111,9 +2119,11 @@
                         <outlet property="attended3" destination="w5p-xO-2ZB" id="PId-sa-Js4"/>
                         <outlet property="attended4" destination="DQX-CT-11D" id="KUR-QA-9mC"/>
                         <outlet property="author" destination="yZJ-rv-VUM" id="jYf-ng-uvQ"/>
+                        <outlet property="chatButton" destination="cx7-IM-a8E" id="zdS-0Z-Uwb"/>
                         <outlet property="date" destination="kI0-dM-TD7" id="mRJ-Dy-BqQ"/>
                         <outlet property="descr" destination="GmR-uJ-kOR" id="rh5-ax-M4b"/>
                         <outlet property="distance" destination="20q-ON-OK6" id="aFl-Qv-36N"/>
+                        <outlet property="inviteButton" destination="8O1-RX-2Jg" id="6fb-78-cRh"/>
                         <outlet property="location" destination="osr-Lf-Lv0" id="ToS-Ii-lwG"/>
                         <outlet property="name" destination="MoZ-iz-hEA" id="Zpg-Cg-2kQ"/>
                         <outlet property="photo" destination="ouD-nU-Dfg" id="eBN-Ex-vVi"/>
@@ -2127,7 +2137,7 @@
         <!--MainNavigationController-->
         <scene sceneID="gwg-3g-UCN">
             <objects>
-                <navigationController storyboardIdentifier="MainNavigationController" title="MainNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="MuY-NZ-fa0" customClass="MainNavigationController" customModule="Friendzy" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="MainNavigationController" title="MainNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="MuY-NZ-fa0" customClass="MainNavigationController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" backIndicatorImage="notifications_backarrow" backIndicatorTransitionMaskImage="notifications_backarrow" id="Jsz-bM-hKF">
@@ -2155,7 +2165,7 @@
         <!--PROFILE-->
         <scene sceneID="snL-XI-Ena">
             <objects>
-                <tableViewController storyboardIdentifier="UserProfileViewController" title="PROFILE" id="FBc-ue-V7y" customClass="UserProfileViewController" customModule="Friendzy" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="UserProfileViewController" title="PROFILE" id="FBc-ue-V7y" customClass="UserProfileViewController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" sectionIndexMinimumDisplayRowCount="4" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="xqi-1P-ER1">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2410,7 +2420,6 @@
         <image name="pickaDateLocation_textfield" width="167" height="33"/>
         <image name="pickeventpicture" width="640" height="270"/>
         <image name="searchingicon" width="146" height="146"/>
-        <image name="seefriendsico" width="49" height="42"/>
         <image name="signupbutton" width="186" height="81"/>
         <image name="topbar_settingsico" width="32" height="32"/>
         <image name="twittersignup" width="76" height="76"/>
@@ -2420,6 +2429,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="dLE-is-Chf"/>
-        <segue reference="NDv-lM-SCZ"/>
+        <segue reference="dCM-D0-qCd"/>
     </inferredMetricsTieBreakers>
 </document>
