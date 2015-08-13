@@ -23,6 +23,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
     @IBOutlet weak var eventsCount: UILabel!
     @IBOutlet weak var interests: UILabel!
     @IBOutlet weak var about: UILabel!
+    @IBOutlet weak var rankIcon: UIImageView!
     
     
     
@@ -43,7 +44,9 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         ParseHelper.getUpcomingPastEvents(user, upcoming: nil, block: {
             result, error in
             if error == nil {
-                self.eventsCount.text = "\(result!.count) Events"
+                let rank = Rank.getRank(result!.count)
+                self.eventsCount.text = rank.getString(self.user["gender"] as! Int)
+                self.rankIcon.image = rank.getImage(self.user["gender"] as! Int)
             }
         })
         

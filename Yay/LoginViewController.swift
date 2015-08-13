@@ -60,6 +60,7 @@ class LoginViewController: UIViewController, InstagramDelegate {
                             PFUser.currentUser()?.setObject(true, forKey: "eventNearby")
                             PFUser.currentUser()?.setObject(true, forKey: "newMessage")
                             PFUser.currentUser()?.setObject(10, forKey: "distance")
+                            PFUser.currentUser()?.setObject(1, forKey: "gender")
                             PFUser.currentUser()?.setObject(imageFile, forKey: "avatar")
                             PFUser.currentUser()?.saveEventually(nil)
                             
@@ -101,6 +102,7 @@ class LoginViewController: UIViewController, InstagramDelegate {
                     PFUser.currentUser()?.setObject(true, forKey: "newMessage")
                     PFUser.currentUser()?.setObject([], forKey: "interests")
                     PFUser.currentUser()?.setObject(10, forKey: "distance")
+                    PFUser.currentUser()?.setObject(1, forKey: "gender")
                     PFUser.currentUser()?.saveEventually(nil)
                     self.performSegueWithIdentifier("proceed", sender: nil)
                 } else {
@@ -140,6 +142,7 @@ class LoginViewController: UIViewController, InstagramDelegate {
                     pfuser["name"] = user.fullName
                     pfuser["token"] = token
                     pfuser["distance"] = 10
+                    pfuser["gender"] = 1
                     pfuser["interests"] = []
                     pfuser["attAccepted"] = true
                     pfuser["eventNearby"] = true

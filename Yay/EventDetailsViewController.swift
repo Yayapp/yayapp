@@ -74,6 +74,7 @@ class EventDetailsViewController: UIViewController {
             
         } else {
             currentLocation = CLLocation(latitude: TempUser.location!.latitude, longitude: TempUser.location!.longitude)
+            attend.hidden = false
         }
         
         var distanceBetween: CLLocationDistance = CLLocation(latitude: event.location.latitude, longitude: event.location.longitude).distanceFromLocation(currentLocation)
@@ -138,20 +139,36 @@ class EventDetailsViewController: UIViewController {
     */
 
     @IBAction func attend(sender: AnyObject) {
-        spinner.startAnimating()
-        event.fetchIfNeededInBackgroundWithBlock({
-            (result, error) in
-            self.event.addObject(PFUser.currentUser()!, forKey: "attendees")
-            self.event.saveInBackgroundWithBlock({
+
+        if PFUser.currentUser() == nil {
+            let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
+            blurryAlertViewController.action = BlurryAlertViewController.BUTTON_LOGIN
+            blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
+            blurryAlertViewController.aboutText = "Please login before attending  events."
+            presentViewController(blurryAlertViewController, animated: true, completion: nil)
+        } else {
+            spinner.startAnimating()
+            event.fetchIfNeededInBackgroundWithBlock({
                 (result, error) in
-                self.spinner.stopAnimating()
-                self.attend.hidden = true
-                var errors:NSError?
-                var set = NSMutableSet()
-                set.addObject(self.appDelegate.layerClient.authenticatedUserID)
-                self.conversation.addParticipants(set as Set<NSObject>, error: &errors)
+                self.event.addObject(PFUser.currentUser()!, forKey: "attendees")
+                self.event.saveInBackgroundWithBlock({
+                    (result, error) in
+                    self.spinner.stopAnimating()
+                    self.attend.hidden = true
+                    
+                    let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
+                    blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
+                    blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
+                    blurryAlertViewController.aboutText = "Your request has been sent."
+                    blurryAlertViewController.messageText = "We will notify you of the outcome."
+                    self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
+//                    var errors:NSError?
+//                    var set = NSMutableSet()
+//                    set.addObject(self.appDelegate.layerClient.authenticatedUserID)
+//                    self.conversation.addParticipants(set as Set<NSObject>, error: &errors)
+                })
             })
-        })
+        }
     }
     
     func getLocationString(latitude: Double, longitude: Double){

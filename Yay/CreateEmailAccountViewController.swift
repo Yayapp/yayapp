@@ -57,6 +57,7 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate {
         user["name"] = name.text
         user["interests"] = []
         user["distance"] = 10
+        user["gender"] = 1
         user["attAccepted"] = true
         user["eventNearby"] = true
         user["newMessage"] = true
