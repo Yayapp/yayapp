@@ -268,6 +268,7 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
         if(text == "\n") {
            
             textView.resignFirstResponder()
+            textDidEndEditing()
             return false
         }
         return true
