@@ -274,14 +274,12 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
     }
 
     @IBAction func plusLimit(sender: AnyObject) {
-        limit.textColor = UIColor.whiteColor()
-        if limitInt < 5 {
+        if limitInt < 4 {
             limitInt++
             limit.text = "\(limitInt)"
         }
     }
     @IBAction func minusLimit(sender: AnyObject) {
-        limit.textColor = UIColor.whiteColor()
         if limitInt > 1 {
             limitInt--
             limit.text = "\(limitInt)"
@@ -308,14 +306,18 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
             MessageToUser.showDefaultErrorMessage("Please choose photo")
         } else {
             spinner.startAnimating()
+            let eventACL:PFACL = PFACL()
+            eventACL.setPublicWriteAccess(true)
+            
             var event = Event()
             event.name = name.text
             event.summary = descr.text
             event.category = chosenCategory!
             event.startDate = chosenDate!
             event.photo = chosenPhoto!
-            event.limit = limitInt
+            event.limit = (limitInt+1)
             event.minAge = minAge
+            event.ACL = eventACL
             event.maxAge = maxAge
             event.owner = PFUser.currentUser()!
             event.location = PFGeoPoint(latitude: latitude!, longitude: longitude!)
@@ -324,15 +326,6 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
                 (result, error) in
                 if error == nil {
                     event.addObject(PFUser.currentUser()!, forKey: "attendees")
-                    var errors:NSError?
-                    let conversation = self.appDelegate.layerClient.newConversationWithParticipants(NSSet(object:PFUser.currentUser()!.objectId!) as Set<NSObject>, options: nil, error: &errors)
-                    if  conversation == nil {
-                        println("New Conversation creation failed: \(error)")
-                    }
-                    
-                    conversation.setValue(self.name.text, forMetadataAtKeyPath: "name")
-                    event.conversation = conversation.identifier.absoluteString!
-                    
                     event.saveInBackgroundWithBlock({
                         (result, error) in
                         self.spinner.stopAnimating()

@@ -65,13 +65,12 @@ class EventDetailsViewController: UIViewController {
             }
             
                 let query:LYRQuery = LYRQuery(queryableClass: LYRConversation.self)
-            query.limit = 100
 //            query.predicate = LYRPredicate(property: "identifier", predicateOperator:LYRPredicateOperator.IsEqualTo, value:NSURL(string:event.conversation))
                 var error:NSError?
                 appDelegate.layerClient.isConnected
-//            let conversations = appDelegate.layerClient.executeQuery(query, error:&error).array as! [LYRConversation]
+            let conversations = appDelegate.layerClient.executeQuery(query, error:&error).array as! [LYRConversation]
                 conversation = appDelegate.layerClient.executeQuery(query, error:&error).firstObject as? LYRConversation
-            
+//            conversation.delete(LYRDeletionMode.AllParticipants, error: &error)
         } else {
             currentLocation = CLLocation(latitude: TempUser.location!.latitude, longitude: TempUser.location!.longitude)
             attend.hidden = false
@@ -151,6 +150,21 @@ class EventDetailsViewController: UIViewController {
             event.fetchIfNeededInBackgroundWithBlock({
                 (result, error) in
                 self.event.addObject(PFUser.currentUser()!, forKey: "attendees")
+                var errors:NSError?
+                let participants = NSMutableSet()
+                participants.addObject(PFUser.currentUser()!.objectId!)
+                if self.conversation == nil {
+                    
+                    participants.addObject(self.event.owner.objectId!)
+                    self.conversation = self.appDelegate.layerClient.newConversationWithParticipants(participants as Set<NSObject>, options: [LYRConversationOptionsDistinctByParticipantsKey : false ], error: &errors)
+                    if  self.conversation == nil {
+                        println("New Conversation creation failed: \(error)")
+                    }                    
+                    self.conversation.setValue(self.name.text, forMetadataAtKeyPath: "name")
+                    self.event.conversation = self.conversation.identifier.absoluteString!
+                } else {
+                    self.conversation.addParticipants(participants as Set<NSObject>, error: &errors)
+                }
                 self.event.saveInBackgroundWithBlock({
                     (result, error) in
                     self.spinner.stopAnimating()
