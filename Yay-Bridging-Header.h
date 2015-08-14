@@ -13,7 +13,6 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
-#import <ParseTwitterUtils/PFTwitterUtils.h>
 #import <InstagramKit/InstagramKit.h>
 #import <AFNetworking/AFNetworking.h>
 #import <CommonCrypto/CommonCrypto.h>
