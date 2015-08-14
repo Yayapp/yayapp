@@ -17,18 +17,22 @@ class ParseHelper {
 
     class func getTodayEvents(user:PFUser?, category:Category?, block:EventsResultBlock?) {
 
-        let today = NSDate()
+        var calendar = NSCalendar(calendarIdentifier: NSGregorianCalendar)
+        calendar!.timeZone = NSTimeZone.localTimeZone()
+        let components = NSDateComponents()
+        components.second = NSTimeZone.localTimeZone().secondsFromGMT
+        let today = calendar!.dateByAddingComponents(components, toDate: NSDate(), options: nil)
         
-        let cal = NSCalendar.currentCalendar()
-        let startToday = cal.startOfDayForDate(today)
+        
+        let endToday = calendar!.dateByAddingComponents(components, toDate: calendar!.startOfDayForDate(today!), options: nil)
         
         let dayComponent = NSDateComponents()
         dayComponent.day = 1
-        let endToday = cal.dateByAddingComponents(dayComponent, toDate: startToday, options: NSCalendarOptions.MatchFirst)
+        let startTomorrow = calendar!.dateByAddingComponents(dayComponent, toDate: endToday!, options: NSCalendarOptions.MatchFirst)
         
 		var query = PFQuery(className:Event.parseClassName())
-        query.whereKey("startDate", greaterThan: today)
-        query.whereKey("startDate", lessThanOrEqualTo: endToday!)
+        query.whereKey("startDate", greaterThan: today!)
+        query.whereKey("startDate", lessThanOrEqualTo: startTomorrow!)
         if let user = user {
             let location:PFGeoPoint? = user.objectForKey("location") as? PFGeoPoint
             let distance = user.objectForKey("distance") as? Double
@@ -64,22 +68,23 @@ class ParseHelper {
     class func getThisWeekEvents(user:PFUser?, category:Category?, block:EventsResultBlock?) {
         
         
-        let today = NSDate()
+        var calendar = NSCalendar(calendarIdentifier: NSGregorianCalendar)
+        calendar!.timeZone = NSTimeZone.localTimeZone()
+        let components = NSDateComponents()
+        components.second = NSTimeZone.localTimeZone().secondsFromGMT
+        let today = calendar!.dateByAddingComponents(components, toDate: NSDate(), options: nil)
         
-        let cal = NSCalendar.currentCalendar()
-        let startToday = cal.startOfDayForDate(today)
-        
-        
-        let weekEndDay = 7-cal.components(NSCalendarUnit.CalendarUnitWeekday, fromDate: today).weekday
+        let weekEndDay = 9-calendar!.components(NSCalendarUnit.CalendarUnitWeekday, fromDate: today!).weekday
         
         let dayComponent = NSDateComponents()
         dayComponent.day = weekEndDay
         
-        let endWeek = cal.dateByAddingComponents(dayComponent, toDate: startToday, options: NSCalendarOptions.MatchFirst)
+        let endWeek = calendar!.dateByAddingComponents(dayComponent, toDate: today!, options: NSCalendarOptions.MatchFirst)
+        let startNextWeek = calendar!.dateByAddingComponents(components, toDate: calendar!.startOfDayForDate(endWeek!), options: nil)
         
         var query = PFQuery(className:Event.parseClassName())
-        query.whereKey("startDate", greaterThan: today)
-        query.whereKey("startDate", lessThanOrEqualTo: endWeek!)
+        query.whereKey("startDate", greaterThan: today!)
+        query.whereKey("startDate", lessThanOrEqualTo: startNextWeek!)
         if let user = user {
             let location:PFGeoPoint? = user.objectForKey("location") as? PFGeoPoint
             let distance = user.objectForKey("distance") as? Double

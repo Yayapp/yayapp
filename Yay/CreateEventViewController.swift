@@ -309,6 +309,7 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
             spinner.startAnimating()
             let eventACL:PFACL = PFACL()
             eventACL.setPublicWriteAccess(true)
+            eventACL.setPublicReadAccess(true)
             
             var event = Event()
             event.name = name.text
