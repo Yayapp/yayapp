@@ -7,14 +7,10 @@ class ConversationListViewController: ATLConversationListViewController, ATLConv
         
         self.dataSource = self
         self.delegate = self
-//        self.navigationController!.navigationBar.tintColor = ATLBlueColor()
+
+        let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
+        self.navigationItem.setLeftBarButtonItem(back, animated: false)
         
-//        let title = NSLocalizedString("Logout", comment: "")
-//        let logoutItem = UIBarButtonItem(title: title, style: UIBarButtonItemStyle.Plain, target: self, action: Selector("logoutButtonTapped:"))
-//        self.navigationItem.setLeftBarButtonItem(logoutItem, animated: false)
-        
-//        let composeItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Compose, target: self, action: Selector("composeButtonTapped:"))
-//        self.navigationItem.setRightBarButtonItem(composeItem, animated: false)
     }
     
     override func didReceiveMemoryWarning() {
@@ -51,31 +47,9 @@ class ConversationListViewController: ATLConversationListViewController, ATLConv
     
     func conversationListViewController(conversationListViewController: ATLConversationListViewController, titleForConversation conversation: LYRConversation) -> String {
         return conversation.metadata["name"] as! String
-//        else {
-//            let listOfParticipant = Array(conversation.participants)
-//            let unresolvedParticipants: NSArray = UserManager.sharedManager.unCachedUserIDsFromParticipants(listOfParticipant)
-//            let resolvedNames: NSArray = UserManager.sharedManager.resolvedNamesFromParticipants(listOfParticipant)
-//            
-//            if (unresolvedParticipants.count > 0) {
-//                UserManager.sharedManager.queryAndCacheUsersWithIDs(unresolvedParticipants as! [String]) { (participants: NSArray?, error: NSError?) in
-//                    if (error == nil) {
-//                        if (participants?.count > 0) {
-//                            self.reloadCellForConversation(conversation)
-//                        }
-//                    } else {
-//                        println("Error querying for Users: \(error)")
-//                    }
-//                }
-//            }
-//            
-//            if (resolvedNames.count > 0 && unresolvedParticipants.count > 0) {
-//                let resolved = resolvedNames.componentsJoinedByString(", ")
-//                return "\(resolved) and \(unresolvedParticipants.count) others"
-//            } else if (resolvedNames.count > 0 && unresolvedParticipants.count == 0) {
-//                return resolvedNames.componentsJoinedByString(", ")
-//            } else {
-//                return "Conversation with \(conversation.participants.count) users..."
-//            }
-//        }
+    }
+    
+    @IBAction func backButtonTapped(sender: AnyObject) {
+        navigationController?.popViewControllerAnimated(true)
     }
 }

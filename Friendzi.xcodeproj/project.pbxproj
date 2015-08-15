@@ -342,6 +342,11 @@
 					9950326A1B564B4400D792C5 = {
 						CreatedOnToolsVersion = 6.4;
 						DevelopmentTeam = 3G8XAHXNH6;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					9950327F1B564B4400D792C5 = {
 						CreatedOnToolsVersion = 6.4;

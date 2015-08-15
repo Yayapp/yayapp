@@ -26,7 +26,7 @@ class ConversationViewController: ATLConversationViewController, ATLConversation
     // MARK - ATLConversationViewControllerDelegate methods
     
     func conversationViewController(viewController: ATLConversationViewController, didSendMessage message: LYRMessage) {
-        println("Message sent!")
+//        println("Message sent!")
     }
     
     func conversationViewController(viewController: ATLConversationViewController, didFailSendingMessage message: LYRMessage, error: NSError?) {
@@ -47,7 +47,7 @@ class ConversationViewController: ATLConversationViewController, ATLConversation
         if (user == nil) {
             UserManager.sharedManager.queryAndCacheUsersWithIDs([participantIdentifier]) { (participants: NSArray?, error: NSError?) -> Void in
                 if (participants?.count > 0 && error == nil) {
-                    self.addressBarController.reloadView()
+//                    self.addressBarController.reloadView()
                     // TODO: Need a good way to refresh all the messages for the refreshed participants...
                     self.reloadCellsForMessagesSentByParticipantWithIdentifier(participantIdentifier)
                 } else {
@@ -125,7 +125,41 @@ class ConversationViewController: ATLConversationViewController, ATLConversation
         }
     }
     
-    // MARK - ATLParticipantTableViewController Delegate Methods
+    
+    func messageForMessageParts(parts: [AnyObject], MIMEType: String, pushText: String?) -> LYRMessage? {
+        let senderName: String = PFUser.currentUser()!.objectForKey("name") as! String
+        let conversationName: String = conversation.metadata["name"] as! String
+        var completePushText: String
+        if pushText == nil {
+            if MIMEType == ATLMIMETypeImageGIF {
+                completePushText = "\(senderName) sent you a GIF."
+            }
+            else {
+                if MIMEType == ATLMIMETypeImagePNG || MIMEType == ATLMIMETypeImageJPEG {
+                    completePushText = "\(senderName) sent you a photo."
+                }
+                else {
+                    if MIMEType == ATLMIMETypeLocation {
+                        completePushText = "\(senderName) sent you a location."
+                    }
+                    else {
+                        completePushText = "\(senderName) sent you a message."
+                    }
+                }
+            }
+        }
+        else {
+            completePushText = "\(senderName) in  \"\(conversationName)\" event topic: \(pushText!)"
+        }
+        var pushOptions: [NSObject: AnyObject] = [LYRMessageOptionsPushNotificationAlertKey: completePushText, LYRMessageOptionsPushNotificationSoundNameKey: "layerbell.caf"]
+        var error: NSError?
+        var message: LYRMessage = self.layerClient.newMessageWithParts(parts, options: pushOptions, error: &error)
+        if (error != nil) {
+            return nil
+        }
+        return message
+    }
+
     
     func participantTableViewController(participantTableViewController: ATLParticipantTableViewController, didSelectParticipant participant: ATLParticipant) {
         println("participant: \(participant)")

@@ -64,13 +64,11 @@ class EventDetailsViewController: UIViewController {
                 inviteButton.enabled = false
             }
             
-                let query:LYRQuery = LYRQuery(queryableClass: LYRConversation.self)
-//            query.predicate = LYRPredicate(property: "identifier", predicateOperator:LYRPredicateOperator.IsEqualTo, value:NSURL(string:event.conversation))
-                var error:NSError?
-                appDelegate.layerClient.isConnected
-            let conversations = appDelegate.layerClient.executeQuery(query, error:&error).array as! [LYRConversation]
-                conversation = appDelegate.layerClient.executeQuery(query, error:&error).firstObject as? LYRConversation
-//            conversation.delete(LYRDeletionMode.AllParticipants, error: &error)
+            let query:LYRQuery = LYRQuery(queryableClass: LYRConversation.self)
+            query.predicate = LYRPredicate(property: "identifier", predicateOperator:LYRPredicateOperator.IsEqualTo, value:NSURL(string:event.conversation))
+            var error:NSError?
+            conversation = appDelegate.layerClient.executeQuery(query, error:&error).firstObject as? LYRConversation
+            //            conversation.delete(LYRDeletionMode.AllParticipants, error: &error)
         } else {
             currentLocation = CLLocation(latitude: TempUser.location!.latitude, longitude: TempUser.location!.longitude)
             attend.hidden = false
@@ -105,16 +103,19 @@ class EventDetailsViewController: UIViewController {
             
             attendeeButton.addTarget(self, action: "attendeeProfile:", forControlEvents: .TouchUpInside)
             attendeeButton.tag = index
-            let attendeeAvatar = attendee["avatar"] as? PFFile
-            if(attendeeAvatar != nil) {
-                attendeeAvatar!.getDataInBackgroundWithBlock({
-                    (data:NSData?, error:NSError?) in
-                    if(error == nil) {
-                        var image = UIImage(data:data!)
-                        attendeeButton.setImage(image, forState: .Normal)
-                    }
-                })
-            }
+            
+            attendee.fetchIfNeededInBackgroundWithBlock({
+                result, error in
+                if let attendeeAvatar = attendee["avatar"] as? PFFile {
+                    attendeeAvatar.getDataInBackgroundWithBlock({
+                        (data:NSData?, error:NSError?) in
+                        if(error == nil) {
+                            var image = UIImage(data:data!)
+                            attendeeButton.setImage(image, forState: .Normal)
+                        }
+                    })
+                }
+            })
         }
         
         distance.text = "\(distanceStr)km"
@@ -150,25 +151,35 @@ class EventDetailsViewController: UIViewController {
             event.fetchIfNeededInBackgroundWithBlock({
                 (result, error) in
                 self.event.addObject(PFUser.currentUser()!, forKey: "attendees")
-                var errors:NSError?
-                let participants = NSMutableSet()
-                participants.addObject(PFUser.currentUser()!.objectId!)
-                if self.conversation == nil {
-                    
-                    participants.addObject(self.event.owner.objectId!)
-                    self.conversation = self.appDelegate.layerClient.newConversationWithParticipants(participants as Set<NSObject>, options: [LYRConversationOptionsDistinctByParticipantsKey : false ], error: &errors)
-                    if  self.conversation == nil {
-                        println("New Conversation creation failed: \(error)")
-                    }                    
-                    self.conversation.setValue(self.name.text, forMetadataAtKeyPath: "name")
-                    self.event.conversation = self.conversation.identifier.absoluteString!
-                } else {
-                    self.conversation.addParticipants(participants as Set<NSObject>, error: &errors)
-                }
                 self.event.saveInBackgroundWithBlock({
                     (result, error) in
+                    
+                    if self.conversation != nil {
+                        var errors:NSError?
+                        let participants = NSMutableSet()
+                        participants.addObject(PFUser.currentUser()!.objectId!)
+                        self.conversation.addParticipants(participants as Set<NSObject>, error: &errors)
+                    }
+                    
+                    let attendeeButton = self.attendeeButtons[self.attendees.count]
+                    
+                    attendeeButton.addTarget(self, action: "attendeeProfile:", forControlEvents: .TouchUpInside)
+                    attendeeButton.tag = self.attendees.count
+                    let attendeeAvatar = PFUser.currentUser()!.objectForKey("avatar") as? PFFile
+                    if(attendeeAvatar != nil) {
+                        attendeeAvatar!.getDataInBackgroundWithBlock({
+                            (data:NSData?, error:NSError?) in
+                            if(error == nil) {
+                                var image = UIImage(data:data!)
+                                attendeeButton.setImage(image, forState: .Normal)
+                            }
+                        })
+                    }
+                    
+                    
                     self.spinner.stopAnimating()
                     self.attend.hidden = true
+                    self.chatButton.enabled = true
                     
                     let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
                     blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
@@ -176,10 +187,7 @@ class EventDetailsViewController: UIViewController {
                     blurryAlertViewController.aboutText = "Your request has been sent."
                     blurryAlertViewController.messageText = "We will notify you of the outcome."
                     self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
-//                    var errors:NSError?
-//                    var set = NSMutableSet()
-//                    set.addObject(self.appDelegate.layerClient.authenticatedUserID)
-//                    self.conversation.addParticipants(set as Set<NSObject>, error: &errors)
+
                 })
             })
         }
@@ -215,10 +223,32 @@ class EventDetailsViewController: UIViewController {
     }
     
     @IBAction func chat(sender: AnyObject) {
-        let controller = ConversationViewController(layerClient: appDelegate.layerClient)
-        controller.conversation = conversation
-        controller.displaysAddressBar = false
-        self.navigationController!.pushViewController(controller, animated: true)
+        if (attendees.count>0) {
+            if conversation == nil {
+                var errors:NSError?
+                let participants = NSMutableSet()
+                
+                participants.addObject(event.owner.objectId!)
+                
+                for (index, attendee) in enumerate(attendees) {
+                    let attendeeButton = attendeeButtons[index]
+                    participants.addObject(attendee.objectId!)
+                }
+                
+                conversation = appDelegate.layerClient.newConversationWithParticipants(participants as Set<NSObject>, options: [LYRConversationOptionsDistinctByParticipantsKey : false ], error: &errors)
+                if  self.conversation == nil {
+                    println("New Conversation creation failed: \(errors)")
+                }
+                conversation.setValue(event.name, forMetadataAtKeyPath: "name")
+                event.conversation = conversation.identifier.absoluteString!
+                event.saveInBackground()
+            }
+            
+            let controller = ConversationViewController(layerClient: appDelegate.layerClient)
+            controller.conversation = conversation
+            controller.displaysAddressBar = false
+            self.navigationController!.pushViewController(controller, animated: true)
+        }
     }
     
     

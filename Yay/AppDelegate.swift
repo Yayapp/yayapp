@@ -110,7 +110,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             (changes:[AnyObject]!, error) in
             if (changes != nil) {
                 if (changes.count>0) {
-//                    message = self.messageFromRemoteNotification(userInfo)
+                    let message = self.messageFromRemoteNotification(userInfo)
                     completionHandler(UIBackgroundFetchResult.NewData);
                 } else {
                     completionHandler(UIBackgroundFetchResult.NoData);
@@ -122,7 +122,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if (!success) {
             completionHandler(UIBackgroundFetchResult.NoData)
         }
-        PFPush.handlePush(userInfo)
+//        PFPush.handlePush(userInfo)
     }
     
     func messageFromRemoteNotification(remoteNotification:NSDictionary) -> LYRMessage {

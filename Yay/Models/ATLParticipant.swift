@@ -11,15 +11,15 @@ import Foundation
 extension PFUser: ATLParticipant {
     
     public var firstName: String {
-        return self.username!
+        return self.objectForKey("name")! as! String
     }
     
     public var lastName: String {
-        return "Test"
+        return ""
     }
     
     public var fullName: String {
-        return "\(self.firstName) \(self.lastName)"
+        return "\(self.firstName)"
     }
     
     public var participantIdentifier: String {
