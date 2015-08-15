@@ -13,19 +13,28 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     var rightSwitchBarButtonItem:UIBarButtonItem?
     
+    var thisWeekCenter:NSLayoutConstraint!
+    var todayCenter:NSLayoutConstraint!
+    
     @IBOutlet weak var profileButton: UIBarButtonItem!
     @IBOutlet weak var container: UIView!
-    @IBOutlet weak var segments: UISegmentedControl!
+
+    @IBOutlet weak var thisWeek: UIButton!
     
+    @IBOutlet weak var today: UIButton!
     @IBOutlet weak var createEvent: UIButton!
     
     var currentVC:UIViewController!
     var isMapView = false
     var eventsData:[Event]!=[]
     var chosenCategory:Category?
+    var selectedSegment:Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        thisWeekCenter = NSLayoutConstraint(item: view, attribute: .CenterX, relatedBy: .Equal, toItem: thisWeek, attribute: .CenterX, multiplier: 1, constant: 0)
+        todayCenter = NSLayoutConstraint(item: view, attribute: .CenterX, relatedBy: .Equal, toItem: today, attribute: .CenterX, multiplier: 1, constant: 0)
     
         var buttonItems:[UIBarButtonItem]=[]
         
@@ -43,14 +52,14 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
         
         self.navigationItem.setRightBarButtonItems(buttonItems, animated: true)
         
-        let font = UIFont.boldSystemFontOfSize(20.0)
-        segments.setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.whiteColor(),NSFontAttributeName:font], forState: UIControlState.Selected)
-        segments.setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.whiteColor()], forState: UIControlState.Normal)
+//        let font = UIFont.boldSystemFontOfSize(20.0)
+//        segments.setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.whiteColor(),NSFontAttributeName:font], forState: UIControlState.Selected)
+//        segments.setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.whiteColor()], forState: UIControlState.Normal)
         
         
 //        segments.setBackgroundImage(UIImage(named: "submenu_highlightcolor"), forState: UIControlState.Selected , barMetrics: .Default)
 //        typeButton.setImage(UIImage(named: "submenu_highlightcolor"), forState: UIControlState.Normal)
-        segmentChanged(true)
+        today(true)
     }
 
     override func didReceiveMemoryWarning() {
@@ -59,14 +68,14 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
     }
     
 
-    @IBAction func segmentChanged(sender: AnyObject) {
+    func segmentChanged() {
         var vc:EventsViewController
         if (isMapView) {
             vc = self.storyboard!.instantiateViewControllerWithIdentifier("MapEventsViewController") as! MapEventsViewController
         } else {
             vc = self.storyboard!.instantiateViewControllerWithIdentifier("ListEventsViewController") as! ListEventsViewController
         }
-        if(segments.selectedSegmentIndex == 0) {
+        if(selectedSegment == 0) {
             ParseHelper.getTodayEvents(PFUser.currentUser(), category: chosenCategory, block: {
                 (eventsList:[Event]?, error:NSError?) in
                 if(error == nil) {
@@ -83,6 +92,26 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
         }
         
         updateActiveViewController(vc)
+    }
+    
+    @IBAction func today(sender: AnyObject) {
+        selectedSegment = 0
+        thisWeek.titleLabel?.font = UIFont.systemFontOfSize(15.0)
+        today.titleLabel?.font = UIFont.boldSystemFontOfSize(18.0)
+        view.removeConstraint(thisWeekCenter)
+        view.addConstraint(todayCenter)
+        view.bringSubviewToFront(thisWeek)
+        segmentChanged()
+    }
+    
+    @IBAction func thisWeek(sender: AnyObject) {
+        selectedSegment = 1
+        thisWeek.titleLabel?.font = UIFont.boldSystemFontOfSize(18.0)
+        today.titleLabel?.font = UIFont.systemFontOfSize(15.0)
+        view.removeConstraint(todayCenter)
+        view.addConstraint(thisWeekCenter)
+        view.bringSubviewToFront(today)
+        segmentChanged()
     }
     
     @IBAction func navigationDrawer(sender: AnyObject) {
@@ -134,7 +163,7 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
     
     func madeCategoryChoice(category: Category) {
         chosenCategory = category
-        segmentChanged(true)
+        segmentChanged()
     }
     
     func removeInactiveViewController(inactiveViewController: UIViewController?) {
@@ -168,7 +197,7 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
         } else {
             rightSwitchBarButtonItem!.image = UIImage(named: "mapmarkerico")
         }
-        segmentChanged(true)
+        segmentChanged()
     }
    
     func chatTapped (sender:UIButton) {
