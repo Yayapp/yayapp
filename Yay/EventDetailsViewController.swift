@@ -63,9 +63,9 @@ class EventDetailsViewController: UIViewController {
                 chatButton.enabled = false
                 inviteButton.enabled = false
             }
-            if event.conversation.isEmpty {
+            if event.conversation != nil {
                 let query:LYRQuery = LYRQuery(queryableClass: LYRConversation.self)
-                query.predicate = LYRPredicate(property: "identifier", predicateOperator:LYRPredicateOperator.IsEqualTo, value:NSURL(string:event.conversation))
+                query.predicate = LYRPredicate(property: "identifier", predicateOperator:LYRPredicateOperator.IsEqualTo, value:NSURL(string:event.conversation!))
                 var error:NSError?
                 conversation = appDelegate.layerClient.executeQuery(query, error:&error).firstObject as? LYRConversation
                 //            conversation.delete(LYRDeletionMode.AllParticipants, error: &error)
