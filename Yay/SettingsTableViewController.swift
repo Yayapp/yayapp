@@ -103,6 +103,17 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
         })
     }
     
+    @IBAction func logout(sender: AnyObject) {
+        appDelegate.layerClient.deauthenticateWithCompletion { (success: Bool, error: NSError?) in
+            if error == nil {
+                PFUser.logOut()
+                self.navigationController!.popToRootViewControllerAnimated(true)
+            } else {
+                println("Failed to deauthenticate: \(error)")
+            }
+        }
+    }
+    
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Potentially incomplete method implementation.
         // Return the number of sections.
@@ -125,7 +136,7 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
         } else if section == 1{
             return 2
         } else {
-            return 1
+            return 2
         }
     }
     deinit {
