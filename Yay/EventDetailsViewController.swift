@@ -63,12 +63,13 @@ class EventDetailsViewController: UIViewController {
                 chatButton.enabled = false
                 inviteButton.enabled = false
             }
-            
-            let query:LYRQuery = LYRQuery(queryableClass: LYRConversation.self)
-            query.predicate = LYRPredicate(property: "identifier", predicateOperator:LYRPredicateOperator.IsEqualTo, value:NSURL(string:event.conversation))
-            var error:NSError?
-            conversation = appDelegate.layerClient.executeQuery(query, error:&error).firstObject as? LYRConversation
-            //            conversation.delete(LYRDeletionMode.AllParticipants, error: &error)
+            if event.conversation.isEmpty {
+                let query:LYRQuery = LYRQuery(queryableClass: LYRConversation.self)
+                query.predicate = LYRPredicate(property: "identifier", predicateOperator:LYRPredicateOperator.IsEqualTo, value:NSURL(string:event.conversation))
+                var error:NSError?
+                conversation = appDelegate.layerClient.executeQuery(query, error:&error).firstObject as? LYRConversation
+                //            conversation.delete(LYRDeletionMode.AllParticipants, error: &error)
+            }
         } else {
             currentLocation = CLLocation(latitude: TempUser.location!.latitude, longitude: TempUser.location!.longitude)
             attend.hidden = false
