@@ -61,6 +61,8 @@ class LoginViewController: UIViewController, InstagramDelegate {
                             PFUser.currentUser()?.setObject(true, forKey: "newMessage")
                             PFUser.currentUser()?.setObject(10, forKey: "distance")
                             PFUser.currentUser()?.setObject(1, forKey: "gender")
+                            PFUser.currentUser()?.setObject(3, forKey: "invites")
+                            PFUser.currentUser()?.setObject(true, forKey: "eventsReminder")
                             PFUser.currentUser()?.setObject(imageFile, forKey: "avatar")
                             PFUser.currentUser()?.saveEventually(nil)
                             
@@ -103,6 +105,8 @@ class LoginViewController: UIViewController, InstagramDelegate {
                     PFUser.currentUser()?.setObject([], forKey: "interests")
                     PFUser.currentUser()?.setObject(10, forKey: "distance")
                     PFUser.currentUser()?.setObject(1, forKey: "gender")
+                    PFUser.currentUser()?.setObject(3, forKey: "invites")
+                    PFUser.currentUser()?.setObject(true, forKey: "eventsReminder")
                     PFUser.currentUser()?.saveEventually(nil)
                     self.performSegueWithIdentifier("proceed", sender: nil)
                 } else {
@@ -147,6 +151,8 @@ class LoginViewController: UIViewController, InstagramDelegate {
                     pfuser["attAccepted"] = true
                     pfuser["eventNearby"] = true
                     pfuser["newMessage"] = true
+                    pfuser["invites"] = 3
+                    pfuser["eventsReminder"] = true
                     pfuser.password = "\(user.username.MD5())"
                     pfuser.username = user.username
                     pfuser.signUpInBackgroundWithBlock {

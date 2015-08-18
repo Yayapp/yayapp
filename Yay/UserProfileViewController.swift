@@ -8,12 +8,14 @@
 
 import UIKit
 
-class UserProfileViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, ChooseCategoryDelegate {
+class UserProfileViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, ChooseCategoryDelegate, WriteAboutDelegate, UIPopoverPresentationControllerDelegate {
     
    
     let picker = UIImagePickerController()
     
     var user:PFUser!
+    var editdone:UIBarButtonItem!
+    var isEditingProfile:Bool = false
     
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var location: UILabel!
@@ -24,6 +26,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
     @IBOutlet weak var interests: UILabel!
     @IBOutlet weak var about: UILabel!
     @IBOutlet weak var rankIcon: UIImageView!
+    @IBOutlet weak var invites: UILabel!
     
     
     
@@ -35,7 +38,8 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         name.text = user.objectForKey("name") as? String
         
         if(PFUser.currentUser()?.objectId == user.objectId) {
-            uploadPhoto.hidden = false
+            editdone = UIBarButtonItem(title: "Edit", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("editdone:"))
+            self.navigationItem.setRightBarButtonItem(editdone, animated: false)
         }
         
         let currentPFLocation = user.objectForKey("location") as! PFGeoPoint
@@ -69,11 +73,6 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
             }
         })
         
-      
-        
-        
-        
-        
         
         let avatarfile = user.objectForKey("avatar") as? PFFile
         if(avatarfile != nil) {
@@ -81,13 +80,10 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
             avatar.loadInBackground()
         }
         if user["about"] != nil {
-            let font17 = UIFont.systemFontOfSize(17)
-            let font12 = UIFont.systemFontOfSize(12)
-            let myMutableString = NSMutableAttributedString(string: about.text!+(user["about"] as! String), attributes: [NSFontAttributeName:font17])
-            myMutableString.addAttribute(NSFontAttributeName, value: font12, range: NSRange(location: count(about.text!), length: count((user["about"]! as! String))))
-            
-            about.attributedText = myMutableString
+            setAboutMe((user["about"]! as! String))
         }
+        let userInvites = user["invites"] as! Int
+        invites.text = "\(invites.text!) \(userInvites)"
     }
 
     override func didReceiveMemoryWarning() {
@@ -95,16 +91,14 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func setAboutMe(text:String){
+        let font17 = UIFont.systemFontOfSize(17)
+        let font12 = UIFont.systemFontOfSize(12)
+        let myMutableString = NSMutableAttributedString(string: "About Me: "+text, attributes: [NSFontAttributeName:font17])
+        myMutableString.addAttribute(NSFontAttributeName, value: font12, range: NSRange(location: count(about.text!), length: count(text)))
+        
+        about.attributedText = myMutableString
     }
-    */
 
     func getLocationString(latitude: Double, longitude: Double){
         let geoCoder = CLGeocoder()
@@ -169,6 +163,25 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         })
     }
     
+    func writeAboutDone(text: String) {
+        user["about"] = text
+        user.saveInBackgroundWithBlock({
+            result, error in
+            if error == nil {
+                self.setAboutMe(text)
+            }
+        })
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if (isEditingProfile && indexPath.row == 1){
+            openCategoryPicker()
+        }
+        if (isEditingProfile && indexPath.row == 2){
+            openAboutMeEditor()
+        }
+    }
+    
     func openCategoryPicker() {
         let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ChooseCategoryViewController") as! ChooseCategoryViewController
         vc.delegate = self
@@ -176,10 +189,19 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         presentViewController(vc, animated: true, completion: nil)
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if (PFUser.currentUser()?.objectId == user.objectId && indexPath.row == 1){
-            openCategoryPicker()
-        }
+    func openAboutMeEditor() {
+        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("WriteAboutViewController") as! WriteAboutViewController
+        vc.delegate = self
+        vc.modalPresentationStyle = UIModalPresentationStyle.Popover
+        
+        
+        var detailPopover: UIPopoverPresentationController = vc.popoverPresentationController!
+        detailPopover.delegate = self
+        detailPopover.sourceView = view
+        
+        detailPopover.permittedArrowDirections = UIPopoverArrowDirection.Up
+        presentViewController(vc,
+            animated: true, completion:nil)
     }
     
     @IBAction func uploadPhoto(sender: AnyObject) {
@@ -190,12 +212,29 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         picker.showsCameraControls = true;
         presentViewController(picker, animated: true, completion: nil)
     }
+    
+    @IBAction func editdone(sender: AnyObject) {
+        if(isEditingProfile) {
+            uploadPhoto.hidden = true
+            editdone.title = "Edit"
+            isEditingProfile = false
+            interests.backgroundColor = UIColor.clearColor()
+            about.backgroundColor = UIColor.clearColor()
+        } else {
+            uploadPhoto.hidden = false
+            editdone.title = "Done"
+            isEditingProfile = true
+            interests.backgroundColor = UIColor(red:CGFloat(48/255.0), green:CGFloat(56/255.0), blue:CGFloat(58/255.0), alpha: 1)
+            about.backgroundColor = UIColor(red:CGFloat(48/255.0), green:CGFloat(56/255.0), blue:CGFloat(58/255.0), alpha: 1)
+        }
+    }
+    
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
         let pickedImage:UIImage = info[UIImagePickerControllerEditedImage] as! UIImage
         let imageData = UIImagePNGRepresentation(pickedImage)
         let imageFile:PFFile = PFFile(data: imageData)
-        avatar.file = imageFile
-        avatar.loadInBackground()
+        avatar.image = pickedImage
+        
         PFUser.currentUser()!.setObject(imageFile, forKey: "avatar")
         PFUser.currentUser()!.saveInBackgroundWithBlock({
             result, error in

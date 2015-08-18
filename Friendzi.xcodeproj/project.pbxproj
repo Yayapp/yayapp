@@ -12,6 +12,8 @@
 		8B1531B91B5F9A9E007A2EC7 /* ParseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1531B81B5F9A9E007A2EC7 /* ParseHelper.swift */; };
 		8B1531BB1B5FA963007A2EC7 /* CategoryType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1531BA1B5FA963007A2EC7 /* CategoryType.swift */; };
 		9901A9681B57D81100947DB8 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9901A9671B57D81100947DB8 /* ProfileViewController.swift */; };
+		990CA7251B8206C000591F33 /* InstructionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990CA7241B8206C000591F33 /* InstructionViewController.swift */; };
+		990CA7271B826BB200591F33 /* WriteAboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990CA7261B826BB200591F33 /* WriteAboutViewController.swift */; };
 		9917D9DA1B567E520081A796 /* MainRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9917D9D91B567E520081A796 /* MainRootViewController.swift */; };
 		9917D9DC1B5688850081A796 /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9917D9DB1B5688850081A796 /* MainNavigationController.swift */; };
 		9917D9E21B56A94F0081A796 /* MapEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9917D9E11B56A94F0081A796 /* MapEventsViewController.swift */; };
@@ -74,6 +76,8 @@
 		8B1531BA1B5FA963007A2EC7 /* CategoryType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryType.swift; sourceTree = "<group>"; };
 		9901A9641B57D55C00947DB8 /* Yay-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Yay-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		9901A9671B57D81100947DB8 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		990CA7241B8206C000591F33 /* InstructionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstructionViewController.swift; sourceTree = "<group>"; };
+		990CA7261B826BB200591F33 /* WriteAboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WriteAboutViewController.swift; sourceTree = "<group>"; };
 		9917D9D91B567E520081A796 /* MainRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainRootViewController.swift; sourceTree = "<group>"; };
 		9917D9DB1B5688850081A796 /* MainNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainNavigationController.swift; sourceTree = "<group>"; };
 		9917D9E11B56A94F0081A796 /* MapEventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapEventsViewController.swift; sourceTree = "<group>"; };
@@ -163,6 +167,24 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		990CA7211B82022600591F33 /* controllerParts */ = {
+			isa = PBXGroup;
+			children = (
+				995032961B5671B900D792C5 /* ChooseLocationViewController.swift */,
+				99FDE5441B58E972004CE61B /* ChooseDateTimeViewController.swift */,
+				99EC40FB1B5FFB490093E484 /* InstagramViewController.swift */,
+				997C23901B67B42D0070DDB2 /* ChooseCategoryViewController.swift */,
+				997C23961B67EFCD0070DDB2 /* ChooseEventPictureViewController.swift */,
+				99BFEC981B7A765B00CBFF8B /* ParticipantTableViewController.swift */,
+				99BFEC991B7A765B00CBFF8B /* ConversationViewController.swift */,
+				99BFEC9A1B7A765B00CBFF8B /* ConversationListViewController.swift */,
+				9967D8321B7CFD10003C3CE1 /* BlurryAlertViewController.swift */,
+				990CA7241B8206C000591F33 /* InstructionViewController.swift */,
+				990CA7261B826BB200591F33 /* WriteAboutViewController.swift */,
+			);
+			name = controllerParts;
+			sourceTree = "<group>";
+		};
 		995032621B564B4400D792C5 = {
 			isa = PBXGroup;
 			children = (
@@ -190,6 +212,7 @@
 				997C23891B6668000070DDB2 /* views */,
 				8B1531B51B5F90E1007A2EC7 /* Models */,
 				995032911B5662C300D792C5 /* controllers */,
+				990CA7211B82022600591F33 /* controllerParts */,
 				995032901B56595F00D792C5 /* util */,
 				995032701B564B4400D792C5 /* AppDelegate.swift */,
 				995032741B564B4400D792C5 /* Main.storyboard */,
@@ -247,7 +270,6 @@
 				995032721B564B4400D792C5 /* LoginViewController.swift */,
 				995032921B56632700D792C5 /* StartViewController.swift */,
 				995032941B566F3400D792C5 /* EventFinderViewController.swift */,
-				995032961B5671B900D792C5 /* ChooseLocationViewController.swift */,
 				995032981B56741700D792C5 /* CreateEmailAccountViewController.swift */,
 				9917D9D91B567E520081A796 /* MainRootViewController.swift */,
 				9917D9DB1B5688850081A796 /* MainNavigationController.swift */,
@@ -258,15 +280,7 @@
 				9901A9671B57D81100947DB8 /* ProfileViewController.swift */,
 				99FDE5401B57EB84004CE61B /* SettingsTableViewController.swift */,
 				99FDE5421B580E7D004CE61B /* CreateEventViewController.swift */,
-				99FDE5441B58E972004CE61B /* ChooseDateTimeViewController.swift */,
 				99FDE54A1B5A74FF004CE61B /* UserProfileViewController.swift */,
-				99EC40FB1B5FFB490093E484 /* InstagramViewController.swift */,
-				997C23901B67B42D0070DDB2 /* ChooseCategoryViewController.swift */,
-				997C23961B67EFCD0070DDB2 /* ChooseEventPictureViewController.swift */,
-				99BFEC981B7A765B00CBFF8B /* ParticipantTableViewController.swift */,
-				99BFEC991B7A765B00CBFF8B /* ConversationViewController.swift */,
-				99BFEC9A1B7A765B00CBFF8B /* ConversationListViewController.swift */,
-				9967D8321B7CFD10003C3CE1 /* BlurryAlertViewController.swift */,
 			);
 			name = controllers;
 			sourceTree = "<group>";
@@ -438,6 +452,7 @@
 				997C23991B67F6250070DDB2 /* EventPhotoTableViewCell.swift in Sources */,
 				99FDE5451B58E972004CE61B /* ChooseDateTimeViewController.swift in Sources */,
 				99BFEC9D1B7A765B00CBFF8B /* ConversationListViewController.swift in Sources */,
+				990CA7251B8206C000591F33 /* InstructionViewController.swift in Sources */,
 				99FDE54B1B5A74FF004CE61B /* UserProfileViewController.swift in Sources */,
 				9917D9E41B56B7830081A796 /* ListEventsViewController.swift in Sources */,
 				9917D9E61B56BB660081A796 /* EventDetailsViewController.swift in Sources */,
@@ -468,6 +483,7 @@
 				9917D9DC1B5688850081A796 /* MainNavigationController.swift in Sources */,
 				997C238D1B67889B0070DDB2 /* MessageToUser.swift in Sources */,
 				99FDE5431B580E7D004CE61B /* CreateEventViewController.swift in Sources */,
+				990CA7271B826BB200591F33 /* WriteAboutViewController.swift in Sources */,
 				8B1531B91B5F9A9E007A2EC7 /* ParseHelper.swift in Sources */,
 				997C238F1B6791AE0070DDB2 /* Category.swift in Sources */,
 				997C23951B67BD060070DDB2 /* EventPhoto.swift in Sources */,

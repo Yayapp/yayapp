@@ -8,35 +8,110 @@
 
 import UIKit
 
-class StartViewController: UIViewController {
-
+class StartViewController: UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+    
+    @IBOutlet weak var dots: UIPageControl!
+    
+    var pageViewController : UIPageViewController!
+    var currentIndex : Int = 0
+    var pageImages : Array<String> = ["background_start1", "background_start2", "background_start3"]
+    var pageTitles : Array<String> = [
+        "<style type='text/css'>* {font-size: 14pt; color:#ffffff; text-align: center;}</style><center>Making good times happen.</center>",
+        "<style type='text/css'>* {font-size: 14pt; color:#ffffff; text-align: center;}</style><center>For all the fun people you haven't yet met</center>",
+        "<style type='text/css'>* {font-size: 14pt; color:#ffffff; text-align: center;}</style><center>For all the <span style=\"color:#FBFD29;\">FUN</span>, <span style=\"font-size: 10pt;\">St</span><span style=\"font-size: 17pt;\">u</span>pid, <span style=\"font-size: 17pt;color:#4DDD47;\">crazy</span>, <b><span style=\"font-size: 17pt;color:#55D9FB;\">amazing</span></b>, <u><span style=\"color:#D600F9;\">beautiful</span></u>, <i><span style=\"color:#E50128;\">daring</span></i> things you want to do.</center>"   
+    ]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        //Parse test
-//        let testObject = PFObject(className: "TestObject")
-//        testObject["foo"] = "bar"
-//        testObject.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
-//            println("Object has been saved.")
-//        }
+        pageViewController = self.storyboard?.instantiateViewControllerWithIdentifier("TutorialViewController") as! UIPageViewController
+        self.pageViewController!.dataSource = self
+        self.pageViewController!.delegate = self
+        
+        let pageContentViewController:InstructionViewController! = self.viewControllerAtIndex(0)
+        self.pageViewController.setViewControllers([pageContentViewController!], direction: UIPageViewControllerNavigationDirection.Forward, animated: true, completion: nil)
+        
+        pageViewController!.view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height);
+        
+        addChildViewController(pageViewController!)
+        view.insertSubview(pageViewController!.view, atIndex: 0)
+        pageViewController!.didMoveToParentViewController(self)
         
         
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    
+    func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController?
+    {
+        var index = (viewController as! InstructionViewController).pageIndex
+        
+        if (index == 0) || (index == NSNotFound) {
+            return nil
+        }
+        
+        index--
+        
+        
+        return viewControllerAtIndex(index)
     }
-    */
+    
+    func pageViewController(pageViewController: UIPageViewController, viewControllerAfterViewController viewController: UIViewController) -> UIViewController?
+    {
+        var index = (viewController as! InstructionViewController).pageIndex
+        
+        if index == NSNotFound {
+            return nil
+        }
+        
+        index++
+        
+        
+        
+        if (index == self.pageTitles.count) {
+            return nil
+        }
+        
+        return viewControllerAtIndex(index)
+    }
+    
+    func viewControllerAtIndex(index: Int) -> InstructionViewController!
+    {
+        
+        // Create a new view controller and pass suitable data.
+        let pageContentViewController = self.storyboard?.instantiateViewControllerWithIdentifier("InstructionViewController") as! InstructionViewController
+        pageContentViewController.imageName = pageImages[index]
+        var attrString = NSMutableAttributedString(
+            data: pageTitles[index].dataUsingEncoding(NSUnicodeStringEncoding, allowLossyConversion: false)!,
+            options: [ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType],
+            documentAttributes: nil,
+            error: nil)
+        pageContentViewController.titleText = attrString
+        pageContentViewController.pageIndex = index
+        currentIndex = index
+        
+        return pageContentViewController
+        
+    }
+    
+    func pageViewController(pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [AnyObject], transitionCompleted completed: Bool) {
+        if(completed){
+            let enlarge:InstructionViewController = (self.pageViewController.viewControllers as! [InstructionViewController]).last!
+            self.dots.currentPage =  enlarge.pageIndex;
+        }
+    }
+    
+//    func presentationCountForPageViewController(pageViewController: UIPageViewController) -> Int
+//    {
+//        return self.pageTitles.count
+//    }
+//    
+//    func presentationIndexForPageViewController(pageViewController: UIPageViewController) -> Int
+//    {
+//        return 0
+//    }
 
 }
