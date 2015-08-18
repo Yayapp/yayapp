@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Darwin
 
 class BlurryAlertViewController: UIViewController {
     
@@ -14,6 +15,7 @@ class BlurryAlertViewController: UIViewController {
     
     static let BUTTON_OK = "okbutton"
     static let BUTTON_LOGIN = "loginbutton"
+    static let BUTTON_DELETE_PROFILE = "deletebutton"
     
     var aboutText:String! = ""
     var messageText:String! = ""
@@ -56,6 +58,16 @@ class BlurryAlertViewController: UIViewController {
 
     @IBAction func okbutton(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion:nil)
+    }
+    
+    @IBAction func deletebutton(sender: AnyObject) {
+        ParseHelper.removeUserEvents(PFUser.currentUser()!, block: {
+            result, error in
+            PFUser.currentUser()?.deleteInBackgroundWithBlock({
+                result, error in
+                exit(0)
+            })
+        })
     }
     
     @IBAction func loginbutton(sender: AnyObject) {

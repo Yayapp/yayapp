@@ -3,15 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "hillpv_by_twin_tail-d6legrj.png"
+      "filename" : "ok_delete_button.png"
     },
     {
       "idiom" : "universal",
-      "scale" : "2x"
+      "scale" : "2x",
+      "filename" : "ok_delete_button_x2.png"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x"
+      "scale" : "3x",
+      "filename" : "ok_delete_button_x3.png"
     }
   ],
   "info" : {

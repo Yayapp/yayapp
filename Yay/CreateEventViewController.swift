@@ -12,6 +12,7 @@ import MapKit
 class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLocationDelegate, ChooseCategoryDelegate, ChooseEventPictureDelegate, UIPopoverPresentationControllerDelegate, UITextFieldDelegate, UITextViewDelegate, TTRangeSliderDelegate {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    var calendar = NSCalendar(calendarIdentifier: NSGregorianCalendar)
     
     let dateFormatter = NSDateFormatter()
     var minAge:Int! = 16
@@ -331,6 +332,29 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
                     event.saveInBackgroundWithBlock({
                         (result, error) in
                         self.spinner.stopAnimating()
+                        
+                        if ((PFUser.currentUser()?.objectForKey("eventsReminder") as! Bool)) {
+                            let components = NSDateComponents()
+                            
+                            components.hour = -1
+                            let hourBefore = self.calendar!.dateByAddingComponents(components, toDate: event.startDate, options: nil)
+                            components.hour = -23
+                            let hour24Before = self.calendar!.dateByAddingComponents(components, toDate: event.startDate, options: nil)
+                            
+                            
+                            var localNotification1:UILocalNotification = UILocalNotification()
+                            localNotification1.alertAction = "event.name"
+                            localNotification1.alertBody = "Don't forget to participate in \(self.dateFormatter.stringFromDate(event.startDate))"
+                            localNotification1.fireDate = hourBefore
+                            UIApplication.sharedApplication().scheduleLocalNotification(localNotification1)
+                            
+                            var localNotification24:UILocalNotification = UILocalNotification()
+                            localNotification24.alertAction = "event.name"
+                            localNotification24.alertBody = "Don't forget to participate in \(self.dateFormatter.stringFromDate(event.startDate))"
+                            localNotification24.fireDate = hour24Before
+                            UIApplication.sharedApplication().scheduleLocalNotification(localNotification24)
+                        }
+                        
                         self.navigationController?.popViewControllerAnimated(true)
                     })
                 }

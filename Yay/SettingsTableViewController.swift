@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Darwin
 
 class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate {
 
@@ -145,9 +146,25 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
         } else if section == 1{
             return 2
         } else {
-            return 2
+            return 3
         }
     }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if (indexPath.section == 2 && indexPath.row == 2){
+            deleteProfile()
+        }
+    }
+    
+    func deleteProfile(){
+        let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
+        blurryAlertViewController.action = BlurryAlertViewController.BUTTON_DELETE_PROFILE
+        blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
+        blurryAlertViewController.aboutText = "PROFILE DELETION"
+        blurryAlertViewController.messageText = "Are you sure you want to delete your profile?"
+        self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
+    }
+    
     deinit {
         appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.PanningCenterView
     }

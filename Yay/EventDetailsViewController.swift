@@ -11,6 +11,7 @@ import UIKit
 class EventDetailsViewController: UIViewController {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    var calendar = NSCalendar(calendarIdentifier: NSGregorianCalendar)
     
     var event:Event!
     let dateFormatter = NSDateFormatter()
@@ -97,8 +98,6 @@ class EventDetailsViewController: UIViewController {
             }
         })
         
-        
-        
         for (index, attendee) in enumerate(attendees) {
             let attendeeButton = attendeeButtons[index]
             
@@ -154,6 +153,27 @@ class EventDetailsViewController: UIViewController {
                 self.event.addObject(PFUser.currentUser()!, forKey: "attendees")
                 self.event.saveInBackgroundWithBlock({
                     (result, error) in
+                    
+                    if ((PFUser.currentUser()?.objectForKey("eventsReminder") as! Bool)) {
+                        let components = NSDateComponents()
+                        
+                        components.hour = -1
+                        let hourBefore = self.calendar!.dateByAddingComponents(components, toDate: self.event.startDate, options: nil)
+                        components.hour = -23
+                        let hour24Before = self.calendar!.dateByAddingComponents(components, toDate: self.event.startDate, options: nil)
+                        
+                        var localNotification1:UILocalNotification = UILocalNotification()
+                        localNotification1.alertAction = "event.name"
+                        localNotification1.alertBody = "Don't forget to participate in \(self.dateFormatter.stringFromDate(self.event.startDate))"
+                        localNotification1.fireDate = hourBefore
+                        UIApplication.sharedApplication().scheduleLocalNotification(localNotification1)
+                        
+                        var localNotification24:UILocalNotification = UILocalNotification()
+                        localNotification24.alertAction = "event.name"
+                        localNotification24.alertBody = "Don't forget to participate in \(self.dateFormatter.stringFromDate(self.event.startDate))"
+                        localNotification24.fireDate = hour24Before
+                        UIApplication.sharedApplication().scheduleLocalNotification(localNotification24)
+                    }
                     
                     if self.conversation != nil {
                         var errors:NSError?

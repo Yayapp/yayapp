@@ -26,13 +26,9 @@ class ParseHelper {
         
         let endToday = calendar!.dateByAddingComponents(components, toDate: calendar!.startOfDayForDate(today!), options: nil)
         
-        let dayComponent = NSDateComponents()
-        dayComponent.day = 1
-        let startTomorrow = calendar!.dateByAddingComponents(dayComponent, toDate: endToday!, options: NSCalendarOptions.MatchFirst)
-        
 		var query = PFQuery(className:Event.parseClassName())
         query.whereKey("startDate", greaterThan: today!)
-        query.whereKey("startDate", lessThanOrEqualTo: startTomorrow!)
+        query.whereKey("startDate", lessThanOrEqualTo: endToday!)
         query.orderByDescending("startDate")
         if let user = user {
             let location:PFGeoPoint? = user.objectForKey("location") as? PFGeoPoint
@@ -162,7 +158,6 @@ class ParseHelper {
                 block!(nil, error)
             }
         }
-        
     }
     
     class func getEventPhotos(block:EventPhotosResultBlock?) {
@@ -180,23 +175,23 @@ class ParseHelper {
                 block!(nil, error)
             }
         }
-        
     }
-	
-	class func testingEvents() {
-		
-		var event = Event()
-		event.name = "test"
-		event.summary = "test description"
-		event.category = Category()
-		event.startDate = NSDate()
-		
-//		ParseHelper.saveEvent(event)
-		
-//		ParseHelper.getAllEvents {
-//			(events: [Event]?, error: NSError?) -> () in
-//				println("result: \(events!)")
-//		}
-	}
-	
+    
+    class func removeUserEvents(user: PFUser, block:EventsResultBlock?){
+        var query = PFQuery(className:Event.parseClassName())
+        query.whereKey("owner", equalTo:user)
+        query.findObjectsInBackgroundWithBlock({
+            (objects: [AnyObject]?, error: NSError?) -> () in
+            
+            if error == nil {
+                if let objects = objects as? [Event] {
+                    for event in objects {
+                        event.deleteInBackground()
+                    }
+                }
+                block!(nil, error)
+            }
+            
+        })
+    }
 }
