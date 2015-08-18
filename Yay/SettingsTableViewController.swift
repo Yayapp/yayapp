@@ -106,8 +106,17 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
     @IBAction func logout(sender: AnyObject) {
         appDelegate.layerClient.deauthenticateWithCompletion { (success: Bool, error: NSError?) in
             if error == nil {
-                PFUser.logOut()
-                self.navigationController!.popToRootViewControllerAnimated(true)
+                PFUser.logOutInBackgroundWithBlock({
+                    error in
+                    if error == nil {
+                        let startViewController = self.storyboard!.instantiateViewControllerWithIdentifier("StartViewController") as! StartViewController
+                        self.navigationController!.popToRootViewControllerAnimated(false)
+                        self.appDelegate.window!.rootViewController = startViewController
+                        self.appDelegate.window!.makeKeyAndVisible()
+                        
+                    }
+                })
+                
             } else {
                 println("Failed to deauthenticate: \(error)")
             }

@@ -1184,6 +1184,25 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="47" id="x4m-79-3Gf">
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="x4m-79-3Gf" id="0Ju-vw-5eg">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VIf-Yl-HjK">
+                                                    <rect key="frame" x="0.0" y="0.0" width="121" height="38"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                    <state key="normal" title="Delete Profile">
+                                                        <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="logout:" destination="wNN-no-eq9" eventType="touchUpInside" id="Aid-sE-ORy"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -1206,7 +1225,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7Bf-Lb-m7q" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1557" y="-236"/>
+            <point key="canvasLocation" x="1557" y="-280"/>
         </scene>
         <!--MainRootViewController-->
         <scene sceneID="9tA-yk-bde">
@@ -2785,7 +2804,7 @@
         <image name="userico" width="31" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="dCM-D0-qCd"/>
+        <segue reference="8xc-xQ-cem"/>
         <segue reference="LhE-O1-jqX"/>
     </inferredMetricsTieBreakers>
 </document>

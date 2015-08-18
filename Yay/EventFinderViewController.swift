@@ -66,8 +66,10 @@ class EventFinderViewController: UIViewController, ChooseLocationDelegate {
 
     func goToMain() {
         if((PFUser.currentUser()) != nil) {
-            appDelegate.window!.rootViewController = appDelegate.centerContainer
-            appDelegate.window!.makeKeyAndVisible()
+            appDelegate.window!.rootViewController?.dismissViewControllerAnimated(false, completion: nil)
+                self.appDelegate.window!.rootViewController = self.appDelegate.centerContainer
+                self.appDelegate.window!.makeKeyAndVisible()
+ 
         } else {
             let main = self.storyboard!.instantiateViewControllerWithIdentifier("MainNavigationController") as! MainNavigationController
             presentViewController(main, animated: true, completion: nil)
