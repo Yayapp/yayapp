@@ -80,13 +80,6 @@ class LoginViewController: UIViewController, InstagramDelegate {
                 }
                 
                 
-            } else {
-                let alert = UIAlertView()
-                alert.title = "Ooops"
-                alert.message = error!.localizedDescription
-                alert.addButtonWithTitle("OK")
-                alert.show()
-//                println("Uh oh. The user cancelled the Facebook login.")
             }
         }
     }
@@ -117,15 +110,6 @@ class LoginViewController: UIViewController, InstagramDelegate {
                     
                 } else {
                     self.performSegueWithIdentifier("proceed", sender: nil)
-                }
-            } else {
-                if error != nil {
-                let alert = UIAlertView()
-                alert.title = "Ooops"
-                alert.message = error!.localizedDescription
-                alert.addButtonWithTitle("OK")
-                alert.show()
-//                println("Uh oh. The user cancelled the Twitter login.")
                 }
             }
         }

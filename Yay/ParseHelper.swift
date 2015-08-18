@@ -33,6 +33,7 @@ class ParseHelper {
 		var query = PFQuery(className:Event.parseClassName())
         query.whereKey("startDate", greaterThan: today!)
         query.whereKey("startDate", lessThanOrEqualTo: startTomorrow!)
+        query.orderByDescending("startDate")
         if let user = user {
             let location:PFGeoPoint? = user.objectForKey("location") as? PFGeoPoint
             let distance = user.objectForKey("distance") as? Double
@@ -85,6 +86,7 @@ class ParseHelper {
         var query = PFQuery(className:Event.parseClassName())
         query.whereKey("startDate", greaterThan: today!)
         query.whereKey("startDate", lessThanOrEqualTo: startNextWeek!)
+        query.orderByDescending("startDate")
         if let user = user {
             let location:PFGeoPoint? = user.objectForKey("location") as? PFGeoPoint
             let distance = user.objectForKey("distance") as? Double
@@ -121,6 +123,7 @@ class ParseHelper {
         let today = NSDate()
         var query = PFQuery(className:Event.parseClassName())
         query.whereKey("attendees", equalTo:user)
+        query.orderByDescending("startDate")
         if(upcoming != nil) {
             if (upcoming == true) {
                 query.whereKey("startDate", greaterThanOrEqualTo: today)
