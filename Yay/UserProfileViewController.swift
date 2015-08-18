@@ -197,9 +197,9 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         
         var detailPopover: UIPopoverPresentationController = vc.popoverPresentationController!
         detailPopover.delegate = self
-        detailPopover.sourceView = view
+        detailPopover.sourceView = uploadPhoto
         
-        detailPopover.permittedArrowDirections = UIPopoverArrowDirection.Up
+        detailPopover.permittedArrowDirections = UIPopoverArrowDirection.Down
         presentViewController(vc,
             animated: true, completion:nil)
     }

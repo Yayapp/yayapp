@@ -21,11 +21,15 @@ class ProfileViewController: UITableViewController {
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         
         name.text = PFUser.currentUser()!.objectForKey("name") as! String
-        let avatarfile = PFUser.currentUser()?.objectForKey("avatar") as? PFFile
-        if(avatarfile != nil) {
-            avatar.file = avatarfile
-            avatar.loadInBackground()
-        }
+        PFUser.currentUser()?.fetchInBackgroundWithBlock({
+            result, error in
+            
+            let avatarfile = PFUser.currentUser()?.objectForKey("avatar") as? PFFile
+            if(avatarfile != nil) {
+                self.avatar.file = avatarfile
+                self.avatar.loadInBackground()
+            }
+        })
     }
 
     override func didReceiveMemoryWarning() {

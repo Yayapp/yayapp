@@ -44,35 +44,36 @@ class LoginViewController: UIViewController, InstagramDelegate {
                         else {
                             let fbEmail = result.objectForKey("email") as! String
                             let fbUserId = result.objectForKey("id") as! String
-                            var url:NSURL = NSURL(string:result.objectForKey("picture")?.objectForKey("data")?.objectForKey("url") as! String)!
+                            var url:NSURL = NSURL(string:"http://graph.facebook.com/\(fbUserId)/picture?width=150&height=150")!
                             var err: NSError?
                             var imageData :NSData = NSData(contentsOfURL: url, options: NSDataReadingOptions.DataReadingMappedIfSafe, error: &err)!
                             
                             var imageFile = PFFile(name: "image.jpg", data: imageData) as PFFile
                             
-                            
-                                PFUser.currentUser()?.setObject(result.objectForKey("email")!, forKey: "email")
-                                PFUser.currentUser()?.setObject(result.objectForKey("name")!, forKey: "name")
+                            PFUser.currentUser()?.setObject(result.objectForKey("email")!, forKey: "email")
+                            PFUser.currentUser()?.setObject(result.objectForKey("name")!, forKey: "name")
 //                                PFUser.currentUser()?.setObject(result.objectForKey("about")?!, forKey: "about")
                       
-                            PFUser.currentUser()?.setObject([], forKey: "interests")
-                            PFUser.currentUser()?.setObject(true, forKey: "attAccepted")
-                            PFUser.currentUser()?.setObject(true, forKey: "eventNearby")
-                            PFUser.currentUser()?.setObject(true, forKey: "newMessage")
-                            PFUser.currentUser()?.setObject(10, forKey: "distance")
-                            PFUser.currentUser()?.setObject(1, forKey: "gender")
-                            PFUser.currentUser()?.setObject(3, forKey: "invites")
-                            PFUser.currentUser()?.setObject(true, forKey: "eventsReminder")
                             PFUser.currentUser()?.setObject(imageFile, forKey: "avatar")
-                            PFUser.currentUser()?.saveEventually(nil)
-                            
-                            println("Email: \(fbEmail)")
-                            println("FBUserId: \(fbUserId)")
                             if user.isNew {
-                                self.performSegueWithIdentifier("proceed", sender: nil)
+                                PFUser.currentUser()?.setObject(10, forKey: "distance")
+                                PFUser.currentUser()?.setObject(1, forKey: "gender")
+                                PFUser.currentUser()?.setObject(3, forKey: "invites")
+                                PFUser.currentUser()?.setObject([], forKey: "interests")
+                                PFUser.currentUser()?.setObject(true, forKey: "attAccepted")
+                                PFUser.currentUser()?.setObject(true, forKey: "eventNearby")
+                                PFUser.currentUser()?.setObject(true, forKey: "newMessage")
+                                PFUser.currentUser()?.setObject(true, forKey: "eventsReminder")
                             } else {
                                 self.performSegueWithIdentifier("proceed", sender: nil)
                             }
+                            PFUser.currentUser()?.saveInBackgroundWithBlock({
+                                result, error in
+                                if error == nil {
+                                    self.performSegueWithIdentifier("proceed", sender: nil)
+                                }
+                            })
+                            
                         }
                     })
                     graphConnection.start()
@@ -107,8 +108,13 @@ class LoginViewController: UIViewController, InstagramDelegate {
                     PFUser.currentUser()?.setObject(1, forKey: "gender")
                     PFUser.currentUser()?.setObject(3, forKey: "invites")
                     PFUser.currentUser()?.setObject(true, forKey: "eventsReminder")
-                    PFUser.currentUser()?.saveEventually(nil)
-                    self.performSegueWithIdentifier("proceed", sender: nil)
+                    PFUser.currentUser()?.saveInBackgroundWithBlock({
+                        result, error in
+                        if error == nil {
+                            self.performSegueWithIdentifier("proceed", sender: nil)
+                        }
+                    })
+                    
                 } else {
                     self.performSegueWithIdentifier("proceed", sender: nil)
                 }
