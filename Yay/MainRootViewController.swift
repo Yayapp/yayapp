@@ -138,7 +138,7 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
             result, error in
             let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ListEventsViewController") as! ListEventsViewController
             vc.eventsFirst = result
-            vc.title = "UPCOMING EVENTS"
+            vc.currentTitle = "UPCOMING EVENTS"
             self.navigationController?.pushViewController(vc, animated: true)
         })
     }
@@ -148,7 +148,7 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
             result, error in
             let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ListEventsViewController") as! ListEventsViewController
             vc.eventsFirst = result
-            vc.title = "PAST EVENTS"
+            vc.currentTitle = "PAST EVENTS"
             self.navigationController?.pushViewController(vc, animated: true)
         })
     }

@@ -50,6 +50,11 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
         
         
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        title = "Settings"
+        navigationController?.navigationBar.topItem?.title = ""
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

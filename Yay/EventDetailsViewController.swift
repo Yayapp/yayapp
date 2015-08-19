@@ -93,6 +93,7 @@ class EventDetailsViewController: UIViewController {
                     if(error == nil) {
                         var image = UIImage(data:data!)
                         self.author.setImage(image, forState: .Normal)
+                        self.author.layer.borderColor = UIColor(red:CGFloat(69/255.0), green:CGFloat(164/255.0), blue:CGFloat(254/255.0), alpha: 1).CGColor
                     }
                 })
             }
@@ -122,6 +123,11 @@ class EventDetailsViewController: UIViewController {
         getLocationString(event.location.latitude, longitude: event.location.longitude)
     }
 
+    override func viewWillAppear(animated: Bool) {
+        title = event.name
+        navigationController?.navigationBar.topItem?.title = ""
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -159,7 +165,7 @@ class EventDetailsViewController: UIViewController {
                         
                         components.hour = -1
                         let hourBefore = self.calendar!.dateByAddingComponents(components, toDate: self.event.startDate, options: nil)
-                        components.hour = -23
+                        components.hour = -24
                         let hour24Before = self.calendar!.dateByAddingComponents(components, toDate: self.event.startDate, options: nil)
                         
                         var localNotification1:UILocalNotification = UILocalNotification()

@@ -44,7 +44,7 @@ class LoginViewController: UIViewController, InstagramDelegate {
                         else {
                             let fbEmail = result.objectForKey("email") as! String
                             let fbUserId = result.objectForKey("id") as! String
-                            var url:NSURL = NSURL(string:"http://graph.facebook.com/\(fbUserId)/picture?width=150&height=150")!
+                            var url:NSURL = NSURL(string:"http://graph.facebook.com/\(fbUserId)/picture?width=200&height=200")!
                             var err: NSError?
                             var imageData :NSData = NSData(contentsOfURL: url, options: NSDataReadingOptions.DataReadingMappedIfSafe, error: &err)!
                             

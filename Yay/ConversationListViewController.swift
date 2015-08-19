@@ -8,9 +8,16 @@ class ConversationListViewController: ATLConversationListViewController, ATLConv
         self.dataSource = self
         self.delegate = self
 
+        title = "Messages"
+        
         let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
         self.navigationItem.setLeftBarButtonItem(back, animated: false)
         
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        title = "Messages"
+        navigationController?.navigationBar.topItem?.title = ""
     }
     
     override func didReceiveMemoryWarning() {

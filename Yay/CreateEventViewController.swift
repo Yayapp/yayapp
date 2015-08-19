@@ -39,9 +39,13 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
     @IBOutlet weak var name: UITextField!
     @IBOutlet weak var descr: UITextView!
 
+    @IBOutlet weak var createButton: UIButton!
+    @IBOutlet weak var cancelButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        pickCategory.layer.borderColor = UIColor.whiteColor().CGColor
         descr.delegate = self
         name.delegate = self
         dateFormatter.dateFormat = "EEE dd MMM 'at' H:mm"
@@ -49,6 +53,11 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
         appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.None
     }
 
+    override func viewWillAppear(animated: Bool) {
+        title = "Create Event"
+        navigationController?.navigationBar.topItem?.title = ""
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         
@@ -308,6 +317,9 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
             MessageToUser.showDefaultErrorMessage("Please choose photo")
         } else {
             spinner.startAnimating()
+            createButton.enabled = false
+            cancelButton.enabled = false
+            
             let eventACL:PFACL = PFACL()
             eventACL.setPublicWriteAccess(true)
             eventACL.setPublicReadAccess(true)
@@ -331,7 +343,6 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
                     event.addObject(PFUser.currentUser()!, forKey: "attendees")
                     event.saveInBackgroundWithBlock({
                         (result, error) in
-                        self.spinner.stopAnimating()
                         
                         if ((PFUser.currentUser()?.objectForKey("eventsReminder") as! Bool)) {
                             let components = NSDateComponents()
@@ -355,8 +366,13 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
                             UIApplication.sharedApplication().scheduleLocalNotification(localNotification24)
                         }
                         
+                        self.spinner.stopAnimating()
                         self.navigationController?.popViewControllerAnimated(true)
                     })
+                } else {
+                    self.spinner.stopAnimating()
+                    self.createButton.enabled = false
+                    self.cancelButton.enabled = false
                 }
             })
         }

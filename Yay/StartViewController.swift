@@ -12,6 +12,7 @@ class StartViewController: UIViewController, UIPageViewControllerDataSource, UIP
     
     @IBOutlet weak var dots: UIPageControl!
     
+    var timer:NSTimer!
     var pageViewController : UIPageViewController!
     var currentIndex : Int = 0
     var pageImages : Array<String> = ["background_start1", "background_start2", "background_start3"]
@@ -23,6 +24,7 @@ class StartViewController: UIViewController, UIPageViewControllerDataSource, UIP
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         pageViewController = self.storyboard?.instantiateViewControllerWithIdentifier("TutorialViewController") as! UIPageViewController
         self.pageViewController!.dataSource = self
         self.pageViewController!.delegate = self
@@ -35,8 +37,8 @@ class StartViewController: UIViewController, UIPageViewControllerDataSource, UIP
         addChildViewController(pageViewController!)
         view.insertSubview(pageViewController!.view, atIndex: 0)
         pageViewController!.didMoveToParentViewController(self)
-        
-        
+        timer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: "swipe", userInfo: nil, repeats: true)
+
     }
     
     override func didReceiveMemoryWarning() {
@@ -44,6 +46,14 @@ class StartViewController: UIViewController, UIPageViewControllerDataSource, UIP
         // Dispose of any resources that can be recreated.
     }
     
+    func swipe(){
+        var i:Int! = 0
+        if(currentIndex<2) {
+            i = currentIndex + 1
+        }
+        self.pageViewController.setViewControllers([self.viewControllerAtIndex(i)!], direction: UIPageViewControllerNavigationDirection.Forward, animated: true, completion: nil)
+        self.dots.currentPage = currentIndex
+    }
     
     func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController?
     {
@@ -54,7 +64,6 @@ class StartViewController: UIViewController, UIPageViewControllerDataSource, UIP
         }
         
         index--
-        
         
         return viewControllerAtIndex(index)
     }
@@ -68,9 +77,7 @@ class StartViewController: UIViewController, UIPageViewControllerDataSource, UIP
         }
         
         index++
-        
-        
-        
+       
         if (index == self.pageTitles.count) {
             return nil
         }
@@ -98,20 +105,13 @@ class StartViewController: UIViewController, UIPageViewControllerDataSource, UIP
     }
     
     func pageViewController(pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [AnyObject], transitionCompleted completed: Bool) {
+        
         if(completed){
             let enlarge:InstructionViewController = (self.pageViewController.viewControllers as! [InstructionViewController]).last!
             self.dots.currentPage =  enlarge.pageIndex;
+            currentIndex = enlarge.pageIndex;
+            timer.invalidate()
+            timer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: "swipe", userInfo: nil, repeats: true)
         }
     }
-    
-//    func presentationCountForPageViewController(pageViewController: UIPageViewController) -> Int
-//    {
-//        return self.pageTitles.count
-//    }
-//    
-//    func presentationIndexForPageViewController(pageViewController: UIPageViewController) -> Int
-//    {
-//        return 0
-//    }
-
 }

@@ -84,8 +84,11 @@ class MapEventsViewController: EventsViewController, MKMapViewDelegate {
             (data:NSData?, error:NSError?) in
             if(error == nil){
                 v.image = UIImage(data:data!)
+                v.bounds.size.height = 30
+                v.bounds.size.width = 30
             }
         })
+        
         return v
     }
     

@@ -8,13 +8,18 @@ class ConversationViewController: ATLConversationViewController, ATLConversation
         super.viewDidLoad()
         self.dataSource = self
         self.delegate = self
+        
 //        self.addressBarController.delegate = self
         
         // Setup the dateformatter used by the dataSource.
         self.dateFormatter.dateStyle = NSDateFormatterStyle.ShortStyle
         self.dateFormatter.timeStyle = NSDateFormatterStyle.ShortStyle
-        
         self.configureUI()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        title = conversation.metadata["name"] as! String
+        navigationController?.navigationBar.topItem?.title = ""
     }
     
     // MARK - UI Configuration methods
@@ -179,5 +184,6 @@ class ConversationViewController: ATLConversationViewController, ATLConversation
             }
         }
     }
+
     
 }

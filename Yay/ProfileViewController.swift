@@ -28,6 +28,7 @@ class ProfileViewController: UITableViewController {
             if(avatarfile != nil) {
                 self.avatar.file = avatarfile
                 self.avatar.loadInBackground()
+                self.avatar.layer.borderColor = UIColor.whiteColor().CGColor
             }
         })
     }

@@ -12,7 +12,6 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
     
    
     let picker = UIImagePickerController()
-    
     var user:PFUser!
     var editdone:UIBarButtonItem!
     var isEditingProfile:Bool = false
@@ -33,6 +32,9 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
     override func viewDidLoad() {
         super.viewDidLoad()
         picker.delegate = self
+        
+        view.bringSubviewToFront(uploadPhoto)
+        
         tableView.estimatedRowHeight = 100.0
         tableView.rowHeight = UITableViewAutomaticDimension
         name.text = user.objectForKey("name") as? String
@@ -78,12 +80,21 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         if(avatarfile != nil) {
             avatar.file = avatarfile
             avatar.loadInBackground()
+            avatar.layer.borderColor = UIColor.whiteColor().CGColor
         }
         if user["about"] != nil {
             setAboutMe((user["about"]! as! String))
         }
         let userInvites = user["invites"] as! Int
         invites.text = "\(invites.text!) \(userInvites)"
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        user.fetchInBackgroundWithBlock({
+            result, error in
+            self.title = self.user.objectForKey("name") as? String
+        })
+        navigationController?.navigationBar.topItem?.title = ""
     }
 
     override func didReceiveMemoryWarning() {

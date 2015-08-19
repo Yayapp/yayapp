@@ -11,7 +11,7 @@ import UIKit
 class ListEventsViewController: EventsViewController, UITableViewDataSource, UITableViewDelegate {
 
     var eventsFirst:[Event]?
-    
+    var currentTitle:String?
     let dateFormatter = NSDateFormatter()
     var currentLocation:CLLocation?
     
@@ -35,6 +35,13 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
         if (eventsFirst != nil) {
             reloadAll(eventsFirst!)
         }
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        if currentTitle != nil {
+            title = currentTitle!
+        }
+        navigationController?.navigationBar.topItem?.title = ""
     }
 
     override func didReceiveMemoryWarning() {
