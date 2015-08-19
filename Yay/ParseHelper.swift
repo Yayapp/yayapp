@@ -26,9 +26,13 @@ class ParseHelper {
         
         let endToday = calendar!.dateByAddingComponents(components, toDate: calendar!.startOfDayForDate(today!), options: nil)
         
+        let dayComponent = NSDateComponents()
+        dayComponent.day = 1
+        let startTomorrow = calendar!.dateByAddingComponents(dayComponent, toDate: endToday!, options: NSCalendarOptions.MatchFirst)
+        
 		var query = PFQuery(className:Event.parseClassName())
         query.whereKey("startDate", greaterThan: today!)
-        query.whereKey("startDate", lessThanOrEqualTo: endToday!)
+        query.whereKey("startDate", lessThanOrEqualTo: startTomorrow!)
         query.orderByDescending("startDate")
         if let user = user {
             let location:PFGeoPoint? = user.objectForKey("location") as? PFGeoPoint
