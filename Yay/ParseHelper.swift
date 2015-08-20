@@ -44,6 +44,9 @@ class ParseHelper {
                 query.whereKey("minAge", lessThanOrEqualTo: age)
                 query.whereKey("maxAge", greaterThanOrEqualTo: age)
             }
+        } else {
+            let location:PFGeoPoint = PFGeoPoint(latitude:TempUser.location!.latitude, longitude:TempUser.location!.longitude)
+            query.whereKey("location", nearGeoPoint: location, withinKilometers: Double(100))
         }
         
         if (category != nil) {
@@ -96,6 +99,9 @@ class ParseHelper {
                 query.whereKey("minAge", lessThanOrEqualTo: age)
                 query.whereKey("maxAge", greaterThanOrEqualTo: age)
             }
+        } else {
+            let location:PFGeoPoint = PFGeoPoint(latitude:TempUser.location!.latitude, longitude:TempUser.location!.longitude)
+            query.whereKey("location", nearGeoPoint: location, withinKilometers: Double(100))
         }
         
         if (category != nil) {
