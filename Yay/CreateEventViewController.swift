@@ -97,8 +97,7 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
     @IBAction func openPhotoPicker(sender: AnyObject) {
         let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ChooseEventPictureViewController") as! ChooseEventPictureViewController
         vc.delegate = self
-        vc.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
-        presentViewController(vc, animated: true, completion: nil)
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     @IBAction func openCategoryPicker(sender: AnyObject) {

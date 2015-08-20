@@ -297,10 +297,10 @@
             </objects>
             <point key="canvasLocation" x="865" y="1398"/>
         </scene>
-        <!--ChooseEventPictureViewController-->
+        <!--Choose Picture-->
         <scene sceneID="eTU-vh-rO9">
             <objects>
-                <viewController storyboardIdentifier="ChooseEventPictureViewController" title="ChooseEventPictureViewController" id="AyL-z7-NAd" customClass="ChooseEventPictureViewController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ChooseEventPictureViewController" title="Choose Picture" id="AyL-z7-NAd" customClass="ChooseEventPictureViewController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="CoM-Bb-HRC"/>
                         <viewControllerLayoutGuide type="bottom" id="M5g-DD-c1m"/>
@@ -353,7 +353,7 @@
                                 </prototypes>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zd5-Qc-hfe">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="134"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="134"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="Zd5-Qc-hfe" secondAttribute="height" multiplier="160:67" id="jVA-f5-tWf"/>
                                 </constraints>
@@ -367,15 +367,16 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="bLv-QI-xWF" firstAttribute="top" secondItem="Zd5-Qc-hfe" secondAttribute="bottom" id="c13-lD-a7S"/>
+                            <constraint firstItem="bLv-QI-xWF" firstAttribute="top" secondItem="Zd5-Qc-hfe" secondAttribute="bottom" constant="-64" id="c13-lD-a7S"/>
                             <constraint firstItem="M5g-DD-c1m" firstAttribute="top" secondItem="bLv-QI-xWF" secondAttribute="bottom" id="dJu-FT-ij0"/>
                             <constraint firstItem="Zd5-Qc-hfe" firstAttribute="leading" secondItem="pfz-AZ-VZa" secondAttribute="leading" id="iOm-0Z-oRR"/>
                             <constraint firstAttribute="trailing" secondItem="Zd5-Qc-hfe" secondAttribute="trailing" id="kZl-RV-0sP"/>
-                            <constraint firstItem="Zd5-Qc-hfe" firstAttribute="top" secondItem="pfz-AZ-VZa" secondAttribute="top" id="lhZ-B2-wRD"/>
+                            <constraint firstItem="Zd5-Qc-hfe" firstAttribute="top" secondItem="pfz-AZ-VZa" secondAttribute="top" constant="64" id="lhZ-B2-wRD"/>
                             <constraint firstAttribute="trailing" secondItem="bLv-QI-xWF" secondAttribute="trailing" id="ufc-JP-G5a"/>
                             <constraint firstItem="bLv-QI-xWF" firstAttribute="leading" secondItem="pfz-AZ-VZa" secondAttribute="leading" id="wnC-gW-7dG"/>
                         </constraints>
                     </view>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="photos" destination="bLv-QI-xWF" id="VPo-Vn-SYR"/>
@@ -1192,7 +1193,7 @@
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Delete profile" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W3u-Uw-4OB">
                                                     <rect key="frame" x="8" y="12" width="101" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -1321,7 +1322,7 @@
                     <navigationItem key="navigationItem" id="9vy-WW-67n">
                         <barButtonItem key="backBarButtonItem" title=" " id="kwh-Ss-Ppx"/>
                         <barButtonItem key="leftBarButtonItem" image="topbar_settingsico" id="Lyb-tJ-eql">
-                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
                                 <action selector="navigationDrawer:" destination="oZ6-y1-Cce" id="TV0-e3-7p9"/>
                             </connections>
@@ -1537,6 +1538,7 @@
                             <outlet property="delegate" destination="g0A-ws-qZG" id="msZ-P7-bgG"/>
                         </connections>
                     </tableView>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="avatar" destination="yig-Rz-1MH" id="q9B-Lf-zsJ"/>
@@ -1699,16 +1701,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="addeventphoto" translatesAutoresizingMaskIntoConstraints="NO" id="lQK-S1-GFC">
-                                <rect key="frame" x="0.0" y="64" width="320" height="222"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lQK-S1-GFC">
+                                <rect key="frame" x="0.0" y="64" width="320" height="191"/>
+                                <color key="backgroundColor" red="0.13333333333333333" green="0.13333333333333333" blue="0.13333333333333333" alpha="1" colorSpace="calibratedRGB"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oqO-s0-a05">
-                                <rect key="frame" x="0.0" y="64" width="320" height="113"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="82"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="oqO-s0-a05" secondAttribute="height" multiplier="5:2" constant="37.5" id="Iuj-mh-Xxy"/>
                                 </constraints>
-                                <state key="normal">
+                                <state key="normal" image="uploadphoto_text">
                                     <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -1730,7 +1733,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3PG-OW-ZM5">
-                                <rect key="frame" x="8" y="218" width="90" height="25"/>
+                                <rect key="frame" x="8" y="187" width="90" height="25"/>
                                 <color key="backgroundColor" red="0.2274509804" green="0.28627450980000002" blue="0.3294117647" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="3PG-OW-ZM5" secondAttribute="height" multiplier="4:1" id="vtq-qM-lIP"/>
@@ -1749,7 +1752,7 @@
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Name your event" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="C7x-Rc-Jfd">
-                                <rect key="frame" x="8" y="185" width="200" height="25"/>
+                                <rect key="frame" x="8" y="154" width="200" height="25"/>
                                 <color key="backgroundColor" red="0.2274509804" green="0.28627450980000002" blue="0.3294117647" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1757,7 +1760,7 @@
                                 <textInputTraits key="textInputTraits" returnKeyType="done"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ecn-ay-VBY">
-                                <rect key="frame" x="241" y="220" width="23" height="23"/>
+                                <rect key="frame" x="241" y="189" width="23" height="23"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="Ecn-ay-VBY" secondAttribute="height" multiplier="1:1" id="ah0-ao-S4k"/>
                                 </constraints>
@@ -1789,7 +1792,7 @@
                                 </constraints>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CHr-AL-yX4">
-                                <rect key="frame" x="216" y="185" width="96" height="25"/>
+                                <rect key="frame" x="216" y="154" width="96" height="25"/>
                                 <color key="backgroundColor" red="0.22745098039215686" green="0.28627450980392155" blue="0.32941176470588235" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="25" id="XQP-Dh-GQG"/>
@@ -1816,7 +1819,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k71-4i-rrt">
-                                <rect key="frame" x="289" y="220" width="23" height="23"/>
+                                <rect key="frame" x="289" y="189" width="23" height="23"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="k71-4i-rrt" secondAttribute="height" multiplier="1:1" id="fI6-L3-jlR"/>
                                 </constraints>
@@ -1828,7 +1831,7 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MNo-fL-5nb" customClass="TTRangeSlider">
-                                <rect key="frame" x="41" y="251" width="219" height="25"/>
+                                <rect key="frame" x="41" y="220" width="219" height="25"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -1866,14 +1869,14 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="agepref_icon" translatesAutoresizingMaskIntoConstraints="NO" id="e0s-Op-wcG">
-                                <rect key="frame" x="8" y="251" width="25" height="25"/>
+                                <rect key="frame" x="8" y="220" width="25" height="25"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="25" id="4St-Hb-upN"/>
                                     <constraint firstAttribute="width" constant="25" id="ZwX-xp-egt"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="16-99" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="32l-Ft-yJH">
-                                <rect key="frame" x="268" y="251" width="44" height="25"/>
+                                <rect key="frame" x="268" y="220" width="44" height="25"/>
                                 <color key="backgroundColor" red="0.2274509804" green="0.28627450980000002" blue="0.3294117647" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="44" id="3q2-Bv-bsG"/>
@@ -1890,7 +1893,7 @@
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="1" textAlignment="center" minimumFontSize="17" background="NrOfAttendees_number" translatesAutoresizingMaskIntoConstraints="NO" id="oyx-E2-WSM">
-                                <rect key="frame" x="264" y="220" width="25" height="23"/>
+                                <rect key="frame" x="264" y="189" width="25" height="23"/>
                                 <color key="backgroundColor" red="0.2274509804" green="0.28627450980000002" blue="0.3294117647" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="oyx-E2-WSM" secondAttribute="height" multiplier="27:25" id="Pwc-J8-Si1"/>
@@ -1901,7 +1904,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OMs-22-tqc">
-                                <rect key="frame" x="8" y="294" width="304" height="93"/>
+                                <rect key="frame" x="8" y="263" width="304" height="93"/>
                                 <color key="backgroundColor" red="0.22745098039215686" green="0.28627450980392155" blue="0.32941176470588235" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="OMs-22-tqc" secondAttribute="height" multiplier="19:8" constant="83.125" id="J5a-U4-nG8"/>
@@ -1916,7 +1919,7 @@
                                 </userDefinedRuntimeAttributes>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a7S-B7-6oA">
-                                <rect key="frame" x="118" y="218" width="90" height="25"/>
+                                <rect key="frame" x="118" y="187" width="90" height="25"/>
                                 <color key="backgroundColor" red="0.2274509804" green="0.28627450980000002" blue="0.3294117647" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="a7S-B7-6oA" secondAttribute="height" multiplier="4:1" id="lE3-yA-WLP"/>
@@ -2463,7 +2466,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
-                                    <color key="backgroundColor" red="0.18823529411764706" green="0.2196078431372549" blue="0.22745098039215686" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" red="0.36470588240000001" green="0.3803921569" blue="0.38823529410000002" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstItem="YC7-09-l41" firstAttribute="leading" secondItem="hZI-1r-P87" secondAttribute="leading" constant="16" id="0fw-sQ-7dx"/>
                                         <constraint firstAttribute="trailing" secondItem="YC7-09-l41" secondAttribute="trailing" constant="16" id="Euf-RL-tWs"/>
@@ -2475,19 +2478,6 @@
                                         <constraint firstAttribute="bottom" secondItem="YC7-09-l41" secondAttribute="bottom" constant="6" id="oxH-X6-jGD"/>
                                     </constraints>
                                 </view>
-                                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rgc-Lt-xe2">
-                                    <rect key="frame" x="145" y="160" width="30" height="30"/>
-                                    <constraints>
-                                        <constraint firstAttribute="width" constant="30" id="MYZ-E6-ao4"/>
-                                        <constraint firstAttribute="height" constant="30" id="exQ-oH-RcV"/>
-                                    </constraints>
-                                    <state key="normal" backgroundImage="uploadphoto_ico">
-                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                    </state>
-                                    <connections>
-                                        <action selector="uploadPhoto:" destination="FBc-ue-V7y" eventType="touchUpInside" id="Khd-Kf-M23"/>
-                                    </connections>
-                                </button>
                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hG3-mO-OaJ" customClass="PFImageView">
                                     <rect key="frame" x="85" y="50" width="150" height="150"/>
                                     <constraints>
@@ -2507,6 +2497,19 @@
                                         <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                                     </userDefinedRuntimeAttributes>
                                 </imageView>
+                                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rgc-Lt-xe2">
+                                    <rect key="frame" x="145" y="147" width="30" height="30"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="30" id="MYZ-E6-ao4"/>
+                                        <constraint firstAttribute="height" constant="30" id="exQ-oH-RcV"/>
+                                    </constraints>
+                                    <state key="normal" backgroundImage="uploadphoto_ico">
+                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="uploadPhoto:" destination="FBc-ue-V7y" eventType="touchUpInside" id="Khd-Kf-M23"/>
+                                    </connections>
+                                </button>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
@@ -2515,7 +2518,7 @@
                                 <constraint firstAttribute="bottom" secondItem="7GV-8n-UNB" secondAttribute="bottom" id="Dnd-va-CKu"/>
                                 <constraint firstItem="7GV-8n-UNB" firstAttribute="leading" secondItem="3hR-Lx-nHH" secondAttribute="leading" id="NZV-pA-lm6"/>
                                 <constraint firstItem="hZI-1r-P87" firstAttribute="leading" secondItem="3hR-Lx-nHH" secondAttribute="leading" id="YmC-dQ-OEz"/>
-                                <constraint firstItem="Rgc-Lt-xe2" firstAttribute="top" secondItem="hG3-mO-OaJ" secondAttribute="bottom" constant="-40" id="hbO-DJ-BNi"/>
+                                <constraint firstItem="Rgc-Lt-xe2" firstAttribute="top" secondItem="hG3-mO-OaJ" secondAttribute="bottom" constant="-53" id="hbO-DJ-BNi"/>
                                 <constraint firstItem="7GV-8n-UNB" firstAttribute="top" secondItem="3hR-Lx-nHH" secondAttribute="top" id="ktE-W5-VzO"/>
                                 <constraint firstAttribute="trailing" secondItem="hZI-1r-P87" secondAttribute="trailing" id="lGT-nH-eht"/>
                                 <constraint firstAttribute="centerX" secondItem="Rgc-Lt-xe2" secondAttribute="centerX" id="px8-Nj-vlj"/>
@@ -2766,7 +2769,6 @@
         <image name="NrOfAttendees_plus" width="33" height="32"/>
         <image name="aboutTheuserico" width="29" height="29"/>
         <image name="addevent_button" width="83" height="83"/>
-        <image name="addeventphoto" width="640" height="427"/>
         <image name="agepref_icon" width="30" height="32"/>
         <image name="background_finder" width="640" height="960"/>
         <image name="background_login" width="640" height="960"/>
@@ -2798,6 +2800,7 @@
         <image name="topbar_settingsico" width="32" height="32"/>
         <image name="twittersignup" width="76" height="76"/>
         <image name="uploadphoto_ico" width="29" height="27"/>
+        <image name="uploadphoto_text" width="137" height="81"/>
         <image name="user_settings_ico" width="33" height="32"/>
         <image name="userico" width="31" height="32"/>
     </resources>

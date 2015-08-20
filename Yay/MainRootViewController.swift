@@ -41,13 +41,13 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
         if (PFUser.currentUser() != nil) {
             createEvent.hidden = false
             var rightChatBarButtonItem:UIBarButtonItem = UIBarButtonItem(image:UIImage(named: "topbar_chatico"), style: UIBarButtonItemStyle.Plain, target: self, action: "chatTapped:")
-            rightChatBarButtonItem.tintColor = UIColor.whiteColor()
+            rightChatBarButtonItem.tintColor = UIColor(red:CGFloat(170/255.0), green:CGFloat(170/255.0), blue:CGFloat(170/255.0), alpha: 1)
             buttonItems.append(rightChatBarButtonItem)
         }
             
         
         rightSwitchBarButtonItem = UIBarButtonItem(image:UIImage(named: "mapmarkerico"), style: UIBarButtonItemStyle.Plain, target: self, action: "switchTapped:")
-        rightSwitchBarButtonItem!.tintColor = UIColor.whiteColor()
+        rightSwitchBarButtonItem!.tintColor = UIColor(red:CGFloat(170/255.0), green:CGFloat(170/255.0), blue:CGFloat(170/255.0), alpha: 1)
         buttonItems.append(rightSwitchBarButtonItem!)
         
         self.navigationItem.setRightBarButtonItems(buttonItems, animated: true)

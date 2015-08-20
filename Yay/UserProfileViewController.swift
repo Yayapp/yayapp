@@ -33,14 +33,17 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         super.viewDidLoad()
         picker.delegate = self
         
-        view.bringSubviewToFront(uploadPhoto)
-        
+        var tblView =  UIView(frame: CGRectZero)
+        tableView.tableFooterView = tblView
+        tableView.tableFooterView!.hidden = true
         tableView.estimatedRowHeight = 100.0
         tableView.rowHeight = UITableViewAutomaticDimension
+        
         name.text = user.objectForKey("name") as? String
         
         if(PFUser.currentUser()?.objectId == user.objectId) {
             editdone = UIBarButtonItem(title: "Edit", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("editdone:"))
+            editdone.tintColor = UIColor(red:CGFloat(170/255.0), green:CGFloat(170/255.0), blue:CGFloat(170/255.0), alpha: 1)
             self.navigationItem.setRightBarButtonItem(editdone, animated: false)
         }
         
@@ -87,6 +90,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         }
         let userInvites = user["invites"] as! Int
         invites.text = "\(invites.text!) \(userInvites)"
+        view.bringSubviewToFront(uploadPhoto)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -263,5 +267,5 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         alertVC.addAction(okAction)
         presentViewController(alertVC, animated: true, completion: nil)
     }
-    
+ 
 }

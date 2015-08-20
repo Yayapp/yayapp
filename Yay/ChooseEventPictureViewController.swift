@@ -31,6 +31,10 @@ class ChooseEventPictureViewController: UIViewController, UITableViewDataSource,
         })
     }
 
+    override func viewWillAppear(animated: Bool) {
+        navigationController?.navigationBar.topItem?.title = ""
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -55,7 +59,7 @@ class ChooseEventPictureViewController: UIViewController, UITableViewDataSource,
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         delegate.madeEventPictureChoice(photosList[indexPath.row].photo, pickedPhoto: nil)
-        self.dismissViewControllerAnimated(true, completion:nil)
+        self.navigationController?.popViewControllerAnimated(true)
     }
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -79,7 +83,7 @@ class ChooseEventPictureViewController: UIViewController, UITableViewDataSource,
         let imageFile:PFFile = PFFile(data: imageData)
         delegate.madeEventPictureChoice(imageFile, pickedPhoto: pickedImage)
         dismissViewControllerAnimated(true, completion: {
-            self.dismissViewControllerAnimated(true, completion:nil)
+            self.navigationController?.popViewControllerAnimated(true)
         }) //5
         
     }
