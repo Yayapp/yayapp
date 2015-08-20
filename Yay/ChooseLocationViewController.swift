@@ -38,10 +38,11 @@ class ChooseLocationViewController: UIViewController, CLLocationManagerDelegate,
     }
     
     @IBAction func ok(sender: AnyObject) {
-        if touchMapCoordinate != nil {
-            delegate.madeLocationChoice(touchMapCoordinate)
-        }
-        dismissViewControllerAnimated(true, completion: nil)
+        dismissViewControllerAnimated(true, completion: {
+            if self.touchMapCoordinate != nil {
+                self.delegate.madeLocationChoice(self.touchMapCoordinate)
+            }
+        })
     }
     
     @IBAction func cancel(sender: AnyObject) {
