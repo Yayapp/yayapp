@@ -28,6 +28,10 @@ class LoginViewController: UIViewController, InstagramDelegate {
         PFFacebookUtils.logInInBackgroundWithReadPermissions(permissions) {
             (user: PFUser?, error: NSError?) -> Void in
             if let user = user {
+                let currentInstallation:PFInstallation = PFInstallation.currentInstallation()
+                currentInstallation["user"] = PFUser.currentUser()
+                currentInstallation.saveInBackground()
+                
                 self.appDelegate.authenticateInLayer()
                 Prefs.storeSessionId(user.sessionToken!)
                 Prefs.storeLoginType(LoginType.FACEBOOK)
@@ -64,8 +68,7 @@ class LoginViewController: UIViewController, InstagramDelegate {
                                 PFUser.currentUser()?.setObject(true, forKey: "eventNearby")
                                 PFUser.currentUser()?.setObject(true, forKey: "newMessage")
                                 PFUser.currentUser()?.setObject(true, forKey: "eventsReminder")
-                            } else {
-                                self.performSegueWithIdentifier("proceed", sender: nil)
+                                
                             }
                             PFUser.currentUser()?.saveInBackgroundWithBlock({
                                 result, error in
@@ -88,6 +91,11 @@ class LoginViewController: UIViewController, InstagramDelegate {
         PFTwitterUtils.logInWithBlock {
             (user: PFUser?, error: NSError?) -> Void in
             if let user = user {
+                
+                let currentInstallation:PFInstallation = PFInstallation.currentInstallation()
+                currentInstallation["user"] = PFUser.currentUser()
+                currentInstallation.saveInBackground()
+                
                 self.appDelegate.authenticateInLayer()
                 Prefs.storeSessionId(user.sessionToken!)
                 Prefs.storeLoginType(LoginType.TWITTER)
@@ -101,6 +109,7 @@ class LoginViewController: UIViewController, InstagramDelegate {
                     PFUser.currentUser()?.setObject(1, forKey: "gender")
                     PFUser.currentUser()?.setObject(3, forKey: "invites")
                     PFUser.currentUser()?.setObject(true, forKey: "eventsReminder")
+                    
                     PFUser.currentUser()?.saveInBackgroundWithBlock({
                         result, error in
                         if error == nil {
@@ -126,6 +135,11 @@ class LoginViewController: UIViewController, InstagramDelegate {
         PFUser.logInWithUsernameInBackground(user.username, password: "\(user.username.MD5())") {
             (pfuser: PFUser?, error: NSError?) -> Void in
             if pfuser != nil {
+                
+                let currentInstallation:PFInstallation = PFInstallation.currentInstallation()
+                currentInstallation["user"] = PFUser.currentUser()
+                currentInstallation.saveInBackground()
+                
                 self.appDelegate.authenticateInLayer()
                 Prefs.storeSessionId(pfuser!.sessionToken!)
                 Prefs.storeLoginType(LoginType.INSTAGRAM)
@@ -154,6 +168,10 @@ class LoginViewController: UIViewController, InstagramDelegate {
                             alert.addButtonWithTitle("OK")
                             alert.show()
                         } else {
+                            let currentInstallation:PFInstallation = PFInstallation.currentInstallation()
+                            currentInstallation["user"] = PFUser.currentUser()
+                            currentInstallation.saveInBackground()
+                            
                             self.appDelegate.authenticateInLayer()
                             self.performSegueWithIdentifier("proceed", sender: nil)
                         }

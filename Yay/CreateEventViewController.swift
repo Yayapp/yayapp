@@ -353,14 +353,14 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
                             
                             
                             var localNotification1:UILocalNotification = UILocalNotification()
-                            localNotification1.alertAction = "event.name"
-                            localNotification1.alertBody = "Don't forget to participate in \(self.dateFormatter.stringFromDate(event.startDate))"
+                            localNotification1.alertAction = "\(event.name)"
+                            localNotification1.alertBody = "Don't forget to participate on \(self.dateFormatter.stringFromDate(event.startDate))"
                             localNotification1.fireDate = hourBefore
                             UIApplication.sharedApplication().scheduleLocalNotification(localNotification1)
                             
                             var localNotification24:UILocalNotification = UILocalNotification()
-                            localNotification24.alertAction = "event.name"
-                            localNotification24.alertBody = "Don't forget to participate in \(self.dateFormatter.stringFromDate(event.startDate))"
+                            localNotification24.alertAction = "\(event.name)"
+                            localNotification24.alertBody = "Don't forget to participate on \(self.dateFormatter.stringFromDate(event.startDate))"
                             localNotification24.fireDate = hour24Before
                             UIApplication.sharedApplication().scheduleLocalNotification(localNotification24)
                         }
