@@ -50,6 +50,9 @@ class EventDetailsViewController: UIViewController {
         attendeeButtons = [attended1,attended2,attended3,attended4]
         attendees = event.attendees.filter({$0.objectId != self.event.owner.objectId})
         
+        title = event.name
+        let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
+        self.navigationItem.setLeftBarButtonItem(back, animated: false)
         
         dateFormatter.dateFormat = "EEE dd MMM 'at' H:mm"
         
@@ -123,26 +126,12 @@ class EventDetailsViewController: UIViewController {
         getLocationString(event.location.latitude, longitude: event.location.longitude)
     }
 
-    override func viewWillAppear(animated: Bool) {
-        title = event.name
-        navigationController?.navigationBar.topItem?.title = ""
-    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
     @IBAction func attend(sender: AnyObject) {
 
@@ -202,6 +191,7 @@ class EventDetailsViewController: UIViewController {
                             }
                         })
                     }
+                    self.attendees.append(PFUser.currentUser()!)
                     
                     
                     self.spinner.stopAnimating()
@@ -297,4 +287,7 @@ class EventDetailsViewController: UIViewController {
         navigationController?.pushViewController(userProfileViewController, animated: true)
     }
     
+    @IBAction func backButtonTapped(sender: AnyObject) {
+        navigationController?.popViewControllerAnimated(true)
+    }
 }

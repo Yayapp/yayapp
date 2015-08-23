@@ -43,7 +43,6 @@
 		997C23971B67EFCD0070DDB2 /* ChooseEventPictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997C23961B67EFCD0070DDB2 /* ChooseEventPictureViewController.swift */; };
 		997C23991B67F6250070DDB2 /* EventPhotoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997C23981B67F6250070DDB2 /* EventPhotoTableViewCell.swift */; };
 		99BFEC911B7A70D100CBFF8B /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BFEC901B7A70D100CBFF8B /* UserManager.swift */; };
-		99BFEC9B1B7A765B00CBFF8B /* ParticipantTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BFEC981B7A765B00CBFF8B /* ParticipantTableViewController.swift */; };
 		99BFEC9C1B7A765B00CBFF8B /* ConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BFEC991B7A765B00CBFF8B /* ConversationViewController.swift */; };
 		99BFEC9D1B7A765B00CBFF8B /* ConversationListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BFEC9A1B7A765B00CBFF8B /* ConversationListViewController.swift */; };
 		99BFEC9F1B7A78C700CBFF8B /* ATLParticipant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BFEC9E1B7A78C700CBFF8B /* ATLParticipant.swift */; };
@@ -111,7 +110,6 @@
 		997C23961B67EFCD0070DDB2 /* ChooseEventPictureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseEventPictureViewController.swift; sourceTree = "<group>"; };
 		997C23981B67F6250070DDB2 /* EventPhotoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventPhotoTableViewCell.swift; sourceTree = "<group>"; };
 		99BFEC901B7A70D100CBFF8B /* UserManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
-		99BFEC981B7A765B00CBFF8B /* ParticipantTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParticipantTableViewController.swift; sourceTree = "<group>"; };
 		99BFEC991B7A765B00CBFF8B /* ConversationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationViewController.swift; sourceTree = "<group>"; };
 		99BFEC9A1B7A765B00CBFF8B /* ConversationListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationListViewController.swift; sourceTree = "<group>"; };
 		99BFEC9E1B7A78C700CBFF8B /* ATLParticipant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ATLParticipant.swift; sourceTree = "<group>"; };
@@ -175,7 +173,6 @@
 				99EC40FB1B5FFB490093E484 /* InstagramViewController.swift */,
 				997C23901B67B42D0070DDB2 /* ChooseCategoryViewController.swift */,
 				997C23961B67EFCD0070DDB2 /* ChooseEventPictureViewController.swift */,
-				99BFEC981B7A765B00CBFF8B /* ParticipantTableViewController.swift */,
 				99BFEC991B7A765B00CBFF8B /* ConversationViewController.swift */,
 				99BFEC9A1B7A765B00CBFF8B /* ConversationListViewController.swift */,
 				9967D8321B7CFD10003C3CE1 /* BlurryAlertViewController.swift */,
@@ -476,7 +473,6 @@
 				8B1531BB1B5FA963007A2EC7 /* CategoryType.swift in Sources */,
 				99253FF41B6A67970078B668 /* TempUser.swift in Sources */,
 				99FDE5411B57EB84004CE61B /* SettingsTableViewController.swift in Sources */,
-				99BFEC9B1B7A765B00CBFF8B /* ParticipantTableViewController.swift in Sources */,
 				995032971B5671B900D792C5 /* ChooseLocationViewController.swift in Sources */,
 				995032951B566F3400D792C5 /* EventFinderViewController.swift in Sources */,
 				99C7B8CF1B7D1D370045D44D /* Rank.swift in Sources */,

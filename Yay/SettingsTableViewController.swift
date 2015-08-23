@@ -30,6 +30,12 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        title = "Settings"
+        
+        let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
+        self.navigationItem.setLeftBarButtonItem(back, animated: false)
+        
         distanceSlider.delegate = self
         appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.None
         PFUser.currentUser()!.fetchIfNeededInBackgroundWithBlock({
@@ -49,11 +55,6 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
         })
         
         
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        title = "Settings"
-        navigationController?.navigationBar.topItem?.title = ""
     }
 
     override func didReceiveMemoryWarning() {
@@ -168,6 +169,10 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
         blurryAlertViewController.aboutText = "PROFILE DELETION"
         blurryAlertViewController.messageText = "Are you sure you want to delete your profile?"
         self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
+    }
+    
+    @IBAction func backButtonTapped(sender: AnyObject) {
+        navigationController?.popViewControllerAnimated(true)
     }
     
     deinit {

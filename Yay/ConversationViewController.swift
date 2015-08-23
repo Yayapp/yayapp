@@ -1,6 +1,6 @@
 import UIKit
 
-class ConversationViewController: ATLConversationViewController, ATLConversationViewControllerDataSource, ATLConversationViewControllerDelegate, ATLParticipantTableViewControllerDelegate {
+class ConversationViewController: ATLConversationViewController, ATLConversationViewControllerDataSource, ATLConversationViewControllerDelegate {
     var dateFormatter: NSDateFormatter = NSDateFormatter()
     var usersArray: NSArray!
     
@@ -9,26 +9,28 @@ class ConversationViewController: ATLConversationViewController, ATLConversation
         self.dataSource = self
         self.delegate = self
         
+        title = conversation.metadata["name"] as! String
 //        self.addressBarController.delegate = self
-        
+        let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
+        self.navigationItem.setLeftBarButtonItem(back, animated: false)
         // Setup the dateformatter used by the dataSource.
         self.dateFormatter.dateStyle = NSDateFormatterStyle.ShortStyle
         self.dateFormatter.timeStyle = NSDateFormatterStyle.ShortStyle
         self.configureUI()
     }
-    
-    override func viewWillAppear(animated: Bool) {
-        title = conversation.metadata["name"] as! String
-        navigationController?.navigationBar.topItem?.title = ""
-    }
+   
     
     // MARK - UI Configuration methods
     
     func configureUI() {
         ATLOutgoingMessageCollectionViewCell.appearance().messageTextColor = UIColor.whiteColor()
+        shouldDisplayAvatarItemForOneOtherParticipant = true
+        ATLAvatarImageView.appearance().avatarImageViewDiameter = 40
     }
     
-    // MARK - ATLConversationViewControllerDelegate methods
+    func shouldDisplayAvatarItem() ->Bool {
+        return true
+    }
     
     func conversationViewController(viewController: ATLConversationViewController, didSendMessage message: LYRMessage) {
 //        println("Message sent!")
@@ -101,36 +103,7 @@ class ConversationViewController: ATLConversationViewController, ATLConversation
         return mergedStatuses;
     }
     
-    // MARK - ATLAddressBarViewController Delegate methods methods
-    
-    override func addressBarViewController(addressBarViewController: ATLAddressBarViewController, didTapAddContactsButton addContactsButton: UIButton) {
-        UserManager.sharedManager.queryForAllUsersWithCompletion { (users: NSArray?, error: NSError?) in
-            if error == nil {
-                let participants = NSSet(array: users as! [PFUser]) as Set<NSObject>
-                let controller = ParticipantTableViewController(participants: participants, sortType: ATLParticipantPickerSortType.FirstName)
-                controller.delegate = self
-                
-                let navigationController = UINavigationController(rootViewController: controller)
-                self.navigationController!.presentViewController(navigationController, animated: true, completion: nil)
-            } else {
-                println("Error querying for All Users: \(error)")
-            }
-        }
-    }
-    
-    override func addressBarViewController(addressBarViewController: ATLAddressBarViewController, searchForParticipantsMatchingText searchText: String, completion: (([AnyObject]) -> Void)?) {
-        UserManager.sharedManager.queryForUserWithName(searchText) { (participants: NSArray?, error: NSError?) in
-            if (error == nil) {
-                if let callback = completion {
-                    callback(participants! as [AnyObject])
-                }
-            } else {
-                println("Error search for participants: \(error)")
-            }
-        }
-    }
-    
-    
+ 
     func messageForMessageParts(parts: [AnyObject], MIMEType: String, pushText: String?) -> LYRMessage? {
         let senderName: String = PFUser.currentUser()!.objectForKey("name") as! String
         let conversationName: String = conversation.metadata["name"] as! String
@@ -164,26 +137,8 @@ class ConversationViewController: ATLConversationViewController, ATLConversation
         }
         return message
     }
-
     
-    func participantTableViewController(participantTableViewController: ATLParticipantTableViewController, didSelectParticipant participant: ATLParticipant) {
-        println("participant: \(participant)")
-        self.addressBarController.selectParticipant(participant)
-        println("selectedParticipants: \(self.addressBarController.selectedParticipants)")
-        self.navigationController!.dismissViewControllerAnimated(true, completion: nil)
+    @IBAction func backButtonTapped(sender: AnyObject) {
+        navigationController?.popViewControllerAnimated(true)
     }
-    
-    func participantTableViewController(participantTableViewController: ATLParticipantTableViewController, didSearchWithString searchText: String, completion: ((Set<NSObject>!) -> Void)?) {
-        UserManager.sharedManager.queryForUserWithName(searchText) { (participants, error) in
-            if (error == nil) {
-                if let callback = completion {
-                    callback(NSSet(array: participants as! [AnyObject]) as Set<NSObject>)
-                }
-            } else {
-                println("Error search for participants: \(error)")
-            }
-        }
-    }
-
-    
 }

@@ -45,17 +45,16 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        title = "Create Event"
         pickCategory.layer.borderColor = UIColor.whiteColor().CGColor
         descr.delegate = self
         name.delegate = self
         dateFormatter.dateFormat = "EEE dd MMM 'at' H:mm"
         rangeSlider.delegate = self
         appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.None
-    }
-
-    override func viewWillAppear(animated: Bool) {
-        title = "Create Event"
-        navigationController?.navigationBar.topItem?.title = ""
+        
+        let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
+        self.navigationItem.setLeftBarButtonItem(back, animated: false)
     }
     
     override func didReceiveMemoryWarning() {
@@ -376,6 +375,11 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
             })
         }
     }
+    
+    @IBAction func backButtonTapped(sender: AnyObject) {
+        navigationController?.popViewControllerAnimated(true)
+    }
+    
     deinit {
         appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.PanningCenterView
     }

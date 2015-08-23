@@ -27,6 +27,9 @@ extension PFUser: ATLParticipant {
     }
     
     public var avatarImageURL: NSURL? {
+        if let avatar = self.objectForKey("avatar") as? PFFile {
+            return NSURL(string:avatar.url!)
+        }
         return nil
     }
     

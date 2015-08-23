@@ -22,6 +22,13 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
         super.viewDidLoad()
         dateFormatter.dateFormat = "EEE dd MMM 'at' H:mm"
         
+        if currentTitle != nil {
+            title = currentTitle!
+        }
+        
+        let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
+        self.navigationItem.setLeftBarButtonItem(back, animated: false)
+        
         if let user = PFUser.currentUser() {
             let currentPFLocation = user.objectForKey("location") as! PFGeoPoint
             currentLocation = CLLocation(latitude: currentPFLocation.latitude, longitude: currentPFLocation.longitude)
@@ -36,29 +43,13 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
             reloadAll(eventsFirst!)
         }
     }
-    
-    override func viewWillAppear(animated: Bool) {
-        if currentTitle != nil {
-            title = currentTitle!
-        }
-        navigationController?.navigationBar.topItem?.title = ""
-    }
+   
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
+   
 
     override func reloadAll(eventsList:[Event]) {
         eventsData = eventsList
@@ -93,6 +84,10 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
         eventDetailsViewController.event = eventsData[indexPath.row]
         
         navigationController?.pushViewController(eventDetailsViewController, animated: true)
+    }
+    
+    @IBAction func backButtonTapped(sender: AnyObject) {
+        navigationController?.popViewControllerAnimated(true)
     }
     
 }

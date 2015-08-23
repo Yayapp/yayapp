@@ -33,11 +33,16 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         super.viewDidLoad()
         picker.delegate = self
         
+        let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
+        self.navigationItem.setLeftBarButtonItem(back, animated: false)
+        
         var tblView =  UIView(frame: CGRectZero)
         tableView.tableFooterView = tblView
         tableView.tableFooterView!.hidden = true
         tableView.estimatedRowHeight = 100.0
         tableView.rowHeight = UITableViewAutomaticDimension
+        
+        title = self.user.objectForKey("name") as? String
         
         name.text = user.objectForKey("name") as? String
         
@@ -93,13 +98,6 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         view.bringSubviewToFront(uploadPhoto)
     }
     
-    override func viewWillAppear(animated: Bool) {
-        user.fetchInBackgroundWithBlock({
-            result, error in
-            self.title = self.user.objectForKey("name") as? String
-        })
-        navigationController?.navigationBar.topItem?.title = ""
-    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -266,6 +264,10 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         let okAction = UIAlertAction(title: "OK", style:.Default, handler: nil)
         alertVC.addAction(okAction)
         presentViewController(alertVC, animated: true, completion: nil)
+    }
+    
+    @IBAction func backButtonTapped(sender: AnyObject) {
+        navigationController?.popViewControllerAnimated(true)
     }
  
 }
