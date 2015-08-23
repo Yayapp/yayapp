@@ -37,7 +37,6 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
         self.navigationItem.setLeftBarButtonItem(back, animated: false)
         
         distanceSlider.delegate = self
-        appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.None
         PFUser.currentUser()!.fetchIfNeededInBackgroundWithBlock({
             result, error in
             let selectedMaximum = PFUser.currentUser()!.objectForKey("distance") as! Float
@@ -174,8 +173,5 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
     @IBAction func backButtonTapped(sender: AnyObject) {
         navigationController?.popViewControllerAnimated(true)
     }
-    
-    deinit {
-        appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.PanningCenterView
-    }
+  
 }
