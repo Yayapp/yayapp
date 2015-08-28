@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "twittersignup.png"
+      "filename" : "twitter.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "twittersignup_x2.png"
+      "filename" : "twitter_x2.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "twittersignup_x3.png"
+      "filename" : "twitter_x3.png"
     }
   ],
   "info" : {

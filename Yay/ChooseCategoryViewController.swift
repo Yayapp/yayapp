@@ -12,6 +12,8 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
 
     var delegate:ChooseCategoryDelegate!
     var categoriesData:[Category]! = []
+    var selectedCategoriesData:[Category]! = []
+    var multi:Bool = false
     
     @IBOutlet weak var categories: UICollectionView!
     
@@ -20,6 +22,7 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         
         categories.delegate = self
         categories.dataSource = self
+        categories.allowsMultipleSelection = true
 
         ParseHelper.getCategories({
             (categoriesList:[Category]?, error:NSError?) in
@@ -28,6 +31,7 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
                 self.categories.reloadData()
             }
         })
+        
 
     }
 
@@ -52,22 +56,63 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
     
         let category = categoriesData[indexPath.row]
         cell.name.text = category.name
-        cell.photo.file = category.photo
+        if (contains(selectedCategoriesData, category)) {
+            cell.photo.file = category.photoSelected
+        } else {
+            cell.photo.file = category.photo
+        }
         cell.photo.loadInBackground()
         return cell
     }
 
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        delegate.madeCategoryChoice(categoriesData[indexPath.row])
-        self.dismissViewControllerAnimated(true, completion:nil)
+        let category = categoriesData[indexPath.row]
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! CategoryCollectionViewCell
+        if (contains(selectedCategoriesData, category)){
+            
+            category.photo.getDataInBackgroundWithBlock({
+                (data:NSData?, error:NSError?) in
+                if(error == nil) {
+                    var image = UIImage(data:data!)
+                    cell.photo.image = image!
+                    collectionView.reloadItemsAtIndexPaths([indexPath])
+                }
+            })
+            
+            selectedCategoriesData = selectedCategoriesData.filter({$0.objectId != category.objectId})
+        } else {
+            category.photoSelected.getDataInBackgroundWithBlock({
+                (data:NSData?, error:NSError?) in
+                if(error == nil) {
+                    var image = UIImage(data:data!)
+                    cell.photo.image = image!
+                    collectionView.reloadItemsAtIndexPaths([indexPath])
+                }
+            })
+            if(multi){
+                selectedCategoriesData.append(category)
+            } else {
+                selectedCategoriesData = [category]
+            }
+        }
+        delegate.madeCategoryChoice(selectedCategoriesData)
+        if(!multi){
+            self.dismissViewControllerAnimated(true, completion:nil)
+        }
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         
-        return CGSize(width: categories.bounds.size.width/2-1, height: categories.bounds.size.width/2-1);
+        return CGSize(width: categories.bounds.size.width/2-0.5, height: categories.bounds.size.height/4);
         
     }
+    
+    @IBAction func close(sender: AnyObject) {
+        self.dismissViewControllerAnimated(true, completion:nil)
+    }
+
+    
 }
 protocol ChooseCategoryDelegate : NSObjectProtocol {
-    func madeCategoryChoice(category: Category)
+    func madeCategoryChoice(categories: [Category])
 }

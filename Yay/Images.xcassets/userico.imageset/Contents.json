@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "userico.png"
+      "filename" : "profile_ico.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "userico_x2.png"
+      "filename" : "profile_ico_x2.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "userico_x3.png"
+      "filename" : "profile_ico_x3.png"
     }
   ],
   "info" : {

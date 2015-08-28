@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "distancerange_homeicon.png"
+      "filename" : "distance_range_home.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "distancerange_homeicon_x2.png"
+      "filename" : "distance_range_home_x2.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "distancerange_homeicon_x3.png"
+      "filename" : "distance_range_home_x3.png"
     }
   ],
   "info" : {

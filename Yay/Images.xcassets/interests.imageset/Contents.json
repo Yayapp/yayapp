@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "interests.png"
+      "filename" : "interests_ico.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "interests_x2.png"
+      "filename" : "interests_ico_x2.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "interests_x3.png"
+      "filename" : "interests_ico_x3.png"
     }
   ],
   "info" : {

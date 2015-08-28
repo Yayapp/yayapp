@@ -16,12 +16,15 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
     var thisWeekCenter:NSLayoutConstraint!
     var todayCenter:NSLayoutConstraint!
     
-    @IBOutlet weak var profileButton: UIBarButtonItem!
-    @IBOutlet weak var container: UIView!
-
-    @IBOutlet weak var secondary: UIButton!
+    @IBOutlet weak var today: UIButton!
+    @IBOutlet weak var tomorrow: UIButton!
+    @IBOutlet weak var thisWeek: UIButton!
     
-    @IBOutlet weak var current: UIButton!
+    @IBOutlet weak var todayUnderline: UIView!
+    @IBOutlet weak var tomorrowUnderline: UIView!
+    @IBOutlet weak var thisWeekUnderline: UIView!
+    
+    @IBOutlet weak var container: UIView!
     @IBOutlet weak var createEvent: UIButton!
     
     var currentVC:UIViewController!
@@ -33,23 +36,16 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
     
-        var buttonItems:[UIBarButtonItem]=[]
-        
         if (PFUser.currentUser() != nil) {
             createEvent.hidden = false
-            var rightChatBarButtonItem:UIBarButtonItem = UIBarButtonItem(image:UIImage(named: "topbar_chatico"), style: UIBarButtonItemStyle.Plain, target: self, action: "chatTapped:")
-            rightChatBarButtonItem.tintColor = UIColor(red:CGFloat(170/255.0), green:CGFloat(170/255.0), blue:CGFloat(170/255.0), alpha: 1)
-            buttonItems.append(rightChatBarButtonItem)
         }
-            
         
         rightSwitchBarButtonItem = UIBarButtonItem(image:UIImage(named: "mapmarkerico"), style: UIBarButtonItemStyle.Plain, target: self, action: "switchTapped:")
-        rightSwitchBarButtonItem!.tintColor = UIColor(red:CGFloat(170/255.0), green:CGFloat(170/255.0), blue:CGFloat(170/255.0), alpha: 1)
-        buttonItems.append(rightSwitchBarButtonItem!)
+        rightSwitchBarButtonItem!.tintColor = UIColor(red:CGFloat(3/255.0), green:CGFloat(118/255.0), blue:CGFloat(114/255.0), alpha: 1)
         
-        self.navigationItem.setRightBarButtonItems(buttonItems, animated: true)
+        self.navigationItem.setRightBarButtonItem(rightSwitchBarButtonItem, animated: true)
 
-        segmentChanged()
+        today(true)
     }
 
     override func didReceiveMemoryWarning() {
@@ -66,17 +62,20 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
             vc = self.storyboard!.instantiateViewControllerWithIdentifier("ListEventsViewController") as! ListEventsViewController
         }
         if(selectedSegment == 0) {
-            current.setTitle("Today", forState: .Normal)
-            secondary.setTitle("This Week", forState: .Normal)
             ParseHelper.getTodayEvents(PFUser.currentUser(), category: chosenCategory, block: {
                 (eventsList:[Event]?, error:NSError?) in
                 if(error == nil) {
                     vc.reloadAll(eventsList!)
                 }
             })
+        } else if (selectedSegment == 1) {
+            ParseHelper.getTomorrowEvents(PFUser.currentUser(), category: chosenCategory, block: {
+                (eventsList:[Event]?, error:NSError?) in
+                if(error == nil) {
+                    vc.reloadAll(eventsList!)
+                }
+            })
         } else {
-            secondary.setTitle("Today", forState: .Normal)
-            current.setTitle("This Week", forState: .Normal)
             ParseHelper.getThisWeekEvents(PFUser.currentUser(), category: chosenCategory, block: {
                 (eventsList:[Event]?, error:NSError?) in
                 if(error == nil) {
@@ -88,22 +87,43 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
         updateActiveViewController(vc)
     }
     
-    @IBAction func current(sender: AnyObject) {
+    @IBAction func today(sender: AnyObject) {
+        selectedSegment = 0
+        todayUnderline.hidden = false
+        tomorrowUnderline.hidden = true
+        thisWeekUnderline.hidden = true
+        today.titleLabel?.font = UIFont.boldSystemFontOfSize(15)
+        tomorrow.titleLabel?.font = UIFont.systemFontOfSize(15)
+        thisWeek.titleLabel?.font = UIFont.systemFontOfSize(15)
         segmentChanged()
     }
     
-    @IBAction func secondary(sender: AnyObject) {
-        selectedSegment = selectedSegment == 0 ? 1 : 0
+    @IBAction func tomorrow(sender: AnyObject) {
+        selectedSegment = 1
+        todayUnderline.hidden = true
+        tomorrowUnderline.hidden = false
+        thisWeekUnderline.hidden = true
+        today.titleLabel?.font = UIFont.systemFontOfSize(15)
+        tomorrow.titleLabel?.font = UIFont.boldSystemFontOfSize(15)
+        thisWeek.titleLabel?.font = UIFont.systemFontOfSize(15)
         segmentChanged()
     }
     
-    @IBAction func navigationDrawer(sender: AnyObject) {
-        if (PFUser.currentUser() != nil) {
-            appDelegate.centerContainer!.toggleDrawerSide(MMDrawerSide.Left, animated: true, completion: nil)
-        } else {
-            let loginViewController = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
-            navigationController?.pushViewController(loginViewController, animated: true)
-        }
+    @IBAction func thisWeek(sender: AnyObject) {
+        selectedSegment = 2
+        todayUnderline.hidden = true
+        tomorrowUnderline.hidden = true
+        thisWeekUnderline.hidden = false
+        today.titleLabel?.font = UIFont.systemFontOfSize(15)
+        tomorrow.titleLabel?.font = UIFont.systemFontOfSize(15)
+        thisWeek.titleLabel?.font = UIFont.boldSystemFontOfSize(15)
+        segmentChanged()
+    }
+  
+    
+    func showMessages() {
+        let controller: ConversationListViewController = ConversationListViewController(layerClient: appDelegate.layerClient)
+        navigationController?.pushViewController(controller, animated: true)
     }
     
     func showProfile(){
@@ -116,36 +136,49 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
         performSegueWithIdentifier("settings", sender: nil)
     }
     
-    func showUpcomingEvents(){
-        ParseHelper.getUpcomingPastEvents(PFUser.currentUser()!, upcoming: true, block: {
+    func showRequests(){
+        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ListEventsViewController") as! ListEventsViewController
+        vc.requests = true
+        ParseHelper.getOwnerEvents(PFUser.currentUser()!, block: {
             result, error in
-            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ListEventsViewController") as! ListEventsViewController
-            vc.eventsFirst = result
-            vc.currentTitle = "UPCOMING EVENTS"
-            self.navigationController?.pushViewController(vc, animated: true)
+            if (error == nil){
+                vc.eventsFirst = result
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
         })
+        
     }
     
-    func showPastEvents(){
-        ParseHelper.getUpcomingPastEvents(PFUser.currentUser()!, upcoming: false, block: {
-            result, error in
-            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ListEventsViewController") as! ListEventsViewController
-            vc.eventsFirst = result
-            vc.currentTitle = "PAST EVENTS"
-            self.navigationController?.pushViewController(vc, animated: true)
-        })
+    func showHappenings(){
+        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("HappeningsViewController") as! HappeningsViewController
+        self.navigationController?.pushViewController(vc, animated: true)
     }
+    
+    func showTerms(){
+        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("TermsController") as! TermsController
+        self.navigationController?.pushViewController(vc, animated: true)
+        
+    }
+    
+    func showPrivacy(){
+        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("PrivacyPolicyController") as! PrivacyPolicyController
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
     
     @IBAction func openCategoryPicker(sender: AnyObject) {
         let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ChooseCategoryViewController") as! ChooseCategoryViewController
         vc.delegate = self
+        if chosenCategory != nil {
+            vc.selectedCategoriesData = [chosenCategory!]
+        }
         vc.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
         presentViewController(vc, animated: true, completion: nil)
     }
     
     
-    func madeCategoryChoice(category: Category) {
-        chosenCategory = category
+    func madeCategoryChoice(categories: [Category]) {
+        chosenCategory = categories.first
         segmentChanged()
     }
     
@@ -183,9 +216,6 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
         segmentChanged()
     }
    
-    func chatTapped (sender:UIButton) {
-        let controller: ConversationListViewController = ConversationListViewController(layerClient: appDelegate.layerClient)
-        navigationController?.pushViewController(controller, animated: true)
-    }
+    
 
 }

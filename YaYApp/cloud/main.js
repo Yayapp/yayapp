@@ -8,12 +8,12 @@ var privateKey = fs.readFileSync('cloud/keys/layer-key.js');
 layer.initialize(layerProviderID, layerKeyID, privateKey);
 
 Parse.Cloud.define("generateToken", function(request, response) {
-    var userID = request.params.userID;
-    var nonce = request.params.nonce;
-    if (!userID) throw new Error('Missing userID parameter');
-    if (!nonce) throw new Error('Missing nonce parameter');
-        response.success(layer.layerIdentityToken(userID, nonce));
-});
+                   var userID = request.params.userID;
+                   var nonce = request.params.nonce;
+                   if (!userID) throw new Error('Missing userID parameter');
+                   if (!nonce) throw new Error('Missing nonce parameter');
+                   response.success(layer.layerIdentityToken(userID, nonce));
+                   });
 
 
 // Use Parse.Cloud.define to define as many cloud functions as you want.
@@ -23,34 +23,117 @@ Parse.Cloud.define("generateToken", function(request, response) {
 //});
 
 Parse.Cloud.afterSave("Event", function(request) {
-  // Our "Comment" class has a "text" key with the body of the comment itself
-  var eventName = request.object.get('name');
-  var location = request.object.get('location');
- 
-  var date = new Date(request.object.get('startDate'));
-  var dateFormatted = moment(date).format("ddd DD MMM") +" at "+ moment(date).format("H:mm");
+                      // Our "Comment" class has a "text" key with the body of the comment itself
+                      var eventName = "";
+                      var location = request.object.get('location');
+                      
+                      var date = new Date(request.object.get('startDate'));
+                      var dateFormatted = moment(date).format("ddd DD MMM") +" at "+ moment(date).format("H:mm");
+                      
+                      var userQuery = new Parse.Query(Parse.User);
+                      userQuery.withinKilometers("location", location, 20.0);
+                      userQuery.equalTo('eventNearby', true);
+                      
+                      // Find devices associated with these users
+                      var pushQuery = new Parse.Query(Parse.Installation);
+                      pushQuery.matchesQuery('user', userQuery);
+                      
+                      // Send push notification to query
+                      Parse.Push.send({
+                                      where: pushQuery,
+                                      //channels: [ "global" ],
+                                      data: {
+                                      alert: "There is a new happening \"" + eventName + "\" on " + dateFormatted + " near you within 20km"
+                                      }
+                                      }, {
+                                      success: function() {
+                                      // Push was successful
+                                      },
+                                      error: function(error) {
+                                      throw "Got an error " + error.code + " : " + error.message;
+                                      }
+                                      });
+                      });
 
-  var userQuery = new Parse.Query(Parse.User);
-  userQuery.withinKilometers("location", location, 100.0);
-  userQuery.equalTo('eventNearby', true);
-
-// Find devices associated with these users
-  var pushQuery = new Parse.Query(Parse.Installation);
-  pushQuery.matchesQuery('user', userQuery);
-
-// Send push notification to query
-  Parse.Push.send({
-    where: pushQuery,
-    //channels: [ "global" ],
-    data: {
-      alert: "There is a new happening \"" + eventName + "\" on " + dateFormatted + " near you within 100km" 
-    }
-  }, {
-    success: function() {
-      // Push was successful
-    },
-    error: function(error) {
-      throw "Got an error " + error.code + " : " + error.message;
-    }
-  });
-});
+Parse.Cloud.afterSave("Request", function(request) {
+                      var accepted = request.object.get('accepted');
+                      var user = request.object.get('attendee');
+                      var event = request.object.get('event');
+                      var owner = event.get('owner');
+                      event.fetch({
+                                  success: function(event) {
+                                  
+                                  owner = event.get('owner');
+                                  
+                                  eventName = event.get('name');
+                                  if(accepted == null) {
+                                  var eventName = event.get('name');
+                                  
+                                  var pushQuery = new Parse.Query(Parse.Installation);
+                                  pushQuery.equalTo('user', owner);
+                                  
+                                  Parse.Push.send({
+                                                  where: pushQuery,
+                                                  data: {
+                                                  alert: "There is a new attendee to happening \"" + eventName + "\""
+                                                  }
+                                                  }, {
+                                                  success: function() {},
+                                                  error: function(error) {
+                                                  throw "Got an error " + error.code + " : " + error.message;
+                                                  }});
+                                  if(owner.get('eventsReminder')){
+                                  var pushQuery1 = new Parse.Query(Parse.Installation);
+                                  pushQuery1.equalTo('user', user);
+                                  var before24 = event.get('startDate');
+                                  before24.setHours(before24.getHours()-24);
+                                  var before1 = event.get('startDate');
+                                  before1.setHours(before1.getHours()-1);
+                                  
+                                  var dateFormatted = moment(event.get('startDate')).format("ddd DD MMM") +" at "+ moment(event.get('startDate')).format("H:mm");
+                                  
+                                  Parse.Push.send({
+                                                  where: pushQuery1,
+                                                  data: {
+                                                  alert: "Don't forget to participate on happening \""+eventName+"\" on "+dateFormatted
+                                                  },
+                                                  push_time: before24
+                                                  }, {
+                                                  success: function() {},
+                                                  error: function(error) {
+                                                  throw "Got an error " + error.code + " : " + error.message;
+                                                  }
+                                                  });
+                                  Parse.Push.send({
+                                                  where: pushQuery1,
+                                                  data: {
+                                                  alert: "Don't forget to participate on happening \""+eventName+"\" on "+dateFormatted
+                                                  },
+                                                  push_time: before1
+                                                  }, {
+                                                  success: function() {},
+                                                  error: function(error) {
+                                                  throw "Got an error " + error.code + " : " + error.message;
+                                                  }
+                                                  });
+                                  }
+                                  } else if (accepted) {
+                                  user.fetch({
+                                             success: function(user) {
+                                             if (user.get('attAccepted') == true){
+                                             var pushQuery = new Parse.Query(Parse.Installation);
+                                             pushQuery.equalTo('user', user);
+                                             
+                                             Parse.Push.send({
+                                                             where: pushQuery,
+                                                             data: {
+                                                             alert: "Attendance to happening \"" + eventName + "\" accepted"
+                                                             }
+                                                             }, {
+                                                             success: function() {},
+                                                             error: function(error) {
+                                                             throw "Got an error " + error.code + " : " + error.message;
+                                                             }});
+                                             }}});
+                                  }}});
+                      });

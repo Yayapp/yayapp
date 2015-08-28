@@ -44,6 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Category.registerSubclass()
         EventPhoto.registerSubclass()
         Event.registerSubclass()
+        Request.registerSubclass()
         setupParse()
         setupLayer()
         

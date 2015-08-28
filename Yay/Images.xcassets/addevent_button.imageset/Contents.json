@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "new_addeventbutton.png"
+      "filename" : "plus_button.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "new_addeventbutton_x2.png"
+      "filename" : "plus_button_x2.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "new_addeventbutton_x3.png"
+      "filename" : "plus_button_x3.png"
     }
   ],
   "info" : {

@@ -54,6 +54,7 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
         appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.None
         
         let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
+        back.tintColor = UIColor(red:CGFloat(3/255.0), green:CGFloat(118/255.0), blue:CGFloat(114/255.0), alpha: 1)
         self.navigationItem.setLeftBarButtonItem(back, animated: false)
     }
     
@@ -102,6 +103,9 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
     @IBAction func openCategoryPicker(sender: AnyObject) {
         let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ChooseCategoryViewController") as! ChooseCategoryViewController
         vc.delegate = self
+        if chosenCategory != nil {
+            vc.selectedCategoriesData = [chosenCategory!]
+        }
         vc.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
         presentViewController(vc, animated: true, completion: nil)
     }
@@ -120,9 +124,13 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
     }
     
     
-    func madeCategoryChoice(category: Category) {
-        chosenCategory = category
-        pickCategory.setTitle(category.name, forState: .Normal)
+    func madeCategoryChoice(categories: [Category]) {
+        chosenCategory = categories.first
+        if(chosenCategory != nil){
+            pickCategory.setTitle(chosenCategory!.name, forState: .Normal)
+        } else {
+            pickCategory.setTitle("PICK CATEGORY", forState: .Normal)
+        }
     }
     
     func madeEventPictureChoice(photo: PFFile, pickedPhoto: UIImage?) {
@@ -133,7 +141,7 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
             photo.getDataInBackgroundWithBlock({
                 (data:NSData?, error:NSError?) in
                 if(error == nil) {
-                    var image = UIImage(data:data!)
+                    var image = self.toCobalt(UIImage(data:data!)!)
                     self.eventPhoto.setImage(image, forState: .Normal)
                 }
             })
@@ -151,16 +159,22 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
             var placeMark: CLPlacemark!
             placeMark = placeArray?[0]
             
-            // City
-            if let city = placeMark.addressDictionary["City"] as? String {
-                cityCountry.appendString(city)
+            if let building = placeMark.subThoroughfare {
+                cityCountry.appendString(building)
             }
-            // Country
-            if let country = placeMark.addressDictionary["Country"] as? String {
+            
+            if let address = placeMark.thoroughfare {
+                if cityCountry.length>0 {
+                    cityCountry.appendString(" ")
+                }
+                cityCountry.appendString(address)
+            }
+            
+            if let zip = placeMark.postalCode {
                 if cityCountry.length>0 {
                     cityCountry.appendString(", ")
                 }
-                cityCountry.appendString(country)
+                cityCountry.appendString(zip)
             }
             if cityCountry.length>0 {
                 self.location.setTitle(cityCountry as String, forState: .Normal)
@@ -174,15 +188,7 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
     {
         return .None
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
+    
 
     
     override func viewWillDisappear(animated: Bool) {
@@ -353,13 +359,13 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
                             
                             var localNotification1:UILocalNotification = UILocalNotification()
                             localNotification1.alertAction = "\(event.name)"
-                            localNotification1.alertBody = "Don't forget to participate on \(self.dateFormatter.stringFromDate(event.startDate))"
+                            localNotification1.alertBody = "Don't forget to participate on happening \"\(event.name)\" on \(self.dateFormatter.stringFromDate(event.startDate))"
                             localNotification1.fireDate = hourBefore
                             UIApplication.sharedApplication().scheduleLocalNotification(localNotification1)
                             
                             var localNotification24:UILocalNotification = UILocalNotification()
                             localNotification24.alertAction = "\(event.name)"
-                            localNotification24.alertBody = "Don't forget to participate on \(self.dateFormatter.stringFromDate(event.startDate))"
+                            localNotification24.alertBody = "Don't forget to participate on happening \"\(event.name)\" on \(self.dateFormatter.stringFromDate(event.startDate))"
                             localNotification24.fireDate = hour24Before
                             UIApplication.sharedApplication().scheduleLocalNotification(localNotification24)
                         }
@@ -378,6 +384,28 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
     
     @IBAction func backButtonTapped(sender: AnyObject) {
         navigationController?.popViewControllerAnimated(true)
+    }
+    
+    func toCobalt(image:UIImage) -> UIImage{
+        let inputImage:CIImage = CIImage(CGImage: image.CGImage)
+        
+        // Make the filter
+        let colorMatrixFilter:CIFilter = CIFilter(name: "CIColorMatrix")
+        colorMatrixFilter.setDefaults()
+        colorMatrixFilter.setValue(inputImage, forKey:kCIInputImageKey)
+        colorMatrixFilter.setValue(CIVector(x:1, y:1, z:1, w:0), forKey:"inputRVector")
+        colorMatrixFilter.setValue(CIVector(x:0, y:1, z:0, w:0), forKey:"inputGVector")
+        colorMatrixFilter.setValue(CIVector(x:0, y:0, z:1, w:0), forKey:"inputBVector")
+        colorMatrixFilter.setValue(CIVector(x:0, y:0, z:0, w:1), forKey:"inputAVector")
+        
+        // Get the output image recipe
+        let outputImage:CIImage = colorMatrixFilter.outputImage
+        
+        // Create the context and instruct CoreImage to draw the output image recipe into a CGImage
+        let context:CIContext = CIContext(options:nil)
+        let cgimg:CGImageRef = context.createCGImage(outputImage, fromRect:outputImage.extent()) // 10
+        
+        return UIImage(CGImage:cgimg)!
     }
     
     deinit {

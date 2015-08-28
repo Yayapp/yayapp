@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "socialiterank.png"
+      "filename" : "social_rank_socialite.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "socialiterank_x2.png"
+      "filename" : "social_rank_socialite_x2.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "socialiterank_X3.png"
+      "filename" : "social_rank_socialite_x3.png"
     }
   ],
   "info" : {

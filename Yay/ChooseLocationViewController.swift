@@ -9,8 +9,9 @@
 import UIKit
 import MapKit
 
-class ChooseLocationViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate {
+class ChooseLocationViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UISearchBarDelegate {
     
+    @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet var mapView: MKMapView!
     var lat: CLLocationDegrees?
     var lon: CLLocationDegrees?
@@ -21,6 +22,7 @@ class ChooseLocationViewController: UIViewController, CLLocationManagerDelegate,
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        searchBar.delegate = self
         locationManager.delegate = self
         mapView.delegate = self
         mapView.showsUserLocation = true
@@ -52,6 +54,11 @@ class ChooseLocationViewController: UIViewController, CLLocationManagerDelegate,
     func handleLongPress(getstureRecognizer : UIGestureRecognizer){
         if getstureRecognizer.state != .Began { return }
         
+        if self.mapView.annotations.count != 0{
+            let annotation = self.mapView.annotations[0] as! MKAnnotation
+            self.mapView.removeAnnotation(annotation)
+        }
+        
         let touchPoint = getstureRecognizer.locationInView(self.mapView)
         touchMapCoordinate = mapView.convertPoint(touchPoint, toCoordinateFromView: mapView)
         
@@ -62,15 +69,37 @@ class ChooseLocationViewController: UIViewController, CLLocationManagerDelegate,
     }
     
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func searchBarSearchButtonClicked(searchBar: UISearchBar){
+        //1
+        searchBar.resignFirstResponder()
+        
+        if self.mapView.annotations.count != 0{
+            let annotation = self.mapView.annotations[0] as! MKAnnotation
+            self.mapView.removeAnnotation(annotation)
+        }
+        //2
+        var localSearchRequest = MKLocalSearchRequest()
+        localSearchRequest.naturalLanguageQuery = searchBar.text
+        let localSearch = MKLocalSearch(request: localSearchRequest)
+        localSearch.startWithCompletionHandler { (localSearchResponse, error) -> Void in
+            
+            if localSearchResponse == nil{
+                var alert = UIAlertView(title: nil, message: "Place not found", delegate: self, cancelButtonTitle: "Try again")
+                alert.show()
+                return
+            }
+            //3
+            let pointAnnotation = MKPointAnnotation()
+            pointAnnotation.title = searchBar.text
+            pointAnnotation.coordinate = CLLocationCoordinate2D(latitude: localSearchResponse.boundingRegion.center.latitude, longitude:     localSearchResponse.boundingRegion.center.longitude)
+            
+            self.touchMapCoordinate = pointAnnotation.coordinate
+            
+            let pinAnnotationView = MKPinAnnotationView(annotation: pointAnnotation, reuseIdentifier: nil)
+            self.mapView.centerCoordinate = pointAnnotation.coordinate
+            self.mapView.addAnnotation(pinAnnotationView.annotation)
+        }
     }
-    */
 
 }
 protocol ChooseLocationDelegate : NSObjectProtocol {

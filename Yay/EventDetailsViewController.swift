@@ -52,16 +52,25 @@ class EventDetailsViewController: UIViewController {
         
         title = event.name
         let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
+        back.tintColor = UIColor(red:CGFloat(3/255.0), green:CGFloat(118/255.0), blue:CGFloat(114/255.0), alpha: 1)
         self.navigationItem.setLeftBarButtonItem(back, animated: false)
         
         dateFormatter.dateFormat = "EEE dd MMM 'at' H:mm"
+      
         
         if let user = PFUser.currentUser() {
+            
+            
             let currentPFLocation = user.objectForKey("location") as! PFGeoPoint
             currentLocation = CLLocation(latitude: currentPFLocation.latitude, longitude: currentPFLocation.longitude)
             let attendedThisEvent = !(event.attendees.filter({$0.objectId == user.objectId}).count == 0)
             if !attendedThisEvent && event.limit>event.attendees.count {
-                attend.hidden = false
+                ParseHelper.getUserRequests(event, user: user, block: {
+                    result, error in
+                    if (error != nil || result == nil || result!.isEmpty) {
+                        self.attend.hidden = false
+                    }
+                })
             }
             if !attendedThisEvent {
                 chatButton.enabled = false
@@ -84,8 +93,15 @@ class EventDetailsViewController: UIViewController {
         title  = event.name
         name.text = event.name
         descr.text = event.summary
-        photo.file = event.photo
-        photo.loadInBackground()
+        
+        event.photo.getDataInBackgroundWithBlock({
+            (data:NSData?, error:NSError?) in
+            if(error == nil) {
+                var image = self.toCobalt(UIImage(data:data!)!)
+                self.photo.image = image
+            }
+        })
+        
         date.text = dateFormatter.stringFromDate(event.startDate)
         
         event.owner.fetchIfNeededInBackgroundWithBlock({
@@ -96,7 +112,7 @@ class EventDetailsViewController: UIViewController {
                     if(error == nil) {
                         var image = UIImage(data:data!)
                         self.author.setImage(image, forState: .Normal)
-                        self.author.layer.borderColor = UIColor(red:CGFloat(69/255.0), green:CGFloat(164/255.0), blue:CGFloat(254/255.0), alpha: 1).CGColor
+                        self.author.layer.borderColor = UIColor(red:CGFloat(250/255.0), green:CGFloat(214/255.0), blue:CGFloat(117/255.0), alpha: 1).CGColor
                     }
                 })
             }
@@ -145,67 +161,27 @@ class EventDetailsViewController: UIViewController {
             spinner.startAnimating()
             event.fetchIfNeededInBackgroundWithBlock({
                 (result, error) in
-                self.event.addObject(PFUser.currentUser()!, forKey: "attendees")
-                self.event.saveInBackgroundWithBlock({
-                    (result, error) in
-                    
-                    if ((PFUser.currentUser()?.objectForKey("eventsReminder") as! Bool)) {
-                        let components = NSDateComponents()
-                        
-                        components.hour = -1
-                        let hourBefore = self.calendar!.dateByAddingComponents(components, toDate: self.event.startDate, options: nil)
-                        components.hour = -24
-                        let hour24Before = self.calendar!.dateByAddingComponents(components, toDate: self.event.startDate, options: nil)
-                        
-                        var localNotification1:UILocalNotification = UILocalNotification()
-                        localNotification1.alertAction = "\(self.event.name)"
-                        localNotification1.alertBody = "Don't forget to participate on \(self.dateFormatter.stringFromDate(self.event.startDate))"
-                        localNotification1.fireDate = hourBefore
-                        UIApplication.sharedApplication().scheduleLocalNotification(localNotification1)
-                        
-                        var localNotification24:UILocalNotification = UILocalNotification()
-                        localNotification24.alertAction = "\(self.event.name)"
-                        localNotification24.alertBody = "Don't forget to participate on \(self.dateFormatter.stringFromDate(self.event.startDate))"
-                        localNotification24.fireDate = hour24Before
-                        UIApplication.sharedApplication().scheduleLocalNotification(localNotification24)
-                    }
-                    
-                    if self.conversation != nil {
-                        var errors:NSError?
-                        let participants = NSMutableSet()
-                        participants.addObject(PFUser.currentUser()!.objectId!)
-                        self.conversation.addParticipants(participants as Set<NSObject>, error: &errors)
-                    }
-                    
-                    let attendeeButton = self.attendeeButtons[self.attendees.count]
-                    
-                    attendeeButton.addTarget(self, action: "attendeeProfile:", forControlEvents: .TouchUpInside)
-                    attendeeButton.tag = self.attendees.count
-                    let attendeeAvatar = PFUser.currentUser()!.objectForKey("avatar") as? PFFile
-                    if(attendeeAvatar != nil) {
-                        attendeeAvatar!.getDataInBackgroundWithBlock({
-                            (data:NSData?, error:NSError?) in
-                            if(error == nil) {
-                                var image = UIImage(data:data!)
-                                attendeeButton.setImage(image, forState: .Normal)
-                            }
-                        })
-                    }
-                    self.attendees.append(PFUser.currentUser()!)
-                    
-                    
-                    self.spinner.stopAnimating()
-                    self.attend.hidden = true
-                    self.chatButton.enabled = true
-                    
-                    let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
-                    blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
-                    blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
-                    blurryAlertViewController.aboutText = "Your request has been sent."
-                    blurryAlertViewController.messageText = "We will notify you of the outcome."
-                    self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
-
-                })
+                
+                let requestACL:PFACL = PFACL()
+                requestACL.setPublicWriteAccess(true)
+                requestACL.setPublicReadAccess(true)
+                let request = Request()
+                request.event = self.event
+                request.attendee = PFUser.currentUser()!
+                request.ACL = requestACL
+                request.saveInBackground()
+                
+                self.spinner.stopAnimating()
+                self.attend.hidden = true
+                
+                let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
+                blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
+                blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
+                blurryAlertViewController.aboutText = "Your request has been sent."
+                blurryAlertViewController.messageText = "We will notify you of the outcome."
+                self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
+                
+                
             })
         }
     }
@@ -221,16 +197,22 @@ class EventDetailsViewController: UIViewController {
             var placeMark: CLPlacemark!
             placeMark = placeArray?[0]
             
-            // City
-            if let city = placeMark.addressDictionary["City"] as? String {
-                cityCountry.appendString(city)
+            if let building = placeMark.subThoroughfare {
+                cityCountry.appendString(building)
             }
-            // Country
-            if let country = placeMark.addressDictionary["Country"] as? String {
+            
+            if let address = placeMark.thoroughfare {
+                if cityCountry.length>0 {
+                    cityCountry.appendString(" ")
+                }
+                cityCountry.appendString(address)
+            }
+            
+            if let zip = placeMark.postalCode {
                 if cityCountry.length>0 {
                     cityCountry.appendString(", ")
                 }
-                cityCountry.appendString(country)
+                cityCountry.appendString(zip)
             }
             if cityCountry.length>0 {
                 self.location.text = cityCountry as String
@@ -251,6 +233,13 @@ class EventDetailsViewController: UIViewController {
                     let attendeeButton = attendeeButtons[index]
                     participants.addObject(attendee.objectId!)
                 }
+                
+                //                    if self.conversation != nil {
+                //                        var errors:NSError?
+                //                        let participants = NSMutableSet()
+                //                        participants.addObject(PFUser.currentUser()!.objectId!)
+                //                        self.conversation.addParticipants(participants as Set<NSObject>, error: &errors)
+                //                    }
                 
                 conversation = appDelegate.layerClient.newConversationWithParticipants(participants as Set<NSObject>, options: [LYRConversationOptionsDistinctByParticipantsKey : false ], error: &errors)
                 if  self.conversation == nil {
@@ -289,5 +278,27 @@ class EventDetailsViewController: UIViewController {
     
     @IBAction func backButtonTapped(sender: AnyObject) {
         navigationController?.popViewControllerAnimated(true)
+    }
+    
+    func toCobalt(image:UIImage) -> UIImage{
+        let inputImage:CIImage = CIImage(CGImage: image.CGImage)
+        
+        // Make the filter
+        let colorMatrixFilter:CIFilter = CIFilter(name: "CIColorMatrix")
+        colorMatrixFilter.setDefaults()
+        colorMatrixFilter.setValue(inputImage, forKey:kCIInputImageKey)
+        colorMatrixFilter.setValue(CIVector(x:1, y:1, z:1, w:0), forKey:"inputRVector")
+        colorMatrixFilter.setValue(CIVector(x:0, y:1, z:0, w:0), forKey:"inputGVector")
+        colorMatrixFilter.setValue(CIVector(x:0, y:0, z:1, w:0), forKey:"inputBVector")
+        colorMatrixFilter.setValue(CIVector(x:0, y:0, z:0, w:1), forKey:"inputAVector")
+        
+        // Get the output image recipe
+        let outputImage:CIImage = colorMatrixFilter.outputImage
+        
+        // Create the context and instruct CoreImage to draw the output image recipe into a CGImage
+        let context:CIContext = CIContext(options:nil)
+        let cgimg:CGImageRef = context.createCGImage(outputImage, fromRect:outputImage.extent()) // 10
+        
+        return UIImage(CGImage:cgimg)!
     }
 }

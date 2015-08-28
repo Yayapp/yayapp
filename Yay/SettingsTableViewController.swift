@@ -32,10 +32,13 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
         super.viewDidLoad()
         
         title = "Settings"
-        
+        let logout = UIBarButtonItem(image:UIImage(named: "logout"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("logout:"))
+        logout.tintColor = UIColor(red:CGFloat(3/255.0), green:CGFloat(118/255.0), blue:CGFloat(114/255.0), alpha: 1)
+        self.navigationItem.setRightBarButtonItem(logout, animated: false)
         let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
+        back.tintColor = UIColor(red:CGFloat(3/255.0), green:CGFloat(118/255.0), blue:CGFloat(114/255.0), alpha: 1)
         self.navigationItem.setLeftBarButtonItem(back, animated: false)
-        
+        appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.None
         distanceSlider.delegate = self
         PFUser.currentUser()!.fetchIfNeededInBackgroundWithBlock({
             result, error in
@@ -62,7 +65,7 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
     }
 
     func rangeSlider(sender:TTRangeSlider, didChangeSelectedMinimumValue selectedMinimum:Float, andMaximumValue selectedMaximum:Float){
-        distanceLabel.text = "\(Int(selectedMaximum)) km"
+        distanceLabel.text = "\(Int(selectedMaximum))KM"
         PFUser.currentUser()!.fetchIfNeededInBackgroundWithBlock({
             result, error in
             PFUser.currentUser()?.setObject(Int(selectedMaximum), forKey: "distance")
@@ -92,21 +95,17 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
     }
     
     @IBAction func female(sender: AnyObject) {
+        self.maleButton.backgroundColor = UIColor(red:CGFloat(124/255.0), green:CGFloat(127/255.0), blue:CGFloat(128/255.0), alpha: 1)
+        self.femaleButton.backgroundColor = UIColor(red:CGFloat(253/255.0), green:CGFloat(185/255.0), blue:CGFloat(38/255.0), alpha: 1)
         PFUser.currentUser()?.setObject(0, forKey: "gender")
-        PFUser.currentUser()?.saveInBackgroundWithBlock({
-            result, error in
-            self.maleButton.backgroundColor = UIColor(red:CGFloat(217/255.0), green:CGFloat(217/255.0), blue:CGFloat(217/255.0), alpha: 1)
-            self.femaleButton.backgroundColor = UIColor(red:CGFloat(53/255.0), green:CGFloat(128/255.0), blue:CGFloat(184/255.0), alpha: 1)
-        })
+        PFUser.currentUser()?.saveInBackground()
     }
     
     @IBAction func male(sender: AnyObject) {
+        self.femaleButton.backgroundColor = UIColor(red:CGFloat(124/255.0), green:CGFloat(127/255.0), blue:CGFloat(128/255.0), alpha: 1)
+        self.maleButton.backgroundColor = UIColor(red:CGFloat(253/255.0), green:CGFloat(185/255.0), blue:CGFloat(38/255.0), alpha: 1)
         PFUser.currentUser()?.setObject(0, forKey: "gender")
-        PFUser.currentUser()?.saveInBackgroundWithBlock({
-            result, error in
-            self.femaleButton.backgroundColor = UIColor(red:CGFloat(217/255.0), green:CGFloat(217/255.0), blue:CGFloat(217/255.0), alpha: 1)
-            self.maleButton.backgroundColor = UIColor(red:CGFloat(53/255.0), green:CGFloat(128/255.0), blue:CGFloat(184/255.0), alpha: 1)
-        })
+        PFUser.currentUser()?.saveInBackground()
     }
     
     @IBAction func logout(sender: AnyObject) {
@@ -132,13 +131,14 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Potentially incomplete method implementation.
         // Return the number of sections.
-        return 3
+        return 2
     }
 
     override func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         let header:UITableViewHeaderFooterView = view as! UITableViewHeaderFooterView
-        header.contentView.backgroundColor = UIColor(red:CGFloat(236/255.0), green:CGFloat(242/255.0), blue:CGFloat(246/255.0), alpha: 1)
+        header.contentView.backgroundColor = UIColor(red:CGFloat(121/255.0), green:CGFloat(205/255.0), blue:CGFloat(205/255.0), alpha: 1)
         header.textLabel.textAlignment = NSTextAlignment.Center
+        header.textLabel.textColor = UIColor.whiteColor()
     }
     
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -148,20 +148,12 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             return 5
-        } else if section == 1{
-            return 2
         } else {
-            return 3
+            return 2
         }
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if (indexPath.section == 2 && indexPath.row == 2){
-            deleteProfile()
-        }
-    }
-    
-    func deleteProfile(){
+    @IBAction func deleteProfile(){
         let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
         blurryAlertViewController.action = BlurryAlertViewController.BUTTON_DELETE_PROFILE
         blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
@@ -174,4 +166,7 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
         navigationController?.popViewControllerAnimated(true)
     }
   
+    deinit {
+        appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.PanningCenterView
+    }
 }

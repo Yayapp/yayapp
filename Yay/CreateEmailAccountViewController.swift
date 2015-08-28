@@ -29,6 +29,7 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var createAccount: UIButton!
     @IBOutlet weak var signIn: UIButton!
     @IBOutlet weak var accountExist: UILabel!
+    @IBOutlet weak var forgotPassword: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,7 +57,7 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate {
         var user = PFUser()
         user["name"] = name.text
         user["interests"] = []
-        user["distance"] = 10
+        user["distance"] = 20
         user["gender"] = 1
         user["attAccepted"] = true
         user["eventNearby"] = true
@@ -84,6 +85,8 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate {
                 self.performSegueWithIdentifier("proceed", sender: nil)
             }
         }
+        } else {
+            MessageToUser.showDefaultErrorMessage("Please fill all fields to Sign Up")
         }
     }
 
@@ -114,6 +117,29 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate {
     @IBAction func close(sender: AnyObject) {
         dismissViewControllerAnimated(true, completion: nil)
     }
+    
+    
+    @IBAction func forgotPassword(sender: AnyObject) {
+        var tField: UITextField!
+        var alert = UIAlertController(title: "Reset password", message: nil, preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "Reset", style: UIAlertActionStyle.Default, handler: {
+            (action: UIAlertAction!) in
+            if (!tField.text.isEmpty && PatternValidator.validate(tField.text, patternString: PatternValidator.EMAIL_PATTERN)) {
+                PFUser.requestPasswordResetForEmailInBackground(tField.text)
+                MessageToUser.showMessage("Reset password", textId: "We've sent you password reset instructions. Please check your email.")
+            } else {
+                MessageToUser.showDefaultErrorMessage("Please enter valid email")
+            }
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default, handler: nil))
+        alert.addTextFieldWithConfigurationHandler({(textField) in
+            tField = textField
+            tField.placeholder = "Email"
+        })
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
     @IBAction func switchToRegister(sender: AnyObject) {
         switchToRegister.hidden = true
         switchToLogin.hidden = false
@@ -121,6 +147,7 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate {
         createAccount.hidden = false
         name.hidden = false
         password2.hidden = false
+        forgotPassword.hidden = true
         email2.hidden = false
         accountExist.text = "Already have an account?"
     }
@@ -131,6 +158,7 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate {
         signIn.hidden = false
         createAccount.hidden = true
         name.hidden = true
+        forgotPassword.hidden = false
         password2.hidden = true
         email2.hidden = true
         accountExist.text = "Don't have an account?"

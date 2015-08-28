@@ -34,6 +34,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         picker.delegate = self
         
         let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
+        back.tintColor = UIColor(red:CGFloat(3/255.0), green:CGFloat(118/255.0), blue:CGFloat(114/255.0), alpha: 1)
         self.navigationItem.setLeftBarButtonItem(back, animated: false)
         
         var tblView =  UIView(frame: CGRectZero)
@@ -47,13 +48,11 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         name.text = user.objectForKey("name") as? String
         
         if(PFUser.currentUser()?.objectId == user.objectId) {
-            editdone = UIBarButtonItem(title: "Edit", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("editdone:"))
-            editdone.tintColor = UIColor(red:CGFloat(170/255.0), green:CGFloat(170/255.0), blue:CGFloat(170/255.0), alpha: 1)
+            editdone = UIBarButtonItem(image:UIImage(named: "edit_icon"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("editdone:"))
+            editdone.tintColor = UIColor(red:CGFloat(3/255.0), green:CGFloat(118/255.0), blue:CGFloat(114/255.0), alpha: 1)
             self.navigationItem.setRightBarButtonItem(editdone, animated: false)
         }
         
-        let currentPFLocation = user.objectForKey("location") as! PFGeoPoint
-        getLocationString(currentPFLocation.latitude, longitude: currentPFLocation.longitude)
         
         ParseHelper.getUpcomingPastEvents(user, upcoming: nil, block: {
             result, error in
@@ -79,7 +78,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
                 }
                 let interestsStr:String = ", ".join(interests)
                 //
-                self.interests.text = "\(self.interests.text!) \(interestsStr)"
+                self.setMyInterests(interestsStr)
             }
         })
         
@@ -94,7 +93,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
             setAboutMe((user["about"]! as! String))
         }
         let userInvites = user["invites"] as! Int
-        invites.text = "\(invites.text!) \(userInvites)"
+        setMyInvites(userInvites)
         view.bringSubviewToFront(uploadPhoto)
     }
     
@@ -105,75 +104,51 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
     }
     
     func setAboutMe(text:String){
-        let font17 = UIFont.systemFontOfSize(17)
-        let font12 = UIFont.systemFontOfSize(12)
-        let myMutableString = NSMutableAttributedString(string: "About Me: "+text, attributes: [NSFontAttributeName:font17])
-        myMutableString.addAttribute(NSFontAttributeName, value: font12, range: NSRange(location: count(about.text!), length: count(text)))
-        
+        let color = UIColor(red:CGFloat(153/255.0), green:CGFloat(113/255.0), blue:CGFloat(0/255.0), alpha: 1)
+        let font15 = UIFont.boldSystemFontOfSize(15)
+        let font11 = UIFont.boldSystemFontOfSize(11)
+        let range = NSRange(location: count("About Me: "), length: count(text))
+        let myMutableString = NSMutableAttributedString(string: "About Me: "+text, attributes: [NSFontAttributeName:font15])
+        myMutableString.addAttribute(NSFontAttributeName, value: font11, range: range)
+        myMutableString.addAttribute(NSForegroundColorAttributeName, value: color , range: range)
         about.attributedText = myMutableString
     }
-
-    func getLocationString(latitude: Double, longitude: Double){
-        let geoCoder = CLGeocoder()
-        let cllocation = CLLocation(latitude: latitude, longitude: longitude)
-        var cityCountry:NSMutableString=NSMutableString()
-        geoCoder.reverseGeocodeLocation(cllocation, completionHandler: { (placemarks, error) -> Void in
-            let placeArray = placemarks as? [CLPlacemark]
-            
-            // Place details
-            var placeMark: CLPlacemark!
-            placeMark = placeArray?[0]
-            
-            // City
-            if let city = placeMark.addressDictionary["City"] as? String {
-                cityCountry.appendString(city)
-            }
-            // Country
-            if let country = placeMark.addressDictionary["Country"] as? String {
-                if cityCountry.length>0 {
-                    cityCountry.appendString(", ")
-                }
-                cityCountry.appendString(country)
-            }
-            if cityCountry.length>0 {
-                self.location.text = cityCountry as String
-            }
-        })
-        
+    
+    func setMyInterests(text:String){
+        let color = UIColor(red:CGFloat(153/255.0), green:CGFloat(113/255.0), blue:CGFloat(0/255.0), alpha: 1)
+        let font15 = UIFont.boldSystemFontOfSize(15)
+        let font11 = UIFont.boldSystemFontOfSize(11)
+        let range = NSRange(location: count("Interests: "), length: count(text))
+        let myMutableString = NSMutableAttributedString(string: "Interests: "+text, attributes: [NSFontAttributeName:font15])
+        myMutableString.addAttribute(NSFontAttributeName, value: font11, range: range)
+        myMutableString.addAttribute(NSForegroundColorAttributeName, value: color , range: range)
+        interests.attributedText = myMutableString
     }
     
-    func madeCategoryChoice(category: Category) {
-        user.fetchIfNeededInBackgroundWithBlock({
-            (result, error) in
-            if (error == nil) {
-                
-                let categories = self.user.objectForKey("interests") as! [Category]
-                var interests:[String] = []
-                for category in categories {
-                    interests.append(category.name)
-                }
-                let interestsStr:String = ", ".join(interests)
-                //
-                self.interests.text = "\(self.interests.text!) \(interestsStr)"
-            }
-        })
+    func setMyInvites(text:Int){
+        let color = UIColor(red:CGFloat(153/255.0), green:CGFloat(113/255.0), blue:CGFloat(0/255.0), alpha: 1)
+        let font15 = UIFont.boldSystemFontOfSize(15)
+        let font11 = UIFont.boldSystemFontOfSize(11)
+        let range = NSRange(location: count("Invites left: "), length: 1)
+        let myMutableString = NSMutableAttributedString(string: "Invites left: \(text)", attributes: [NSFontAttributeName:font15])
+        myMutableString.addAttribute(NSFontAttributeName, value: font11, range: range)
+        myMutableString.addAttribute(NSForegroundColorAttributeName, value: color , range: range)
+        invites.attributedText = myMutableString
+    }
+     
+    func madeCategoryChoice(categories: [Category]) {
         
+        var interestsarr:[String] = []
+        for category in categories {
+            interestsarr.append(category.name)
+        }
+        let interestsStr:String = ", ".join(interestsarr)
         
-        PFUser.currentUser()!.fetchIfNeededInBackgroundWithBlock({
-            (result, error) in
-            PFUser.currentUser()!.addObject(category, forKey: "interests")
-            PFUser.currentUser()!.saveInBackgroundWithBlock({
-                (result, error) in
-                let categories = PFUser.currentUser()!.objectForKey("interests") as! [Category]
-                var interests:[String] = []
-                for category in categories {
-                    interests.append(category.name)
-                }
-                let interestsStr:String = ", ".join(interests)
-                //
-                self.interests.text = "\(self.interests.text!) \(interestsStr)"
-            })
-        })
+        setMyInterests(interestsStr)
+        
+        PFUser.currentUser()!.setObject(categories, forKey: "interests")
+        
+        PFUser.currentUser()!.saveInBackground()
     }
     
     func writeAboutDone(text: String) {
@@ -195,10 +170,21 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         }
     }
     
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if(PFUser.currentUser()?.objectId == user.objectId) {
+            return 4
+        } else {
+            return 3
+        }
+    }
+    
     func openCategoryPicker() {
         let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ChooseCategoryViewController") as! ChooseCategoryViewController
         vc.delegate = self
         vc.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
+        vc.multi = true
+        let categories = self.user.objectForKey("interests") as! [Category]
+        vc.selectedCategoriesData = categories
         presentViewController(vc, animated: true, completion: nil)
     }
     
@@ -229,13 +215,13 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
     @IBAction func editdone(sender: AnyObject) {
         if(isEditingProfile) {
             uploadPhoto.hidden = true
-            editdone.title = "Edit"
+            editdone.image = UIImage(named:"edit_icon")
             isEditingProfile = false
             interests.backgroundColor = UIColor.clearColor()
             about.backgroundColor = UIColor.clearColor()
         } else {
             uploadPhoto.hidden = false
-            editdone.title = "Done"
+            editdone.image = UIImage(named:"edit_done_icon")
             isEditingProfile = true
             interests.backgroundColor = UIColor(red:CGFloat(48/255.0), green:CGFloat(56/255.0), blue:CGFloat(58/255.0), alpha: 1)
             about.backgroundColor = UIColor(red:CGFloat(48/255.0), green:CGFloat(56/255.0), blue:CGFloat(58/255.0), alpha: 1)

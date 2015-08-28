@@ -12,25 +12,14 @@ class ProfileViewController: UITableViewController {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
-    @IBOutlet weak var avatar: PFImageView!
     @IBOutlet weak var profileTable: UITableView!
-    @IBOutlet weak var name: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: false)
-        
-        name.text = PFUser.currentUser()!.objectForKey("name") as! String
-        PFUser.currentUser()?.fetchInBackgroundWithBlock({
-            result, error in
-            
-            let avatarfile = PFUser.currentUser()?.objectForKey("avatar") as? PFFile
-            if(avatarfile != nil) {
-                self.avatar.file = avatarfile
-                self.avatar.loadInBackground()
-                self.avatar.layer.borderColor = UIColor.whiteColor().CGColor
-            }
-        })
+        var tblView =  UIView(frame: CGRectZero)
+        tableView.tableFooterView = tblView
+        tableView.tableFooterView!.hidden = true
     }
 
     override func didReceiveMemoryWarning() {
@@ -41,26 +30,23 @@ class ProfileViewController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         switch (indexPath.row){
         case 0 : appDelegate.centerContainer!.closeDrawerAnimated(true, completion: nil)
-        (appDelegate.centerViewController.viewControllers[0] as! MainRootViewController).showProfile()
+        (appDelegate.centerViewController.viewControllers[0] as! MainRootViewController).showMessages()
         case 1 : appDelegate.centerContainer!.closeDrawerAnimated(true, completion: nil)
-        (appDelegate.centerViewController.viewControllers[0] as! MainRootViewController).showSettings()
+        (appDelegate.centerViewController.viewControllers[0] as! MainRootViewController).showProfile()
         case 2 : appDelegate.centerContainer!.closeDrawerAnimated(true, completion: nil)
-        (appDelegate.centerViewController.viewControllers[0] as! MainRootViewController).showUpcomingEvents()
+        (appDelegate.centerViewController.viewControllers[0] as! MainRootViewController).showSettings()
         case 3 : appDelegate.centerContainer!.closeDrawerAnimated(true, completion: nil)
-        (appDelegate.centerViewController.viewControllers[0] as! MainRootViewController).showPastEvents()
+        (appDelegate.centerViewController.viewControllers[0] as! MainRootViewController).showHappenings()
+        case 4 : appDelegate.centerContainer!.closeDrawerAnimated(true, completion: nil)
+        (appDelegate.centerViewController.viewControllers[0] as! MainRootViewController).showRequests()
+        case 5 : appDelegate.centerContainer!.closeDrawerAnimated(true, completion: nil)
+        (appDelegate.centerViewController.viewControllers[0] as! MainRootViewController).showTerms()
+        case 6 : appDelegate.centerContainer!.closeDrawerAnimated(true, completion: nil)
+        (appDelegate.centerViewController.viewControllers[0] as! MainRootViewController).showPrivacy()
         default: appDelegate.centerContainer!.closeDrawerAnimated(true, completion: nil)
             (appDelegate.centerViewController.viewControllers[0] as! MainRootViewController).showProfile()
         }
     }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

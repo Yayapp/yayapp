@@ -37,7 +37,7 @@ class StartViewController: UIViewController, UIPageViewControllerDataSource, UIP
         addChildViewController(pageViewController!)
         view.insertSubview(pageViewController!.view, atIndex: 0)
         pageViewController!.didMoveToParentViewController(self)
-        timer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: "swipe", userInfo: nil, repeats: true)
+        timer = NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: "swipe", userInfo: nil, repeats: true)
 
     }
     
@@ -111,7 +111,7 @@ class StartViewController: UIViewController, UIPageViewControllerDataSource, UIP
             self.dots.currentPage =  enlarge.pageIndex;
             currentIndex = enlarge.pageIndex;
             timer.invalidate()
-            timer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: "swipe", userInfo: nil, repeats: true)
+            timer = NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: "swipe", userInfo: nil, repeats: true)
         }
     }
 }

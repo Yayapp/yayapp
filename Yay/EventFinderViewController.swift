@@ -107,16 +107,22 @@ class EventFinderViewController: UIViewController, ChooseLocationDelegate {
             var placeMark: CLPlacemark!
             placeMark = placeArray?[0]
             
-            // City
-            if let city = placeMark.addressDictionary["City"] as? String {
-                cityCountry.appendString(city)
+            if let building = placeMark.subThoroughfare {
+                cityCountry.appendString(building)
             }
-            // Country
-            if let country = placeMark.addressDictionary["Country"] as? String {
+            
+            if let address = placeMark.thoroughfare {
+                if cityCountry.length>0 {
+                    cityCountry.appendString(" ")
+                }
+                cityCountry.appendString(address)
+            }
+            
+            if let zip = placeMark.postalCode {
                 if cityCountry.length>0 {
                     cityCountry.appendString(", ")
                 }
-                cityCountry.appendString(country)
+                cityCountry.appendString(zip)
             }
             if cityCountry.length>0 {
                 self.location.setTitle(cityCountry as String, forState: .Normal)

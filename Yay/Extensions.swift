@@ -5,7 +5,7 @@
 //  Created by Nerses Zakoyan on 30.07.15.
 //  Copyright (c) 2015 YAY LLC. All rights reserved.
 //
-
+import UIKit
 extension String {
     func MD5() -> String {
         var data = (self as NSString).dataUsingEncoding(NSUTF8StringEncoding)
@@ -48,3 +48,4 @@ extension UIView {
         self.layer.addAnimation(rotateAnimation, forKey: nil)
     }
 }
+

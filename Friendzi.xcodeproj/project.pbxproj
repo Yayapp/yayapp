@@ -21,6 +21,12 @@
 		9917D9E61B56BB660081A796 /* EventDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9917D9E51B56BB660081A796 /* EventDetailsViewController.swift */; };
 		99253FF41B6A67970078B668 /* TempUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99253FF31B6A67970078B668 /* TempUser.swift */; };
 		99253FF61B6ABBF40078B668 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99253FF51B6ABBF40078B668 /* Extensions.swift */; };
+		993D3ED51B8CCF860023B054 /* HappeningsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993D3ED41B8CCF860023B054 /* HappeningsViewController.swift */; };
+		993D3ED71B8CE1170023B054 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993D3ED61B8CE1170023B054 /* Request.swift */; };
+		993D3ED91B8DCA900023B054 /* RequestsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993D3ED81B8DCA900023B054 /* RequestsTableViewController.swift */; };
+		993D3EDB1B8DD2FF0023B054 /* RequestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993D3EDA1B8DD2FF0023B054 /* RequestTableViewCell.swift */; };
+		993D3EDD1B90DB2F0023B054 /* PrivacyPolicyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993D3EDC1B90DB2F0023B054 /* PrivacyPolicyController.swift */; };
+		993D3EE11B90F2450023B054 /* TermsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993D3EE01B90F2450023B054 /* TermsController.swift */; };
 		995032711B564B4400D792C5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032701B564B4400D792C5 /* AppDelegate.swift */; };
 		995032731B564B4400D792C5 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032721B564B4400D792C5 /* LoginViewController.swift */; };
 		995032761B564B4400D792C5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 995032741B564B4400D792C5 /* Main.storyboard */; };
@@ -84,6 +90,12 @@
 		9917D9E51B56BB660081A796 /* EventDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDetailsViewController.swift; sourceTree = "<group>"; };
 		99253FF31B6A67970078B668 /* TempUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempUser.swift; sourceTree = "<group>"; };
 		99253FF51B6ABBF40078B668 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		993D3ED41B8CCF860023B054 /* HappeningsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HappeningsViewController.swift; sourceTree = "<group>"; };
+		993D3ED61B8CE1170023B054 /* Request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
+		993D3ED81B8DCA900023B054 /* RequestsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestsTableViewController.swift; sourceTree = "<group>"; };
+		993D3EDA1B8DD2FF0023B054 /* RequestTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestTableViewCell.swift; sourceTree = "<group>"; };
+		993D3EDC1B90DB2F0023B054 /* PrivacyPolicyController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyController.swift; sourceTree = "<group>"; };
+		993D3EE01B90F2450023B054 /* TermsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermsController.swift; sourceTree = "<group>"; };
 		9950326B1B564B4400D792C5 /* Friendzi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Friendzi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9950326F1B564B4400D792C5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		995032701B564B4400D792C5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -159,6 +171,7 @@
 				8B1531B61B5F90FB007A2EC7 /* Event.swift */,
 				997C238E1B6791AE0070DDB2 /* Category.swift */,
 				997C23941B67BD060070DDB2 /* EventPhoto.swift */,
+				993D3ED61B8CE1170023B054 /* Request.swift */,
 				99253FF31B6A67970078B668 /* TempUser.swift */,
 				99BFEC9E1B7A78C700CBFF8B /* ATLParticipant.swift */,
 			);
@@ -264,6 +277,8 @@
 		995032911B5662C300D792C5 /* controllers */ = {
 			isa = PBXGroup;
 			children = (
+				993D3EE01B90F2450023B054 /* TermsController.swift */,
+				993D3EDC1B90DB2F0023B054 /* PrivacyPolicyController.swift */,
 				995032721B564B4400D792C5 /* LoginViewController.swift */,
 				995032921B56632700D792C5 /* StartViewController.swift */,
 				995032941B566F3400D792C5 /* EventFinderViewController.swift */,
@@ -278,6 +293,8 @@
 				99FDE5401B57EB84004CE61B /* SettingsTableViewController.swift */,
 				99FDE5421B580E7D004CE61B /* CreateEventViewController.swift */,
 				99FDE54A1B5A74FF004CE61B /* UserProfileViewController.swift */,
+				993D3ED41B8CCF860023B054 /* HappeningsViewController.swift */,
+				993D3ED81B8DCA900023B054 /* RequestsTableViewController.swift */,
 			);
 			name = controllers;
 			sourceTree = "<group>";
@@ -289,6 +306,7 @@
 				997C23921B67B9960070DDB2 /* CategoryCollectionViewCell.swift */,
 				997C23981B67F6250070DDB2 /* EventPhotoTableViewCell.swift */,
 				995363481B693F4B00350133 /* CustomPointAnnotation.swift */,
+				993D3EDA1B8DD2FF0023B054 /* RequestTableViewCell.swift */,
 			);
 			name = views;
 			sourceTree = "<group>";
@@ -447,7 +465,10 @@
 				997C238B1B668CFB0070DDB2 /* EventsViewController.swift in Sources */,
 				99EC40F61B5D397A0093E484 /* PatternValidator.swift in Sources */,
 				997C23991B67F6250070DDB2 /* EventPhotoTableViewCell.swift in Sources */,
+				993D3ED51B8CCF860023B054 /* HappeningsViewController.swift in Sources */,
 				99FDE5451B58E972004CE61B /* ChooseDateTimeViewController.swift in Sources */,
+				993D3EDB1B8DD2FF0023B054 /* RequestTableViewCell.swift in Sources */,
+				993D3ED71B8CE1170023B054 /* Request.swift in Sources */,
 				99BFEC9D1B7A765B00CBFF8B /* ConversationListViewController.swift in Sources */,
 				990CA7251B8206C000591F33 /* InstructionViewController.swift in Sources */,
 				99FDE54B1B5A74FF004CE61B /* UserProfileViewController.swift in Sources */,
@@ -462,6 +483,8 @@
 				995032731B564B4400D792C5 /* LoginViewController.swift in Sources */,
 				995032711B564B4400D792C5 /* AppDelegate.swift in Sources */,
 				99EC40FA1B5D916A0093E484 /* LoginType.swift in Sources */,
+				993D3EE11B90F2450023B054 /* TermsController.swift in Sources */,
+				993D3EDD1B90DB2F0023B054 /* PrivacyPolicyController.swift in Sources */,
 				995363491B693F4B00350133 /* CustomPointAnnotation.swift in Sources */,
 				995032931B56632700D792C5 /* StartViewController.swift in Sources */,
 				99BFEC911B7A70D100CBFF8B /* UserManager.swift in Sources */,
@@ -469,6 +492,7 @@
 				99253FF61B6ABBF40078B668 /* Extensions.swift in Sources */,
 				995032991B56741700D792C5 /* CreateEmailAccountViewController.swift in Sources */,
 				9917D9E21B56A94F0081A796 /* MapEventsViewController.swift in Sources */,
+				993D3ED91B8DCA900023B054 /* RequestsTableViewController.swift in Sources */,
 				997C23911B67B42D0070DDB2 /* ChooseCategoryViewController.swift in Sources */,
 				8B1531BB1B5FA963007A2EC7 /* CategoryType.swift in Sources */,
 				99253FF41B6A67970078B668 /* TempUser.swift in Sources */,

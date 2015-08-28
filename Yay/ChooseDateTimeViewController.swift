@@ -16,7 +16,7 @@ class ChooseDateTimeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        datePicker.transform = CGAffineTransformMakeScale(1, 0.7);
         // Do any additional setup after loading the view.
     }
 

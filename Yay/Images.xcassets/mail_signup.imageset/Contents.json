@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "mailsignup.png"
+      "filename" : "gmail.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "mailsignup_x2.png"
+      "filename" : "gmail_x2.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "mailsignup_x3.png"
+      "filename" : "gmail_x3.png"
     }
   ],
   "info" : {

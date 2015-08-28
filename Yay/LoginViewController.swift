@@ -60,7 +60,7 @@ class LoginViewController: UIViewController, InstagramDelegate {
                       
                             PFUser.currentUser()?.setObject(imageFile, forKey: "avatar")
                             if user.isNew {
-                                PFUser.currentUser()?.setObject(10, forKey: "distance")
+                                PFUser.currentUser()?.setObject(20, forKey: "distance")
                                 PFUser.currentUser()?.setObject(1, forKey: "gender")
                                 PFUser.currentUser()?.setObject(3, forKey: "invites")
                                 PFUser.currentUser()?.setObject([], forKey: "interests")
@@ -105,7 +105,7 @@ class LoginViewController: UIViewController, InstagramDelegate {
                     PFUser.currentUser()?.setObject(true, forKey: "eventNearby")
                     PFUser.currentUser()?.setObject(true, forKey: "newMessage")
                     PFUser.currentUser()?.setObject([], forKey: "interests")
-                    PFUser.currentUser()?.setObject(10, forKey: "distance")
+                    PFUser.currentUser()?.setObject(20, forKey: "distance")
                     PFUser.currentUser()?.setObject(1, forKey: "gender")
                     PFUser.currentUser()?.setObject(3, forKey: "invites")
                     PFUser.currentUser()?.setObject(true, forKey: "eventsReminder")
@@ -149,7 +149,7 @@ class LoginViewController: UIViewController, InstagramDelegate {
                     var pfuser = PFUser()
                     pfuser["name"] = user.fullName
                     pfuser["token"] = token
-                    pfuser["distance"] = 10
+                    pfuser["distance"] = 20
                     pfuser["gender"] = 1
                     pfuser["interests"] = []
                     pfuser["attAccepted"] = true
