@@ -18,7 +18,7 @@ class InstagramViewController: UIViewController, UIWebViewDelegate {
         super.viewDidLoad()
 
         webView.delegate = self
-        
+
         
 //        InstagramEngine.sharedEngine().appClientID = "aec497e4d81e4b758aa48a94b3c35c00"
 //        InstagramEngine.sharedEngine().appRedirectURL = "http://www.textquickit.com"
@@ -90,6 +90,10 @@ class InstagramViewController: UIViewController, UIWebViewDelegate {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    @IBAction func close(sender: AnyObject) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
 
 }
 protocol InstagramDelegate : NSObjectProtocol {

@@ -33,6 +33,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         super.viewDidLoad()
         picker.delegate = self
         
+        
         let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
         back.tintColor = UIColor(red:CGFloat(3/255.0), green:CGFloat(118/255.0), blue:CGFloat(114/255.0), alpha: 1)
         self.navigationItem.setLeftBarButtonItem(back, animated: false)
@@ -112,6 +113,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         myMutableString.addAttribute(NSFontAttributeName, value: font11, range: range)
         myMutableString.addAttribute(NSForegroundColorAttributeName, value: color , range: range)
         about.attributedText = myMutableString
+        tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 2, inSection: 0)], withRowAnimation: UITableViewRowAnimation.None)
     }
     
     func setMyInterests(text:String){
@@ -123,6 +125,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         myMutableString.addAttribute(NSFontAttributeName, value: font11, range: range)
         myMutableString.addAttribute(NSForegroundColorAttributeName, value: color , range: range)
         interests.attributedText = myMutableString
+        tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 1, inSection: 0)], withRowAnimation: UITableViewRowAnimation.None)
     }
     
     func setMyInvites(text:Int){
@@ -175,6 +178,19 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
             return 4
         } else {
             return 3
+        }
+    }
+    
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        
+        if indexPath.row == 1 {
+            interests.sizeToFit()
+            return interests.frame.height + 16
+        } else if indexPath.row == 2 {
+            about.sizeToFit()
+            return about.frame.height + 16
+        } else {
+            return 44
         }
     }
     

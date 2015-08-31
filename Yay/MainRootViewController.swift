@@ -136,6 +136,10 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
         performSegueWithIdentifier("settings", sender: nil)
     }
     
+    func showInvite(){
+        var uuid = NSUUID().UUIDString
+    }
+    
     func showRequests(){
         let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ListEventsViewController") as! ListEventsViewController
         vc.requests = true
@@ -216,6 +220,18 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
         segmentChanged()
     }
    
+    let letters = Array("abcdefghijklmnopqrstuvwxyz0123456789")
+    
+    func randomString() -> String {
+    
+        let randomString:NSMutableString = NSMutableString(capacity: 5)
+    
+        for i in 1...5 {
+            randomString.appendString("\(letters[Int(random() % letters.count)])")
+        }
+    
+        return randomString as String;
+    }
     
 
 }

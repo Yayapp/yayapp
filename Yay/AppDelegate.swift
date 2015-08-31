@@ -48,7 +48,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setupParse()
         setupLayer()
         
-        PFAnalytics.trackAppOpenedWithLaunchOptions(launchOptions)
+        Flurry.startSession("XBT2H8327QRT89B23Y5Q");
+        
         PFFacebookUtils.initializeFacebookWithApplicationLaunchOptions(launchOptions)
         
         PFTwitterUtils.initializeWithConsumerKey("3r0IsGvrLLvchitCYLUcKVqCK",  consumerSecret:"76rgAwOz7YDcBPPhWB9jqLOx8HmkA0WxbGM97tcYrFTU2cMmEO")
@@ -63,18 +64,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let navLeft = UINavigationController(rootViewController: leftViewController)
         
+        Flurry.logAllPageViewsForTarget(navLeft);
+        Flurry.setDebugLogEnabled(true)
+        Flurry.setCrashReportingEnabled(true)
+        
         centerContainer = MMDrawerController(centerViewController: centerViewController, leftDrawerViewController: navLeft)
         
         centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.PanningCenterView
         centerContainer?.closeDrawerGestureModeMask = MMCloseDrawerGestureMode.PanningCenterView
+//        Flurry.logAllPageViewsForTarget(navLeft);
         
         if (PFUser.currentUser() != nil) {
                 authenticateInLayer()
                 window!.rootViewController = centerContainer
                 window!.makeKeyAndVisible()
-          
+            
         }
-        
         return true
     }
     

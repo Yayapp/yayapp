@@ -20,8 +20,9 @@ class BlurryAlertViewController: UIViewController {
     var aboutText:String! = ""
     var messageText:String! = ""
     var action:String!
-
+    var hasCancelAction:Bool = false
     
+    @IBOutlet weak var cancel: UIButton!
     @IBOutlet weak var about: UILabel!
     
     @IBOutlet weak var message: UILabel!
@@ -33,6 +34,8 @@ class BlurryAlertViewController: UIViewController {
 
         about.text = aboutText
         message.text = messageText
+        
+        cancel.hidden = !hasCancelAction
         
         centerButton.setImage(UIImage(named: action), forState: .Normal)
         

@@ -75,7 +75,7 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
         getLocationString(cell.location, latitude: event.location.latitude, longitude: event.location.longitude)
         
         cell.date.text = dateFormatter.stringFromDate(event.startDate)
-        cell.howFar.text = distanceStr
+        cell.howFar.text = "\(distanceStr)km"
         
         event.photo.getDataInBackgroundWithBlock({
             (data:NSData?, error:NSError?) in

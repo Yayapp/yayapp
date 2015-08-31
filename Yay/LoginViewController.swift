@@ -99,8 +99,29 @@ class LoginViewController: UIViewController, InstagramDelegate {
                 self.appDelegate.authenticateInLayer()
                 Prefs.storeSessionId(user.sessionToken!)
                 Prefs.storeLoginType(LoginType.TWITTER)
+                
+                var url:NSURL = NSURL(string:"https://api.twitter.com/1.1/users/show.json?screen_name=\(PFTwitterUtils.twitter()!.screenName!)")!
+                var err: NSError?
+                let request:NSMutableURLRequest = NSMutableURLRequest(URL:url)
+                PFTwitterUtils.twitter()?.signRequest(request)
+                var response:NSURLResponse?
+                let data:NSData = NSURLConnection.sendSynchronousRequest(request, returningResponse:&response, error:&err)!
+                
+                
+                if (error == nil){
+                    let result:NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options:NSJSONReadingOptions.AllowFragments, error:&err) as! NSDictionary
+                    var url:NSURL = NSURL(string:result.objectForKey("profile_image_url_https") as! String)!
+                    var err: NSError?
+                    var imageData :NSData = NSData(contentsOfURL: url, options: NSDataReadingOptions.DataReadingMappedIfSafe, error: &err)!
+                    
+                    var imageFile = PFFile(name: "image.jpg", data: imageData) as PFFile
+                    
+                    PFUser.currentUser()?.setObject(imageFile, forKey: "avatar")
+                }
+                
+                
                 if user.isNew {
-                 
+                    
                     PFUser.currentUser()?.setObject(true, forKey: "attAccepted")
                     PFUser.currentUser()?.setObject(true, forKey: "eventNearby")
                     PFUser.currentUser()?.setObject(true, forKey: "newMessage")
@@ -136,6 +157,12 @@ class LoginViewController: UIViewController, InstagramDelegate {
             (pfuser: PFUser?, error: NSError?) -> Void in
             if pfuser != nil {
                 
+                var err: NSError?
+                var imageData :NSData = NSData(contentsOfURL: user.profilePictureURL, options: NSDataReadingOptions.DataReadingMappedIfSafe, error: &err)!
+                var imageFile = PFFile(name: "image.jpg", data: imageData) as PFFile
+                PFUser.currentUser()?.setObject(imageFile, forKey: "avatar")
+                PFUser.currentUser()?.saveInBackground()
+                
                 let currentInstallation:PFInstallation = PFInstallation.currentInstallation()
                 currentInstallation["user"] = PFUser.currentUser()
                 currentInstallation.saveInBackground()
@@ -147,6 +174,12 @@ class LoginViewController: UIViewController, InstagramDelegate {
             } else {
                 if(error!.code == 101) {
                     var pfuser = PFUser()
+                    
+                    var err: NSError?
+                    var imageData :NSData = NSData(contentsOfURL: user.profilePictureURL, options: NSDataReadingOptions.DataReadingMappedIfSafe, error: &err)!
+                    var imageFile = PFFile(name: "image.jpg", data: imageData) as PFFile
+                    
+                    pfuser["avatar"] = imageFile
                     pfuser["name"] = user.fullName
                     pfuser["token"] = token
                     pfuser["distance"] = 20

@@ -56,12 +56,20 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
     
         let category = categoriesData[indexPath.row]
         cell.name.text = category.name
-        if (contains(selectedCategoriesData, category)) {
-            cell.photo.file = category.photoSelected
-        } else {
-            cell.photo.file = category.photo
-        }
-        cell.photo.loadInBackground()
+        
+        category.photoSelected.getDataInBackgroundWithBlock({
+            (data:NSData?, error:NSError?) in
+            if(error == nil) {
+                var image = UIImage(data:data!)
+                if (contains(self.selectedCategoriesData, category)) {
+                    cell.photo.image = self.toCobalt(image!)
+                } else {
+                    cell.photo.image = image!
+                }
+                
+            }
+        })
+        
         return cell
     }
 
@@ -69,31 +77,15 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         let category = categoriesData[indexPath.row]
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! CategoryCollectionViewCell
         if (contains(selectedCategoriesData, category)){
-            
-            category.photo.getDataInBackgroundWithBlock({
-                (data:NSData?, error:NSError?) in
-                if(error == nil) {
-                    var image = UIImage(data:data!)
-                    cell.photo.image = image!
-                    collectionView.reloadItemsAtIndexPaths([indexPath])
-                }
-            })
-            
             selectedCategoriesData = selectedCategoriesData.filter({$0.objectId != category.objectId})
+            collectionView.reloadItemsAtIndexPaths([indexPath])
         } else {
-            category.photoSelected.getDataInBackgroundWithBlock({
-                (data:NSData?, error:NSError?) in
-                if(error == nil) {
-                    var image = UIImage(data:data!)
-                    cell.photo.image = image!
-                    collectionView.reloadItemsAtIndexPaths([indexPath])
-                }
-            })
             if(multi){
                 selectedCategoriesData.append(category)
             } else {
                 selectedCategoriesData = [category]
             }
+            collectionView.reloadItemsAtIndexPaths([indexPath])
         }
         delegate.madeCategoryChoice(selectedCategoriesData)
         if(!multi){
@@ -102,15 +94,34 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        
         return CGSize(width: categories.bounds.size.width/2-0.5, height: categories.bounds.size.height/4);
-        
     }
     
     @IBAction func close(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion:nil)
     }
 
+    func toCobalt(image:UIImage) -> UIImage{
+        let inputImage:CIImage = CIImage(CGImage: image.CGImage)
+        
+        // Make the filter
+        let colorMatrixFilter:CIFilter = CIFilter(name: "CIColorMatrix")
+        colorMatrixFilter.setDefaults()
+        colorMatrixFilter.setValue(inputImage, forKey:kCIInputImageKey)
+        colorMatrixFilter.setValue(CIVector(x:1, y:1, z:1, w:0), forKey:"inputRVector")
+        colorMatrixFilter.setValue(CIVector(x:0, y:1, z:0, w:0), forKey:"inputGVector")
+        colorMatrixFilter.setValue(CIVector(x:0, y:0, z:1, w:0), forKey:"inputBVector")
+        colorMatrixFilter.setValue(CIVector(x:0, y:0, z:0, w:1), forKey:"inputAVector")
+        
+        // Get the output image recipe
+        let outputImage:CIImage = colorMatrixFilter.outputImage
+        
+        // Create the context and instruct CoreImage to draw the output image recipe into a CGImage
+        let context:CIContext = CIContext(options:nil)
+        let cgimg:CGImageRef = context.createCGImage(outputImage, fromRect:outputImage.extent()) // 10
+        
+        return UIImage(CGImage:cgimg)!
+    }
     
 }
 protocol ChooseCategoryDelegate : NSObjectProtocol {

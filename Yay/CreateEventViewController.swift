@@ -26,6 +26,7 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
     var animateDistance:CGFloat = 0.0
     var limitInt:Int=1
     
+    @IBOutlet weak var eventImage: UIImageView!
     @IBOutlet weak var pickCategory: UIButton!
     @IBOutlet weak var eventPhoto: UIButton!
     @IBOutlet weak var limit: UITextField!
@@ -136,13 +137,13 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
     func madeEventPictureChoice(photo: PFFile, pickedPhoto: UIImage?) {
         chosenPhoto = photo
         if pickedPhoto != nil {
-            eventPhoto.setImage(pickedPhoto, forState: .Normal)
+            eventImage.image = toCobalt(pickedPhoto!)
         } else {
             photo.getDataInBackgroundWithBlock({
                 (data:NSData?, error:NSError?) in
                 if(error == nil) {
                     var image = self.toCobalt(UIImage(data:data!)!)
-                    self.eventPhoto.setImage(image, forState: .Normal)
+                    self.eventImage.image = self.toCobalt(image)
                 }
             })
         }
@@ -353,7 +354,7 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
                             
                             components.hour = -1
                             let hourBefore = self.calendar!.dateByAddingComponents(components, toDate: event.startDate, options: nil)
-                            components.hour = -23
+                            components.hour = -24
                             let hour24Before = self.calendar!.dateByAddingComponents(components, toDate: event.startDate, options: nil)
                             
                             

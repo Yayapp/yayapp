@@ -32,6 +32,12 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
         super.viewDidLoad()
         
         title = "Settings"
+        
+        var tblView =  UIView(frame: CGRectZero)
+        tableView.tableFooterView = tblView
+        tableView.tableFooterView!.hidden = true
+        
+        
         let logout = UIBarButtonItem(image:UIImage(named: "logout"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("logout:"))
         logout.tintColor = UIColor(red:CGFloat(3/255.0), green:CGFloat(118/255.0), blue:CGFloat(114/255.0), alpha: 1)
         self.navigationItem.setRightBarButtonItem(logout, animated: false)
@@ -157,8 +163,9 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
         let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
         blurryAlertViewController.action = BlurryAlertViewController.BUTTON_DELETE_PROFILE
         blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
-        blurryAlertViewController.aboutText = "PROFILE DELETION"
-        blurryAlertViewController.messageText = "Are you sure you want to delete your profile?"
+        blurryAlertViewController.aboutText = "Sorry, are you sure you want to delete your profile?"
+        blurryAlertViewController.messageText = "You'll need another invite to start a new profile again."
+        blurryAlertViewController.hasCancelAction = true
         self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
     }
     
