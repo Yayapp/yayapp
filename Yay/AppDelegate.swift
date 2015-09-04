@@ -29,6 +29,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
+//        for family in UIFont.familyNames()
+//        {
+//            let familyname = family as! String
+//            print("\(familyname)")
+//            for names in UIFont.fontNamesForFamilyName(familyname)
+//            {
+//                print("== \(names as! String)")
+//            }
+//        }
         
         // Checking if app is running iOS 8
         if (application.respondsToSelector("registerForRemoteNotifications")) {

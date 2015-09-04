@@ -901,16 +901,6 @@
                                     <action selector="forgotPassword:" destination="yIt-h0-NIl" eventType="touchUpInside" id="qic-zT-2FW"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="REGISTER" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="655-Vz-39V">
-                                <rect key="frame" x="102" y="80" width="117" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="HCS-Y0-xUZ"/>
-                                    <constraint firstAttribute="width" constant="117" id="bWe-Fm-m5n"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                                <color key="textColor" red="0.48627450979999998" green="0.49803921569999998" blue="0.50196078430000002" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0bq-1X-P9a">
                                 <rect key="frame" x="274" y="20" width="30" height="30"/>
                                 <constraints>
@@ -924,6 +914,16 @@
                                     <action selector="close:" destination="yIt-h0-NIl" eventType="touchUpInside" id="dxu-6a-VTP"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="REGISTER" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="655-Vz-39V">
+                                <rect key="frame" x="102" y="80" width="117" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="HCS-Y0-xUZ"/>
+                                    <constraint firstAttribute="width" constant="117" id="bWe-Fm-m5n"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                <color key="textColor" red="0.48627450979999998" green="0.49803921569999998" blue="0.50196078430000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.96862745098039216" green="0.96862745098039216" blue="0.96862745098039216" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -3873,13 +3873,13 @@
             </objects>
             <point key="canvasLocation" x="2289" y="1452"/>
         </scene>
-        <!--Page View Controller-->
+        <!--Tutorial View Controller-->
         <scene sceneID="zsI-mA-1TB">
             <objects>
-                <pageViewController storyboardIdentifier="TutorialViewController" autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="tWG-Ve-aWL" sceneMemberID="viewController">
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Tzl-6Q-hKD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <pageViewController storyboardIdentifier="TutorialViewController" autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" doubleSided="YES" id="tWG-Ve-aWL" customClass="TutorialViewController" sceneMemberID="viewController">
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                 </pageViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Tzl-6Q-hKD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-81" y="-220"/>
         </scene>
@@ -3895,9 +3895,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fMB-AZ-VA4">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jlm-TB-HTR">
                                 <rect key="frame" x="45" y="213" width="230" height="53"/>
                                 <constraints>
@@ -3908,6 +3905,9 @@
                                 <color key="highlightedColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fMB-AZ-VA4">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>

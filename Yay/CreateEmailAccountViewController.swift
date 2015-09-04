@@ -52,6 +52,7 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate, E
     }
 
     @IBAction func createAccount(sender: AnyObject) {
+        self.view.endEditing(true)
         if !email.text.isEmpty && PatternValidator.validate(email.text, patternString: PatternValidator.EMAIL_PATTERN) && email.text == email2.text && !password1.text.isEmpty && password1.text == password2.text {
             
         var user = PFUser()
@@ -89,6 +90,7 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate, E
     }
 
     @IBAction func signIn(sender: AnyObject) {
+        self.view.endEditing(true)
         if !email.text.isEmpty && PatternValidator.validate(email.text, patternString: PatternValidator.EMAIL_PATTERN) && !password1.text.isEmpty {
             PFUser.logInWithUsernameInBackground(email.text, password:password1.text) {
                 (user: PFUser?, error: NSError?) -> Void in

@@ -52,6 +52,7 @@
 		997C23951B67BD060070DDB2 /* EventPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997C23941B67BD060070DDB2 /* EventPhoto.swift */; };
 		997C23971B67EFCD0070DDB2 /* ChooseEventPictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997C23961B67EFCD0070DDB2 /* ChooseEventPictureViewController.swift */; };
 		997C23991B67F6250070DDB2 /* EventPhotoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997C23981B67F6250070DDB2 /* EventPhotoTableViewCell.swift */; };
+		9983D8AA1B9A163600E1E4F4 /* Verlag.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9983D8A91B9A163600E1E4F4 /* Verlag.otf */; };
 		99BFEC911B7A70D100CBFF8B /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BFEC901B7A70D100CBFF8B /* UserManager.swift */; };
 		99BFEC9C1B7A765B00CBFF8B /* ConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BFEC991B7A765B00CBFF8B /* ConversationViewController.swift */; };
 		99BFEC9D1B7A765B00CBFF8B /* ConversationListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BFEC9A1B7A765B00CBFF8B /* ConversationListViewController.swift */; };
@@ -129,6 +130,7 @@
 		997C23941B67BD060070DDB2 /* EventPhoto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventPhoto.swift; sourceTree = "<group>"; };
 		997C23961B67EFCD0070DDB2 /* ChooseEventPictureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseEventPictureViewController.swift; sourceTree = "<group>"; };
 		997C23981B67F6250070DDB2 /* EventPhotoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventPhotoTableViewCell.swift; sourceTree = "<group>"; };
+		9983D8A91B9A163600E1E4F4 /* Verlag.otf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Verlag.otf; path = ../Verlag.otf; sourceTree = "<group>"; };
 		99BFEC901B7A70D100CBFF8B /* UserManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		99BFEC991B7A765B00CBFF8B /* ConversationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationViewController.swift; sourceTree = "<group>"; };
 		99BFEC9A1B7A765B00CBFF8B /* ConversationListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationListViewController.swift; sourceTree = "<group>"; };
@@ -206,6 +208,14 @@
 			name = controllerParts;
 			sourceTree = "<group>";
 		};
+		993B6C5A1B9A1BA4006EE1BB /* font */ = {
+			isa = PBXGroup;
+			children = (
+				9983D8A91B9A163600E1E4F4 /* Verlag.otf */,
+			);
+			name = font;
+			sourceTree = "<group>";
+		};
 		995032621B564B4400D792C5 = {
 			isa = PBXGroup;
 			children = (
@@ -229,6 +239,7 @@
 		9950326D1B564B4400D792C5 /* Yay */ = {
 			isa = PBXGroup;
 			children = (
+				993B6C5A1B9A1BA4006EE1BB /* font */,
 				9901A9641B57D55C00947DB8 /* Yay-Bridging-Header.h */,
 				997C23891B6668000070DDB2 /* views */,
 				8B1531B51B5F90E1007A2EC7 /* Models */,
@@ -422,6 +433,7 @@
 				995032761B564B4400D792C5 /* Main.storyboard in Resources */,
 				9950327B1B564B4400D792C5 /* LaunchScreen.xib in Resources */,
 				995032781B564B4400D792C5 /* Images.xcassets in Resources */,
+				9983D8AA1B9A163600E1E4F4 /* Verlag.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

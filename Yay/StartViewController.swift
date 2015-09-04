@@ -24,12 +24,20 @@ class StartViewController: UIViewController, UIPageViewControllerDataSource, UIP
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        let dictionary:NSMutableDictionary = NSMutableDictionary()
+        let pageSpacing:NSNumber = DeviceType.IS_IPHONE_4_OR_LESS ? 0 : DeviceType.IS_IPHONE_5 ? 0 : DeviceType.IS_IPHONE_6 ? 35 : 40
         
-        pageViewController = self.storyboard?.instantiateViewControllerWithIdentifier("TutorialViewController") as! UIPageViewController
+        dictionary.setValue(pageSpacing, forKey:UIPageViewControllerOptionInterPageSpacingKey)
+        
+        pageViewController = UIPageViewController(transitionStyle:UIPageViewControllerTransitionStyle.Scroll, navigationOrientation: UIPageViewControllerNavigationOrientation.Horizontal, options:dictionary as [NSObject : AnyObject])
+        
         self.pageViewController!.dataSource = self
         self.pageViewController!.delegate = self
+   
         
         let pageContentViewController:InstructionViewController! = self.viewControllerAtIndex(0)
+        
         self.pageViewController.setViewControllers([pageContentViewController!], direction: UIPageViewControllerNavigationDirection.Forward, animated: true, completion: nil)
         
         pageViewController!.view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height);
@@ -115,4 +123,25 @@ class StartViewController: UIViewController, UIPageViewControllerDataSource, UIP
             timer = NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: "swipe", userInfo: nil, repeats: true)
         }
     }
+}
+enum UIUserInterfaceIdiom : Int
+{
+    case Unspecified
+    case Phone
+    case Pad
+}
+
+struct ScreenSize
+{
+    static let SCREEN_WIDTH = UIScreen.mainScreen().bounds.size.width
+    static let SCREEN_HEIGHT = UIScreen.mainScreen().bounds.size.height
+    static let SCREEN_MAX_LENGTH = max(ScreenSize.SCREEN_WIDTH, ScreenSize.SCREEN_HEIGHT)
+    static let SCREEN_MIN_LENGTH = min(ScreenSize.SCREEN_WIDTH, ScreenSize.SCREEN_HEIGHT)
+}
+struct DeviceType
+{
+    static let IS_IPHONE_4_OR_LESS =  UIDevice.currentDevice().userInterfaceIdiom == .Phone && ScreenSize.SCREEN_MAX_LENGTH < 568.0
+    static let IS_IPHONE_5 = UIDevice.currentDevice().userInterfaceIdiom == .Phone && ScreenSize.SCREEN_MAX_LENGTH == 568.0
+    static let IS_IPHONE_6 = UIDevice.currentDevice().userInterfaceIdiom == .Phone && ScreenSize.SCREEN_MAX_LENGTH == 667.0
+    static let IS_IPHONE_6P = UIDevice.currentDevice().userInterfaceIdiom == .Phone && ScreenSize.SCREEN_MAX_LENGTH == 736.0
 }
