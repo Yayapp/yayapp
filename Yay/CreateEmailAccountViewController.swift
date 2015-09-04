@@ -9,7 +9,7 @@
 import UIKit
 
 
-class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate {
+class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate, EnterCodeDelegate {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
@@ -77,12 +77,10 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate {
                 alert.addButtonWithTitle("OK")
                 alert.show()
             } else {
-                let currentInstallation:PFInstallation = PFInstallation.currentInstallation()
-                currentInstallation["user"] = PFUser.currentUser()
-                currentInstallation.saveInBackground()
-                
-                self.appDelegate.authenticateInLayer()
-                self.performSegueWithIdentifier("proceed", sender: nil)
+                let vc = self.storyboard!.instantiateViewControllerWithIdentifier("EnterCodeViewController") as! EnterCodeViewController
+                vc.delegate = self
+                vc.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
+                self.presentViewController(vc, animated: true, completion: nil)
             }
         }
         } else {
@@ -100,8 +98,6 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate {
                     currentInstallation.saveInBackground()
                     
                     self.appDelegate.authenticateInLayer()
-                    Prefs.storeSessionId(user!.sessionToken!)
-                    Prefs.storeLoginType(LoginType.MAIL)
                     self.performSegueWithIdentifier("proceed", sender: nil)
                 } else {
                     let alert = UIAlertView()
@@ -165,16 +161,14 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate {
     }
     
     
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func validCode() {
+        let currentInstallation:PFInstallation = PFInstallation.currentInstallation()
+        currentInstallation["user"] = PFUser.currentUser()
+        currentInstallation.saveInBackground()
+        
+        self.appDelegate.authenticateInLayer()
+        self.performSegueWithIdentifier("proceedToPicker", sender: nil)
     }
-    */
     
     
     struct MoveKeyboard {

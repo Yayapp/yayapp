@@ -12,11 +12,13 @@ typealias RequestsResultBlock = ([Request]?, NSError?) -> ()
 typealias EventsResultBlock = ([Event]?, NSError?) -> ()
 typealias CategoriesResultBlock = ([Category]?, NSError?) -> ()
 typealias EventPhotosResultBlock = ([EventPhoto]?, NSError?) -> ()
+typealias InviteCodesResultBlock = ([InviteCode]?, NSError?) -> ()
+typealias BoolResultBlock = (Bool?, NSError?) -> ()
 
 class ParseHelper {
 	
 
-    class func getTodayEvents(user:PFUser?, category:Category?, block:EventsResultBlock?) {
+    class func getTodayEvents(user:PFUser?, categories:[Category], block:EventsResultBlock?) {
 
         var calendar = NSCalendar(calendarIdentifier: NSGregorianCalendar)
         calendar!.timeZone = NSTimeZone.localTimeZone()
@@ -50,8 +52,8 @@ class ParseHelper {
             query.whereKey("location", nearGeoPoint: location, withinKilometers: Double(100))
         }
         
-        if (category != nil) {
-            query.whereKey("category", equalTo: category!)
+        if (!categories.isEmpty) {
+            query.whereKey("category", containedIn: categories)
         }
         
 		query.findObjectsInBackgroundWithBlock {
@@ -70,7 +72,7 @@ class ParseHelper {
 
 	}
     
-    class func getTomorrowEvents(user:PFUser?, category:Category?, block:EventsResultBlock?) {
+    class func getTomorrowEvents(user:PFUser?, categories:[Category], block:EventsResultBlock?) {
         
         var calendar = NSCalendar(calendarIdentifier: NSGregorianCalendar)
         calendar!.timeZone = NSTimeZone.localTimeZone()
@@ -106,8 +108,8 @@ class ParseHelper {
             query.whereKey("location", nearGeoPoint: location, withinKilometers: Double(100))
         }
         
-        if (category != nil) {
-            query.whereKey("category", equalTo: category!)
+        if (!categories.isEmpty) {
+            query.whereKey("category", containedIn: categories)
         }
         
         query.findObjectsInBackgroundWithBlock {
@@ -126,7 +128,7 @@ class ParseHelper {
         
     }
     
-    class func getThisWeekEvents(user:PFUser?, category:Category?, block:EventsResultBlock?) {
+    class func getThisWeekEvents(user:PFUser?, categories:[Category], block:EventsResultBlock?) {
         
         
         var calendar = NSCalendar(calendarIdentifier: NSGregorianCalendar)
@@ -161,8 +163,8 @@ class ParseHelper {
             query.whereKey("location", nearGeoPoint: location, withinKilometers: Double(100))
         }
         
-        if (category != nil) {
-            query.whereKey("category", equalTo: category!)
+        if (!categories.isEmpty) {
+            query.whereKey("category", containedIn: categories)
         }
         
         query.findObjectsInBackgroundWithBlock {
@@ -210,6 +212,7 @@ class ParseHelper {
         
     }
     
+    
     class func getCategories(block:CategoriesResultBlock?) {
         var query = PFQuery(className:Category.parseClassName())
         query.findObjectsInBackgroundWithBlock {
@@ -227,14 +230,51 @@ class ParseHelper {
         }
     }
     
-    class func getEventPhotos(block:EventPhotosResultBlock?) {
+    class func getEventPhotos(category:Category, block:EventPhotosResultBlock?) {
         var query = PFQuery(className:EventPhoto.parseClassName())
+        query.whereKey("category", equalTo: category)
         query.findObjectsInBackgroundWithBlock {
             (objects: [AnyObject]?, error: NSError?) -> () in
             
             if error == nil {
                 if let objects = objects as? [EventPhoto] {
                     block!(objects, error)
+                }
+            } else {
+                // Log details of the failure
+                println("Error: \(error!) \(error!.userInfo!)")
+                block!(nil, error)
+            }
+        }
+    }
+    
+    class func getInviteCode(code:String, block:InviteCodesResultBlock?) {
+        var query = PFQuery(className:InviteCode.parseClassName())
+        query.whereKey("code", equalTo: code)
+        query.findObjectsInBackgroundWithBlock {
+            (objects: [AnyObject]?, error: NSError?) -> () in
+            
+            if error == nil {
+                if let objects = objects as? [InviteCode] {
+                    block!(objects, error)
+                }
+            } else {
+                // Log details of the failure
+                println("Error: \(error!) \(error!.userInfo!)")
+                block!(nil, error)
+            }
+        }
+    }
+    
+    class func checkIfCodeExist(code:String, block:BoolResultBlock?) {
+        var query = PFQuery(className:InviteCode.parseClassName())
+        query.whereKey("code", equalTo: code)
+        query.findObjectsInBackgroundWithBlock {
+            (objects: [AnyObject]?, error: NSError?) -> () in
+            
+            if error == nil {
+                if let objects = objects as? [InviteCode] {
+                    block!(objects.count>0, error)
                 }
             } else {
                 // Log details of the failure
@@ -264,9 +304,13 @@ class ParseHelper {
         }
     }
     
-    class func getEventRequests(event:Event, block:RequestsResultBlock?) {
+    class func getOwnerRequests(user: PFUser, block:RequestsResultBlock?) {
+        
+        var query1 = PFQuery(className:Event.parseClassName())
+        query1.whereKey("owner", equalTo:user)
+        
         var query = PFQuery(className:Request.parseClassName())
-        query.whereKey("event", equalTo:event)
+        query.whereKey("event", matchesQuery: query1)
         query.whereKeyDoesNotExist("accepted")
         query.findObjectsInBackgroundWithBlock {
             (objects: [AnyObject]?, error: NSError?) -> () in

@@ -14,7 +14,6 @@ class BlurryAlertViewController: UIViewController {
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
     static let BUTTON_OK = "okbutton"
-    static let BUTTON_LOGIN = "loginbutton"
     static let BUTTON_DELETE_PROFILE = "deletebutton"
     
     var aboutText:String! = ""
@@ -43,7 +42,7 @@ class BlurryAlertViewController: UIViewController {
         
             self.view.backgroundColor = UIColor.clearColor()
             
-            let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.Dark)
+            let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.Light)
             let blurEffectView = UIVisualEffectView(effect: blurEffect)
             //always fill the view
             blurEffectView.frame = self.view.bounds
@@ -68,16 +67,11 @@ class BlurryAlertViewController: UIViewController {
             result, error in
             PFUser.currentUser()?.deleteInBackgroundWithBlock({
                 result, error in
+                let defaults = NSUserDefaults.standardUserDefaults()
+                defaults.setBool(false, forKey: "hasPermission")
+                defaults.synchronize()
                 exit(0)
             })
         })
     }
-    
-    @IBAction func loginbutton(sender: AnyObject) {
-        self.performSegueWithIdentifier("login", sender: nil)
-//        let loginViewController = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
-////        navigationController?.pushViewController(loginViewController, animated: true)
-//        appDelegate.window?.navigationController!.pushViewController(loginViewController, animated: true)
-    }
-
 }

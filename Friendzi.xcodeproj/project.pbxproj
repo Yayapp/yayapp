@@ -37,6 +37,10 @@
 		995032951B566F3400D792C5 /* EventFinderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032941B566F3400D792C5 /* EventFinderViewController.swift */; };
 		995032971B5671B900D792C5 /* ChooseLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032961B5671B900D792C5 /* ChooseLocationViewController.swift */; };
 		995032991B56741700D792C5 /* CreateEmailAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032981B56741700D792C5 /* CreateEmailAccountViewController.swift */; };
+		99509E8A1B9618FA003BF7CD /* PhotosTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99509E891B9618FA003BF7CD /* PhotosTableViewController.swift */; };
+		99509E8C1B976FE9003BF7CD /* InviteCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99509E8B1B976FE9003BF7CD /* InviteCode.swift */; };
+		99509E8E1B978D53003BF7CD /* EnterCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99509E8D1B978D53003BF7CD /* EnterCodeViewController.swift */; };
+		99509E901B99CEDC003BF7CD /* PicturePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99509E8F1B99CEDC003BF7CD /* PicturePickerViewController.swift */; };
 		995363491B693F4B00350133 /* CustomPointAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995363481B693F4B00350133 /* CustomPointAnnotation.swift */; };
 		9967D8331B7CFD10003C3CE1 /* BlurryAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9967D8321B7CFD10003C3CE1 /* BlurryAlertViewController.swift */; };
 		997C23881B6667F10070DDB2 /* EventsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997C23871B6667F10070DDB2 /* EventsTableViewCell.swift */; };
@@ -110,6 +114,10 @@
 		995032941B566F3400D792C5 /* EventFinderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventFinderViewController.swift; sourceTree = "<group>"; };
 		995032961B5671B900D792C5 /* ChooseLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseLocationViewController.swift; sourceTree = "<group>"; };
 		995032981B56741700D792C5 /* CreateEmailAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateEmailAccountViewController.swift; sourceTree = "<group>"; };
+		99509E891B9618FA003BF7CD /* PhotosTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosTableViewController.swift; sourceTree = "<group>"; };
+		99509E8B1B976FE9003BF7CD /* InviteCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InviteCode.swift; sourceTree = "<group>"; };
+		99509E8D1B978D53003BF7CD /* EnterCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnterCodeViewController.swift; sourceTree = "<group>"; };
+		99509E8F1B99CEDC003BF7CD /* PicturePickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PicturePickerViewController.swift; sourceTree = "<group>"; };
 		995363481B693F4B00350133 /* CustomPointAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomPointAnnotation.swift; sourceTree = "<group>"; };
 		9967D8321B7CFD10003C3CE1 /* BlurryAlertViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlurryAlertViewController.swift; sourceTree = "<group>"; };
 		997C23871B6667F10070DDB2 /* EventsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsTableViewCell.swift; sourceTree = "<group>"; };
@@ -174,6 +182,7 @@
 				993D3ED61B8CE1170023B054 /* Request.swift */,
 				99253FF31B6A67970078B668 /* TempUser.swift */,
 				99BFEC9E1B7A78C700CBFF8B /* ATLParticipant.swift */,
+				99509E8B1B976FE9003BF7CD /* InviteCode.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -191,6 +200,8 @@
 				9967D8321B7CFD10003C3CE1 /* BlurryAlertViewController.swift */,
 				990CA7241B8206C000591F33 /* InstructionViewController.swift */,
 				990CA7261B826BB200591F33 /* WriteAboutViewController.swift */,
+				99509E891B9618FA003BF7CD /* PhotosTableViewController.swift */,
+				99509E8D1B978D53003BF7CD /* EnterCodeViewController.swift */,
 			);
 			name = controllerParts;
 			sourceTree = "<group>";
@@ -295,6 +306,7 @@
 				99FDE54A1B5A74FF004CE61B /* UserProfileViewController.swift */,
 				993D3ED41B8CCF860023B054 /* HappeningsViewController.swift */,
 				993D3ED81B8DCA900023B054 /* RequestsTableViewController.swift */,
+				99509E8F1B99CEDC003BF7CD /* PicturePickerViewController.swift */,
 			);
 			name = controllers;
 			sourceTree = "<group>";
@@ -460,12 +472,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				99509E8A1B9618FA003BF7CD /* PhotosTableViewController.swift in Sources */,
 				99EC40F81B5D90630093E484 /* Prefs.swift in Sources */,
 				99EC40FC1B5FFB4A0093E484 /* InstagramViewController.swift in Sources */,
 				997C238B1B668CFB0070DDB2 /* EventsViewController.swift in Sources */,
 				99EC40F61B5D397A0093E484 /* PatternValidator.swift in Sources */,
 				997C23991B67F6250070DDB2 /* EventPhotoTableViewCell.swift in Sources */,
 				993D3ED51B8CCF860023B054 /* HappeningsViewController.swift in Sources */,
+				99509E8C1B976FE9003BF7CD /* InviteCode.swift in Sources */,
 				99FDE5451B58E972004CE61B /* ChooseDateTimeViewController.swift in Sources */,
 				993D3EDB1B8DD2FF0023B054 /* RequestTableViewCell.swift in Sources */,
 				993D3ED71B8CE1170023B054 /* Request.swift in Sources */,
@@ -495,9 +509,11 @@
 				993D3ED91B8DCA900023B054 /* RequestsTableViewController.swift in Sources */,
 				997C23911B67B42D0070DDB2 /* ChooseCategoryViewController.swift in Sources */,
 				8B1531BB1B5FA963007A2EC7 /* CategoryType.swift in Sources */,
+				99509E901B99CEDC003BF7CD /* PicturePickerViewController.swift in Sources */,
 				99253FF41B6A67970078B668 /* TempUser.swift in Sources */,
 				99FDE5411B57EB84004CE61B /* SettingsTableViewController.swift in Sources */,
 				995032971B5671B900D792C5 /* ChooseLocationViewController.swift in Sources */,
+				99509E8E1B978D53003BF7CD /* EnterCodeViewController.swift in Sources */,
 				995032951B566F3400D792C5 /* EventFinderViewController.swift in Sources */,
 				99C7B8CF1B7D1D370045D44D /* Rank.swift in Sources */,
 				9917D9DC1B5688850081A796 /* MainNavigationController.swift in Sources */,

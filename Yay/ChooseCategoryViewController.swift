@@ -10,6 +10,8 @@ import UIKit
 
 class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
 
+    let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    
     var delegate:ChooseCategoryDelegate!
     var categoriesData:[Category]! = []
     var selectedCategoriesData:[Category]! = []
@@ -23,6 +25,8 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         categories.delegate = self
         categories.dataSource = self
         categories.allowsMultipleSelection = true
+        
+        appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.None
 
         ParseHelper.getCategories({
             (categoriesList:[Category]?, error:NSError?) in
@@ -31,21 +35,15 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
                 self.categories.reloadData()
             }
         })
-        
-
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
-
 
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-        //#warning Incomplete method implementation -- Return the number of sections
         return 1
     }
-
 
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return categoriesData.count
@@ -69,7 +67,6 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
                 
             }
         })
-        
         return cell
     }
 
@@ -83,13 +80,12 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
             if(multi){
                 selectedCategoriesData.append(category)
             } else {
+                if(!selectedCategoriesData.isEmpty){
+                    collectionView.reloadItemsAtIndexPaths([NSIndexPath(forRow: find(categoriesData, selectedCategoriesData.first!)!, inSection: 0)])
+                }
                 selectedCategoriesData = [category]
             }
             collectionView.reloadItemsAtIndexPaths([indexPath])
-        }
-        delegate.madeCategoryChoice(selectedCategoriesData)
-        if(!multi){
-            self.dismissViewControllerAnimated(true, completion:nil)
         }
     }
     
@@ -98,6 +94,7 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
     }
     
     @IBAction func close(sender: AnyObject) {
+        delegate.madeCategoryChoice(selectedCategoriesData)
         self.dismissViewControllerAnimated(true, completion:nil)
     }
 
@@ -111,7 +108,7 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         colorMatrixFilter.setValue(CIVector(x:1, y:1, z:1, w:0), forKey:"inputRVector")
         colorMatrixFilter.setValue(CIVector(x:0, y:1, z:0, w:0), forKey:"inputGVector")
         colorMatrixFilter.setValue(CIVector(x:0, y:0, z:1, w:0), forKey:"inputBVector")
-        colorMatrixFilter.setValue(CIVector(x:0, y:0, z:0, w:1), forKey:"inputAVector")
+        colorMatrixFilter.setValue(CIVector(x:1, y:0, z:0, w:1), forKey:"inputAVector")
         
         // Get the output image recipe
         let outputImage:CIImage = colorMatrixFilter.outputImage
@@ -121,6 +118,9 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         let cgimg:CGImageRef = context.createCGImage(outputImage, fromRect:outputImage.extent()) // 10
         
         return UIImage(CGImage:cgimg)!
+    }
+    deinit {
+        appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.PanningCenterView
     }
     
 }

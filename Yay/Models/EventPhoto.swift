@@ -25,6 +25,6 @@ class EventPhoto : PFObject, PFSubclassing {
     
     @NSManaged var name: String
     @NSManaged var photo: PFFile
-    
+    @NSManaged var category: Category
     
 }

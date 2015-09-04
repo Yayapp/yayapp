@@ -78,14 +78,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 authenticateInLayer()
                 window!.rootViewController = centerContainer
                 window!.makeKeyAndVisible()
-            
         }
         return true
     }
     
     
     func application( application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData ) {
-        
         
         var characterSet: NSCharacterSet = NSCharacterSet( charactersInString: "<>" )
         
@@ -127,8 +125,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         })
         if (!success) {
             completionHandler(UIBackgroundFetchResult.NoData)
+            if let aps = userInfo["aps"] as? NSDictionary {
+                if let alert = aps["alert"] as? NSDictionary {
+                    if let message = alert["message"] as? NSString {
+                        let blurryAlertViewController = mainStoryBoard.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
+                        blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
+                        blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
+                        blurryAlertViewController.aboutText = message as String
+                        centerViewController.presentViewController(blurryAlertViewController, animated: true, completion: nil)
+                    }
+                } else if let alert = aps["alert"] as? NSString {
+                    let blurryAlertViewController = mainStoryBoard.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
+                    blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
+                    blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
+                    blurryAlertViewController.aboutText = alert as String
+                    centerViewController.presentViewController(blurryAlertViewController, animated: true, completion: nil)
+                }
+            }
         }
-//        PFPush.handlePush(userInfo)
     }
     
     func messageFromRemoteNotification(remoteNotification:NSDictionary) -> LYRMessage {
@@ -161,6 +175,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
+        
+        let sanitizedURL:NSURL = GSDDeepLink.handleDeepLink(url)
+        
             return FBSDKApplicationDelegate.sharedInstance().application(application,
                 openURL: url,
                 sourceApplication: sourceApplication,

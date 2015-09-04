@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LoginViewController: UIViewController, InstagramDelegate {
+class LoginViewController: UIViewController, InstagramDelegate, EnterCodeDelegate {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
@@ -32,10 +32,6 @@ class LoginViewController: UIViewController, InstagramDelegate {
                 currentInstallation["user"] = PFUser.currentUser()
                 currentInstallation.saveInBackground()
                 
-                self.appDelegate.authenticateInLayer()
-                Prefs.storeSessionId(user.sessionToken!)
-                Prefs.storeLoginType(LoginType.FACEBOOK)
-                
                 if (FBSDKAccessToken.currentAccessToken() != nil){
                     
                     var userProfileRequestParams = [ "fields" : "id, name, email, picture, about"]
@@ -56,8 +52,6 @@ class LoginViewController: UIViewController, InstagramDelegate {
                             
                             PFUser.currentUser()?.setObject(result.objectForKey("email")!, forKey: "email")
                             PFUser.currentUser()?.setObject(result.objectForKey("name")!, forKey: "name")
-//                                PFUser.currentUser()?.setObject(result.objectForKey("about")?!, forKey: "about")
-                      
                             PFUser.currentUser()?.setObject(imageFile, forKey: "avatar")
                             if user.isNew {
                                 PFUser.currentUser()?.setObject(20, forKey: "distance")
@@ -68,21 +62,26 @@ class LoginViewController: UIViewController, InstagramDelegate {
                                 PFUser.currentUser()?.setObject(true, forKey: "eventNearby")
                                 PFUser.currentUser()?.setObject(true, forKey: "newMessage")
                                 PFUser.currentUser()?.setObject(true, forKey: "eventsReminder")
-                                
+                                PFUser.currentUser()?.saveInBackgroundWithBlock({
+                                    result, error in
+                                    if error == nil {
+                                        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("EnterCodeViewController") as! EnterCodeViewController
+                                        vc.delegate = self
+                                        vc.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
+                                        self.presentViewController(vc, animated: true, completion: nil)
+                                    }
+                                })
+                            } else {
+                                PFUser.currentUser()?.saveInBackground()
+                                self.appDelegate.authenticateInLayer()
+                                self.performSegueWithIdentifier("proceed", sender: nil)
                             }
-                            PFUser.currentUser()?.saveInBackgroundWithBlock({
-                                result, error in
-                                if error == nil {
-                                    self.performSegueWithIdentifier("proceed", sender: nil)
-                                }
-                            })
+                            
                             
                         }
                     })
                     graphConnection.start()
                 }
-                
-                
             }
         }
     }
@@ -95,10 +94,6 @@ class LoginViewController: UIViewController, InstagramDelegate {
                 let currentInstallation:PFInstallation = PFInstallation.currentInstallation()
                 currentInstallation["user"] = PFUser.currentUser()
                 currentInstallation.saveInBackground()
-                
-                self.appDelegate.authenticateInLayer()
-                Prefs.storeSessionId(user.sessionToken!)
-                Prefs.storeLoginType(LoginType.TWITTER)
                 
                 var url:NSURL = NSURL(string:"https://api.twitter.com/1.1/users/show.json?screen_name=\(PFTwitterUtils.twitter()!.screenName!)")!
                 var err: NSError?
@@ -134,11 +129,16 @@ class LoginViewController: UIViewController, InstagramDelegate {
                     PFUser.currentUser()?.saveInBackgroundWithBlock({
                         result, error in
                         if error == nil {
-                            self.performSegueWithIdentifier("proceed", sender: nil)
+                            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("EnterCodeViewController") as! EnterCodeViewController
+                            vc.delegate = self
+                            vc.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
+                            self.presentViewController(vc, animated: true, completion: nil)
                         }
                     })
                     
                 } else {
+                    PFUser.currentUser()?.saveInBackground()
+                    self.appDelegate.authenticateInLayer()
                     self.performSegueWithIdentifier("proceed", sender: nil)
                 }
             }
@@ -162,14 +162,7 @@ class LoginViewController: UIViewController, InstagramDelegate {
                 var imageFile = PFFile(name: "image.jpg", data: imageData) as PFFile
                 PFUser.currentUser()?.setObject(imageFile, forKey: "avatar")
                 PFUser.currentUser()?.saveInBackground()
-                
-                let currentInstallation:PFInstallation = PFInstallation.currentInstallation()
-                currentInstallation["user"] = PFUser.currentUser()
-                currentInstallation.saveInBackground()
-                
                 self.appDelegate.authenticateInLayer()
-                Prefs.storeSessionId(pfuser!.sessionToken!)
-                Prefs.storeLoginType(LoginType.INSTAGRAM)
                 self.performSegueWithIdentifier("proceed", sender: nil)
             } else {
                 if(error!.code == 101) {
@@ -201,12 +194,10 @@ class LoginViewController: UIViewController, InstagramDelegate {
                             alert.addButtonWithTitle("OK")
                             alert.show()
                         } else {
-                            let currentInstallation:PFInstallation = PFInstallation.currentInstallation()
-                            currentInstallation["user"] = PFUser.currentUser()
-                            currentInstallation.saveInBackground()
-                            
-                            self.appDelegate.authenticateInLayer()
-                            self.performSegueWithIdentifier("proceed", sender: nil)
+                            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("EnterCodeViewController") as! EnterCodeViewController
+                            vc.delegate = self
+                            vc.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
+                            self.presentViewController(vc, animated: true, completion: nil)
                         }
                     }
                 } else {
@@ -217,7 +208,6 @@ class LoginViewController: UIViewController, InstagramDelegate {
                 alert.show()
                 
                 }
-                
             }
         }
        
@@ -230,5 +220,13 @@ class LoginViewController: UIViewController, InstagramDelegate {
         alert.show()
     }
     
+    func validCode() {
+        let currentInstallation:PFInstallation = PFInstallation.currentInstallation()
+        currentInstallation["user"] = PFUser.currentUser()
+        currentInstallation.saveInBackground()
+        
+        self.appDelegate.authenticateInLayer()
+        self.performSegueWithIdentifier("proceed", sender: nil)
+    }
 }
 

@@ -7,14 +7,17 @@
 //
 
 import UIKit
+import MessageUI
 
-class MainRootViewController: UIViewController, ChooseCategoryDelegate {
+class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailComposeViewControllerDelegate {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     var rightSwitchBarButtonItem:UIBarButtonItem?
     
     var thisWeekCenter:NSLayoutConstraint!
     var todayCenter:NSLayoutConstraint!
+    var inviteCode:InviteCode?
+    
     
     @IBOutlet weak var today: UIButton!
     @IBOutlet weak var tomorrow: UIButton!
@@ -30,7 +33,7 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
     var currentVC:UIViewController!
     var isMapView = false
     var eventsData:[Event]!=[]
-    var chosenCategory:Category?
+    var chosenCategories:[Category] = []
     var selectedSegment:Int = 0
     
     override func viewDidLoad() {
@@ -62,21 +65,21 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
             vc = self.storyboard!.instantiateViewControllerWithIdentifier("ListEventsViewController") as! ListEventsViewController
         }
         if(selectedSegment == 0) {
-            ParseHelper.getTodayEvents(PFUser.currentUser(), category: chosenCategory, block: {
+            ParseHelper.getTodayEvents(PFUser.currentUser(), categories: chosenCategories, block: {
                 (eventsList:[Event]?, error:NSError?) in
                 if(error == nil) {
                     vc.reloadAll(eventsList!)
                 }
             })
         } else if (selectedSegment == 1) {
-            ParseHelper.getTomorrowEvents(PFUser.currentUser(), category: chosenCategory, block: {
+            ParseHelper.getTomorrowEvents(PFUser.currentUser(), categories: chosenCategories, block: {
                 (eventsList:[Event]?, error:NSError?) in
                 if(error == nil) {
                     vc.reloadAll(eventsList!)
                 }
             })
         } else {
-            ParseHelper.getThisWeekEvents(PFUser.currentUser(), category: chosenCategory, block: {
+            ParseHelper.getThisWeekEvents(PFUser.currentUser(), categories: chosenCategories, block: {
                 (eventsList:[Event]?, error:NSError?) in
                 if(error == nil) {
                     vc.reloadAll(eventsList!)
@@ -137,16 +140,66 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
     }
     
     func showInvite(){
-        var uuid = NSUUID().UUIDString
+        if((PFUser.currentUser()?.objectForKey("invites") as! Int)>0){
+            if MFMailComposeViewController.canSendMail() {
+                randomString({
+                    code in
+                    let inviteACL:PFACL = PFACL()
+                    inviteACL.setPublicWriteAccess(true)
+                    inviteACL.setPublicReadAccess(true)
+                    self.inviteCode = InviteCode()
+                    self.inviteCode!.code = code
+                    self.inviteCode!.limit = 1
+                    self.inviteCode!.ACL = inviteACL
+                    self.inviteCode!.invited = 0
+                    self.inviteCode!.saveInBackground()
+                    let mailComposeViewController = self.configuredMailComposeViewController(code)
+                    self.presentViewController(mailComposeViewController, animated: true, completion: nil)
+                })
+            } else {
+                self.showSendMailErrorAlert()
+            }
+        } else {
+            let sendMailErrorAlert = UIAlertView(title: "Invite friend", message: "You have no more invites.", delegate: self, cancelButtonTitle: "OK")
+            sendMailErrorAlert.show()
+        }
+    }
+    
+    func configuredMailComposeViewController(code:String) -> MFMailComposeViewController {
+        let userName = PFUser.currentUser()?.objectForKey("name") as! String
+        var emailTitle = "\(userName) invited you to Friendzi app"
+        var messageBody = "Hi, use this code \(code) to enter the app.\n\nhttp://friendzy.io/"
+        
+        let mailComposerVC = MFMailComposeViewController()
+        mailComposerVC.mailComposeDelegate = self
+        mailComposerVC.setSubject(emailTitle)
+        mailComposerVC.setMessageBody(messageBody, isHTML: false)
+        
+        return mailComposerVC
+    }
+    
+    func showSendMailErrorAlert() {
+        let sendMailErrorAlert = UIAlertView(title: "Could Not Send Email", message: "Your device could not send e-mail.  Please check e-mail configuration and try again.", delegate: self, cancelButtonTitle: "OK")
+        sendMailErrorAlert.show()
+    }
+    
+    func mailComposeController(controller: MFMailComposeViewController!, didFinishWithResult result: MFMailComposeResult, error: NSError!) {
+        if result.value != MFMailComposeResultSent.value {
+            inviteCode?.deleteInBackground()
+            inviteCode = nil
+        } else {
+            PFUser.currentUser()?.incrementKey("invites", byAmount: -1)
+            PFUser.currentUser()?.saveInBackground()
+        }
+        controller.dismissViewControllerAnimated(true, completion: nil)
     }
     
     func showRequests(){
-        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ListEventsViewController") as! ListEventsViewController
-        vc.requests = true
-        ParseHelper.getOwnerEvents(PFUser.currentUser()!, block: {
+        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("RequestsTableViewController") as! RequestsTableViewController
+        ParseHelper.getOwnerRequests(PFUser.currentUser()!, block: {
             result, error in
             if (error == nil){
-                vc.eventsFirst = result
+                vc.requests = result!
                 self.navigationController?.pushViewController(vc, animated: true)
             }
         })
@@ -160,29 +213,27 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
     
     func showTerms(){
         let vc = self.storyboard!.instantiateViewControllerWithIdentifier("TermsController") as! TermsController
-        self.navigationController?.pushViewController(vc, animated: true)
-        
+        presentViewController(vc, animated: true, completion: nil)
     }
     
     func showPrivacy(){
         let vc = self.storyboard!.instantiateViewControllerWithIdentifier("PrivacyPolicyController") as! PrivacyPolicyController
-        self.navigationController?.pushViewController(vc, animated: true)
+        presentViewController(vc, animated: true, completion: nil)
     }
     
     
     @IBAction func openCategoryPicker(sender: AnyObject) {
         let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ChooseCategoryViewController") as! ChooseCategoryViewController
         vc.delegate = self
-        if chosenCategory != nil {
-            vc.selectedCategoriesData = [chosenCategory!]
-        }
+        vc.selectedCategoriesData = chosenCategories
+        vc.multi = true
         vc.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
         presentViewController(vc, animated: true, completion: nil)
     }
     
     
     func madeCategoryChoice(categories: [Category]) {
-        chosenCategory = categories.first
+        chosenCategories = categories
         segmentChanged()
     }
     
@@ -222,15 +273,25 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate {
    
     let letters = Array("abcdefghijklmnopqrstuvwxyz0123456789")
     
-    func randomString() -> String {
+    func randomString(blockResult:((String!) -> Void)?) {
     
         let randomString:NSMutableString = NSMutableString(capacity: 5)
     
         for i in 1...5 {
-            randomString.appendString("\(letters[Int(random() % letters.count)])")
+            randomString.appendString("\(letters[Int(arc4random_uniform(36))])")
         }
+        
+        ParseHelper.checkIfCodeExist(randomString as String, block: {
+            result, error in
+            if result != nil {
+                if (result == true) {
+                    self.randomString(blockResult)
+                } else {
+                    blockResult!(randomString as String)
+                }
+            }
+        })
     
-        return randomString as String;
     }
     
 

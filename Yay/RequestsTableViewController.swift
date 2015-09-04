@@ -11,9 +11,13 @@ import UIKit
 class RequestsTableViewController: UITableViewController {
     
     var requests:[Request] = []
+    let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        var tblView =  UIView(frame: CGRectZero)
+        tableView.tableFooterView = tblView
+        tableView.tableFooterView!.hidden = true
         let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
         back.tintColor = UIColor(red:CGFloat(3/255.0), green:CGFloat(118/255.0), blue:CGFloat(114/255.0), alpha: 1)
         self.navigationItem.setLeftBarButtonItem(back, animated: false)
@@ -36,11 +40,18 @@ class RequestsTableViewController: UITableViewController {
         
         var cell = tableView.dequeueReusableCellWithIdentifier("Cell") as! RequestTableViewCell
         let request:Request! = requests[indexPath.row]
+        
+        request.event.fetchIfNeededInBackgroundWithBlock({
+            result, error in
+            cell.eventName.text = request.event.name
+        })
+        
         request.attendee.fetchIfNeededInBackgroundWithBlock({
             result, error in
             cell.name.text = request.attendee.objectForKey("name") as! String
             cell.avatar.file = request.attendee.objectForKey("avatar") as! PFFile
             cell.avatar.loadInBackground()
+            cell.avatar.layer.borderColor = UIColor(red:CGFloat(3/255.0), green:CGFloat(118/255.0), blue:CGFloat(114/255.0), alpha: 1).CGColor
         })
         
         cell.accept.tag = indexPath.row;
@@ -53,10 +64,15 @@ class RequestsTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let request:Request! = requests[indexPath.row]
+        let userProfileViewController = self.storyboard!.instantiateViewControllerWithIdentifier("UserProfileViewController") as! UserProfileViewController
+        userProfileViewController.user = request.attendee
         
+        navigationController?.pushViewController(userProfileViewController, animated: true)
     }
     
     @IBAction func accept(sender: AnyObject) {
+        
         let request = requests[sender.tag]
         request.event.attendees.append(request.attendee)
         request.event.saveInBackground()
@@ -64,6 +80,16 @@ class RequestsTableViewController: UITableViewController {
         request.saveInBackground()
         requests.removeAtIndex(sender.tag)
         tableView.reloadData()
+        
+        if request.event.conversation != nil {
+            let query:LYRQuery = LYRQuery(queryableClass: LYRConversation.self)
+            query.predicate = LYRPredicate(property: "identifier", predicateOperator:LYRPredicateOperator.IsEqualTo, value:NSURL(string:request.event.conversation!))
+            var error:NSError?
+            let conversation = appDelegate.layerClient.executeQuery(query, error:&error).firstObject as? LYRConversation
+            let participants = NSMutableSet()
+            participants.addObject(request.attendee.objectId!)
+            conversation!.addParticipants(participants as Set<NSObject>, error: &error)
+        }
     }
     
     @IBAction func decline(sender: AnyObject) {

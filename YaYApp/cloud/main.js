@@ -22,8 +22,13 @@ Parse.Cloud.define("generateToken", function(request, response) {
 //  response.success("Hello world!");
 //});
 
+
 Parse.Cloud.afterSave("Event", function(request) {
-                      // Our "Comment" class has a "text" key with the body of the comment itself
+                      
+                      if(request.object.existed()) {
+                        return;
+                      }
+                      
                       var eventName = "";
                       var location = request.object.get('location');
                       

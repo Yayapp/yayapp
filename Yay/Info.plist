@@ -32,7 +32,7 @@
 	<key>FacebookAppID</key>
 	<string>1670771429818141</string>
 	<key>FacebookDisplayName</key>
-	<string>YayApp</string>
+	<string>Friendzi</string>
 	<key>InstagramAppClientId</key>
 	<string>aec497e4d81e4b758aa48a94b3c35c00</string>
 	<key>InstagramAppRedirectURL</key>
@@ -43,8 +43,8 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Friendzi needs your geolocation to display most relevant happenings</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Friendzi needs your geolocation to display the most relevant happenings</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

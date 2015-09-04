@@ -60,9 +60,7 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
             } else {
                 self.male(true)
             }
-        })
-        
-        
+        })  
     }
 
     override func didReceiveMemoryWarning() {

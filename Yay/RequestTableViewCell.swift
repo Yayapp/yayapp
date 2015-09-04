@@ -11,6 +11,7 @@ import UIKit
 class RequestTableViewCell: UITableViewCell {
     
     @IBOutlet weak var avatar: PFImageView!
+    @IBOutlet weak var eventName: UILabel!
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var accept: UIButton!
     @IBOutlet weak var decline: UIButton!

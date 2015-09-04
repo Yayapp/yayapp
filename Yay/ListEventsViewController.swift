@@ -10,7 +10,6 @@ import UIKit
 
 class ListEventsViewController: EventsViewController, UITableViewDataSource, UITableViewDelegate {
 
-    var requests:Bool = false
     var eventsFirst:[Event]?
     var currentTitle:String?
     let dateFormatter = NSDateFormatter()
@@ -93,25 +92,14 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if (requests) {
-            let requestsTableViewController = self.storyboard!.instantiateViewControllerWithIdentifier("RequestsTableViewController") as! RequestsTableViewController
-            ParseHelper.getEventRequests(eventsData[indexPath.row], block: {
-                result, error in
-                if (error == nil) {
-                    requestsTableViewController.requests = result!
-                    self.navigationController?.pushViewController(requestsTableViewController, animated: true)
-                }
-            })
-            
-        } else {
-            if(delegate != nil) {
+        if(delegate != nil) {
                 delegate!.madeEventChoice(eventsData[indexPath.row])
             } else {
                 let eventDetailsViewController = self.storyboard!.instantiateViewControllerWithIdentifier("EventDetailsViewController") as! EventDetailsViewController
                 eventDetailsViewController.event = eventsData[indexPath.row]
                 self.navigationController?.pushViewController(eventDetailsViewController, animated: true)
             }
-        }
+        
     }
     
     func getLocationString(label:UILabel, latitude: Double, longitude: Double){
@@ -161,10 +149,10 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
         let colorMatrixFilter:CIFilter = CIFilter(name: "CIColorMatrix")
         colorMatrixFilter.setDefaults()
         colorMatrixFilter.setValue(inputImage, forKey:kCIInputImageKey)
-        colorMatrixFilter.setValue(CIVector(x:1, y:1, z:1, w:0), forKey:"inputRVector")
+        colorMatrixFilter.setValue(CIVector(x:1, y:0, z:0, w:0), forKey:"inputRVector")
         colorMatrixFilter.setValue(CIVector(x:0, y:1, z:0, w:0), forKey:"inputGVector")
         colorMatrixFilter.setValue(CIVector(x:0, y:0, z:1, w:0), forKey:"inputBVector")
-        colorMatrixFilter.setValue(CIVector(x:0, y:0, z:0, w:1), forKey:"inputAVector")
+        colorMatrixFilter.setValue(CIVector(x:1, y:0, z:0, w:1), forKey:"inputAVector")
         
         // Get the output image recipe
         let outputImage:CIImage = colorMatrixFilter.outputImage

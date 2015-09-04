@@ -8,11 +8,11 @@
 
 import UIKit
 
-class ChooseEventPictureViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class ChooseEventPictureViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, ChooseCategoryPhotoDelegate {
 
     let picker = UIImagePickerController()
     var delegate:ChooseEventPictureDelegate!
-    var photosList:[EventPhoto]! = []
+    var categories:[Category]! = []
     
     @IBOutlet weak var photos: UITableView!
     
@@ -26,10 +26,10 @@ class ChooseEventPictureViewController: UIViewController, UITableViewDataSource,
         back.tintColor = UIColor(red:CGFloat(3/255.0), green:CGFloat(118/255.0), blue:CGFloat(114/255.0), alpha: 1)
         self.navigationItem.setLeftBarButtonItem(back, animated: false)
         
-        ParseHelper.getEventPhotos({
-            (photosList:[EventPhoto]?, error:NSError?) in
+        ParseHelper.getCategories({
+            (categories:[Category]?, error:NSError?) in
             if(error == nil) {
-                self.photosList = photosList!
+                self.categories = categories!
                 self.photos.reloadData()
             }
         })
@@ -42,35 +42,41 @@ class ChooseEventPictureViewController: UIViewController, UITableViewDataSource,
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return photosList.count
+        return categories.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         var cell = photos.dequeueReusableCellWithIdentifier("Cell") as! EventPhotoTableViewCell
-        let eventPhoto:EventPhoto! = photosList[indexPath.row]
+        let category:Category! = categories[indexPath.row]
         
-        cell.name.text = eventPhoto.name
-        eventPhoto.photo.getDataInBackgroundWithBlock({
+        cell.name.text = category.name
+        category.photo.getDataInBackgroundWithBlock({
             (data:NSData?, error:NSError?) in
             if(error == nil) {
                 var image = self.toCobalt(UIImage(data:data!)!)
                 cell.photo.image = image
             }
         })
-        
         return cell
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        delegate.madeEventPictureChoice(photosList[indexPath.row].photo, pickedPhoto: nil)
-        self.navigationController?.popViewControllerAnimated(true)
+        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("PhotosTableViewController") as! PhotosTableViewController
+        vc.delegate = self
+        let category = categories[indexPath.row]
+        vc.category = category
+        navigationController?.pushViewController(vc, animated: true)
     }
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return tableView.frame.height/2
     }
 
+    func madeCategoryPhotoChoice(eventPhoto: EventPhoto) {
+        delegate.madeEventPictureChoice(eventPhoto.photo, pickedPhoto: nil)
+        self.navigationController?.popViewControllerAnimated(true)
+    }
     
     @IBAction func library(sender: AnyObject) {
         picker.allowsEditing = true //2
@@ -98,6 +104,7 @@ class ChooseEventPictureViewController: UIViewController, UITableViewDataSource,
         navigationController?.popViewControllerAnimated(true)
     }
     
+    
     func toCobalt(image:UIImage) -> UIImage{
         let inputImage:CIImage = CIImage(CGImage: image.CGImage)
         
@@ -105,10 +112,10 @@ class ChooseEventPictureViewController: UIViewController, UITableViewDataSource,
         let colorMatrixFilter:CIFilter = CIFilter(name: "CIColorMatrix")
         colorMatrixFilter.setDefaults()
         colorMatrixFilter.setValue(inputImage, forKey:kCIInputImageKey)
-        colorMatrixFilter.setValue(CIVector(x:1, y:1, z:1, w:0), forKey:"inputRVector")
+        colorMatrixFilter.setValue(CIVector(x:1, y:0, z:0, w:0), forKey:"inputRVector")
         colorMatrixFilter.setValue(CIVector(x:0, y:1, z:0, w:0), forKey:"inputGVector")
         colorMatrixFilter.setValue(CIVector(x:0, y:0, z:1, w:0), forKey:"inputBVector")
-        colorMatrixFilter.setValue(CIVector(x:0, y:0, z:0, w:1), forKey:"inputAVector")
+        colorMatrixFilter.setValue(CIVector(x:1, y:0, z:0, w:1), forKey:"inputAVector")
         
         // Get the output image recipe
         let outputImage:CIImage = colorMatrixFilter.outputImage

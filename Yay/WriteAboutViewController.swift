@@ -21,6 +21,16 @@ class WriteAboutViewController: UIViewController {
 
         text.text = textAbout
         text.becomeFirstResponder()
+        
+        self.view.backgroundColor = UIColor.clearColor()
+        
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.Light)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        //always fill the view
+        blurEffectView.frame = self.view.bounds
+        blurEffectView.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
+        
+        self.view.insertSubview(blurEffectView, atIndex: 0)
     }
 
     override func didReceiveMemoryWarning() {

@@ -185,10 +185,18 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         
         if indexPath.row == 1 {
             interests.sizeToFit()
-            return interests.frame.height + 16
+            if interests.frame.height<44 {
+                return 44
+            } else {
+                return interests.frame.height + 16
+            }
         } else if indexPath.row == 2 {
             about.sizeToFit()
-            return about.frame.height + 16
+            if about.frame.height<44 {
+                return 44
+            } else {
+                return about.frame.height + 16
+            }
         } else {
             return 44
         }
@@ -207,16 +215,8 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
     func openAboutMeEditor() {
         let vc = self.storyboard!.instantiateViewControllerWithIdentifier("WriteAboutViewController") as! WriteAboutViewController
         vc.delegate = self
-        vc.modalPresentationStyle = UIModalPresentationStyle.Popover
-        
-        
-        var detailPopover: UIPopoverPresentationController = vc.popoverPresentationController!
-        detailPopover.delegate = self
-        detailPopover.sourceView = uploadPhoto
-        
-        detailPopover.permittedArrowDirections = UIPopoverArrowDirection.Down
-        presentViewController(vc,
-            animated: true, completion:nil)
+        vc.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
+        presentViewController(vc, animated: true, completion: nil)
     }
     
     @IBAction func uploadPhoto(sender: AnyObject) {
