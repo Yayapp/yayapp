@@ -61,6 +61,8 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
                 let rank = Rank.getRank(result!.count)
                 self.eventsCount.text = rank.getString(self.user["gender"] as! Int)
                 self.rankIcon.image = rank.getImage(self.user["gender"] as! Int)
+            } else {
+                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
         })
         
@@ -160,6 +162,8 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
             result, error in
             if error == nil {
                 self.setAboutMe(text)
+            } else {
+                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
         })
     }
@@ -215,17 +219,34 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
     func openAboutMeEditor() {
         let vc = self.storyboard!.instantiateViewControllerWithIdentifier("WriteAboutViewController") as! WriteAboutViewController
         vc.delegate = self
+        if user["about"] != nil {
+            vc.textAbout = user["about"]! as! String
+        }
         vc.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
         presentViewController(vc, animated: true, completion: nil)
     }
     
     @IBAction func uploadPhoto(sender: AnyObject) {
-        picker.allowsEditing = true
-        picker.sourceType = UIImagePickerControllerSourceType.Camera
-        picker.cameraCaptureMode = .Photo
-        picker.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
-        picker.showsCameraControls = true;
-        presentViewController(picker, animated: true, completion: nil)
+        var alert = UIAlertController(title: "Choose Option", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
+        alert.addAction(UIAlertAction(title: "Take Photo", style: UIAlertActionStyle.Default, handler: {
+            (action: UIAlertAction!) in
+            self.picker.allowsEditing = true
+            self.picker.sourceType = UIImagePickerControllerSourceType.Camera
+            self.picker.cameraCaptureMode = .Photo
+            self.picker.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
+            self.picker.showsCameraControls = true;
+            self.presentViewController(self.picker, animated: true, completion: nil)
+        }))
+        alert.addAction(UIAlertAction(title: "From Library", style: UIAlertActionStyle.Default, handler: {
+            (action: UIAlertAction!) in
+            self.picker.allowsEditing = true //2
+            self.picker.sourceType = .PhotoLibrary //3
+            self.picker.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
+            self.presentViewController(self.picker, animated: true, completion: nil)
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+        presentViewController(alert, animated: true, completion: nil)
+        
     }
     
     @IBAction func editdone(sender: AnyObject) {
@@ -239,8 +260,8 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
             uploadPhoto.hidden = false
             editdone.image = UIImage(named:"edit_done_icon")
             isEditingProfile = true
-            interests.backgroundColor = UIColor(red:CGFloat(48/255.0), green:CGFloat(56/255.0), blue:CGFloat(58/255.0), alpha: 1)
-            about.backgroundColor = UIColor(red:CGFloat(48/255.0), green:CGFloat(56/255.0), blue:CGFloat(58/255.0), alpha: 1)
+            interests.backgroundColor = UIColor(red:CGFloat(219/255.0), green:CGFloat(234/255.0), blue:CGFloat(237/255.0), alpha: 1)
+            about.backgroundColor = UIColor(red:CGFloat(219/255.0), green:CGFloat(234/255.0), blue:CGFloat(237/255.0), alpha: 1)
         }
     }
     
@@ -253,7 +274,11 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         PFUser.currentUser()!.setObject(imageFile, forKey: "avatar")
         PFUser.currentUser()!.saveInBackgroundWithBlock({
             result, error in
-            self.dismissViewControllerAnimated(true, completion: nil)
+            if error == nil {
+                self.dismissViewControllerAnimated(true, completion: nil)
+            } else {
+                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+            }
         })
     }
     //What to do if the image picker cancels.

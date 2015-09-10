@@ -31,6 +31,8 @@ class ChooseEventPictureViewController: UIViewController, UITableViewDataSource,
             if(error == nil) {
                 self.categories = categories!
                 self.photos.reloadData()
+            } else {
+                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
         })
     }
@@ -54,8 +56,10 @@ class ChooseEventPictureViewController: UIViewController, UITableViewDataSource,
         category.photo.getDataInBackgroundWithBlock({
             (data:NSData?, error:NSError?) in
             if(error == nil) {
-                var image = self.toCobalt(UIImage(data:data!)!)
+                var image = UIImage(data:data!)
                 cell.photo.image = image
+            } else {
+                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
         })
         return cell
@@ -102,29 +106,6 @@ class ChooseEventPictureViewController: UIViewController, UITableViewDataSource,
     
     @IBAction func backButtonTapped(sender: AnyObject) {
         navigationController?.popViewControllerAnimated(true)
-    }
-    
-    
-    func toCobalt(image:UIImage) -> UIImage{
-        let inputImage:CIImage = CIImage(CGImage: image.CGImage)
-        
-        // Make the filter
-        let colorMatrixFilter:CIFilter = CIFilter(name: "CIColorMatrix")
-        colorMatrixFilter.setDefaults()
-        colorMatrixFilter.setValue(inputImage, forKey:kCIInputImageKey)
-        colorMatrixFilter.setValue(CIVector(x:1, y:0, z:0, w:0), forKey:"inputRVector")
-        colorMatrixFilter.setValue(CIVector(x:0, y:1, z:0, w:0), forKey:"inputGVector")
-        colorMatrixFilter.setValue(CIVector(x:0, y:0, z:1, w:0), forKey:"inputBVector")
-        colorMatrixFilter.setValue(CIVector(x:1, y:0, z:0, w:1), forKey:"inputAVector")
-        
-        // Get the output image recipe
-        let outputImage:CIImage = colorMatrixFilter.outputImage
-        
-        // Create the context and instruct CoreImage to draw the output image recipe into a CGImage
-        let context:CIContext = CIContext(options:nil)
-        let cgimg:CGImageRef = context.createCGImage(outputImage, fromRect:outputImage.extent()) // 10
-        
-        return UIImage(CGImage:cgimg)!
     }
     
 }

@@ -18,4 +18,5 @@
 #import <CommonCrypto/CommonCrypto.h>
 #import <TTRangeSlider/TTRangeSlider.h>
 #import <GoogleAppIndexing/GoogleAppIndexing.h>
+#import <APTimeZones/APTimeZones.h>
 #import "Flurry.h"

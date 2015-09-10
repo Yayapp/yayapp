@@ -16,6 +16,7 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
     var categoriesData:[Category]! = []
     var selectedCategoriesData:[Category]! = []
     var multi:Bool = false
+    var isEventCreation:Bool = false
     
     @IBOutlet weak var categories: UICollectionView!
     
@@ -26,13 +27,17 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         categories.dataSource = self
         categories.allowsMultipleSelection = true
         
-        appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.None
-
+        if(!isEventCreation) {
+            appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.None
+        }
+        
         ParseHelper.getCategories({
             (categoriesList:[Category]?, error:NSError?) in
             if(error == nil) {
                 self.categoriesData = categoriesList!
                 self.categories.reloadData()
+            } else {
+                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
         })
     }
@@ -65,6 +70,8 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
                     cell.photo.image = image!
                 }
                 
+            } else {
+                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
         })
         return cell
@@ -120,7 +127,9 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         return UIImage(CGImage:cgimg)!
     }
     deinit {
-        appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.PanningCenterView
+        if(!isEventCreation) {
+            appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.PanningCenterView
+        }
     }
     
 }

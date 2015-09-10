@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ListEventsViewController: EventsViewController, UITableViewDataSource, UITableViewDelegate {
+class ListEventsViewController: EventsViewController, UITableViewDataSource, UITableViewDelegate, EventChangeDelegate {
 
     var eventsFirst:[Event]?
     var currentTitle:String?
@@ -80,7 +80,9 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
             (data:NSData?, error:NSError?) in
             if(error == nil) {
                 var image = UIImage(data:data!)
-                cell.picture.image = self.toCobalt(image!)
+                cell.picture.image = image!
+            } else {
+                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
         })
         
@@ -93,15 +95,24 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if(delegate != nil) {
-                delegate!.madeEventChoice(eventsData[indexPath.row])
-            } else {
-                let eventDetailsViewController = self.storyboard!.instantiateViewControllerWithIdentifier("EventDetailsViewController") as! EventDetailsViewController
-                eventDetailsViewController.event = eventsData[indexPath.row]
-                self.navigationController?.pushViewController(eventDetailsViewController, animated: true)
-            }
-        
+            delegate!.madeEventChoice(eventsData[indexPath.row])
+        } else {
+            let eventDetailsViewController = self.storyboard!.instantiateViewControllerWithIdentifier("EventDetailsViewController") as! EventDetailsViewController
+            eventDetailsViewController.event = eventsData[indexPath.row]
+            eventDetailsViewController.delegate = self
+            self.navigationController?.pushViewController(eventDetailsViewController, animated: true)
+        }
     }
     
+    func eventChanged(event:Event) {
+        events.reloadData()
+    }
+    
+    func eventRemoved(event:Event) {
+        eventsData = eventsData.filter({$0.objectId != event.objectId})
+        events.reloadData()
+    }
+   
     func getLocationString(label:UILabel, latitude: Double, longitude: Double){
         let geoCoder = CLGeocoder()
         let cllocation = CLLocation(latitude: latitude, longitude: longitude)
@@ -141,28 +152,6 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
         navigationController?.popViewControllerAnimated(true)
     }
     
-    
-    func toCobalt(image:UIImage) -> UIImage{
-        let inputImage:CIImage = CIImage(CGImage: image.CGImage)
-        
-        // Make the filter
-        let colorMatrixFilter:CIFilter = CIFilter(name: "CIColorMatrix")
-        colorMatrixFilter.setDefaults()
-        colorMatrixFilter.setValue(inputImage, forKey:kCIInputImageKey)
-        colorMatrixFilter.setValue(CIVector(x:1, y:0, z:0, w:0), forKey:"inputRVector")
-        colorMatrixFilter.setValue(CIVector(x:0, y:1, z:0, w:0), forKey:"inputGVector")
-        colorMatrixFilter.setValue(CIVector(x:0, y:0, z:1, w:0), forKey:"inputBVector")
-        colorMatrixFilter.setValue(CIVector(x:1, y:0, z:0, w:1), forKey:"inputAVector")
-        
-        // Get the output image recipe
-        let outputImage:CIImage = colorMatrixFilter.outputImage
-        
-        // Create the context and instruct CoreImage to draw the output image recipe into a CGImage
-        let context:CIContext = CIContext(options:nil)
-        let cgimg:CGImageRef = context.createCGImage(outputImage, fromRect:outputImage.extent()) // 10
-        
-        return UIImage(CGImage:cgimg)!
-    }
 }
 protocol ListEventsDelegate : NSObjectProtocol {
     func madeEventChoice(event: Event)

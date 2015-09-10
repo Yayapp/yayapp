@@ -43,17 +43,26 @@ class RequestsTableViewController: UITableViewController {
         
         request.event.fetchIfNeededInBackgroundWithBlock({
             result, error in
-            cell.eventName.text = request.event.name
+            if error == nil {
+                cell.eventName.text = request.event.name
+            } else {
+                cell.eventName.text = ""
+                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+            }
         })
         
         request.attendee.fetchIfNeededInBackgroundWithBlock({
             result, error in
-            cell.name.text = request.attendee.objectForKey("name") as! String
-            cell.avatar.file = request.attendee.objectForKey("avatar") as! PFFile
-            cell.avatar.loadInBackground()
-            cell.avatar.layer.borderColor = UIColor(red:CGFloat(3/255.0), green:CGFloat(118/255.0), blue:CGFloat(114/255.0), alpha: 1).CGColor
+            if error == nil {
+                cell.name.text = request.attendee.objectForKey("name") as! String
+                cell.avatar.file = request.attendee.objectForKey("avatar") as! PFFile
+                cell.avatar.loadInBackground()
+            } else {
+                cell.name.text = ""
+                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+            }
         })
-        
+        cell.avatar.layer.borderColor = UIColor(red:CGFloat(3/255.0), green:CGFloat(118/255.0), blue:CGFloat(114/255.0), alpha: 1).CGColor
         cell.accept.tag = indexPath.row;
         cell.accept.addTarget(self, action: "accept:", forControlEvents: .TouchUpInside)
         
@@ -74,12 +83,12 @@ class RequestsTableViewController: UITableViewController {
     @IBAction func accept(sender: AnyObject) {
         
         let request = requests[sender.tag]
+        
         request.event.attendees.append(request.attendee)
         request.event.saveInBackground()
         request.accepted = true
         request.saveInBackground()
         requests.removeAtIndex(sender.tag)
-        tableView.reloadData()
         
         if request.event.conversation != nil {
             let query:LYRQuery = LYRQuery(queryableClass: LYRConversation.self)
@@ -89,6 +98,20 @@ class RequestsTableViewController: UITableViewController {
             let participants = NSMutableSet()
             participants.addObject(request.attendee.objectId!)
             conversation!.addParticipants(participants as Set<NSObject>, error: &error)
+        }
+        if(request.event.attendees.count >= request.event.limit) {
+            ParseHelper.declineRequests(request.event)
+            ParseHelper.getOwnerRequests(PFUser.currentUser()!, block: {
+                result, error in
+                if (error == nil){
+                    self.requests = result!
+                    self.tableView.reloadData()
+                } else {
+                    MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+                }
+            })
+        } else {
+            tableView.reloadData()
         }
     }
     

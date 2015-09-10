@@ -48,19 +48,23 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
         distanceSlider.delegate = self
         PFUser.currentUser()!.fetchIfNeededInBackgroundWithBlock({
             result, error in
-            let selectedMaximum = PFUser.currentUser()!.objectForKey("distance") as! Float
-            self.distanceLabel.text = "\(Int(selectedMaximum)) km"
-            self.distanceSlider.selectedMaximum = selectedMaximum
-            self.attAccepted.on = PFUser.currentUser()!.objectForKey("attAccepted") as! Bool
-            self.eventNearby.on = PFUser.currentUser()!.objectForKey("eventNearby") as! Bool
-            self.newMessage.on = PFUser.currentUser()!.objectForKey("newMessage") as! Bool
-            self.eventsReminder.on = PFUser.currentUser()!.objectForKey("eventsReminder") as! Bool
-            if(PFUser.currentUser()!.objectForKey("gender") as! Int == 0) {
-                self.female(true)
+            if error == nil {
+                let selectedMaximum = PFUser.currentUser()!.objectForKey("distance") as! Float
+                self.distanceLabel.text = "\(Int(selectedMaximum)) km"
+                self.distanceSlider.selectedMaximum = selectedMaximum
+                self.attAccepted.on = PFUser.currentUser()!.objectForKey("attAccepted") as! Bool
+                self.eventNearby.on = PFUser.currentUser()!.objectForKey("eventNearby") as! Bool
+                self.newMessage.on = PFUser.currentUser()!.objectForKey("newMessage") as! Bool
+                self.eventsReminder.on = PFUser.currentUser()!.objectForKey("eventsReminder") as! Bool
+                if(PFUser.currentUser()!.objectForKey("gender") as! Int == 0) {
+                    self.female(true)
+                } else {
+                    self.male(true)
+                }
             } else {
-                self.male(true)
+                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
-        })  
+        })
     }
 
     override func didReceiveMemoryWarning() {
@@ -72,8 +76,12 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
         distanceLabel.text = "\(Int(selectedMaximum))KM"
         PFUser.currentUser()!.fetchIfNeededInBackgroundWithBlock({
             result, error in
-            PFUser.currentUser()?.setObject(Int(selectedMaximum), forKey: "distance")
-            PFUser.currentUser()?.saveInBackground()
+            if error == nil {
+                PFUser.currentUser()?.setObject(Int(selectedMaximum), forKey: "distance")
+                PFUser.currentUser()?.saveInBackground()
+            } else {
+                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+            }
         })
         
     }
@@ -108,7 +116,7 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
     @IBAction func male(sender: AnyObject) {
         self.femaleButton.backgroundColor = UIColor(red:CGFloat(124/255.0), green:CGFloat(127/255.0), blue:CGFloat(128/255.0), alpha: 1)
         self.maleButton.backgroundColor = UIColor(red:CGFloat(253/255.0), green:CGFloat(185/255.0), blue:CGFloat(38/255.0), alpha: 1)
-        PFUser.currentUser()?.setObject(0, forKey: "gender")
+        PFUser.currentUser()?.setObject(1, forKey: "gender")
         PFUser.currentUser()?.saveInBackground()
     }
     
@@ -159,7 +167,7 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
     
     @IBAction func deleteProfile(){
         let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
-        blurryAlertViewController.action = BlurryAlertViewController.BUTTON_DELETE_PROFILE
+        blurryAlertViewController.action = BlurryAlertViewController.BUTTON_DELETE
         blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
         blurryAlertViewController.aboutText = "Sorry, are you sure you want to delete your profile?"
         blurryAlertViewController.messageText = "You'll need another invite to start a new profile again."

@@ -346,6 +346,24 @@ class ParseHelper {
         }
     }
     
+    class func declineRequests(event:Event){
+        var query = PFQuery(className:Request.parseClassName())
+        query.whereKey("event", equalTo:event)
+        query.whereKeyDoesNotExist("accepted")
+        query.findObjectsInBackgroundWithBlock({
+            (objects: [AnyObject]?, error: NSError?) -> () in
+            
+            if error == nil {
+                if let objects = objects as? [Request] {
+                    for request in objects {
+                        request.accepted = false
+                        request.save()
+                    }
+                }
+            }
+            
+        })
+    }
     
     class func removeUserEvents(user: PFUser, block:EventsResultBlock?){
         var query = PFQuery(className:Event.parseClassName())

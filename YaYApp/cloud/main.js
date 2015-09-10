@@ -1,6 +1,6 @@
 var fs = require('fs');
 var layer = require('cloud/layer-module.js');
-var moment = require('cloud/moment.min.js');
+var moment = require('cloud/moment-timezone-with-data.js');
 
 var layerProviderID = 'layer:///providers/325c1b08-305a-11e5-9444-7ceb2e015ed0';
 var layerKeyID = 'layer:///keys/543e166c-306a-11e5-b8ad-f60e4d0122e7';
@@ -29,10 +29,11 @@ Parse.Cloud.afterSave("Event", function(request) {
                         return;
                       }
                       
-                      var eventName = "";
+                      var eventName = request.object.get('name');
                       var location = request.object.get('location');
+                      var timeZone = request.object.get('timeZone');
                       
-                      var date = new Date(request.object.get('startDate'));
+                      var date = moment.tz(new Date(request.object.get('startDate')), timeZone);
                       var dateFormatted = moment(date).format("ddd DD MMM") +" at "+ moment(date).format("H:mm");
                       
                       var userQuery = new Parse.Query(Parse.User);
@@ -70,6 +71,8 @@ Parse.Cloud.afterSave("Request", function(request) {
                                   
                                   owner = event.get('owner');
                                   
+                                  var timeZone = event.get('timeZone');
+                                  
                                   eventName = event.get('name');
                                   if(accepted == null) {
                                   var eventName = event.get('name');
@@ -90,12 +93,16 @@ Parse.Cloud.afterSave("Request", function(request) {
                                   if(owner.get('eventsReminder')){
                                   var pushQuery1 = new Parse.Query(Parse.Installation);
                                   pushQuery1.equalTo('user', user);
-                                  var before24 = event.get('startDate');
+                                  var before24 = moment.tz(new Date(event.get('startDate')), timeZone);
                                   before24.setHours(before24.getHours()-24);
-                                  var before1 = event.get('startDate');
+                                  var before1 = moment.tz(new Date(event.get('startDate')), timeZone);
                                   before1.setHours(before1.getHours()-1);
                                   
-                                  var dateFormatted = moment(event.get('startDate')).format("ddd DD MMM") +" at "+ moment(event.get('startDate')).format("H:mm");
+                                  
+                                  
+                                  var date = moment.tz(new Date(event.get('startDate')), timeZone);
+                                  
+                                  var dateFormatted = moment(date).format("ddd DD MMM") +" at "+ moment(date).format("H:mm");
                                   
                                   Parse.Push.send({
                                                   where: pushQuery1,

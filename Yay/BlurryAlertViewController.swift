@@ -14,12 +14,14 @@ class BlurryAlertViewController: UIViewController {
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
     static let BUTTON_OK = "okbutton"
-    static let BUTTON_DELETE_PROFILE = "deletebutton"
+    static let BUTTON_DELETE = "deletebutton"
     
     var aboutText:String! = ""
     var messageText:String! = ""
     var action:String!
     var hasCancelAction:Bool = false
+    var event:Event?
+    var completion:(()->Void)?
     
     @IBOutlet weak var cancel: UIButton!
     @IBOutlet weak var about: UILabel!
@@ -63,15 +65,38 @@ class BlurryAlertViewController: UIViewController {
     }
     
     @IBAction func deletebutton(sender: AnyObject) {
-        ParseHelper.removeUserEvents(PFUser.currentUser()!, block: {
-            result, error in
-            PFUser.currentUser()?.deleteInBackgroundWithBlock({
+        if event != nil {
+            event?.deleteInBackgroundWithBlock({
                 result, error in
-                let defaults = NSUserDefaults.standardUserDefaults()
-                defaults.setBool(false, forKey: "hasPermission")
-                defaults.synchronize()
-                exit(0)
+                if error == nil {
+                    if result == true {
+                        self.dismissViewControllerAnimated(true, completion:self.completion!)
+                    } else {
+                        MessageToUser.showDefaultErrorMessage("Couldn't remove the event")
+                    }
+                } else {
+                    MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+                }
             })
-        })
+        } else {
+            ParseHelper.removeUserEvents(PFUser.currentUser()!, block: {
+                result, error in
+                if error == nil {
+                    PFUser.currentUser()?.deleteInBackgroundWithBlock({
+                        result, error in
+                        if error == nil {
+                            let defaults = NSUserDefaults.standardUserDefaults()
+                            defaults.setBool(false, forKey: "hasPermission")
+                            defaults.synchronize()
+                            exit(0)
+                        } else {
+                            MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+                        }
+                    })
+                } else {
+                    MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+                }
+            })
+        }
     }
 }

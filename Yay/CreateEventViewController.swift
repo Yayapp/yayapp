@@ -9,10 +9,12 @@
 import UIKit
 import MapKit
 
-class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLocationDelegate, ChooseCategoryDelegate, ChooseEventPictureDelegate, UIPopoverPresentationControllerDelegate, UITextFieldDelegate, UITextViewDelegate, TTRangeSliderDelegate {
+class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLocationDelegate, ChooseCategoryDelegate, ChooseEventPictureDelegate, UIPopoverPresentationControllerDelegate, UITextFieldDelegate, TTRangeSliderDelegate {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     var calendar = NSCalendar(calendarIdentifier: NSGregorianCalendar)
+    
+    var event:Event?
     
     let dateFormatter = NSDateFormatter()
     var minAge:Int! = 16
@@ -22,7 +24,8 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
     var chosenDate:NSDate?
     var chosenCategory:Category?
     var chosenPhoto:PFFile?
-    
+    var delegate:EventCreationDelegate!
+    var timeZone:NSTimeZone!
     var animateDistance:CGFloat = 0.0
     var limitInt:Int=1
     
@@ -38,7 +41,7 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
     @IBOutlet weak var sliderContainer: UIView!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     @IBOutlet weak var name: UITextField!
-    @IBOutlet weak var descr: UITextView!
+    @IBOutlet weak var descr: UITextField!
 
     @IBOutlet weak var createButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
@@ -46,13 +49,20 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Create Event"
+        
         pickCategory.layer.borderColor = UIColor.whiteColor().CGColor
         descr.delegate = self
         name.delegate = self
         dateFormatter.dateFormat = "EEE dd MMM 'at' H:mm"
         rangeSlider.delegate = self
         appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.None
+        
+        if event != nil {
+            update()
+            title = "Edit Event"
+        } else {
+            title = "Create Event"
+        }
         
         let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
         back.tintColor = UIColor(red:CGFloat(3/255.0), green:CGFloat(118/255.0), blue:CGFloat(114/255.0), alpha: 1)
@@ -61,6 +71,29 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+        
+    }
+    
+    func update() {
+        event!.fetchInBackgroundWithBlock({
+            result, error in
+            if error == nil {
+                self.title  = self.event!.name
+                self.name.text = self.event!.name
+                self.descr.text = self.event!.summary
+                self.limitInt = self.event!.limit-1
+                self.limit.text = "\(self.limitInt)"
+                self.rangeSlider.selectedMinimum = Float(self.event!.minAge)
+                self.rangeSlider.selectedMaximum = Float(self.event!.maxAge)
+                self.rangeLabel.text = "\(self.rangeSlider.selectedMinimum)-\(self.rangeSlider.selectedMaximum)"
+                self.madeCategoryChoice([self.event!.category])
+                self.madeEventPictureChoice(self.event!.photo, pickedPhoto: nil)
+                self.madeDateTimeChoice(self.event!.startDate)
+                self.madeLocationChoice(CLLocationCoordinate2D(latitude: self.event!.location.latitude, longitude: self.event!.location.longitude))
+            } else {
+                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+            }
+        })
         
     }
     
@@ -104,6 +137,7 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
     @IBAction func openCategoryPicker(sender: AnyObject) {
         let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ChooseCategoryViewController") as! ChooseCategoryViewController
         vc.delegate = self
+        vc.isEventCreation = true
         if chosenCategory != nil {
             vc.selectedCategoriesData = [chosenCategory!]
         }
@@ -112,9 +146,10 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
     }
     
     func madeDateTimeChoice(date: NSDate){
+        
         chosenDate = date
         
-        let dateString = dateFormatter.stringFromDate(date)
+        let dateString = dateFormatter.stringFromDate(chosenDate!)
         dateTimeButton.setTitle(dateString, forState: UIControlState.Normal)
     }
     
@@ -128,7 +163,14 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
     func madeCategoryChoice(categories: [Category]) {
         chosenCategory = categories.first
         if(chosenCategory != nil){
-            pickCategory.setTitle(chosenCategory!.name, forState: .Normal)
+            chosenCategory?.fetchInBackgroundWithBlock({
+                result, error in
+                if error == nil {
+                    self.pickCategory.setTitle(self.chosenCategory!.name, forState: .Normal)
+                } else {
+                    MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+                }
+            })
         } else {
             pickCategory.setTitle("PICK CATEGORY", forState: .Normal)
         }
@@ -137,15 +179,17 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
     func madeEventPictureChoice(photo: PFFile, pickedPhoto: UIImage?) {
         chosenPhoto = photo
         if pickedPhoto != nil {
-            eventImage.image = toCobalt(pickedPhoto!)
+            eventImage.image = pickedPhoto!
             eventImage.contentMode = UIViewContentMode.ScaleAspectFill
         } else {
             photo.getDataInBackgroundWithBlock({
                 (data:NSData?, error:NSError?) in
                 if(error == nil) {
-                    var image = self.toCobalt(UIImage(data:data!)!)
-                    self.eventImage.image = self.toCobalt(image)
+                    var image = UIImage(data:data!)
+                    self.eventImage.image = image
                     self.eventImage.contentMode = UIViewContentMode.ScaleAspectFill
+                } else {
+                    MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                 }
             })
         }
@@ -161,6 +205,9 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
             // Place details
             var placeMark: CLPlacemark!
             placeMark = placeArray?[0]
+            let countryCode = placeMark.addressDictionary["CountryCode"] as! String
+            
+            self.timeZone = APTimeZones.sharedInstance().timeZoneWithLocation(placeMark.location, countryCode:countryCode)
             
             if let building = placeMark.subThoroughfare {
                 cityCountry.appendString(building)
@@ -213,14 +260,6 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
-        textDidEndEditing()
-    }
-    
-    func textViewDidBeginEditing(textField: UITextView) {
-        textDidBeginEditing(textField)
-    }
-    
-    func textViewdDidEndEditing(textField: UITextView) {
         textDidEndEditing()
     }
     
@@ -277,20 +316,7 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
         self.view.endEditing(true)
         return false
     }
-    func textViewShouldReturn(textField: UITextView) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
-        if(text == "\n") {
-           
-            textView.resignFirstResponder()
-            textDidEndEditing()
-            return false
-        }
-        return true
-    }
-
+   
     @IBAction func plusLimit(sender: AnyObject) {
         if limitInt < 4 {
             limitInt++
@@ -310,13 +336,13 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
 
     @IBAction func create(sender: AnyObject) {
         
-        if name.text.isEmpty {
+        if name.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).isEmpty {
             MessageToUser.showDefaultErrorMessage("Please enter name")
         } else if longitude == nil || latitude == nil {
             MessageToUser.showDefaultErrorMessage("Please choose location")
         } else if chosenDate == nil {
             MessageToUser.showDefaultErrorMessage("Please choose date")
-        } else if descr.text.isEmpty {
+        } else if descr.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).isEmpty {
             MessageToUser.showDefaultErrorMessage("Please enter description")
         } else if chosenCategory == nil {
             MessageToUser.showDefaultErrorMessage("Please choose category")
@@ -327,53 +353,57 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
             createButton.enabled = false
             cancelButton.enabled = false
             
+            if event == nil {
             let eventACL:PFACL = PFACL()
             eventACL.setPublicWriteAccess(true)
             eventACL.setPublicReadAccess(true)
             
-            var event = Event()
-            event.name = name.text
-            event.summary = descr.text
-            event.category = chosenCategory!
-            event.startDate = chosenDate!
-            event.photo = chosenPhoto!
-            event.limit = (limitInt+1)
-            event.minAge = minAge
-            event.ACL = eventACL
-            event.maxAge = maxAge
-            event.owner = PFUser.currentUser()!
-            event.location = PFGeoPoint(latitude: latitude!, longitude: longitude!)
-            event.attendees = []
-            event.saveInBackgroundWithBlock({
+            self.event = Event()
+            self.event!.ACL = eventACL
+            }
+            self.event!.name = name.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+            self.event!.summary = descr.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+            self.event!.category = chosenCategory!
+            self.event!.startDate = chosenDate!
+            self.event!.photo = chosenPhoto!
+            self.event!.limit = (limitInt+1)
+            self.event!.minAge = minAge
+            self.event!.maxAge = maxAge
+            self.event!.owner = PFUser.currentUser()!
+            self.event!.location = PFGeoPoint(latitude: latitude!, longitude: longitude!)
+            self.event!.timeZone = timeZone.name
+            self.event!.attendees = []
+            self.event!.saveInBackgroundWithBlock({
                 (result, error) in
                 if error == nil {
-                    event.addObject(PFUser.currentUser()!, forKey: "attendees")
-                    event.saveInBackgroundWithBlock({
+                    self.event!.addObject(PFUser.currentUser()!, forKey: "attendees")
+                    self.event!.saveInBackgroundWithBlock({
                         (result, error) in
                         
                         if ((PFUser.currentUser()?.objectForKey("eventsReminder") as! Bool)) {
                             let components = NSDateComponents()
                             
                             components.hour = -1
-                            let hourBefore = self.calendar!.dateByAddingComponents(components, toDate: event.startDate, options: nil)
+                            let hourBefore = self.calendar!.dateByAddingComponents(components, toDate: self.event!.startDate, options: nil)
                             components.hour = -24
-                            let hour24Before = self.calendar!.dateByAddingComponents(components, toDate: event.startDate, options: nil)
+                            let hour24Before = self.calendar!.dateByAddingComponents(components, toDate: self.event!.startDate, options: nil)
                             
                             
                             var localNotification1:UILocalNotification = UILocalNotification()
-                            localNotification1.alertAction = "\(event.name)"
-                            localNotification1.alertBody = "Don't forget to participate on happening \"\(event.name)\" on \(self.dateFormatter.stringFromDate(event.startDate))"
+                            localNotification1.alertAction = "\(self.event!.name)"
+                            localNotification1.alertBody = "Don't forget to participate on happening \"\(self.event!.name)\" on \(self.dateFormatter.stringFromDate(self.event!.startDate))"
                             localNotification1.fireDate = hourBefore
                             UIApplication.sharedApplication().scheduleLocalNotification(localNotification1)
                             
                             var localNotification24:UILocalNotification = UILocalNotification()
-                            localNotification24.alertAction = "\(event.name)"
-                            localNotification24.alertBody = "Don't forget to participate on happening \"\(event.name)\" on \(self.dateFormatter.stringFromDate(event.startDate))"
+                            localNotification24.alertAction = "\(self.event!.name)"
+                            localNotification24.alertBody = "Don't forget to participate on happening \"\(self.event!.name)\" on \(self.dateFormatter.stringFromDate(self.event!.startDate))"
                             localNotification24.fireDate = hour24Before
                             UIApplication.sharedApplication().scheduleLocalNotification(localNotification24)
                         }
                         
                         self.spinner.stopAnimating()
+                        self.delegate.eventCreated(self.event!)
                         self.navigationController?.popViewControllerAnimated(true)
                     })
                 } else {
@@ -388,30 +418,12 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
     @IBAction func backButtonTapped(sender: AnyObject) {
         navigationController?.popViewControllerAnimated(true)
     }
-    
-    func toCobalt(image:UIImage) -> UIImage{
-        let inputImage:CIImage = CIImage(CGImage: image.CGImage)
-        
-        // Make the filter
-        let colorMatrixFilter:CIFilter = CIFilter(name: "CIColorMatrix")
-        colorMatrixFilter.setDefaults()
-        colorMatrixFilter.setValue(inputImage, forKey:kCIInputImageKey)
-        colorMatrixFilter.setValue(CIVector(x:1, y:0, z:0, w:0), forKey:"inputRVector")
-        colorMatrixFilter.setValue(CIVector(x:0, y:1, z:0, w:0), forKey:"inputGVector")
-        colorMatrixFilter.setValue(CIVector(x:0, y:0, z:1, w:0), forKey:"inputBVector")
-        colorMatrixFilter.setValue(CIVector(x:1, y:0, z:0, w:1), forKey:"inputAVector")
-        
-        // Get the output image recipe
-        let outputImage:CIImage = colorMatrixFilter.outputImage
-        
-        // Create the context and instruct CoreImage to draw the output image recipe into a CGImage
-        let context:CIContext = CIContext(options:nil)
-        let cgimg:CGImageRef = context.createCGImage(outputImage, fromRect:outputImage.extent()) // 10
-        
-        return UIImage(CGImage:cgimg)!
-    }
+   
     
     deinit {
         appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.PanningCenterView
     }
+}
+protocol EventCreationDelegate : NSObjectProtocol {
+    func eventCreated(event:Event)
 }

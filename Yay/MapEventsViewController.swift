@@ -86,6 +86,8 @@ class MapEventsViewController: EventsViewController, MKMapViewDelegate {
                 v.image = UIImage(data:data!)
                 v.bounds.size.height = 30
                 v.bounds.size.width = 30
+            } else {
+                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
         })
         

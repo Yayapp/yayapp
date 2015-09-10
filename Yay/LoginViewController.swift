@@ -11,6 +11,7 @@ import UIKit
 class LoginViewController: UIViewController, InstagramDelegate, EnterCodeDelegate {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    var isLogin:Bool! = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,17 +44,18 @@ class LoginViewController: UIViewController, InstagramDelegate, EnterCodeDelegat
                         }
                         else {
                             let fbEmail = result.objectForKey("email") as! String
-                            let fbUserId = result.objectForKey("id") as! String
-                            var url:NSURL = NSURL(string:"http://graph.facebook.com/\(fbUserId)/picture?width=200&height=200")!
-                            var err: NSError?
-                            var imageData :NSData = NSData(contentsOfURL: url, options: NSDataReadingOptions.DataReadingMappedIfSafe, error: &err)!
-                            
-                            var imageFile = PFFile(name: "image.jpg", data: imageData) as PFFile
                             
                             PFUser.currentUser()?.setObject(result.objectForKey("email")!, forKey: "email")
                             PFUser.currentUser()?.setObject(result.objectForKey("name")!, forKey: "name")
-                            PFUser.currentUser()?.setObject(imageFile, forKey: "avatar")
+                            
                             if user.isNew {
+                                let fbUserId = result.objectForKey("id") as! String
+                                var url:NSURL = NSURL(string:"http://graph.facebook.com/\(fbUserId)/picture?width=200&height=200")!
+                                var err: NSError?
+                                var imageData :NSData = NSData(contentsOfURL: url, options: NSDataReadingOptions.DataReadingMappedIfSafe, error: &err)!
+                                var imageFile = PFFile(name: "image.jpg", data: imageData) as PFFile
+                                
+                                PFUser.currentUser()?.setObject(imageFile, forKey: "avatar")
                                 PFUser.currentUser()?.setObject(20, forKey: "distance")
                                 PFUser.currentUser()?.setObject(1, forKey: "gender")
                                 PFUser.currentUser()?.setObject(3, forKey: "invites")
@@ -69,6 +71,8 @@ class LoginViewController: UIViewController, InstagramDelegate, EnterCodeDelegat
                                         vc.delegate = self
                                         vc.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
                                         self.presentViewController(vc, animated: true, completion: nil)
+                                    } else {
+                                        MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                                     }
                                 })
                             } else {
@@ -95,27 +99,24 @@ class LoginViewController: UIViewController, InstagramDelegate, EnterCodeDelegat
                 currentInstallation["user"] = PFUser.currentUser()
                 currentInstallation.saveInBackground()
                 
-                var url:NSURL = NSURL(string:"https://api.twitter.com/1.1/users/show.json?screen_name=\(PFTwitterUtils.twitter()!.screenName!)")!
-                var err: NSError?
-                let request:NSMutableURLRequest = NSMutableURLRequest(URL:url)
-                PFTwitterUtils.twitter()?.signRequest(request)
-                var response:NSURLResponse?
-                let data:NSData = NSURLConnection.sendSynchronousRequest(request, returningResponse:&response, error:&err)!
-                
-                
-                if (error == nil){
-                    let result:NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options:NSJSONReadingOptions.AllowFragments, error:&err) as! NSDictionary
-                    var url:NSURL = NSURL(string:result.objectForKey("profile_image_url_https") as! String)!
-                    var err: NSError?
-                    var imageData :NSData = NSData(contentsOfURL: url, options: NSDataReadingOptions.DataReadingMappedIfSafe, error: &err)!
-                    
-                    var imageFile = PFFile(name: "image.jpg", data: imageData) as PFFile
-                    
-                    PFUser.currentUser()?.setObject(imageFile, forKey: "avatar")
-                }
-                
-                
                 if user.isNew {
+                    var url:NSURL = NSURL(string:"https://api.twitter.com/1.1/users/show.json?screen_name=\(PFTwitterUtils.twitter()!.screenName!)")!
+                    var err: NSError?
+                    let request:NSMutableURLRequest = NSMutableURLRequest(URL:url)
+                    PFTwitterUtils.twitter()?.signRequest(request)
+                    var response:NSURLResponse?
+                    let data:NSData = NSURLConnection.sendSynchronousRequest(request, returningResponse:&response, error:&err)!
+                    
+                    if (error == nil){
+                        let result:NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options:NSJSONReadingOptions.AllowFragments, error:&err) as! NSDictionary
+                        var url:NSURL = NSURL(string:result.objectForKey("profile_image_url_https") as! String)!
+                        var err: NSError?
+                        var imageData :NSData = NSData(contentsOfURL: url, options: NSDataReadingOptions.DataReadingMappedIfSafe, error: &err)!
+                        
+                        var imageFile = PFFile(name: "image.jpg", data: imageData) as PFFile
+                        
+                        PFUser.currentUser()?.setObject(imageFile, forKey: "avatar")
+                    }
                     
                     PFUser.currentUser()?.setObject(true, forKey: "attAccepted")
                     PFUser.currentUser()?.setObject(true, forKey: "eventNearby")
@@ -133,6 +134,8 @@ class LoginViewController: UIViewController, InstagramDelegate, EnterCodeDelegat
                             vc.delegate = self
                             vc.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
                             self.presentViewController(vc, animated: true, completion: nil)
+                        } else {
+                            MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                         }
                     })
                     
@@ -156,12 +159,6 @@ class LoginViewController: UIViewController, InstagramDelegate, EnterCodeDelegat
         PFUser.logInWithUsernameInBackground(user.username, password: "\(user.username.MD5())") {
             (pfuser: PFUser?, error: NSError?) -> Void in
             if pfuser != nil {
-                
-                var err: NSError?
-                var imageData :NSData = NSData(contentsOfURL: user.profilePictureURL, options: NSDataReadingOptions.DataReadingMappedIfSafe, error: &err)!
-                var imageFile = PFFile(name: "image.jpg", data: imageData) as PFFile
-                PFUser.currentUser()?.setObject(imageFile, forKey: "avatar")
-                PFUser.currentUser()?.saveInBackground()
                 self.appDelegate.authenticateInLayer()
                 self.performSegueWithIdentifier("proceed", sender: nil)
             } else {
@@ -188,11 +185,7 @@ class LoginViewController: UIViewController, InstagramDelegate, EnterCodeDelegat
                     pfuser.signUpInBackgroundWithBlock {
                         (succeeded: Bool, error: NSError?) -> Void in
                         if let error = error {
-                            let alert = UIAlertView()
-                            alert.title = "Ooops"
-                            alert.message = "Something went wrong"
-                            alert.addButtonWithTitle("OK")
-                            alert.show()
+                            MessageToUser.showDefaultErrorMessage("Something went wrong")
                         } else {
                             let vc = self.storyboard!.instantiateViewControllerWithIdentifier("EnterCodeViewController") as! EnterCodeViewController
                             vc.delegate = self
@@ -201,23 +194,14 @@ class LoginViewController: UIViewController, InstagramDelegate, EnterCodeDelegat
                         }
                     }
                 } else {
-                let alert = UIAlertView()
-                alert.title = "Ooops"
-                alert.message = "Something went wrong"
-                alert.addButtonWithTitle("OK")
-                alert.show()
-                
+                    MessageToUser.showDefaultErrorMessage("Something went wrong")
                 }
             }
         }
        
     }
     func instagramFailure() {
-        let alert = UIAlertView()
-        alert.title = "Ooops"
-        alert.message = "Something went wrong"
-        alert.addButtonWithTitle("OK")
-        alert.show()
+        MessageToUser.showDefaultErrorMessage("Something went wrong")
     }
     
     func validCode() {
@@ -228,5 +212,17 @@ class LoginViewController: UIViewController, InstagramDelegate, EnterCodeDelegat
         self.appDelegate.authenticateInLayer()
         self.performSegueWithIdentifier("proceed", sender: nil)
     }
+    
+    @IBAction func loginEmail(sender: AnyObject) {
+        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("CreateEmailAccountViewController") as! CreateEmailAccountViewController
+        vc.isLogin = isLogin
+        presentViewController(vc, animated: true, completion: nil)
+        
+    }
+    
+    @IBAction func close(sender: AnyObject) {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
 }
 

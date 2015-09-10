@@ -9,7 +9,7 @@
 import UIKit
 import MessageUI
 
-class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailComposeViewControllerDelegate {
+class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailComposeViewControllerDelegate, EventCreationDelegate {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     var rightSwitchBarButtonItem:UIBarButtonItem?
@@ -69,6 +69,8 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
                 (eventsList:[Event]?, error:NSError?) in
                 if(error == nil) {
                     vc.reloadAll(eventsList!)
+                } else {
+                    MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                 }
             })
         } else if (selectedSegment == 1) {
@@ -76,6 +78,8 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
                 (eventsList:[Event]?, error:NSError?) in
                 if(error == nil) {
                     vc.reloadAll(eventsList!)
+                } else {
+                    MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                 }
             })
         } else {
@@ -83,11 +87,23 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
                 (eventsList:[Event]?, error:NSError?) in
                 if(error == nil) {
                     vc.reloadAll(eventsList!)
+                } else {
+                    MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                 }
             })
         }
         
         updateActiveViewController(vc)
+    }
+    
+    @IBAction func createEvent(sender: AnyObject) {
+        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("CreateEventViewController") as! CreateEventViewController
+        vc.delegate = self
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func eventCreated(event:Event) {
+        segmentChanged()
     }
     
     @IBAction func today(sender: AnyObject) {
@@ -201,6 +217,8 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
             if (error == nil){
                 vc.requests = result!
                 self.navigationController?.pushViewController(vc, animated: true)
+            } else {
+                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
         })
         
@@ -283,12 +301,14 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
         
         ParseHelper.checkIfCodeExist(randomString as String, block: {
             result, error in
-            if result != nil {
+            if error == nil {
                 if (result == true) {
                     self.randomString(blockResult)
                 } else {
                     blockResult!(randomString as String)
                 }
+            } else {
+                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
         })
     

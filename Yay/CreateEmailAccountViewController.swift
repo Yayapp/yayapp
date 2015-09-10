@@ -12,16 +12,18 @@ import UIKit
 class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate, EnterCodeDelegate {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-    
+    var isLogin:Bool! = false
     var animateDistance:CGFloat = 0.0
-    
+   
     @IBOutlet weak var name: UITextField!
     
     @IBOutlet weak var email: UITextField!
+    @IBOutlet weak var loginEmail: UITextField!
     
     @IBOutlet weak var email2: UITextField!
-    @IBOutlet weak var password1: UITextField!
+    @IBOutlet weak var loginPassword: UITextField!
     
+    @IBOutlet weak var password1: UITextField!
     @IBOutlet weak var password2: UITextField!
     
     @IBOutlet weak var switchToLogin: UIButton!
@@ -34,12 +36,18 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate, E
     override func viewDidLoad() {
         super.viewDidLoad()
        
+        loginEmail.delegate = self
+        loginPassword.delegate = self
         name.delegate = self
         email.delegate = self
         email2.delegate = self
         password1.delegate = self
         password2.delegate = self
-        switchToRegister(true)
+        if(isLogin == true){
+            switchToLogin(true)
+        } else {
+            switchToRegister(true)
+        }
     }
 
     override func prefersStatusBarHidden() -> Bool {
@@ -53,8 +61,16 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate, E
 
     @IBAction func createAccount(sender: AnyObject) {
         self.view.endEditing(true)
-        if !email.text.isEmpty && PatternValidator.validate(email.text, patternString: PatternValidator.EMAIL_PATTERN) && email.text == email2.text && !password1.text.isEmpty && password1.text == password2.text {
-            
+        if (name.text.isEmpty || email.text.isEmpty || password1.text.isEmpty) {
+            MessageToUser.showDefaultErrorMessage("Please fill all fields to Sign Up.")
+        } else if (email.text != email2.text) {
+            MessageToUser.showDefaultErrorMessage("Emails are not same.")
+        } else if (password1.text != password2.text) {
+            MessageToUser.showDefaultErrorMessage("Passwords are not same.")
+        } else if !PatternValidator.validate(email.text, patternString: PatternValidator.EMAIL_PATTERN) {
+            MessageToUser.showDefaultErrorMessage("Email is invalid.")
+        } else {
+        
         var user = PFUser()
         user["name"] = name.text
         user["interests"] = []
@@ -72,11 +88,7 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate, E
         user.signUpInBackgroundWithBlock {
             (succeeded: Bool, error: NSError?) -> Void in
             if let error = error {
-                let alert = UIAlertView()
-                alert.title = "Ooops"
-                alert.message = error.localizedDescription
-                alert.addButtonWithTitle("OK")
-                alert.show()
+                MessageToUser.showDefaultErrorMessage(error.localizedDescription)
             } else {
                 let vc = self.storyboard!.instantiateViewControllerWithIdentifier("EnterCodeViewController") as! EnterCodeViewController
                 vc.delegate = self
@@ -84,15 +96,17 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate, E
                 self.presentViewController(vc, animated: true, completion: nil)
             }
         }
-        } else {
-            MessageToUser.showDefaultErrorMessage("Please fill all fields to Sign Up")
         }
     }
 
     @IBAction func signIn(sender: AnyObject) {
         self.view.endEditing(true)
-        if !email.text.isEmpty && PatternValidator.validate(email.text, patternString: PatternValidator.EMAIL_PATTERN) && !password1.text.isEmpty {
-            PFUser.logInWithUsernameInBackground(email.text, password:password1.text) {
+        if (loginEmail.text.isEmpty || loginPassword.text.isEmpty) {
+            MessageToUser.showDefaultErrorMessage("Please fill all fields to Sign In.")
+        } else if !PatternValidator.validate(loginEmail.text, patternString: PatternValidator.EMAIL_PATTERN) {
+            MessageToUser.showDefaultErrorMessage("Email is invalid.")
+        } else {
+            PFUser.logInWithUsernameInBackground(loginEmail.text, password:loginPassword.text) {
                 (user: PFUser?, error: NSError?) -> Void in
                 if user != nil {
                     let currentInstallation:PFInstallation = PFInstallation.currentInstallation()
@@ -102,11 +116,7 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate, E
                     self.appDelegate.authenticateInLayer()
                     self.performSegueWithIdentifier("proceed", sender: nil)
                 } else {
-                    let alert = UIAlertView()
-                    alert.title = "Ooops"
-                    alert.message = error?.localizedDescription
-                    alert.addButtonWithTitle("OK")
-                    alert.show()
+                    MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
                 }
             }
         }
@@ -123,8 +133,15 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate, E
         alert.addAction(UIAlertAction(title: "Reset", style: UIAlertActionStyle.Default, handler: {
             (action: UIAlertAction!) in
             if (!tField.text.isEmpty && PatternValidator.validate(tField.text, patternString: PatternValidator.EMAIL_PATTERN)) {
-                PFUser.requestPasswordResetForEmailInBackground(tField.text)
-                MessageToUser.showMessage("Reset password", textId: "We've sent you password reset instructions. Please check your email.")
+                PFUser.requestPasswordResetForEmailInBackground(tField.text, block: {
+                    result, error in
+                    if(error == nil) {
+                        MessageToUser.showMessage("Reset password", textId: "We've sent you password reset instructions. Please check your email.")
+                    } else {
+                        MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+                    }
+                })
+                
             } else {
                 MessageToUser.showDefaultErrorMessage("Please enter valid email")
             }
@@ -144,8 +161,12 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate, E
         signIn.hidden = true
         createAccount.hidden = false
         name.hidden = false
+        password1.hidden = false
         password2.hidden = false
         forgotPassword.hidden = true
+        loginEmail.hidden = true
+        loginPassword.hidden = true
+        email.hidden = false
         email2.hidden = false
         accountExist.text = "Already have an account?"
     }
@@ -157,7 +178,11 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate, E
         createAccount.hidden = true
         name.hidden = true
         forgotPassword.hidden = false
+        password1.hidden = true
         password2.hidden = true
+        loginEmail.hidden = false
+        loginPassword.hidden = false
+        email.hidden = true
         email2.hidden = true
         accountExist.text = "Don't have an account?"
     }

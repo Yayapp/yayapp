@@ -26,7 +26,7 @@ class StartViewController: UIViewController, UIPageViewControllerDataSource, UIP
         super.viewDidLoad()
 
         let dictionary:NSMutableDictionary = NSMutableDictionary()
-        let pageSpacing:NSNumber = DeviceType.IS_IPHONE_4_OR_LESS ? 0 : DeviceType.IS_IPHONE_5 ? 0 : DeviceType.IS_IPHONE_6 ? 35 : 40
+        let pageSpacing:NSNumber = DeviceType.IS_IPHONE_4_OR_LESS ? 0 : DeviceType.IS_IPHONE_5 ? 30 : DeviceType.IS_IPHONE_6 ? 35 : 40
         
         dictionary.setValue(pageSpacing, forKey:UIPageViewControllerOptionInterPageSpacingKey)
         
@@ -35,6 +35,7 @@ class StartViewController: UIViewController, UIPageViewControllerDataSource, UIP
         self.pageViewController!.dataSource = self
         self.pageViewController!.delegate = self
    
+        
         
         let pageContentViewController:InstructionViewController! = self.viewControllerAtIndex(0)
         
@@ -53,6 +54,18 @@ class StartViewController: UIViewController, UIPageViewControllerDataSource, UIP
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    
+    @IBAction func login(sender: AnyObject) {
+        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
+        vc.isLogin = true
+        presentViewController(vc, animated: true, completion: nil)
+    }
+    
+    @IBAction func signup(sender: AnyObject) {
+        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
+        presentViewController(vc, animated: true, completion: nil)
     }
     
     func swipe(){

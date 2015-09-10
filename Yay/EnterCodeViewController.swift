@@ -74,6 +74,8 @@ class EnterCodeViewController: UIViewController, UITextFieldDelegate {
                     let sendMailErrorAlert = UIAlertView(title: "Invitation code", message: "Invitation code is not valid.", delegate: self, cancelButtonTitle: "OK")
                     sendMailErrorAlert.show()
                 }
+            } else {
+                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
         })
     }
@@ -94,10 +96,17 @@ class EnterCodeViewController: UIViewController, UITextFieldDelegate {
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
-        if (range.length + range.location > count(textField.text) )
-        {
+        if (range.length + range.location >= 1 && !string.isEmpty) {
+            textFieldShouldReturn(textField)
+            fields[find(fields, textField)!+1].text = string
             return false;
         }
+//        
+//        if (range.length + range.location > count(textField.text) )
+//        {
+//            return false;
+//        }
+//       
         
         let newLength = count(textField.text) + count(string) - range.length
         return newLength <= 1

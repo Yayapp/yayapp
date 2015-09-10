@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HappeningsViewController: UIViewController, ListEventsDelegate {
+class HappeningsViewController: UIViewController, ListEventsDelegate, EventChangeDelegate {
 
     @IBOutlet weak var upcoming: UIButton!
     @IBOutlet weak var past: UIButton!
@@ -18,6 +18,7 @@ class HappeningsViewController: UIViewController, ListEventsDelegate {
     
     @IBOutlet weak var container: UIView!
     
+    var eventsData:[Event]!
     var activeViewController:ListEventsViewController!
     
     override func viewDidLoad() {
@@ -43,7 +44,12 @@ class HappeningsViewController: UIViewController, ListEventsDelegate {
     @IBAction func upcoming(sender: AnyObject) {
         ParseHelper.getUpcomingPastEvents(PFUser.currentUser()!, upcoming: true, block: {
             result, error in
-            self.activeViewController.reloadAll(result!)
+            if error == nil {
+                self.eventsData = result
+                self.activeViewController.reloadAll(result!)
+            } else {
+                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+            }
         })
         pastUnderline.hidden = true
         upcaomingUnderline.hidden = false
@@ -54,7 +60,12 @@ class HappeningsViewController: UIViewController, ListEventsDelegate {
     @IBAction func past(sender: AnyObject) {
         ParseHelper.getUpcomingPastEvents(PFUser.currentUser()!, upcoming: false, block: {
             result, error in
-            self.activeViewController.reloadAll(result!)
+            if error == nil {
+                self.eventsData = result
+                self.activeViewController.reloadAll(result!)
+            } else {
+                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+            }
         })
         pastUnderline.hidden = false
         upcaomingUnderline.hidden = true
@@ -65,18 +76,19 @@ class HappeningsViewController: UIViewController, ListEventsDelegate {
     func madeEventChoice(event:Event){
         let eventDetailsViewController = self.storyboard!.instantiateViewControllerWithIdentifier("EventDetailsViewController") as! EventDetailsViewController
         eventDetailsViewController.event = event
+        eventDetailsViewController.delegate = self
         self.navigationController?.pushViewController(eventDetailsViewController, animated: true)
     }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func eventChanged(event:Event) {
+        self.activeViewController.events.reloadData()
     }
-    */
+    
+    func eventRemoved(event:Event) {
+        eventsData = eventsData.filter({$0.objectId != event.objectId})
+        self.activeViewController.reloadAll(eventsData!)
+    }
+    
     @IBAction func backButtonTapped(sender: AnyObject) {
         navigationController?.popViewControllerAnimated(true)
     }

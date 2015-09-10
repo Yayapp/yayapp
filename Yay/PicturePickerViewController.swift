@@ -49,8 +49,12 @@ class PicturePickerViewController: UIViewController, UIImagePickerControllerDele
         PFUser.currentUser()!.setObject(imageFile, forKey: "avatar")
         PFUser.currentUser()!.saveInBackgroundWithBlock({
             result, error in
-            self.proceed.hidden = false
-            self.dismissViewControllerAnimated(true, completion: nil)
+            if error == nil {
+                self.proceed.hidden = false
+                self.dismissViewControllerAnimated(true, completion: nil)
+            } else {
+                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+            }
         })
     }
     //What to do if the image picker cancels.
