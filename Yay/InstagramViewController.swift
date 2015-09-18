@@ -53,7 +53,7 @@ class InstagramViewController: UIViewController, UIWebViewDelegate {
                         },
                         failure: {
                             (error:NSError?, statusCode:Int) in
-                            print(error)
+                            print(error, terminator: "")
                     })
                     
                     return false

@@ -60,7 +60,7 @@ class EventFinderViewController: UIViewController, ChooseLocationDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    override func animationDidStop(anim: CAAnimation!, finished flag: Bool) {
+    override func animationDidStop(anim: CAAnimation, finished flag: Bool) {
         if self.shouldStopRotating == false {
             self.searchingAnimation.rotate360Degrees(completionDelegate: self)
         } else {
@@ -108,9 +108,9 @@ class EventFinderViewController: UIViewController, ChooseLocationDelegate {
     func getLocationString(coordinates: CLLocationCoordinate2D){
         let geoCoder = CLGeocoder()
         let cllocation = CLLocation(latitude: coordinates.latitude, longitude: coordinates.longitude)
-        var cityCountry:NSMutableString=NSMutableString()
+        let cityCountry:NSMutableString=NSMutableString()
         geoCoder.reverseGeocodeLocation(cllocation, completionHandler: { (placemarks, error) -> Void in
-            let placeArray = placemarks as? [CLPlacemark]
+            let placeArray = placemarks as [CLPlacemark]!
             
             // Place details
             var placeMark: CLPlacemark!

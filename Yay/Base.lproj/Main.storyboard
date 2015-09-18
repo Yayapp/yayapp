@@ -1225,7 +1225,7 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background_finder" translatesAutoresizingMaskIntoConstraints="NO" id="G9V-nP-w0J">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Searching" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HK6-0X-9kn">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Searching" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HK6-0X-9kn">
                                 <rect key="frame" x="16" y="115" width="288" height="22"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="22" id="rne-R8-LTc"/>
@@ -1267,7 +1267,7 @@
                                     <constraint firstAttribute="width" secondItem="8al-Yo-MZ2" secondAttribute="height" multiplier="1:1" id="yBt-sZ-Lzp"/>
                                 </constraints>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="8ML-Vz-ebr">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="8ML-Vz-ebr">
                                 <rect key="frame" x="85" y="28" width="150" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="8ML-Vz-ebr" secondAttribute="height" multiplier="5:1" id="xL2-t3-Fxa"/>
@@ -1276,7 +1276,6 @@
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="8ML-Vz-ebr" firstAttribute="width" secondItem="8ML-Vz-ebr" secondAttribute="height" multiplier="5:1" id="4Qh-2d-KlK"/>
                             <constraint firstItem="8al-Yo-MZ2" firstAttribute="leading" secondItem="BBT-qY-CUG" secondAttribute="leadingMargin" constant="119" id="7Ij-GY-m5C"/>
                             <constraint firstAttribute="centerY" secondItem="8al-Yo-MZ2" secondAttribute="centerY" id="7Zm-fa-FBN"/>
                             <constraint firstAttribute="trailing" secondItem="G9V-nP-w0J" secondAttribute="trailing" id="9Ck-Xc-eBl"/>
@@ -3281,8 +3280,8 @@
                                 <nil key="highlightedColor"/>
                                 <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="20q-ON-OK6">
-                                <rect key="frame" x="234" y="172" width="70" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="20q-ON-OK6">
+                                <rect key="frame" x="234" y="176" width="70" height="17"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="70" id="GAy-88-wRT"/>
                                 </constraints>
@@ -4086,6 +4085,6 @@
         <image name="userico" width="30" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="NDv-lM-SCZ"/>
+        <segue reference="dCM-D0-qCd"/>
     </inferredMetricsTieBreakers>
 </document>

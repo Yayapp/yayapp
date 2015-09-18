@@ -61,7 +61,7 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate, E
 
     @IBAction func createAccount(sender: AnyObject) {
         self.view.endEditing(true)
-        if (name.text.isEmpty || email.text.isEmpty || password1.text.isEmpty) {
+        if (name.text!.isEmpty || email.text!.isEmpty || password1.text!.isEmpty) {
             MessageToUser.showDefaultErrorMessage("Please fill all fields to Sign Up.")
         } else if (email.text != email2.text) {
             MessageToUser.showDefaultErrorMessage("Emails are not same.")
@@ -71,7 +71,7 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate, E
             MessageToUser.showDefaultErrorMessage("Email is invalid.")
         } else {
         
-        var user = PFUser()
+        let user = PFUser()
         user["name"] = name.text
         user["interests"] = []
         user["distance"] = 20
@@ -101,12 +101,12 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate, E
 
     @IBAction func signIn(sender: AnyObject) {
         self.view.endEditing(true)
-        if (loginEmail.text.isEmpty || loginPassword.text.isEmpty) {
+        if (loginEmail.text!.isEmpty || loginPassword.text!.isEmpty) {
             MessageToUser.showDefaultErrorMessage("Please fill all fields to Sign In.")
         } else if !PatternValidator.validate(loginEmail.text, patternString: PatternValidator.EMAIL_PATTERN) {
             MessageToUser.showDefaultErrorMessage("Email is invalid.")
         } else {
-            PFUser.logInWithUsernameInBackground(loginEmail.text, password:loginPassword.text) {
+            PFUser.logInWithUsernameInBackground(loginEmail.text!, password:loginPassword.text!) {
                 (user: PFUser?, error: NSError?) -> Void in
                 if user != nil {
                     let currentInstallation:PFInstallation = PFInstallation.currentInstallation()
@@ -129,11 +129,11 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate, E
     
     @IBAction func forgotPassword(sender: AnyObject) {
         var tField: UITextField!
-        var alert = UIAlertController(title: "Reset password", message: nil, preferredStyle: UIAlertControllerStyle.Alert)
+        let alert = UIAlertController(title: "Reset password", message: nil, preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "Reset", style: UIAlertActionStyle.Default, handler: {
-            (action: UIAlertAction!) in
-            if (!tField.text.isEmpty && PatternValidator.validate(tField.text, patternString: PatternValidator.EMAIL_PATTERN)) {
-                PFUser.requestPasswordResetForEmailInBackground(tField.text, block: {
+            (action: UIAlertAction) in
+            if (!tField.text!.isEmpty && PatternValidator.validate(tField.text, patternString: PatternValidator.EMAIL_PATTERN)) {
+                PFUser.requestPasswordResetForEmailInBackground(tField.text!, block: {
                     result, error in
                     if(error == nil) {
                         MessageToUser.showMessage("Reset password", textId: "We've sent you password reset instructions. Please check your email.")

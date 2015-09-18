@@ -28,7 +28,7 @@ class ChooseLocationViewController: UIViewController, CLLocationManagerDelegate,
         mapView.showsUserLocation = true
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         
-        var longPressRecogniser = UILongPressGestureRecognizer(target: self, action: "handleLongPress:")
+        let longPressRecogniser = UILongPressGestureRecognizer(target: self, action: "handleLongPress:")
         
         longPressRecogniser.minimumPressDuration = 1.0
         mapView.addGestureRecognizer(longPressRecogniser)
@@ -55,7 +55,7 @@ class ChooseLocationViewController: UIViewController, CLLocationManagerDelegate,
         if getstureRecognizer.state != .Began { return }
         
         if self.mapView.annotations.count != 0{
-            let annotation = self.mapView.annotations[0] as! MKAnnotation
+            let annotation = self.mapView.annotations[0] 
             self.mapView.removeAnnotation(annotation)
         }
         
@@ -74,30 +74,30 @@ class ChooseLocationViewController: UIViewController, CLLocationManagerDelegate,
         searchBar.resignFirstResponder()
         
         if self.mapView.annotations.count != 0{
-            let annotation = self.mapView.annotations[0] as! MKAnnotation
+            let annotation = self.mapView.annotations[0] 
             self.mapView.removeAnnotation(annotation)
         }
         //2
-        var localSearchRequest = MKLocalSearchRequest()
+        let localSearchRequest = MKLocalSearchRequest()
         localSearchRequest.naturalLanguageQuery = searchBar.text
         let localSearch = MKLocalSearch(request: localSearchRequest)
         localSearch.startWithCompletionHandler { (localSearchResponse, error) -> Void in
             
             if localSearchResponse == nil{
-                var alert = UIAlertView(title: nil, message: "Place not found", delegate: self, cancelButtonTitle: "Try again")
+                let alert = UIAlertView(title: nil, message: "Place not found", delegate: self, cancelButtonTitle: "Try again")
                 alert.show()
                 return
             }
             //3
             let pointAnnotation = MKPointAnnotation()
             pointAnnotation.title = searchBar.text
-            pointAnnotation.coordinate = CLLocationCoordinate2D(latitude: localSearchResponse.boundingRegion.center.latitude, longitude:     localSearchResponse.boundingRegion.center.longitude)
+            pointAnnotation.coordinate = CLLocationCoordinate2D(latitude: localSearchResponse!.boundingRegion.center.latitude, longitude:     localSearchResponse!.boundingRegion.center.longitude)
             
             self.touchMapCoordinate = pointAnnotation.coordinate
             
             let pinAnnotationView = MKPinAnnotationView(annotation: pointAnnotation, reuseIdentifier: nil)
             self.mapView.centerCoordinate = pointAnnotation.coordinate
-            self.mapView.addAnnotation(pinAnnotationView.annotation)
+            self.mapView.addAnnotation(pinAnnotationView.annotation!)
         }
     }
 

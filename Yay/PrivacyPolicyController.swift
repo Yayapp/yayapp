@@ -18,11 +18,10 @@ class PrivacyPolicyController: UIViewController {
 
         appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.None
         
-            var attrString = NSMutableAttributedString(
+            let attrString = try? NSMutableAttributedString(
             data: text.text.dataUsingEncoding(NSUnicodeStringEncoding, allowLossyConversion: false)!,
             options: [ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType],
-            documentAttributes: nil,
-            error: nil)
+            documentAttributes: nil)
         
         text.attributedText = attrString
     }

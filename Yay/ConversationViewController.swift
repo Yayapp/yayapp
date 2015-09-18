@@ -9,7 +9,7 @@ class ConversationViewController: ATLConversationViewController, ATLConversation
         self.dataSource = self
         self.delegate = self
         
-        title = conversation.metadata["name"] as! String
+        title = conversation.metadata["name"] as! String!
 //        self.addressBarController.delegate = self
         let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
         back.tintColor = UIColor(red:CGFloat(3/255.0), green:CGFloat(118/255.0), blue:CGFloat(114/255.0), alpha: 1)
@@ -38,11 +38,11 @@ class ConversationViewController: ATLConversationViewController, ATLConversation
     }
     
     func conversationViewController(viewController: ATLConversationViewController, didFailSendingMessage message: LYRMessage, error: NSError?) {
-        println("Message failed to sent with error: \(error)")
+        print("Message failed to sent with error: \(error)")
     }
     
     func conversationViewController(viewController: ATLConversationViewController, didSelectMessage message: LYRMessage) {
-        println("Message selected")
+        print("Message selected")
     }
     
     // MARK - ATLConversationViewControllerDataSource methods
@@ -59,7 +59,7 @@ class ConversationViewController: ATLConversationViewController, ATLConversation
                     // TODO: Need a good way to refresh all the messages for the refreshed participants...
                     self.reloadCellsForMessagesSentByParticipantWithIdentifier(participantIdentifier)
                 } else {
-                    println("Error querying for users: \(error)")
+                    print("Error querying for users: \(error)")
                 }
             }
         }
@@ -130,12 +130,14 @@ class ConversationViewController: ATLConversationViewController, ATLConversation
         else {
             completePushText = "\(senderName) in  \"\(conversationName)\" event topic: \(pushText!)"
         }
-        var pushOptions: [NSObject: AnyObject] = [LYRMessageOptionsPushNotificationAlertKey: completePushText, LYRMessageOptionsPushNotificationSoundNameKey: "layerbell.caf"]
-        var error: NSError?
-        var message: LYRMessage = self.layerClient.newMessageWithParts(parts, options: pushOptions, error: &error)
-        if (error != nil) {
+        let pushOptions: [NSObject: AnyObject] = [LYRMessageOptionsPushNotificationAlertKey: completePushText, LYRMessageOptionsPushNotificationSoundNameKey: "layerbell.caf"]
+        var message: LYRMessage
+        do {
+            message =  try self.layerClient.newMessageWithParts(parts, options: pushOptions)
+        } catch {
             return nil
         }
+        
         return message
     }
     

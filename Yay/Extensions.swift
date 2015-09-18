@@ -8,7 +8,7 @@
 import UIKit
 extension String {
     func MD5() -> String {
-        var data = (self as NSString).dataUsingEncoding(NSUTF8StringEncoding)
+        let data = (self as NSString).dataUsingEncoding(NSUTF8StringEncoding)
         let result = NSMutableData(length: Int(CC_MD5_DIGEST_LENGTH))
         let resultBytes = UnsafeMutablePointer<CUnsignedChar>(result!.mutableBytes)
         CC_MD5(data!.bytes, CC_LONG(data!.length), resultBytes)
@@ -25,7 +25,7 @@ extension String {
 extension Array {
     func combine(separator: String) -> String{
         var str : String = ""
-        for (idx, item) in enumerate(self) {
+        for (idx, item) in self.enumerate() {
             str += "\(item)"
             if idx < self.count-1 {
                 str += separator

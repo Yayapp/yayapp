@@ -28,34 +28,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        
-        let font = UIFont(name:"Verlag-Bold", size:15)
-//        UILabel.appearance().font = UIFont(name:"Verlag-Bold", size:15)
-//        UIButton.appearance().titleLabel?.font = UIFont(name:"Verlag-Bold", size:15)
-//        UITextField.appearance().font = UIFont(name:"Verlag-Bold", size:15)
-//        UITextView.appearance().font = UIFont(name:"Verlag-Bold", size:15)
-        
-//        NSLog("Available fonts: %@", UIFont.familyNames());
-//        for family in UIFont.familyNames()
-//        {
-//            let familyname = family as! String
-//            print("\(familyname)")
-//            for names in UIFont.fontNamesForFamilyName(familyname)
-//            {
-//                print("== \(names as! String)")
-//            }
-//        }
+
         
         // Checking if app is running iOS 8
         if (application.respondsToSelector("registerForRemoteNotifications")) {
             // Register device for iOS8
-            let notificationSettings:UIUserNotificationSettings = UIUserNotificationSettings(forTypes: UIUserNotificationType.Alert | UIUserNotificationType.Badge | UIUserNotificationType.Sound, categories:nil)
+            let notificationSettings:UIUserNotificationSettings = UIUserNotificationSettings(forTypes: [UIUserNotificationType.Alert, UIUserNotificationType.Badge, UIUserNotificationType.Sound], categories:nil)
             application.registerUserNotificationSettings(notificationSettings)
             application.registerForRemoteNotifications()
-        } else {
-            // Register device for iOS7
-            application.registerForRemoteNotificationTypes(UIRemoteNotificationType.Alert | UIRemoteNotificationType.Sound | UIRemoteNotificationType.Badge)
         }
+//        else {
+//            // Register device for iOS7
+//            application.registerForRemoteNotificationTypes([UIRemoteNotificationType.Alert, UIRemoteNotificationType.Sound, UIRemoteNotificationType.Badge])
+//        }
         
         Category.registerSubclass()
         EventPhoto.registerSubclass()
@@ -100,19 +85,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application( application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData ) {
         
-        var characterSet: NSCharacterSet = NSCharacterSet( charactersInString: "<>" )
-        
-        var deviceTokenString: String = ( deviceToken.description as NSString )
-            .stringByTrimmingCharactersInSet( characterSet )
-            .stringByReplacingOccurrencesOfString( " ", withString: "" ) as String
-        
-        var error:NSError?
-        let success:Bool = self.layerClient.updateRemoteNotificationDeviceToken(deviceToken, error: &error)
-        if (success) {
-            println("Application did register for remote notifications")
-        } else {
-            println(String(format: "Error updating Layer device token for push:%@", error!))
+        do {
+            try self.layerClient.updateRemoteNotificationDeviceToken(deviceToken)
+        } catch let error as NSError {
+            print(String(format: "Error updating Layer device token for push:%@", error))
         }
+   
         
         // Store the deviceToken in the current installation and save it to Parse.
         let currentInstallation:PFInstallation = PFInstallation.currentInstallation()
@@ -123,7 +101,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
-        var error:NSError?
         
         let success:Bool = self.layerClient.synchronizeWithRemoteNotification(userInfo, completion: {
             (changes:[AnyObject]!, error) in
@@ -170,8 +147,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let query:LYRQuery = LYRQuery(queryableClass:LYRMessage.classForCoder())
         query.predicate = LYRPredicate(property:"identifier", predicateOperator:LYRPredicateOperator.IsIn, value: NSSet(object:messageURL))
         
-        var error:NSError?
-        let messages:NSOrderedSet? = self.layerClient.executeQuery(query, error:&error)
+        let messages:NSOrderedSet?
+        do {
+            messages = try self.layerClient.executeQuery(query)
+        } catch {
+            messages = nil
+        }
         if (messages != nil) {
             //            NSLog(@"Query contains %lu messages", (unsigned long)messages.count);
             let message:LYRMessage = messages!.firstObject! as! LYRMessage
@@ -189,7 +170,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
     }
 
-    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
+    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
         
         let sanitizedURL:NSURL = GSDDeepLink.handleDeepLink(url)
         
@@ -230,7 +211,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func setupLayer() {
         layerClient = LYRClient(appID: LayerAppIDString)
-        layerClient.autodownloadMIMETypes = NSSet(objects: ATLMIMETypeImagePNG, ATLMIMETypeImageJPEG, ATLMIMETypeImageJPEGPreview, ATLMIMETypeImageGIF, ATLMIMETypeImageGIFPreview, ATLMIMETypeLocation) as Set<NSObject>
+        layerClient.autodownloadMIMETypes = NSSet(objects: ATLMIMETypeImagePNG, ATLMIMETypeImageJPEG, ATLMIMETypeImageJPEGPreview, ATLMIMETypeImageGIF, ATLMIMETypeImageGIFPreview, ATLMIMETypeLocation) as! Set<NSObject>
     }
     
     func authenticateInLayer(){
@@ -241,22 +222,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if (nonce != nil) {
                 let user:PFUser = PFUser.currentUser()!
                 let userID:String = user.objectId!
-                var result:PFIdResultBlock? = nil
                 PFCloud.callFunctionInBackground("generateToken", withParameters:["nonce" : nonce!, "userID" : userID], block:{
                     (token:AnyObject?, error:NSError?) in
                     
                     if (error != nil) {
-                        print(String(format: "Parse Cloud function failed to be called to generate token with error: %@", error!));
+                        print(String(format: "Parse Cloud function failed to be called to generate token with error: %@", error!), terminator: "");
                     }
                     else{
                         // Send the Identity Token to Layer to authenticate the user
                         self.layerClient.authenticateWithIdentityToken(token as! String, completion:{
                             (authenticatedUserID:String!, error:NSError?) in
                             if (error != nil) {
-                                print(String(format: "Parse User failed to authenticate with token with error: %@", error!));
+                                print(String(format: "Parse User failed to authenticate with token with error: %@", error!), terminator: "");
                             }
                             else{
-                                print("Parse User authenticated with Layer Identity Token");
+                                print("Parse User authenticated with Layer Identity Token", terminator: "");
                             }
                         })
                     }

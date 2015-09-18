@@ -17,7 +17,7 @@ class ProfileViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: false)
-        var tblView =  UIView(frame: CGRectZero)
+        let tblView =  UIView(frame: CGRectZero)
         tableView.tableFooterView = tblView
         tableView.tableFooterView!.hidden = true
         

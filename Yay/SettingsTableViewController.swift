@@ -33,7 +33,7 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
         
         title = "Settings"
         
-        var tblView =  UIView(frame: CGRectZero)
+        let tblView =  UIView(frame: CGRectZero)
         tableView.tableFooterView = tblView
         tableView.tableFooterView!.hidden = true
         
@@ -135,7 +135,7 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
                 })
                 
             } else {
-                println("Failed to deauthenticate: \(error)")
+                print("Failed to deauthenticate: \(error)")
             }
         }
     }
@@ -149,8 +149,8 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
     override func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         let header:UITableViewHeaderFooterView = view as! UITableViewHeaderFooterView
         header.contentView.backgroundColor = UIColor(red:CGFloat(121/255.0), green:CGFloat(205/255.0), blue:CGFloat(205/255.0), alpha: 1)
-        header.textLabel.textAlignment = NSTextAlignment.Center
-        header.textLabel.textColor = UIColor.whiteColor()
+        header.textLabel!.textAlignment = NSTextAlignment.Center
+        header.textLabel!.textColor = UIColor.whiteColor()
     }
     
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

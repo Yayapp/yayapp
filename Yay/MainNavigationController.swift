@@ -14,7 +14,7 @@ class MainNavigationController: UINavigationController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        var nav = navigationBar
+        let nav = navigationBar
         nav.barTintColor = UIColor(red:CGFloat(245/255.0), green:CGFloat(245/255.0), blue:CGFloat(245/255.0), alpha: 1)
         
         // Do any additional setup after loading the view.

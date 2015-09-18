@@ -12,7 +12,7 @@ import MapKit
 class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLocationDelegate, ChooseCategoryDelegate, ChooseEventPictureDelegate, UIPopoverPresentationControllerDelegate, UITextFieldDelegate, TTRangeSliderDelegate {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-    var calendar = NSCalendar(calendarIdentifier: NSGregorianCalendar)
+    var calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
     
     var event:Event?
     
@@ -110,7 +110,7 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
         map.modalPresentationStyle = UIModalPresentationStyle.Popover
 
         
-        var detailPopover: UIPopoverPresentationController = map.popoverPresentationController!
+        let detailPopover: UIPopoverPresentationController = map.popoverPresentationController!
         detailPopover.delegate = self
         detailPopover.sourceView = sender as! UIButton
         
@@ -189,7 +189,7 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
                 photo.getDataInBackgroundWithBlock({
                     (data:NSData?, error:NSError?) in
                     if(error == nil) {
-                        var image = UIImage(data:data!)
+                        let image = UIImage(data:data!)
                         self.eventImage.image = image
                         self.eventImage.contentMode = UIViewContentMode.ScaleAspectFill
                     } else {
@@ -203,16 +203,18 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
     func getLocationString(coordinates: CLLocationCoordinate2D){
         let geoCoder = CLGeocoder()
         let cllocation = CLLocation(latitude: coordinates.latitude, longitude: coordinates.longitude)
-        var cityCountry:NSMutableString=NSMutableString()
+        let cityCountry:NSMutableString=NSMutableString()
         geoCoder.reverseGeocodeLocation(cllocation, completionHandler: { (placemarks, error) -> Void in
-            let placeArray = placemarks as? [CLPlacemark]
+            let placeArray = placemarks as [CLPlacemark]!
             
             // Place details
             var placeMark: CLPlacemark!
             placeMark = placeArray?[0]
-            let countryCode = placeMark.addressDictionary["CountryCode"] as! String
-            
-            self.timeZone = APTimeZones.sharedInstance().timeZoneWithLocation(placeMark.location, countryCode:countryCode)
+            if #available(iOS 9.0, *) {
+                self.timeZone = placeMark.timeZone
+            } else {
+                self.timeZone = APTimeZones.sharedInstance().timeZoneWithLocation(placeMark.location, countryCode:countryCode)
+            }
             
             if let building = placeMark.subThoroughfare {
                 cityCountry.appendString(building)
@@ -341,13 +343,13 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
 
     @IBAction func create(sender: AnyObject) {
         
-        if name.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).isEmpty {
+        if name.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).isEmpty {
             MessageToUser.showDefaultErrorMessage("Please enter name")
         } else if longitude == nil || latitude == nil {
             MessageToUser.showDefaultErrorMessage("Please choose location")
         } else if chosenDate == nil {
             MessageToUser.showDefaultErrorMessage("Please choose date")
-        } else if descr.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).isEmpty {
+        } else if descr.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).isEmpty {
             MessageToUser.showDefaultErrorMessage("Please enter description")
         } else if chosenCategory == nil {
             MessageToUser.showDefaultErrorMessage("Please choose category")
@@ -367,8 +369,8 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
                 self.event!.ACL = eventACL
                 self.event!.attendees = []
             }
-            self.event!.name = name.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-            self.event!.summary = descr.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+            self.event!.name = name.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+            self.event!.summary = descr.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
             self.event!.category = chosenCategory!
             self.event!.startDate = chosenDate!
             self.event!.photo = chosenPhoto!
@@ -390,18 +392,18 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
                             let components = NSDateComponents()
                             
                             components.hour = -1
-                            let hourBefore = self.calendar!.dateByAddingComponents(components, toDate: self.event!.startDate, options: nil)
+                            let hourBefore = self.calendar!.dateByAddingComponents(components, toDate: self.event!.startDate, options: [])
                             components.hour = -24
-                            let hour24Before = self.calendar!.dateByAddingComponents(components, toDate: self.event!.startDate, options: nil)
+                            let hour24Before = self.calendar!.dateByAddingComponents(components, toDate: self.event!.startDate, options: [])
                             
                             
-                            var localNotification1:UILocalNotification = UILocalNotification()
+                            let localNotification1:UILocalNotification = UILocalNotification()
                             localNotification1.alertAction = "\(self.event!.name)"
                             localNotification1.alertBody = "Don't forget to participate on happening \"\(self.event!.name)\" on \(self.dateFormatter.stringFromDate(self.event!.startDate))"
                             localNotification1.fireDate = hourBefore
                             UIApplication.sharedApplication().scheduleLocalNotification(localNotification1)
                             
-                            var localNotification24:UILocalNotification = UILocalNotification()
+                            let localNotification24:UILocalNotification = UILocalNotification()
                             localNotification24.alertAction = "\(self.event!.name)"
                             localNotification24.alertBody = "Don't forget to participate on happening \"\(self.event!.name)\" on \(self.dateFormatter.stringFromDate(self.event!.startDate))"
                             localNotification24.fireDate = hour24Before

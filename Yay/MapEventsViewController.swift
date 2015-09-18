@@ -52,7 +52,7 @@ class MapEventsViewController: EventsViewController, MKMapViewDelegate, EventCha
                 pointAnnoation.subtitle = item.summary
                 pointAnnoation.event = item
                 let annotationView = MKPinAnnotationView(annotation: pointAnnoation, reuseIdentifier: "pin")
-                self.mapView.addAnnotation(annotationView.annotation)
+                self.mapView.addAnnotation(annotationView.annotation!)
             })
         }
     }
@@ -67,31 +67,31 @@ class MapEventsViewController: EventsViewController, MKMapViewDelegate, EventCha
     }
     */
 
-    func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView!{
+    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView?{
         
         var v = mapView.dequeueReusableAnnotationViewWithIdentifier("pin")
         if v == nil {
             v = MKAnnotationView(annotation: annotation, reuseIdentifier: "pin")
-            v.canShowCallout = true
+            v!.canShowCallout = true
         }
         else {
-            v.annotation = annotation
+            v!.annotation = annotation
         }
         
         let customPointAnnotation = annotation as! CustomPointAnnotation
         let image = customPointAnnotation.event.category["icon"] as! PFFile
         
         if image.isDataAvailable {
-            v.image = UIImage(data:image.getData()!)
-            v.bounds.size.height = 30
-            v.bounds.size.width = 30
+            v!.image = UIImage(data:image.getData()!)
+            v!.bounds.size.height = 30
+            v!.bounds.size.width = 30
         } else {
             image.getDataInBackgroundWithBlock({
                 (data:NSData?, error:NSError?) in
                 if(error == nil){
-                    v.image = UIImage(data:data!)
-                    v.bounds.size.height = 30
-                    v.bounds.size.width = 30
+                    v!.image = UIImage(data:data!)
+                    v!.bounds.size.height = 30
+                    v!.bounds.size.width = 30
                 } else {
                     MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                 }
@@ -100,7 +100,7 @@ class MapEventsViewController: EventsViewController, MKMapViewDelegate, EventCha
         return v
     }
     
-    func mapView(mapView: MKMapView!, didSelectAnnotationView view: MKAnnotationView!) {
+    func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
         let customPointAnnotation = view.annotation as! CustomPointAnnotation
         let eventDetailsViewController = self.storyboard!.instantiateViewControllerWithIdentifier("EventDetailsViewController") as! EventDetailsViewController
         eventDetailsViewController.event = customPointAnnotation.event

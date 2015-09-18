@@ -64,9 +64,9 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        var cell = events.dequeueReusableCellWithIdentifier("Cell") as! EventsTableViewCell
+        let cell = events.dequeueReusableCellWithIdentifier("Cell") as! EventsTableViewCell
         let event:Event! = eventsData[indexPath.row]
-        let distanceBetween: CLLocationDistance = CLLocation(latitude: event.location.latitude, longitude: event.location.longitude).distanceFromLocation(currentLocation)
+        let distanceBetween: CLLocationDistance = CLLocation(latitude: event.location.latitude, longitude: event.location.longitude).distanceFromLocation(currentLocation!)
         let distanceStr = String(format: "%.2f", distanceBetween/1000)
         
         cell.title.text = event.name
@@ -119,9 +119,9 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
     func getLocationString(label:UILabel, latitude: Double, longitude: Double){
         let geoCoder = CLGeocoder()
         let cllocation = CLLocation(latitude: latitude, longitude: longitude)
-        var cityCountry:NSMutableString=NSMutableString()
+        let cityCountry:NSMutableString=NSMutableString()
         geoCoder.reverseGeocodeLocation(cllocation, completionHandler: { (placemarks, error) -> Void in
-            let placeArray = placemarks as? [CLPlacemark]
+            let placeArray = placemarks as [CLPlacemark]!
             
             // Place details
             var placeMark: CLPlacemark!

@@ -15,7 +15,7 @@ class RequestsTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        var tblView =  UIView(frame: CGRectZero)
+        let tblView =  UIView(frame: CGRectZero)
         tableView.tableFooterView = tblView
         tableView.tableFooterView!.hidden = true
         let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
@@ -38,7 +38,7 @@ class RequestsTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        var cell = tableView.dequeueReusableCellWithIdentifier("Cell") as! RequestTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell") as! RequestTableViewCell
         let request:Request! = requests[indexPath.row]
         
         request.event.fetchIfNeededInBackgroundWithBlock({
@@ -54,8 +54,8 @@ class RequestsTableViewController: UITableViewController {
         request.attendee.fetchIfNeededInBackgroundWithBlock({
             result, error in
             if error == nil {
-                cell.name.text = request.attendee.objectForKey("name") as! String
-                cell.avatar.file = request.attendee.objectForKey("avatar") as! PFFile
+                cell.name.text = request.attendee.objectForKey("name") as! String!
+                cell.avatar.file = request.attendee.objectForKey("avatar") as! PFFile!
                 cell.avatar.loadInBackground()
             } else {
                 cell.name.text = ""
@@ -93,11 +93,15 @@ class RequestsTableViewController: UITableViewController {
         if request.event.conversation != nil {
             let query:LYRQuery = LYRQuery(queryableClass: LYRConversation.self)
             query.predicate = LYRPredicate(property: "identifier", predicateOperator:LYRPredicateOperator.IsEqualTo, value:NSURL(string:request.event.conversation!))
-            var error:NSError?
-            let conversation = appDelegate.layerClient.executeQuery(query, error:&error).firstObject as? LYRConversation
-            let participants = NSMutableSet()
-            participants.addObject(request.attendee.objectId!)
-            conversation!.addParticipants(participants as Set<NSObject>, error: &error)
+            
+            do {
+                let conversation = try self.appDelegate.layerClient.executeQuery(query).firstObject as? LYRConversation
+                let participants = NSMutableSet()
+                participants.addObject(request.attendee.objectId!)
+                try conversation!.addParticipants(participants as Set<NSObject>)
+            } catch  {
+                //
+            }
         }
         if(request.event.attendees.count >= request.event.limit) {
             ParseHelper.declineRequests(request.event)

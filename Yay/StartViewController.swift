@@ -25,12 +25,11 @@ class StartViewController: UIViewController, UIPageViewControllerDataSource, UIP
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let dictionary:NSMutableDictionary = NSMutableDictionary()
+        
         let pageSpacing:NSNumber = DeviceType.IS_IPHONE_4_OR_LESS ? 0 : DeviceType.IS_IPHONE_5 ? 30 : DeviceType.IS_IPHONE_6 ? 35 : 40
+        let dictionary:[String : AnyObject] = [UIPageViewControllerOptionInterPageSpacingKey:pageSpacing]
         
-        dictionary.setValue(pageSpacing, forKey:UIPageViewControllerOptionInterPageSpacingKey)
-        
-        pageViewController = UIPageViewController(transitionStyle:UIPageViewControllerTransitionStyle.Scroll, navigationOrientation: UIPageViewControllerNavigationOrientation.Horizontal, options:dictionary as [NSObject : AnyObject])
+        pageViewController = UIPageViewController(transitionStyle:UIPageViewControllerTransitionStyle.Scroll, navigationOrientation: UIPageViewControllerNavigationOrientation.Horizontal, options:dictionary)
         
         self.pageViewController!.dataSource = self
         self.pageViewController!.delegate = self
@@ -113,11 +112,10 @@ class StartViewController: UIViewController, UIPageViewControllerDataSource, UIP
         // Create a new view controller and pass suitable data.
         let pageContentViewController = self.storyboard?.instantiateViewControllerWithIdentifier("InstructionViewController") as! InstructionViewController
         pageContentViewController.imageName = pageImages[index]
-        var attrString = NSMutableAttributedString(
+        let attrString = try? NSMutableAttributedString(
             data: pageTitles[index].dataUsingEncoding(NSUnicodeStringEncoding, allowLossyConversion: false)!,
             options: [ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType],
-            documentAttributes: nil,
-            error: nil)
+            documentAttributes: nil)
         pageContentViewController.titleText = attrString
         pageContentViewController.pageIndex = index
         currentIndex = index
@@ -126,7 +124,7 @@ class StartViewController: UIViewController, UIPageViewControllerDataSource, UIP
         
     }
     
-    func pageViewController(pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [AnyObject], transitionCompleted completed: Bool) {
+    func pageViewController(pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         
         if(completed){
             let enlarge:InstructionViewController = (self.pageViewController.viewControllers as! [InstructionViewController]).last!

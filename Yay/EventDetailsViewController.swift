@@ -12,7 +12,6 @@ import MessageUI
 class EventDetailsViewController: UIViewController, MFMailComposeViewControllerDelegate, EventCreationDelegate {
     
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-    var calendar = NSCalendar(calendarIdentifier: NSGregorianCalendar)
     
     var event:Event!
     let dateFormatter = NSDateFormatter()
@@ -124,8 +123,11 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                 if self.event.conversation != nil {
                     let query:LYRQuery = LYRQuery(queryableClass: LYRConversation.self)
                     query.predicate = LYRPredicate(property: "identifier", predicateOperator:LYRPredicateOperator.IsEqualTo, value:NSURL(string:self.event.conversation!))
-                    var error:NSError?
-                    self.conversation = self.appDelegate.layerClient.executeQuery(query, error:&error).firstObject as? LYRConversation
+                    do {
+                        self.conversation = try self.appDelegate.layerClient.executeQuery(query).firstObject as? LYRConversation
+                    } catch {
+                        self.conversation = nil
+                    }
                     //            conversation.delete(LYRDeletionMode.AllParticipants, error: &error)
                 }
                 
@@ -140,7 +142,7 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                             avatar.getDataInBackgroundWithBlock({
                                 (data:NSData?, error:NSError?) in
                                 if(error == nil) {
-                                    var image = UIImage(data:data!)
+                                    let image = UIImage(data:data!)
                                     self.author.setImage(image, forState: .Normal)
                                     self.author.layer.borderColor = UIColor(red:CGFloat(250/255.0), green:CGFloat(214/255.0), blue:CGFloat(117/255.0), alpha: 1).CGColor
                                 } else {
@@ -154,7 +156,7 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                     }
                 })
                 
-                for (index, attendee) in enumerate(self.attendees) {
+                for (index, attendee) in self.attendees.enumerate() {
                     let attendeeButton = self.attendeeButtons[index]
                     
                     attendeeButton.addTarget(self, action: "attendeeProfile:", forControlEvents: .TouchUpInside)
@@ -170,7 +172,7 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                                 attendeeAvatar.getDataInBackgroundWithBlock({
                                     (data:NSData?, error:NSError?) in
                                     if(error == nil) {
-                                        var image = UIImage(data:data!)
+                                        let image = UIImage(data:data!)
                                         attendeeButton.setImage(image, forState: .Normal)
                                     } else {
                                         MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
@@ -192,7 +194,7 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     }
     
     func update() {
-        var distanceBetween: CLLocationDistance = CLLocation(latitude: self.event.location.latitude, longitude: self.event.location.longitude).distanceFromLocation(self.currentLocation)
+        let distanceBetween: CLLocationDistance = CLLocation(latitude: self.event.location.latitude, longitude: self.event.location.longitude).distanceFromLocation(self.currentLocation)
         let distanceStr = String(format: "%.2f", distanceBetween/1000)
         self.title  = self.event.name
         self.name.text = self.event.name
@@ -273,9 +275,9 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     func getLocationString(latitude: Double, longitude: Double){
         let geoCoder = CLGeocoder()
         let cllocation = CLLocation(latitude: latitude, longitude: longitude)
-        var cityCountry:NSMutableString=NSMutableString()
+        let cityCountry:NSMutableString=NSMutableString()
         geoCoder.reverseGeocodeLocation(cllocation, completionHandler: { (placemarks, error) -> Void in
-            let placeArray = placemarks as? [CLPlacemark]
+            let placeArray = placemarks as [CLPlacemark]!
             
             // Place details
             var placeMark: CLPlacemark!
@@ -308,23 +310,25 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     @IBAction func chat(sender: AnyObject) {
         if (attendees.count>0) {
             if conversation == nil {
-                var errors:NSError?
                 let participants = NSMutableSet()
                 
                 participants.addObject(event.owner.objectId!)
                 
-                for (index, attendee) in enumerate(attendees) {
-                    let attendeeButton = attendeeButtons[index]
+                for (_, attendee) in attendees.enumerate() {
                     participants.addObject(attendee.objectId!)
                 }
                 
-                conversation = appDelegate.layerClient.newConversationWithParticipants(participants as Set<NSObject>, options: [LYRConversationOptionsDistinctByParticipantsKey : false ], error: &errors)
-                if  self.conversation == nil {
-                    println("New Conversation creation failed: \(errors)")
+                do {
+                    conversation = try self.appDelegate.layerClient.newConversationWithParticipants(participants as Set<NSObject>, options: [LYRConversationOptionsDistinctByParticipantsKey : false ])
+                } catch {
+                    conversation = nil
                 }
-                conversation.setValue(event.name, forMetadataAtKeyPath: "name")
-                event.conversation = conversation.identifier.absoluteString!
-                event.saveInBackground()
+                if  self.conversation != nil {
+                    conversation.setValue(event.name, forMetadataAtKeyPath: "name")
+                    event.conversation = conversation.identifier.absoluteString
+                    event.saveInBackground()
+                }
+                
             }
             let controller = ConversationViewController(layerClient: appDelegate.layerClient)
             controller.conversation = conversation
@@ -345,8 +349,8 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     
     func configuredMailComposeViewController() -> MFMailComposeViewController {
         let userName = PFUser.currentUser()?.objectForKey("name") as! String
-        var emailTitle = "\(userName) shared happening from Friendzi app"
-        var messageBody = "Hi, please check this happening \"\(event.name)\" on \(dateFormatter.stringFromDate(event.startDate)).\n\nhttp://friendzy.io/"
+        let emailTitle = "\(userName) shared happening from Friendzi app"
+        let messageBody = "Hi, please check this happening \"\(event.name)\" on \(dateFormatter.stringFromDate(event.startDate)).\n\nhttp://friendzy.io/"
         
         
         let mailComposerVC = MFMailComposeViewController()
@@ -363,7 +367,7 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
         sendMailErrorAlert.show()
     }
     
-    func mailComposeController(controller: MFMailComposeViewController!, didFinishWithResult result: MFMailComposeResult, error: NSError!) {
+    func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
         controller.dismissViewControllerAnimated(true, completion: nil)
     }
     
@@ -396,18 +400,18 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     
     @IBAction func openMapForPlace(sender: AnyObject) {
         
-        var latitute:CLLocationDegrees =  event.location.latitude
-        var longitute:CLLocationDegrees =  event.location.longitude
+        let latitute:CLLocationDegrees =  event.location.latitude
+        let longitute:CLLocationDegrees =  event.location.longitude
         
         let regionDistance:CLLocationDistance = 10000
-        var coordinates = CLLocationCoordinate2DMake(latitute, longitute)
+        let coordinates = CLLocationCoordinate2DMake(latitute, longitute)
         let regionSpan = MKCoordinateRegionMakeWithDistance(coordinates, regionDistance, regionDistance)
-        var options = [
+        let options = [
             MKLaunchOptionsMapCenterKey: NSValue(MKCoordinate: regionSpan.center),
             MKLaunchOptionsMapSpanKey: NSValue(MKCoordinateSpan: regionSpan.span)
         ]
-        var placemark = MKPlacemark(coordinate: coordinates, addressDictionary: nil)
-        var mapItem = MKMapItem(placemark: placemark)
+        let placemark = MKPlacemark(coordinate: coordinates, addressDictionary: nil)
+        let mapItem = MKMapItem(placemark: placemark)
         mapItem.name = "\(event.name)"
         mapItem.openInMapsWithLaunchOptions(options)
         

@@ -71,25 +71,22 @@ class LoginViewController: UIViewController, InstagramDelegate, EnterCodeDelegat
                 
                 if (FBSDKAccessToken.currentAccessToken() != nil){
                     
-                    var userProfileRequestParams = [ "fields" : "id, name, email, picture, about"]
+                    let userProfileRequestParams = [ "fields" : "id, name, email, picture, about"]
                     let userProfileRequest = FBSDKGraphRequest(graphPath: "me", parameters: userProfileRequestParams)
                     let graphConnection = FBSDKGraphRequestConnection()
                     graphConnection.addRequest(userProfileRequest, completionHandler: { (connection: FBSDKGraphRequestConnection!, result: AnyObject!, error: NSError!) -> Void in
                         if(error != nil){
-                            println(error)
+                            print(error)
                         }
                         else {
-                            let fbEmail = result.objectForKey("email") as! String
-                            
                             PFUser.currentUser()?.setObject(result.objectForKey("email")!, forKey: "email")
                             PFUser.currentUser()?.setObject(result.objectForKey("name")!, forKey: "name")
                             
                             if user.isNew {
                                 let fbUserId = result.objectForKey("id") as! String
-                                var url:NSURL = NSURL(string:"http://graph.facebook.com/\(fbUserId)/picture?width=200&height=200")!
-                                var err: NSError?
-                                var imageData :NSData = NSData(contentsOfURL: url, options: NSDataReadingOptions.DataReadingMappedIfSafe, error: &err)!
-                                var imageFile = PFFile(name: "image.jpg", data: imageData) as PFFile
+                                let url:NSURL = NSURL(string:"http://graph.facebook.com/\(fbUserId)/picture?width=200&height=200")!
+                                let imageData :NSData = try! NSData(contentsOfURL: url, options: NSDataReadingOptions.DataReadingMappedIfSafe)
+                                let imageFile = PFFile(name: "image.jpg", data: imageData) as PFFile
                                 PFUser.currentUser()?.setObject(imageFile, forKey: "avatar")
                                 self.doRegistration()
                             } else {
@@ -109,20 +106,18 @@ class LoginViewController: UIViewController, InstagramDelegate, EnterCodeDelegat
             if let user = user {
                 
                 if user.isNew {
-                    var url:NSURL = NSURL(string:"https://api.twitter.com/1.1/users/show.json?screen_name=\(PFTwitterUtils.twitter()!.screenName!)")!
-                    var err: NSError?
+                    let url:NSURL = NSURL(string:"https://api.twitter.com/1.1/users/show.json?screen_name=\(PFTwitterUtils.twitter()!.screenName!)")!
                     let request:NSMutableURLRequest = NSMutableURLRequest(URL:url)
                     PFTwitterUtils.twitter()?.signRequest(request)
                     var response:NSURLResponse?
-                    let data:NSData = NSURLConnection.sendSynchronousRequest(request, returningResponse:&response, error:&err)!
+                    let data:NSData = try! NSURLConnection.sendSynchronousRequest(request, returningResponse:&response)
                     
                     if (error == nil){
-                        let result:NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options:NSJSONReadingOptions.AllowFragments, error:&err) as! NSDictionary
-                        var url:NSURL = NSURL(string:result.objectForKey("profile_image_url_https") as! String)!
-                        var err: NSError?
-                        var imageData :NSData = NSData(contentsOfURL: url, options: NSDataReadingOptions.DataReadingMappedIfSafe, error: &err)!
+                        let result:NSDictionary = (try! NSJSONSerialization.JSONObjectWithData(data, options:NSJSONReadingOptions.AllowFragments)) as! NSDictionary
+                        let url:NSURL = NSURL(string:result.objectForKey("profile_image_url_https") as! String)!
+                        let imageData :NSData = try! NSData(contentsOfURL: url, options: NSDataReadingOptions.DataReadingMappedIfSafe)
                         
-                        var imageFile = PFFile(name: "image.jpg", data: imageData) as PFFile
+                        let imageFile = PFFile(name: "image.jpg", data: imageData) as PFFile
                         
                         PFUser.currentUser()?.setObject(imageFile, forKey: "avatar")
                     }
@@ -148,11 +143,10 @@ class LoginViewController: UIViewController, InstagramDelegate, EnterCodeDelegat
                 self.proceed()
             } else {
                 if(error!.code == 101) {
-                    var pfuser = PFUser()
+                    let pfuser = PFUser()
                     
-                    var err: NSError?
-                    var imageData :NSData = NSData(contentsOfURL: user.profilePictureURL, options: NSDataReadingOptions.DataReadingMappedIfSafe, error: &err)!
-                    var imageFile = PFFile(name: "image.jpg", data: imageData) as PFFile
+                    let imageData :NSData = try! NSData(contentsOfURL: user.profilePictureURL, options: NSDataReadingOptions.DataReadingMappedIfSafe)
+                    let imageFile = PFFile(name: "image.jpg", data: imageData) as PFFile
                     
                     self.setupDefaults(pfuser)
                     pfuser["avatar"] = imageFile
@@ -162,7 +156,7 @@ class LoginViewController: UIViewController, InstagramDelegate, EnterCodeDelegat
                     pfuser.username = user.username
                     pfuser.signUpInBackgroundWithBlock {
                         (succeeded: Bool, error: NSError?) -> Void in
-                        if let error = error {
+                        if error != nil {
                             MessageToUser.showDefaultErrorMessage("Something went wrong")
                         } else {
                             self.goToCodeInsertion()

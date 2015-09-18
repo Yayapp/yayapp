@@ -49,7 +49,7 @@ class ChooseEventPictureViewController: UIViewController, UITableViewDataSource,
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        var cell = photos.dequeueReusableCellWithIdentifier("Cell") as! EventPhotoTableViewCell
+        let cell = photos.dequeueReusableCellWithIdentifier("Cell") as! EventPhotoTableViewCell
         let category:Category! = categories[indexPath.row]
         
         cell.name.text = category.name
@@ -91,10 +91,10 @@ class ChooseEventPictureViewController: UIViewController, UITableViewDataSource,
         presentViewController(picker, animated: true, completion: nil)
     }
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         let pickedImage:UIImage = info[UIImagePickerControllerEditedImage] as! UIImage
         let imageData = UIImagePNGRepresentation(pickedImage)
-        let imageFile:PFFile = PFFile(data: imageData)
+        let imageFile:PFFile = PFFile(data: imageData!)
         delegate.madeEventPictureChoice(imageFile, pickedPhoto: pickedImage)
         dismissViewControllerAnimated(true, completion: {
             self.navigationController?.popViewControllerAnimated(true)

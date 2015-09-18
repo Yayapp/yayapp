@@ -38,7 +38,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         back.tintColor = UIColor(red:CGFloat(3/255.0), green:CGFloat(118/255.0), blue:CGFloat(114/255.0), alpha: 1)
         self.navigationItem.setLeftBarButtonItem(back, animated: false)
         
-        var tblView =  UIView(frame: CGRectZero)
+        let tblView =  UIView(frame: CGRectZero)
         tableView.tableFooterView = tblView
         tableView.tableFooterView!.hidden = true
         tableView.estimatedRowHeight = 100.0
@@ -66,7 +66,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
             }
         })
         
-        var query = PFUser.query()
+        let query = PFUser.query()
         query!.whereKey("objectId", equalTo: user.objectId!)
         query!.includeKey("interests")
         query!.findObjectsInBackgroundWithBlock({
@@ -79,7 +79,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
                 for category in categories {
                     interests.append(category["name"] as! String)
                 }
-                let interestsStr:String = ", ".join(interests)
+                let interestsStr:String = interests.joinWithSeparator(", ")
                 //
                 self.setMyInterests(interestsStr)
             }
@@ -130,7 +130,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         let color = UIColor(red:CGFloat(153/255.0), green:CGFloat(113/255.0), blue:CGFloat(0/255.0), alpha: 1)
         let font15 = UIFont.boldSystemFontOfSize(15)
         let font11 = UIFont.boldSystemFontOfSize(11)
-        let range = NSRange(location: count("About Me: "), length: count(text))
+        let range = NSRange(location: "About Me: ".characters.count, length: text.characters.count)
         let myMutableString = NSMutableAttributedString(string: "About Me: "+text, attributes: [NSFontAttributeName:font15])
         myMutableString.addAttribute(NSFontAttributeName, value: font11, range: range)
         myMutableString.addAttribute(NSForegroundColorAttributeName, value: color , range: range)
@@ -142,7 +142,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         let color = UIColor(red:CGFloat(153/255.0), green:CGFloat(113/255.0), blue:CGFloat(0/255.0), alpha: 1)
         let font15 = UIFont.boldSystemFontOfSize(15)
         let font11 = UIFont.boldSystemFontOfSize(11)
-        let range = NSRange(location: count("Interests: "), length: count(text))
+        let range = NSRange(location: "Interests: ".characters.count, length: text.characters.count)
         let myMutableString = NSMutableAttributedString(string: "Interests: "+text, attributes: [NSFontAttributeName:font15])
         myMutableString.addAttribute(NSFontAttributeName, value: font11, range: range)
         myMutableString.addAttribute(NSForegroundColorAttributeName, value: color , range: range)
@@ -154,7 +154,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         let color = UIColor(red:CGFloat(153/255.0), green:CGFloat(113/255.0), blue:CGFloat(0/255.0), alpha: 1)
         let font15 = UIFont.boldSystemFontOfSize(15)
         let font11 = UIFont.boldSystemFontOfSize(11)
-        let range = NSRange(location: count("Invites left: "), length: 1)
+        let range = NSRange(location: "Invites left: ".characters.count, length: 1)
         let myMutableString = NSMutableAttributedString(string: "Invites left: \(text)", attributes: [NSFontAttributeName:font15])
         myMutableString.addAttribute(NSFontAttributeName, value: font11, range: range)
         myMutableString.addAttribute(NSForegroundColorAttributeName, value: color , range: range)
@@ -167,7 +167,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         for category in categories {
             interestsarr.append(category.name)
         }
-        let interestsStr:String = ", ".join(interestsarr)
+        let interestsStr:String = interestsarr.joinWithSeparator(", ")
         
         setMyInterests(interestsStr)
         
@@ -246,9 +246,9 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
     }
     
     @IBAction func uploadPhoto(sender: AnyObject) {
-        var alert = UIAlertController(title: "Choose Option", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
+        let alert = UIAlertController(title: "Choose Option", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
         alert.addAction(UIAlertAction(title: "Take Photo", style: UIAlertActionStyle.Default, handler: {
-            (action: UIAlertAction!) in
+            (action: UIAlertAction) in
             self.picker.allowsEditing = true
             self.picker.sourceType = UIImagePickerControllerSourceType.Camera
             self.picker.cameraCaptureMode = .Photo
@@ -257,7 +257,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
             self.presentViewController(self.picker, animated: true, completion: nil)
         }))
         alert.addAction(UIAlertAction(title: "From Library", style: UIAlertActionStyle.Default, handler: {
-            (action: UIAlertAction!) in
+            (action: UIAlertAction) in
             self.picker.allowsEditing = true //2
             self.picker.sourceType = .PhotoLibrary //3
             self.picker.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
@@ -284,10 +284,10 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         }
     }
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         let pickedImage:UIImage = info[UIImagePickerControllerEditedImage] as! UIImage
         let imageData = UIImagePNGRepresentation(pickedImage)
-        let imageFile:PFFile = PFFile(data: imageData)
+        let imageFile:PFFile = PFFile(data: imageData!)
         avatar.image = pickedImage
         
         PFUser.currentUser()!.setObject(imageFile, forKey: "avatar")

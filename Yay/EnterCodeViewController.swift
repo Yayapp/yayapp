@@ -39,7 +39,7 @@ class EnterCodeViewController: UIViewController, UITextFieldDelegate {
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         //always fill the view
         blurEffectView.frame = self.view.bounds
-        blurEffectView.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
+        blurEffectView.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight]
         
         self.view.insertSubview(blurEffectView, atIndex: 0)
     }
@@ -50,7 +50,7 @@ class EnterCodeViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func apply(sender: AnyObject) {
-        let code = code1.text + code2.text + code3.text + code4.text + code5.text
+        let code = code1.text! + code2.text! + code3.text! + code4.text! + code5.text!
         ParseHelper.getInviteCode(code, block: {
             result, error in
             if (error == nil){
@@ -86,10 +86,10 @@ class EnterCodeViewController: UIViewController, UITextFieldDelegate {
     }
 
     func textFieldShouldReturn(textField: UITextField) -> Bool {
-        if find(fields, textField) == 4 {
+        if fields.indexOf(textField) == 4 {
             textField.resignFirstResponder()
         } else {
-            fields[find(fields, textField)!+1].becomeFirstResponder()
+            fields[fields.indexOf(textField)!+1].becomeFirstResponder()
         }
         return false
     }
@@ -98,8 +98,8 @@ class EnterCodeViewController: UIViewController, UITextFieldDelegate {
         
         if (range.length + range.location >= 1 && !string.isEmpty) {
             textFieldShouldReturn(textField)
-            if (find(fields, textField)!<4) {
-                fields[find(fields, textField)!+1].text = string
+            if (fields.indexOf(textField)!<4) {
+                fields[fields.indexOf(textField)!+1].text = string
             }
             return false;
         }
@@ -110,7 +110,7 @@ class EnterCodeViewController: UIViewController, UITextFieldDelegate {
 //        }
 //       
         
-        let newLength = count(textField.text) + count(string) - range.length
+        let newLength = textField.text!.characters.count + string.characters.count - range.length
         return newLength <= 1
     }
 

@@ -40,10 +40,10 @@ class PicturePickerViewController: UIViewController, UIImagePickerControllerDele
         presentViewController(picker, animated: true, completion: nil)
     }
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         let pickedImage:UIImage = info[UIImagePickerControllerEditedImage] as! UIImage
         let imageData = UIImagePNGRepresentation(pickedImage)
-        let imageFile:PFFile = PFFile(data: imageData)
+        let imageFile:PFFile = PFFile(data: imageData!)
         avatar.image = pickedImage
         
         PFUser.currentUser()!.setObject(imageFile, forKey: "avatar")

@@ -209,8 +209,8 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
     
     func configuredMailComposeViewController(code:String) -> MFMailComposeViewController {
         let userName = PFUser.currentUser()?.objectForKey("name") as! String
-        var emailTitle = "\(userName) invited you to Friendzi app"
-        var messageBody = "Hi, use this code \(code) to enter the app.\n\nhttp://friendzy.io/"
+        let emailTitle = "\(userName) invited you to Friendzi app"
+        let messageBody = "Hi, use this code \(code) to enter the app.\n\nhttp://friendzy.io/"
         
         let mailComposerVC = MFMailComposeViewController()
         mailComposerVC.mailComposeDelegate = self
@@ -225,8 +225,8 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
         sendMailErrorAlert.show()
     }
     
-    func mailComposeController(controller: MFMailComposeViewController!, didFinishWithResult result: MFMailComposeResult, error: NSError!) {
-        if result.value != MFMailComposeResultSent.value {
+    func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
+        if result.rawValue != MFMailComposeResultSent.rawValue {
             inviteCode?.deleteInBackground()
             inviteCode = nil
         } else {
@@ -315,13 +315,13 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
         segmentChanged()
     }
    
-    let letters = Array("abcdefghijklmnopqrstuvwxyz0123456789")
+    let letters = Array("abcdefghijklmnopqrstuvwxyz0123456789".characters)
     
     func randomString(blockResult:((String!) -> Void)?) {
     
         let randomString:NSMutableString = NSMutableString(capacity: 5)
     
-        for i in 1...5 {
+        for _ in 1...5 {
             randomString.appendString("\(letters[Int(arc4random_uniform(36))])")
         }
         

@@ -14,6 +14,6 @@ pod 'SVProgressHUD'
 pod 'Atlas'
 pod 'InstagramKit', '~> 3.0'
 pod "TTRangeSlider"
-pod 'FlurrySDK', '~>6.7'
+pod 'Flurry-iOS-SDK/FlurrySDK'
 pod 'GoogleAppIndexing'
 pod 'APTimeZones'
