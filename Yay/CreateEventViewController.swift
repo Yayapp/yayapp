@@ -183,8 +183,12 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
             eventImage.contentMode = UIViewContentMode.ScaleAspectFill
         } else {
             if photo.isDataAvailable {
-                self.eventImage.image = UIImage(data:photo.getData()!)
-                self.eventImage.contentMode = UIViewContentMode.ScaleAspectFill
+                do {
+                    self.eventImage.image = UIImage(data:try photo.getData())
+                    self.eventImage.contentMode = UIViewContentMode.ScaleAspectFill
+                } catch {
+                    //
+                }
             } else {
                 photo.getDataInBackgroundWithBlock({
                     (data:NSData?, error:NSError?) in
@@ -211,9 +215,9 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
             var placeMark: CLPlacemark!
             placeMark = placeArray?[0]
             if #available(iOS 9.0, *) {
-                self.timeZone = placeMark.timeZone
+                self.timeZone = placeMark.timeZone()
             } else {
-                self.timeZone = APTimeZones.sharedInstance().timeZoneWithLocation(placeMark.location, countryCode:countryCode)
+                self.timeZone = APTimeZones.sharedInstance().timeZoneWithLocation(placeMark.location, countryCode:placeMark.ISOcountryCode)
             }
             
             if let building = placeMark.subThoroughfare {

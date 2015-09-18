@@ -98,11 +98,14 @@ class EventFinderViewController: UIViewController, ChooseLocationDelegate {
         
         if let user = PFUser.currentUser() {
             user.setObject(PFGeoPoint(latitude: coordinates.latitude, longitude: coordinates.longitude), forKey: "location")
-            user.save()
+            user.saveInBackgroundWithBlock({
+                result, error in
+                self.goToMain()
+            })
         } else {
             TempUser.location = coordinates
+            goToMain()
         }
-        goToMain()
     }
     
     func getLocationString(coordinates: CLLocationCoordinate2D){

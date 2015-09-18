@@ -136,7 +136,11 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                     if error == nil {
                         if let avatar = self.event.owner["avatar"] as? PFFile {
                             if avatar.isDataAvailable {
-                                self.author.setImage(UIImage(data:avatar.getData()!), forState: .Normal)
+                                do {
+                                    self.author.setImage(UIImage(data: try avatar.getData()), forState: .Normal)
+                                } catch {
+                                    //
+                                }
                                 self.author.layer.borderColor = UIColor(red:CGFloat(250/255.0), green:CGFloat(214/255.0), blue:CGFloat(117/255.0), alpha: 1).CGColor
                             } else {
                             avatar.getDataInBackgroundWithBlock({
@@ -167,7 +171,11 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                         if error == nil {
                             if let attendeeAvatar = attendee["avatar"] as? PFFile {
                                 if attendeeAvatar.isDataAvailable {
-                                   attendeeButton.setImage(UIImage(data:attendeeAvatar.getData()!), forState: .Normal)
+                                    do {
+                                        attendeeButton.setImage(UIImage(data: try attendeeAvatar.getData()), forState: .Normal)
+                                    } catch {
+                                        //
+                                    }
                                 } else {
                                 attendeeAvatar.getDataInBackgroundWithBlock({
                                     (data:NSData?, error:NSError?) in

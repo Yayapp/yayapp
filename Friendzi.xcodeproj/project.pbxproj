@@ -575,7 +575,8 @@
 		995032881B564B4400D792C5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -614,6 +615,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = Friendzi;
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "Yay-Bridging-Header";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -621,7 +623,8 @@
 		995032891B564B4400D792C5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -652,6 +655,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = Friendzi;
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "Yay-Bridging-Header";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -660,12 +664,53 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 116D70F35B19AD9546398474 /* Pods.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(PODS_ROOT)/GoogleAppIndexing/Frameworks\"",
+					"\"$(PODS_ROOT)/LayerKit/LayerKit.embeddedframework\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/AFNetworking\"",
+					"\"${PODS_ROOT}/Headers/Public/APTimeZones\"",
+					"\"${PODS_ROOT}/Headers/Public/Atlas\"/**",
+					"\"${PODS_ROOT}/Headers/Public/Bolts\"",
+					"\"${PODS_ROOT}/Headers/Public/FBSDKCoreKit\"/**",
+					"\"${PODS_ROOT}/Headers/Public/FBSDKLoginKit\"",
+					"\"${PODS_ROOT}/Headers/Public/FBSDKShareKit\"",
+					"\"${PODS_ROOT}/Headers/Public/Flurry-iOS-SDK\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleAppIndexing\"",
+					"\"${PODS_ROOT}/Headers/Public/InstagramKit\"",
+					"\"${PODS_ROOT}/Headers/Public/LayerKit\"",
+					"\"${PODS_ROOT}/Headers/Public/MMDrawerController\"",
+					"\"${PODS_ROOT}/Headers/Public/Parse\"",
+					"\"${PODS_ROOT}/Headers/Public/ParseFacebookUtils\"",
+					"\"${PODS_ROOT}/Headers/Public/ParseModel\"",
+					"\"${PODS_ROOT}/Headers/Public/ParseUI\"",
+					"\"${PODS_ROOT}/Headers/Public/SVProgressHUD\"",
+					"\"${PODS_ROOT}/Headers/Public/TTRangeSlider\"",
+				);
 				INFOPLIST_FILE = Yay/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(PODS_ROOT)/Flurry-iOS-SDK/Flurry\"",
+					"$(inherited)",
+					"\"$(PODS_ROOT)/Parse\"",
+					"$(inherited)",
+					"\"$(PODS_ROOT)/ParseFacebookUtilsV4\"",
+					"$(inherited)",
+					"\"$(PODS_ROOT)/Atlas\"",
+				);
+				"OTHER_LDFLAGS[arch=*]" = "";
 				PRODUCT_NAME = Friendzi;
 				SWIFT_OBJC_BRIDGING_HEADER = "Yay-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -676,12 +721,52 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 87E5039D1AFE3D9446032CF4 /* Pods.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(PODS_ROOT)/GoogleAppIndexing/Frameworks\"",
+					"\"$(PODS_ROOT)/LayerKit/LayerKit.embeddedframework\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/AFNetworking\"",
+					"\"${PODS_ROOT}/Headers/Public/APTimeZones\"",
+					"\"${PODS_ROOT}/Headers/Public/Atlas\"/**",
+					"\"${PODS_ROOT}/Headers/Public/Bolts\"",
+					"\"${PODS_ROOT}/Headers/Public/FBSDKCoreKit\"/**",
+					"\"${PODS_ROOT}/Headers/Public/FBSDKLoginKit\"",
+					"\"${PODS_ROOT}/Headers/Public/FBSDKShareKit\"",
+					"\"${PODS_ROOT}/Headers/Public/Flurry-iOS-SDK\"",
+					"\"${PODS_ROOT}/Headers/Public/GoogleAppIndexing\"",
+					"\"${PODS_ROOT}/Headers/Public/InstagramKit\"",
+					"\"${PODS_ROOT}/Headers/Public/LayerKit\"",
+					"\"${PODS_ROOT}/Headers/Public/MMDrawerController\"",
+					"\"${PODS_ROOT}/Headers/Public/Parse\"",
+					"\"${PODS_ROOT}/Headers/Public/ParseFacebookUtils\"",
+					"\"${PODS_ROOT}/Headers/Public/ParseModel\"",
+					"\"${PODS_ROOT}/Headers/Public/ParseUI\"",
+					"\"${PODS_ROOT}/Headers/Public/SVProgressHUD\"",
+					"\"${PODS_ROOT}/Headers/Public/TTRangeSlider\"",
+				);
 				INFOPLIST_FILE = Yay/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(PODS_ROOT)/Flurry-iOS-SDK/Flurry\"",
+					"$(inherited)",
+					"\"$(PODS_ROOT)/Parse\"",
+					"$(inherited)",
+					"\"$(PODS_ROOT)/ParseFacebookUtilsV4\"",
+					"$(inherited)",
+					"\"$(PODS_ROOT)/Atlas\"",
+				);
 				PRODUCT_NAME = Friendzi;
 				SWIFT_OBJC_BRIDGING_HEADER = "Yay-Bridging-Header.h";
 			};

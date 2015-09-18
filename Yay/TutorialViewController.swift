@@ -20,7 +20,8 @@ class TutorialViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.None
-        tutorialImage.image = UIImage(named: hints.first!)
+        let suffix:Int = DeviceType.IS_IPHONE_4_OR_LESS ? 4 : DeviceType.IS_IPHONE_5 ? 5 : DeviceType.IS_IPHONE_6 ? 6 : 61
+        tutorialImage.image = UIImage(named: "\(hints.first!)\(suffix)")
         Prefs.setPref(hints.first)
         hints.removeAtIndex(0)
     }
@@ -37,7 +38,8 @@ class TutorialViewController: UIViewController {
                 appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.PanningCenterView
             })
         } else {
-            tutorialImage.image = UIImage(named: hints.first!)
+            let suffix:Int = DeviceType.IS_IPHONE_4_OR_LESS ? 4 : DeviceType.IS_IPHONE_5 ? 5 : DeviceType.IS_IPHONE_6 ? 6 : 61
+            tutorialImage.image = UIImage(named: "\(hints.first!)\(suffix)")
             Prefs.setPref(hints.first)
             hints.removeAtIndex(0)
         }

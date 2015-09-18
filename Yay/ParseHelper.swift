@@ -122,7 +122,7 @@ class ParseHelper {
     
     class func queryEvent (query:PFQuery, block:EventsResultBlock?) {
         query.findObjectsInBackgroundWithBlock {
-            (objects: [AnyObject]?, error: NSError?) -> () in
+            objects, error in
             
             if error == nil {
                 if let objects = objects as? [Event] {
@@ -140,7 +140,7 @@ class ParseHelper {
     class func getCategories(block:CategoriesResultBlock?) {
         let query = PFQuery(className:Category.parseClassName())
         query.findObjectsInBackgroundWithBlock {
-            (objects: [AnyObject]?, error: NSError?) -> () in
+            objects, error in
             
             if error == nil {
                 if let objects = objects as? [Category] {
@@ -158,7 +158,7 @@ class ParseHelper {
         let query = PFQuery(className:EventPhoto.parseClassName())
         query.whereKey("category", equalTo: category)
         query.findObjectsInBackgroundWithBlock {
-            (objects: [AnyObject]?, error: NSError?) -> () in
+            objects, error in
             
             if error == nil {
                 if let objects = objects as? [EventPhoto] {
@@ -176,7 +176,7 @@ class ParseHelper {
         let query = PFQuery(className:InviteCode.parseClassName())
         query.whereKey("code", equalTo: code)
         query.findObjectsInBackgroundWithBlock {
-            (objects: [AnyObject]?, error: NSError?) -> () in
+            objects, error in
             
             if error == nil {
                 if let objects = objects as? [InviteCode] {
@@ -194,7 +194,7 @@ class ParseHelper {
         let query = PFQuery(className:InviteCode.parseClassName())
         query.whereKey("code", equalTo: code)
         query.findObjectsInBackgroundWithBlock {
-            (objects: [AnyObject]?, error: NSError?) -> () in
+            objects, error in
             
             if error == nil {
                 if let objects = objects as? [InviteCode] {
@@ -207,8 +207,7 @@ class ParseHelper {
             }
         }
     }
-    
-    
+        
     class func getOwnerRequests(user: PFUser, block:RequestsResultBlock?) {
         
         let query1 = PFQuery(className:Event.parseClassName())
@@ -218,7 +217,7 @@ class ParseHelper {
         query.whereKey("event", matchesQuery: query1)
         query.whereKeyDoesNotExist("accepted")
         query.findObjectsInBackgroundWithBlock {
-            (objects: [AnyObject]?, error: NSError?) -> () in
+            objects, error in
             
             if error == nil {
                 if let objects = objects as? [Request] {
@@ -237,7 +236,7 @@ class ParseHelper {
         query.whereKey("attendee", equalTo:user)
         query.whereKey("event", equalTo:event)
         query.findObjectsInBackgroundWithBlock {
-            (objects: [AnyObject]?, error: NSError?) -> () in
+            objects, error in
             
             if error == nil {
                 if let objects = objects as? [Request] {
@@ -256,13 +255,13 @@ class ParseHelper {
         query.whereKey("event", equalTo:event)
         query.whereKeyDoesNotExist("accepted")
         query.findObjectsInBackgroundWithBlock({
-            (objects: [AnyObject]?, error: NSError?) -> () in
+            objects, error in
             
             if error == nil {
                 if let objects = objects as? [Request] {
                     for request in objects {
                         request.accepted = false
-                        request.save()
+                        request.saveInBackground()
                     }
                 }
             }
@@ -274,7 +273,7 @@ class ParseHelper {
         let query = PFQuery(className:Event.parseClassName())
         query.whereKey("owner", equalTo:user)
         query.findObjectsInBackgroundWithBlock({
-            (objects: [AnyObject]?, error: NSError?) -> () in
+            objects, error in
             
             if error == nil {
                 if let objects = objects as? [Event] {
@@ -287,4 +286,5 @@ class ParseHelper {
             
         })
     }
+
 }

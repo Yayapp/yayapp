@@ -70,7 +70,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         query!.whereKey("objectId", equalTo: user.objectId!)
         query!.includeKey("interests")
         query!.findObjectsInBackgroundWithBlock({
-            (users:[AnyObject]?, error:NSError?) in
+            users, error in
             
             if error == nil {
                 let user = users as! [PFUser]

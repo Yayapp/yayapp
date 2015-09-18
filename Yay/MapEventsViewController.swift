@@ -82,9 +82,13 @@ class MapEventsViewController: EventsViewController, MKMapViewDelegate, EventCha
         let image = customPointAnnotation.event.category["icon"] as! PFFile
         
         if image.isDataAvailable {
-            v!.image = UIImage(data:image.getData()!)
-            v!.bounds.size.height = 30
-            v!.bounds.size.width = 30
+            do {
+                v!.image =  UIImage(data: try image.getData())
+                v!.bounds.size.height = 30
+                v!.bounds.size.width = 30
+            } catch {
+                //
+            }
         } else {
             image.getDataInBackgroundWithBlock({
                 (data:NSData?, error:NSError?) in

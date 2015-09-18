@@ -62,7 +62,7 @@ class EnterCodeViewController: UIViewController, UITextFieldDelegate {
                     let invitationCode = result!.first!
                     
                     if ((invitationCode.invited+1) >= invitationCode.limit) {
-                        invitationCode.delete()
+                        invitationCode.deleteInBackground()
                     } else {
                         invitationCode.invited += 1
                         invitationCode.saveInBackground()
