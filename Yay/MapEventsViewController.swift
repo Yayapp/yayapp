@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class MapEventsViewController: EventsViewController, MKMapViewDelegate {
+class MapEventsViewController: EventsViewController, MKMapViewDelegate, EventChangeDelegate {
 
     
     @IBOutlet weak var mapView: MKMapView!
@@ -80,17 +80,23 @@ class MapEventsViewController: EventsViewController, MKMapViewDelegate {
         
         let customPointAnnotation = annotation as! CustomPointAnnotation
         let image = customPointAnnotation.event.category["icon"] as! PFFile
-        image.getDataInBackgroundWithBlock({
-            (data:NSData?, error:NSError?) in
-            if(error == nil){
-                v.image = UIImage(data:data!)
-                v.bounds.size.height = 30
-                v.bounds.size.width = 30
-            } else {
-                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-            }
-        })
         
+        if image.isDataAvailable {
+            v.image = UIImage(data:image.getData()!)
+            v.bounds.size.height = 30
+            v.bounds.size.width = 30
+        } else {
+            image.getDataInBackgroundWithBlock({
+                (data:NSData?, error:NSError?) in
+                if(error == nil){
+                    v.image = UIImage(data:data!)
+                    v.bounds.size.height = 30
+                    v.bounds.size.width = 30
+                } else {
+                    MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+                }
+            })
+        }
         return v
     }
     
@@ -98,7 +104,18 @@ class MapEventsViewController: EventsViewController, MKMapViewDelegate {
         let customPointAnnotation = view.annotation as! CustomPointAnnotation
         let eventDetailsViewController = self.storyboard!.instantiateViewControllerWithIdentifier("EventDetailsViewController") as! EventDetailsViewController
         eventDetailsViewController.event = customPointAnnotation.event
+        eventDetailsViewController.delegate = self
         
         navigationController?.pushViewController(eventDetailsViewController, animated: true)
+    }
+    
+    func eventChanged(event:Event) {
+        reloadAll(eventsData)
+    }
+    
+    func eventRemoved(event:Event) {
+        mapView.removeAnnotations(mapView.annotations)
+        eventsData = eventsData.filter({$0.objectId != event.objectId})
+        reloadAll(eventsData)
     }
 }

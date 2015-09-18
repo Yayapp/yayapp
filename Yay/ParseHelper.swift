@@ -17,7 +17,6 @@ typealias BoolResultBlock = (Bool?, NSError?) -> ()
 
 class ParseHelper {
 	
-
     class func getTodayEvents(user:PFUser?, categories:[Category], block:EventsResultBlock?) {
 
         var calendar = NSCalendar(calendarIdentifier: NSGregorianCalendar)
@@ -26,50 +25,13 @@ class ParseHelper {
         components.second = NSTimeZone.localTimeZone().secondsFromGMT
         let today = calendar!.dateByAddingComponents(components, toDate: NSDate(), options: nil)
         
-        
         let endToday = calendar!.dateByAddingComponents(components, toDate: calendar!.startOfDayForDate(today!), options: nil)
         
         let dayComponent = NSDateComponents()
         dayComponent.day = 1
         let startTomorrow = calendar!.dateByAddingComponents(dayComponent, toDate: endToday!, options: NSCalendarOptions.MatchFirst)
         
-		var query = PFQuery(className:Event.parseClassName())
-        query.whereKey("startDate", greaterThan: today!)
-        query.whereKey("startDate", lessThanOrEqualTo: startTomorrow!)
-        query.orderByDescending("startDate")
-        if let user = user {
-            let location:PFGeoPoint? = user.objectForKey("location") as? PFGeoPoint
-            let distance = user.objectForKey("distance") as? Double
-            query.whereKey("location", nearGeoPoint: location!, withinKilometers: distance!)
-            
-            if let dob = user["dob"] as? NSDate {
-                let age = NSCalendar.currentCalendar().component(NSCalendarUnit.CalendarUnitYear, fromDate: dob )
-                query.whereKey("minAge", lessThanOrEqualTo: age)
-                query.whereKey("maxAge", greaterThanOrEqualTo: age)
-            }
-        } else {
-            let location:PFGeoPoint = PFGeoPoint(latitude:TempUser.location!.latitude, longitude:TempUser.location!.longitude)
-            query.whereKey("location", nearGeoPoint: location, withinKilometers: Double(100))
-        }
-        
-        if (!categories.isEmpty) {
-            query.whereKey("category", containedIn: categories)
-        }
-        
-		query.findObjectsInBackgroundWithBlock {
-			(objects: [AnyObject]?, error: NSError?) -> () in
-			
-			if error == nil {
-				if let objects = objects as? [Event] {
-					block!(objects, error)
-				}
-			} else {
-				// Log details of the failure
-				println("Error: \(error!) \(error!.userInfo!)")
-				block!(nil, error)
-			}
-		}
-
+        queryHomeEvents(today!, endDate: startTomorrow!, user: user!, categories: categories, block: block)
 	}
     
     class func getTomorrowEvents(user:PFUser?, categories:[Category], block:EventsResultBlock?) {
@@ -80,7 +42,6 @@ class ParseHelper {
         components.second = NSTimeZone.localTimeZone().secondsFromGMT
         let today = calendar!.dateByAddingComponents(components, toDate: NSDate(), options: nil)
         
-        
         let endToday = calendar!.dateByAddingComponents(components, toDate: calendar!.startOfDayForDate(today!), options: nil)
         
         let dayComponent = NSDateComponents()
@@ -89,47 +50,10 @@ class ParseHelper {
         dayComponent.day = 2
         let startDayAfterTomorrow = calendar!.dateByAddingComponents(dayComponent, toDate: endToday!, options: NSCalendarOptions.MatchFirst)
         
-        var query = PFQuery(className:Event.parseClassName())
-        query.whereKey("startDate", greaterThan: startTomorrow!)
-        query.whereKey("startDate", lessThanOrEqualTo: startDayAfterTomorrow!)
-        query.orderByDescending("startDate")
-        if let user = user {
-            let location:PFGeoPoint? = user.objectForKey("location") as? PFGeoPoint
-            let distance = user.objectForKey("distance") as? Double
-            query.whereKey("location", nearGeoPoint: location!, withinKilometers: distance!)
-            
-            if let dob = user["dob"] as? NSDate {
-                let age = NSCalendar.currentCalendar().component(NSCalendarUnit.CalendarUnitYear, fromDate: dob )
-                query.whereKey("minAge", lessThanOrEqualTo: age)
-                query.whereKey("maxAge", greaterThanOrEqualTo: age)
-            }
-        } else {
-            let location:PFGeoPoint = PFGeoPoint(latitude:TempUser.location!.latitude, longitude:TempUser.location!.longitude)
-            query.whereKey("location", nearGeoPoint: location, withinKilometers: Double(100))
-        }
-        
-        if (!categories.isEmpty) {
-            query.whereKey("category", containedIn: categories)
-        }
-        
-        query.findObjectsInBackgroundWithBlock {
-            (objects: [AnyObject]?, error: NSError?) -> () in
-            
-            if error == nil {
-                if let objects = objects as? [Event] {
-                    block!(objects, error)
-                }
-            } else {
-                // Log details of the failure
-                println("Error: \(error!) \(error!.userInfo!)")
-                block!(nil, error)
-            }
-        }
-        
+        queryHomeEvents(startTomorrow!, endDate: startDayAfterTomorrow!, user: user!, categories: categories, block: block)
     }
     
     class func getThisWeekEvents(user:PFUser?, categories:[Category], block:EventsResultBlock?) {
-        
         
         var calendar = NSCalendar(calendarIdentifier: NSGregorianCalendar)
         calendar!.timeZone = NSTimeZone.localTimeZone()
@@ -144,10 +68,14 @@ class ParseHelper {
         
         let endWeek = calendar!.dateByAddingComponents(dayComponent, toDate: today!, options: NSCalendarOptions.MatchFirst)
         let startNextWeek = calendar!.dateByAddingComponents(components, toDate: calendar!.startOfDayForDate(endWeek!), options: nil)
-        
+
+        queryHomeEvents(today!, endDate: startNextWeek!, user: user!, categories: categories, block: block)
+    }
+    
+    class func queryHomeEvents(startDate:NSDate, endDate:NSDate, user:PFUser?, categories:[Category], block:EventsResultBlock?) {
         var query = PFQuery(className:Event.parseClassName())
-        query.whereKey("startDate", greaterThan: today!)
-        query.whereKey("startDate", lessThanOrEqualTo: startNextWeek!)
+        query.whereKey("startDate", greaterThan: startDate)
+        query.whereKey("startDate", lessThanOrEqualTo: endDate)
         query.orderByDescending("startDate")
         if let user = user {
             let location:PFGeoPoint? = user.objectForKey("location") as? PFGeoPoint
@@ -167,20 +95,7 @@ class ParseHelper {
             query.whereKey("category", containedIn: categories)
         }
         
-        query.findObjectsInBackgroundWithBlock {
-            (objects: [AnyObject]?, error: NSError?) -> () in
-            
-            if error == nil {
-                if let objects = objects as? [Event] {
-                    block!(objects, error)
-                }
-            } else {
-                // Log details of the failure
-                println("Error: \(error!) \(error!.userInfo!)")
-                block!(nil, error)
-            }
-        }
-        
+        queryEvent(query, block: block)
     }
 
     class func getUpcomingPastEvents(user: PFUser, upcoming:Bool?, block:EventsResultBlock?) {
@@ -196,6 +111,16 @@ class ParseHelper {
                 query.whereKey("startDate", lessThan: today)
             }
         }
+        queryEvent(query, block: block)
+    }
+    
+    class func getOwnerEvents(user: PFUser, block:EventsResultBlock?) {
+        var query = PFQuery(className:Event.parseClassName())
+        query.whereKey("owner", equalTo:user)
+        queryEvent(query, block: block)
+    }
+    
+    class func queryEvent (query:PFQuery, block:EventsResultBlock?) {
         query.findObjectsInBackgroundWithBlock {
             (objects: [AnyObject]?, error: NSError?) -> () in
             
@@ -209,7 +134,6 @@ class ParseHelper {
                 block!(nil, error)
             }
         }
-        
     }
     
     
@@ -284,25 +208,6 @@ class ParseHelper {
         }
     }
     
-    
-    class func getOwnerEvents(user: PFUser, block:EventsResultBlock?) {
-        var query = PFQuery(className:Event.parseClassName())
-        query.whereKey("owner", equalTo:user)
-        
-        query.findObjectsInBackgroundWithBlock {
-            (objects: [AnyObject]?, error: NSError?) -> () in
-            
-            if error == nil {
-                if let objects = objects as? [Event] {
-                    block!(objects, error)
-                }
-            } else {
-                // Log details of the failure
-                println("Error: \(error!) \(error!.userInfo!)")
-                block!(nil, error)
-            }
-        }
-    }
     
     class func getOwnerRequests(user: PFUser, block:RequestsResultBlock?) {
         

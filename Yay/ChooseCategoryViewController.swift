@@ -60,20 +60,29 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         let category = categoriesData[indexPath.row]
         cell.name.text = category.name
         
-        category.photoSelected.getDataInBackgroundWithBlock({
-            (data:NSData?, error:NSError?) in
-            if(error == nil) {
-                var image = UIImage(data:data!)
-                if (contains(self.selectedCategoriesData, category)) {
-                    cell.photo.image = self.toCobalt(image!)
+//        if (category.photoSelected.isDataAvailable) {
+//            if (contains(self.selectedCategoriesData, category)) {
+//                cell.photo.image = self.toCobalt(UIImage(data:category.photoSelected.getData()!)!)
+//            } else {
+//                cell.photo.image = UIImage(data:category.photoSelected.getData()!)
+//            }
+//        } else {
+            category.photoSelected.getDataInBackgroundWithBlock({
+                (data:NSData?, error:NSError?) in
+                if(error == nil) {
+                    var image = UIImage(data:data!)
+                    if (contains(self.selectedCategoriesData, category)) {
+                        cell.photo.image = self.toCobalt(image!)
+                    } else {
+                        cell.photo.image = image!
+                    }
+                    
                 } else {
-                    cell.photo.image = image!
+                    MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                 }
-                
-            } else {
-                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-            }
-        })
+            })
+//        }
+        
         return cell
     }
 

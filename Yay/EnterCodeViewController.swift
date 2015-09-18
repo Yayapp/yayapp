@@ -98,7 +98,9 @@ class EnterCodeViewController: UIViewController, UITextFieldDelegate {
         
         if (range.length + range.location >= 1 && !string.isEmpty) {
             textFieldShouldReturn(textField)
-            fields[find(fields, textField)!+1].text = string
+            if (find(fields, textField)!<4) {
+                fields[find(fields, textField)!+1].text = string
+            }
             return false;
         }
 //        

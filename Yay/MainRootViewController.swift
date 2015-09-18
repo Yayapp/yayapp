@@ -49,6 +49,8 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
         self.navigationItem.setRightBarButtonItem(rightSwitchBarButtonItem, animated: true)
 
         today(true)
+        
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -56,6 +58,30 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
         // Dispose of any resources that can be recreated.
     }
     
+    override func viewDidAppear(animated: Bool) {
+        var hints:[String]!=[]
+        if (Prefs.getPref(Prefs.Menu) == false) {
+            hints.append(Prefs.Menu)
+        }
+        if (Prefs.getPref(Prefs.MakeHappening) == false) {
+            hints.append(Prefs.MakeHappening)
+        }
+        if (Prefs.getPref(Prefs.HappeningCategory) == false) {
+            hints.append(Prefs.HappeningCategory)
+        }
+        if (Prefs.getPref(Prefs.HappeningToday) == false) {
+            hints.append(Prefs.HappeningToday)
+        }
+        if (Prefs.getPref(Prefs.HappeningsAround) == false) {
+            hints.append(Prefs.HappeningsAround)
+        }
+        if !hints.isEmpty {
+            let tutorialViewController = self.storyboard!.instantiateViewControllerWithIdentifier("TutorialViewController") as! TutorialViewController
+            tutorialViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
+            tutorialViewController.hints = hints
+            self.presentViewController(tutorialViewController, animated: true, completion: nil)
+        }
+    }
 
     func segmentChanged() {
         var vc:EventsViewController

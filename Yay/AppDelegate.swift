@@ -29,6 +29,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
+        let font = UIFont(name:"Verlag-Bold", size:15)
+//        UILabel.appearance().font = UIFont(name:"Verlag-Bold", size:15)
+//        UIButton.appearance().titleLabel?.font = UIFont(name:"Verlag-Bold", size:15)
+//        UITextField.appearance().font = UIFont(name:"Verlag-Bold", size:15)
+//        UITextView.appearance().font = UIFont(name:"Verlag-Bold", size:15)
+        
+//        NSLog("Available fonts: %@", UIFont.familyNames());
 //        for family in UIFont.familyNames()
 //        {
 //            let familyname = family as! String
@@ -81,8 +88,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.PanningCenterView
         centerContainer?.closeDrawerGestureModeMask = MMCloseDrawerGestureMode.PanningCenterView
-//        Flurry.logAllPageViewsForTarget(navLeft);
-        
+               
         if (PFUser.currentUser() != nil) {
                 authenticateInLayer()
                 window!.rootViewController = centerContainer

@@ -90,9 +90,14 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                 let currentPFLocation = PFUser.currentUser()!.objectForKey("location") as! PFGeoPoint
                 self.currentLocation = CLLocation(latitude: currentPFLocation.latitude, longitude: currentPFLocation.longitude)
                 
+                let attendedThisEvent = !(self.event.attendees.filter({$0.objectId == PFUser.currentUser()!.objectId}).count == 0)
+                
                 if(PFUser.currentUser()?.objectId != self.event.owner.objectId) {
-                    let attendedThisEvent = !(self.event.attendees.filter({$0.objectId == PFUser.currentUser()!.objectId}).count == 0)
+                    
                     if !attendedThisEvent && self.event.limit>self.event.attendees.count {
+                        
+                        self.chatButton.enabled = false
+                        
                         ParseHelper.getUserRequests(self.event, user: PFUser.currentUser()!, block: {
                             result, error in
                             if (error == nil) {
@@ -106,14 +111,16 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                             }
                         })
-                    }
-                    if !attendedThisEvent {
-                        self.chatButton.enabled = false
                     } else {
+                        if !attendedThisEvent {
+                            self.chatButton.enabled = false
+                        }
                         self.attend.removeFromSuperview()
                         self.view.addConstraint(self.bottomConstraint)
                     }
                 }
+                
+                
                 if self.event.conversation != nil {
                     let query:LYRQuery = LYRQuery(queryableClass: LYRConversation.self)
                     query.predicate = LYRPredicate(property: "identifier", predicateOperator:LYRPredicateOperator.IsEqualTo, value:NSURL(string:self.event.conversation!))
@@ -126,6 +133,10 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                     result, error in
                     if error == nil {
                         if let avatar = self.event.owner["avatar"] as? PFFile {
+                            if avatar.isDataAvailable {
+                                self.author.setImage(UIImage(data:avatar.getData()!), forState: .Normal)
+                                self.author.layer.borderColor = UIColor(red:CGFloat(250/255.0), green:CGFloat(214/255.0), blue:CGFloat(117/255.0), alpha: 1).CGColor
+                            } else {
                             avatar.getDataInBackgroundWithBlock({
                                 (data:NSData?, error:NSError?) in
                                 if(error == nil) {
@@ -136,6 +147,7 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                                     MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                                 }
                             })
+                            }
                         }
                     } else {
                         MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
@@ -152,6 +164,9 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                         result, error in
                         if error == nil {
                             if let attendeeAvatar = attendee["avatar"] as? PFFile {
+                                if attendeeAvatar.isDataAvailable {
+                                   attendeeButton.setImage(UIImage(data:attendeeAvatar.getData()!), forState: .Normal)
+                                } else {
                                 attendeeAvatar.getDataInBackgroundWithBlock({
                                     (data:NSData?, error:NSError?) in
                                     if(error == nil) {
@@ -161,6 +176,7 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                                         MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                                     }
                                 })
+                                }
                             }
                         } else {
                             MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
@@ -193,6 +209,22 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        var hints:[String]!=[]
+        if (Prefs.getPref(Prefs.ChatAttendees) == false) {
+            hints.append(Prefs.ChatAttendees)
+        }
+        if (Prefs.getPref(Prefs.SeeAttendees) == false) {
+            hints.append(Prefs.SeeAttendees)
+        }
+        if !hints.isEmpty {
+            let tutorialViewController = self.storyboard!.instantiateViewControllerWithIdentifier("TutorialViewController") as! TutorialViewController
+            tutorialViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
+            tutorialViewController.hints = hints
+            self.presentViewController(tutorialViewController, animated: true, completion: nil)
+        }
     }
     
     

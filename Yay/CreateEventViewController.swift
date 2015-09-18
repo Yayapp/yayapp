@@ -85,7 +85,7 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
                 self.limit.text = "\(self.limitInt)"
                 self.rangeSlider.selectedMinimum = Float(self.event!.minAge)
                 self.rangeSlider.selectedMaximum = Float(self.event!.maxAge)
-                self.rangeLabel.text = "\(self.rangeSlider.selectedMinimum)-\(self.rangeSlider.selectedMaximum)"
+                self.rangeLabel.text = "\(Int(self.rangeSlider.selectedMinimum))-\(Int(self.rangeSlider.selectedMaximum))"
                 self.madeCategoryChoice([self.event!.category])
                 self.madeEventPictureChoice(self.event!.photo, pickedPhoto: nil)
                 self.madeDateTimeChoice(self.event!.startDate)
@@ -182,16 +182,21 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
             eventImage.image = pickedPhoto!
             eventImage.contentMode = UIViewContentMode.ScaleAspectFill
         } else {
-            photo.getDataInBackgroundWithBlock({
-                (data:NSData?, error:NSError?) in
-                if(error == nil) {
-                    var image = UIImage(data:data!)
-                    self.eventImage.image = image
-                    self.eventImage.contentMode = UIViewContentMode.ScaleAspectFill
-                } else {
-                    MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-                }
-            })
+            if photo.isDataAvailable {
+                self.eventImage.image = UIImage(data:photo.getData()!)
+                self.eventImage.contentMode = UIViewContentMode.ScaleAspectFill
+            } else {
+                photo.getDataInBackgroundWithBlock({
+                    (data:NSData?, error:NSError?) in
+                    if(error == nil) {
+                        var image = UIImage(data:data!)
+                        self.eventImage.image = image
+                        self.eventImage.contentMode = UIViewContentMode.ScaleAspectFill
+                    } else {
+                        MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+                    }
+                })
+            }
         }
     }
 
@@ -354,12 +359,13 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
             cancelButton.enabled = false
             
             if event == nil {
-            let eventACL:PFACL = PFACL()
-            eventACL.setPublicWriteAccess(true)
-            eventACL.setPublicReadAccess(true)
-            
-            self.event = Event()
-            self.event!.ACL = eventACL
+                let eventACL:PFACL = PFACL()
+                eventACL.setPublicWriteAccess(true)
+                eventACL.setPublicReadAccess(true)
+                
+                self.event = Event()
+                self.event!.ACL = eventACL
+                self.event!.attendees = []
             }
             self.event!.name = name.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
             self.event!.summary = descr.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
@@ -372,7 +378,7 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
             self.event!.owner = PFUser.currentUser()!
             self.event!.location = PFGeoPoint(latitude: latitude!, longitude: longitude!)
             self.event!.timeZone = timeZone.name
-            self.event!.attendees = []
+            
             self.event!.saveInBackgroundWithBlock({
                 (result, error) in
                 if error == nil {

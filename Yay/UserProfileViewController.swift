@@ -98,12 +98,32 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         let userInvites = user["invites"] as! Int
         setMyInvites(userInvites)
         view.bringSubviewToFront(uploadPhoto)
+        
+        
     }
     
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        if(PFUser.currentUser()?.objectId == user.objectId) {
+            var hints:[String]!=[]
+            if (Prefs.getPref(Prefs.ProfileSocialRanks) == false) {
+                hints.append(Prefs.ProfileSocialRanks)
+            }
+            if (Prefs.getPref(Prefs.Invites) == false) {
+                hints.append(Prefs.Invites)
+            }
+            if !hints.isEmpty {
+                let tutorialViewController = self.storyboard!.instantiateViewControllerWithIdentifier("TutorialViewController") as! TutorialViewController
+                tutorialViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
+                tutorialViewController.hints = hints
+                self.presentViewController(tutorialViewController, animated: true, completion: nil)
+            }
+        }
     }
     
     func setAboutMe(text:String){
@@ -152,7 +172,6 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         setMyInterests(interestsStr)
         
         PFUser.currentUser()!.setObject(categories, forKey: "interests")
-        
         PFUser.currentUser()!.saveInBackground()
     }
     
@@ -274,11 +293,10 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         PFUser.currentUser()!.setObject(imageFile, forKey: "avatar")
         PFUser.currentUser()!.saveInBackgroundWithBlock({
             result, error in
-            if error == nil {
-                self.dismissViewControllerAnimated(true, completion: nil)
-            } else {
+            if error != nil {
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
+            self.dismissViewControllerAnimated(true, completion: nil)
         })
     }
     //What to do if the image picker cancels.

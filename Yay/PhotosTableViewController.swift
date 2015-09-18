@@ -63,15 +63,18 @@ class PhotosTableViewController: UITableViewController {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! EventPhotoTableViewCell
 
-        eventPhoto.photo.getDataInBackgroundWithBlock({
-            (data:NSData?, error:NSError?) in
-            if(error == nil) {
-                var image = UIImage(data:data!)
-                cell.photo.image = image!
-            } else {
-                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-            }
-        })
+        cell.photo.file = eventPhoto.photo
+        cell.photo.loadInBackground()
+        
+//        eventPhoto.photo.getDataInBackgroundWithBlock({
+//            (data:NSData?, error:NSError?) in
+//            if(error == nil) {
+//                var image = UIImage(data:data!)
+//                cell.photo.image = image!
+//            } else {
+//                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+//            }
+//        })
         return cell
     }
 

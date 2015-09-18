@@ -141,7 +141,6 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate, E
                         MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                     }
                 })
-                
             } else {
                 MessageToUser.showDefaultErrorMessage("Please enter valid email")
             }

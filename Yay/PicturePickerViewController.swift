@@ -57,7 +57,7 @@ class PicturePickerViewController: UIViewController, UIImagePickerControllerDele
             }
         })
     }
-    //What to do if the image picker cancels.
+
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         dismissViewControllerAnimated(true, completion: nil)
     }

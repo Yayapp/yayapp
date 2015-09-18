@@ -76,15 +76,18 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
         cell.date.text = dateFormatter.stringFromDate(event.startDate)
         cell.howFar.text = "\(distanceStr)km"
         
-        event.photo.getDataInBackgroundWithBlock({
-            (data:NSData?, error:NSError?) in
-            if(error == nil) {
-                var image = UIImage(data:data!)
-                cell.picture.image = image!
-            } else {
-                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-            }
-        })
+        cell.picture.file = event.photo
+        cell.picture.loadInBackground()
+        
+//        event.photo.getDataInBackgroundWithBlock({
+//            (data:NSData?, error:NSError?) in
+//            if(error == nil) {
+//                var image = UIImage(data:data!)
+//                cell.picture.image = image!
+//            } else {
+//                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+//            }
+//        })
         
         return cell
     }
