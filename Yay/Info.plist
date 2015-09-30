@@ -23,20 +23,20 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb1670771429818141</string>
+				<string>fb708975105870122</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>FacebookAppID</key>
-	<string>1670771429818141</string>
+	<string>708975105870122</string>
 	<key>FacebookDisplayName</key>
 	<string>Friendzi</string>
 	<key>InstagramAppClientId</key>
-	<string>aec497e4d81e4b758aa48a94b3c35c00</string>
+	<string>1d5cad3a4c2049818608e04d78e24f51</string>
 	<key>InstagramAppRedirectURL</key>
-	<string>http://www.textquickit.com</string>
+	<string>http://friendzi.io</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbauth2</string>
@@ -65,5 +65,10 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+    </dict>
 </dict>
 </plist>

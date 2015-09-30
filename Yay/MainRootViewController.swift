@@ -210,7 +210,7 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
     func configuredMailComposeViewController(code:String) -> MFMailComposeViewController {
         let userName = PFUser.currentUser()?.objectForKey("name") as! String
         let emailTitle = "\(userName) invited you to Friendzi app"
-        let messageBody = "Hi, use this code \(code) to enter the app.\n\nhttp://friendzy.io/"
+        let messageBody = "\(userName) has invited you to join Friendzi. Friendzi is invitation only, Use code \(code) to use the app.\n\nhttp://friendzy.io/"
         
         let mailComposerVC = MFMailComposeViewController()
         mailComposerVC.mailComposeDelegate = self

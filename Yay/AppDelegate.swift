@@ -53,7 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         PFFacebookUtils.initializeFacebookWithApplicationLaunchOptions(launchOptions)
         
-        PFTwitterUtils.initializeWithConsumerKey("3r0IsGvrLLvchitCYLUcKVqCK",  consumerSecret:"76rgAwOz7YDcBPPhWB9jqLOx8HmkA0WxbGM97tcYrFTU2cMmEO")
+        PFTwitterUtils.initializeWithConsumerKey("bfn0pGQNrS0YfQjDDbETcd3Pg",  consumerSecret:"f06sn7JwkMJrOb6xf3gmZmahy9XWojyJ62CTfoNOcYC0okVIVT")
         
         let rootViewController = self.window!.rootViewController
         
@@ -135,6 +135,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
         }
+        
+        let state:UIApplicationState = application.applicationState
+        if state == UIApplicationState.Background || state == UIApplicationState.Inactive {
+            application.applicationIconBadgeNumber+=1
+        }
     }
     
     func messageFromRemoteNotification(remoteNotification:NSDictionary) -> LYRMessage {
@@ -187,9 +192,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+        application.applicationIconBadgeNumber = 0
     }
 
     func applicationDidBecomeActive(application: UIApplication) {
+        application.applicationIconBadgeNumber = 0
         FBSDKAppEvents.activateApp()
     }
 

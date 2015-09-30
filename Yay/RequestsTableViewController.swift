@@ -13,11 +13,18 @@ class RequestsTableViewController: UITableViewController {
     var requests:[Request] = []
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 
+    @IBOutlet weak var emptyView: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        let tblView =  UIView(frame: CGRectZero)
-        tableView.tableFooterView = tblView
-        tableView.tableFooterView!.hidden = true
+        
+        if !requests.isEmpty {
+            emptyView.hidden = true
+            let tblView =  UIView(frame: CGRectZero)
+            tableView.tableFooterView = tblView
+            tableView.tableFooterView!.hidden = true
+        }
+        
         let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
         back.tintColor = UIColor(red:CGFloat(3/255.0), green:CGFloat(118/255.0), blue:CGFloat(114/255.0), alpha: 1)
         self.navigationItem.setLeftBarButtonItem(back, animated: false)

@@ -17,9 +17,9 @@ class StartViewController: UIViewController, UIPageViewControllerDataSource, UIP
     var currentIndex : Int = 0
     var pageImages : Array<String> = ["background_start1", "background_start2", "background_start3"]
     var pageTitles : Array<String> = [
-        "<style type='text/css'>* {font-size: 14pt; color:#ffffff; text-align: center;}</style><center>Making good times happen.</center>",
-        "<style type='text/css'>* {font-size: 14pt; color:#ffffff; text-align: center;}</style><center>For all the fun people you haven't yet met</center>",
-        "<style type='text/css'>* {font-size: 14pt; color:#ffffff; text-align: center;}</style><center>For all the <span style=\"color:#FBFD29;\">FUN</span>, <span style=\"font-size: 10pt;\">St</span><span style=\"font-size: 17pt;\">u</span>pid, <span style=\"font-size: 17pt;color:#4DDD47;\">crazy</span>, <b><span style=\"font-size: 17pt;color:#55D9FB;\">amazing</span></b>, <u><span style=\"color:#D600F9;\">beautiful</span></u>, <i><span style=\"color:#E50128;\">daring</span></i> things you want to do.</center>"   
+        "<style type='text/css'>* {font-family:HelveticaNeue-Light;font-size: 24pt; color:#ffffff; text-align: center;}</style><center><b>Making good times happen.</b></center>",
+        "<style type='text/css'>* {font-family:HelveticaNeue-Light;font-size: 24pt; color:#ffffff; text-align: center;}</style><center><b>For all the fun people you haven't yet met</b></center>",
+        "<style type='text/css'>* {font-family:HelveticaNeue-Light;font-size: 24pt; color:#ffffff; text-align: center;}</style><center><b>For <span style=\"color:#fa0001;\">all the</span> <span style=\"color:#216288;\">FUN</span> <span style=\"color:#66e3fe;\">sTuPid</span> </b><span style=\"color:#ff7af0;\">crazy</span>, <b><span style=\"color:#f4ff1c;\">amazing</span> <u><span style=\"color:#11e037;\">beautiful</span></u>, <i><span style=\"color:#fa0001;\">daring</span></i> things you want to do.</b></center>"
     ]
     
     override func viewDidLoad() {

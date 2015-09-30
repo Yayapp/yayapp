@@ -67,7 +67,7 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate, E
             MessageToUser.showDefaultErrorMessage("Emails are not same.")
         } else if (password1.text != password2.text) {
             MessageToUser.showDefaultErrorMessage("Passwords are not same.")
-        } else if !PatternValidator.validate(email.text, patternString: PatternValidator.EMAIL_PATTERN) {
+        } else if email.text!.isEmail() == false {
             MessageToUser.showDefaultErrorMessage("Email is invalid.")
         } else {
         
@@ -103,7 +103,7 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate, E
         self.view.endEditing(true)
         if (loginEmail.text!.isEmpty || loginPassword.text!.isEmpty) {
             MessageToUser.showDefaultErrorMessage("Please fill all fields to Sign In.")
-        } else if !PatternValidator.validate(loginEmail.text, patternString: PatternValidator.EMAIL_PATTERN) {
+        } else if loginEmail.text!.isEmail() == false {
             MessageToUser.showDefaultErrorMessage("Email is invalid.")
         } else {
             PFUser.logInWithUsernameInBackground(loginEmail.text!, password:loginPassword.text!) {
@@ -115,6 +115,8 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate, E
                     
                     self.appDelegate.authenticateInLayer()
                     self.performSegueWithIdentifier("proceed", sender: nil)
+                } else if(error!.code == 101) {
+                    MessageToUser.showDefaultErrorMessage("Invalid username or password")
                 } else {
                     MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
                 }
@@ -132,7 +134,7 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate, E
         let alert = UIAlertController(title: "Reset password", message: nil, preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "Reset", style: UIAlertActionStyle.Default, handler: {
             (action: UIAlertAction) in
-            if (!tField.text!.isEmpty && PatternValidator.validate(tField.text, patternString: PatternValidator.EMAIL_PATTERN)) {
+            if (!tField.text!.isEmpty && tField.text!.isEmail() == false) {
                 PFUser.requestPasswordResetForEmailInBackground(tField.text!, block: {
                     result, error in
                     if(error == nil) {

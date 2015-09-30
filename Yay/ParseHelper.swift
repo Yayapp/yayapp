@@ -21,34 +21,31 @@ class ParseHelper {
 
         let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
         calendar!.timeZone = NSTimeZone.localTimeZone()
-        let components = NSDateComponents()
-        components.second = NSTimeZone.localTimeZone().secondsFromGMT
-        let today = calendar!.dateByAddingComponents(components, toDate: NSDate(), options: [])
         
-        let endToday = calendar!.dateByAddingComponents(components, toDate: calendar!.startOfDayForDate(today!), options: [])
+        let today = NSDate()
+        
+        let endToday = calendar!.startOfDayForDate(today)
         
         let dayComponent = NSDateComponents()
         dayComponent.day = 1
-        let startTomorrow = calendar!.dateByAddingComponents(dayComponent, toDate: endToday!, options: NSCalendarOptions.MatchFirst)
+        let startTomorrow = calendar!.dateByAddingComponents(dayComponent, toDate: endToday, options: NSCalendarOptions.MatchFirst)
         
-        queryHomeEvents(today!, endDate: startTomorrow!, user: user!, categories: categories, block: block)
+        queryHomeEvents(today, endDate: startTomorrow!, user: user!, categories: categories, block: block)
 	}
     
     class func getTomorrowEvents(user:PFUser?, categories:[Category], block:EventsResultBlock?) {
         
         let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
-        calendar!.timeZone = NSTimeZone.localTimeZone()
-        let components = NSDateComponents()
-        components.second = NSTimeZone.localTimeZone().secondsFromGMT
-        let today = calendar!.dateByAddingComponents(components, toDate: NSDate(), options: [])
         
-        let endToday = calendar!.dateByAddingComponents(components, toDate: calendar!.startOfDayForDate(today!), options: [])
+        let today = NSDate()
+        
+        let endToday = calendar!.startOfDayForDate(today)
         
         let dayComponent = NSDateComponents()
         dayComponent.day = 1
-        let startTomorrow = calendar!.dateByAddingComponents(dayComponent, toDate: endToday!, options: NSCalendarOptions.MatchFirst)
+        let startTomorrow = calendar!.dateByAddingComponents(dayComponent, toDate: endToday, options: NSCalendarOptions.MatchFirst)
         dayComponent.day = 2
-        let startDayAfterTomorrow = calendar!.dateByAddingComponents(dayComponent, toDate: endToday!, options: NSCalendarOptions.MatchFirst)
+        let startDayAfterTomorrow = calendar!.dateByAddingComponents(dayComponent, toDate: endToday, options: NSCalendarOptions.MatchFirst)
         
         queryHomeEvents(startTomorrow!, endDate: startDayAfterTomorrow!, user: user!, categories: categories, block: block)
     }
@@ -56,20 +53,18 @@ class ParseHelper {
     class func getThisWeekEvents(user:PFUser?, categories:[Category], block:EventsResultBlock?) {
         
         let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
-        calendar!.timeZone = NSTimeZone.localTimeZone()
-        let components = NSDateComponents()
-        components.second = NSTimeZone.localTimeZone().secondsFromGMT
-        let today = calendar!.dateByAddingComponents(components, toDate: NSDate(), options: [])
         
-        let weekEndDay = 9-calendar!.components(NSCalendarUnit.Weekday, fromDate: today!).weekday
+        let today = NSDate()
+        
+        let weekEndDay = 9-calendar!.components(NSCalendarUnit.Weekday, fromDate: today).weekday
         
         let dayComponent = NSDateComponents()
         dayComponent.day = weekEndDay
         
-        let endWeek = calendar!.dateByAddingComponents(dayComponent, toDate: today!, options: NSCalendarOptions.MatchFirst)
-        let startNextWeek = calendar!.dateByAddingComponents(components, toDate: calendar!.startOfDayForDate(endWeek!), options: [])
+        let endWeek = calendar!.dateByAddingComponents(dayComponent, toDate: today, options: NSCalendarOptions.MatchFirst)
+        let startNextWeek = calendar!.startOfDayForDate(endWeek!)
 
-        queryHomeEvents(today!, endDate: startNextWeek!, user: user!, categories: categories, block: block)
+        queryHomeEvents(today, endDate: startNextWeek, user: user!, categories: categories, block: block)
     }
     
     class func queryHomeEvents(startDate:NSDate, endDate:NSDate, user:PFUser?, categories:[Category], block:EventsResultBlock?) {

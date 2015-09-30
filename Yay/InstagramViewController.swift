@@ -18,10 +18,6 @@ class InstagramViewController: UIViewController, UIWebViewDelegate {
         super.viewDidLoad()
 
         webView.delegate = self
-
-        
-//        InstagramEngine.sharedEngine().appClientID = "aec497e4d81e4b758aa48a94b3c35c00"
-//        InstagramEngine.sharedEngine().appRedirectURL = "http://www.textquickit.com"
         
         let requestURL = InstagramEngine.sharedEngine().authorizarionURLForScope(InstagramKitLoginScope.Relationships)
         
@@ -81,15 +77,7 @@ class InstagramViewController: UIViewController, UIWebViewDelegate {
 //        
 //        return true
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
+    
     
     @IBAction func close(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)

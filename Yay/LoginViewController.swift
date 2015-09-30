@@ -13,8 +13,17 @@ class LoginViewController: UIViewController, InstagramDelegate, EnterCodeDelegat
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     var isLogin:Bool! = false
     
+    @IBOutlet weak var textLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if (isLogin == true) {
+            textLabel.text = "Log in to make it Happen"
+        } else {
+            textLabel.text = "Sign up to make it Happen"
+        }
+        
         self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
 
@@ -84,10 +93,29 @@ class LoginViewController: UIViewController, InstagramDelegate, EnterCodeDelegat
                             
                             if user.isNew {
                                 let fbUserId = result.objectForKey("id") as! String
-                                let url:NSURL = NSURL(string:"http://graph.facebook.com/\(fbUserId)/picture?width=200&height=200")!
-                                let imageData :NSData = try! NSData(contentsOfURL: url, options: NSDataReadingOptions.DataReadingMappedIfSafe)
-                                let imageFile = PFFile(name: "image.jpg", data: imageData) as PFFile
-                                PFUser.currentUser()?.setObject(imageFile, forKey: "avatar")
+                                let url:NSURL = NSURL(string:"https://graph.facebook.com/\(fbUserId)/picture?width=200&height=200")!
+              
+                                let URLRequestNeeded = NSURLRequest(URL: url)
+                                NSURLConnection.sendAsynchronousRequest(URLRequestNeeded, queue: NSOperationQueue.mainQueue(), completionHandler: {
+                                    response,data, error in
+                                    if error == nil {
+                                        let picture = PFFile(name: "image.jpg", data: data!)
+                                        PFUser.currentUser()!.setObject(picture, forKey: "avatar")
+                                        PFUser.currentUser()!.saveInBackground()
+                                    }
+                                    else {
+                                        print("Error: \(error!.localizedDescription)")
+                                    }
+                                })
+                                
+                                
+//                                do {
+//                                    let imageData :NSData = try NSData(contentsOfURL: url, options: NSDataReadingOptions.DataReadingMappedIfSafe)
+//                                    let imageFile = PFFile(name: "image.jpg", data: imageData) as PFFile
+//                                    PFUser.currentUser()?.setObject(imageFile, forKey: "avatar")
+//                                } catch let error as NSError {
+//                                    MessageToUser.showDefaultErrorMessage(error.description)
+//                                }
                                 self.doRegistration()
                             } else {
                                 self.proceed()
@@ -115,11 +143,17 @@ class LoginViewController: UIViewController, InstagramDelegate, EnterCodeDelegat
                     if (error == nil){
                         let result:NSDictionary = (try! NSJSONSerialization.JSONObjectWithData(data, options:NSJSONReadingOptions.AllowFragments)) as! NSDictionary
                         let url:NSURL = NSURL(string:result.objectForKey("profile_image_url_https") as! String)!
-                        let imageData :NSData = try! NSData(contentsOfURL: url, options: NSDataReadingOptions.DataReadingMappedIfSafe)
                         
-                        let imageFile = PFFile(name: "image.jpg", data: imageData) as PFFile
                         
-                        PFUser.currentUser()?.setObject(imageFile, forKey: "avatar")
+                        do {
+                            let imageData :NSData =  try NSData(contentsOfURL: url, options: NSDataReadingOptions.DataReadingMappedIfSafe)
+                            
+                            let imageFile = PFFile(name: "image.jpg", data: imageData) as PFFile
+                            
+                            PFUser.currentUser()?.setObject(imageFile, forKey: "avatar")
+                        } catch let error as NSError {
+                            MessageToUser.showDefaultErrorMessage("Something went wrong")
+                        }
                     }
                     self.doRegistration()
                 } else {

@@ -44,7 +44,7 @@ class BlurryAlertViewController: UIViewController {
         
             self.view.backgroundColor = UIColor.clearColor()
             
-            let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.Light)
+            let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.Dark)
             let blurEffectView = UIVisualEffectView(effect: blurEffect)
             //always fill the view
             blurEffectView.frame = self.view.bounds

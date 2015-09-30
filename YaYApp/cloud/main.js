@@ -26,12 +26,15 @@ Parse.Cloud.define("generateToken", function(request, response) {
 Parse.Cloud.afterSave("Event", function(request) {
                       
                       if(request.object.existed()) {
-                        return;
+                      return;
                       }
+                      
                       
                       var eventName = request.object.get('name');
                       var location = request.object.get('location');
                       var timeZone = request.object.get('timeZone');
+                      var user = request.object.get('owner');
+                      
                       
                       var date = moment.tz(new Date(request.object.get('startDate')), timeZone);
                       var dateFormatted = moment(date).format("ddd DD MMM") +" at "+ moment(date).format("H:mm");
@@ -39,6 +42,8 @@ Parse.Cloud.afterSave("Event", function(request) {
                       var userQuery = new Parse.Query(Parse.User);
                       userQuery.withinKilometers("location", location, 20.0);
                       userQuery.equalTo('eventNearby', true);
+                      userQuery.notEqualTo('objectId', user.id);
+                      
                       
                       // Find devices associated with these users
                       var pushQuery = new Parse.Query(Parse.Installation);
@@ -49,7 +54,9 @@ Parse.Cloud.afterSave("Event", function(request) {
                                       where: pushQuery,
                                       //channels: [ "global" ],
                                       data: {
-                                      alert: "There is a new happening \"" + eventName + "\" on " + dateFormatted + " near you within 20km"
+                                      alert: "There is a new happening \"" + eventName + "\" on " + dateFormatted + " near you within 20km",
+                                      "content-available": 1,
+                                      "sound":"layerbell.caf"
                                       }
                                       }, {
                                       success: function() {
@@ -59,6 +66,7 @@ Parse.Cloud.afterSave("Event", function(request) {
                                       throw "Got an error " + error.code + " : " + error.message;
                                       }
                                       });
+                      
                       });
 
 Parse.Cloud.afterSave("Request", function(request) {
@@ -83,7 +91,9 @@ Parse.Cloud.afterSave("Request", function(request) {
                                   Parse.Push.send({
                                                   where: pushQuery,
                                                   data: {
-                                                  alert: "There is a new attendee to happening \"" + eventName + "\""
+                                                  alert: "There is a new attendee to happening \"" + eventName + "\"",
+                                                  "content-available": 1,
+                                                  "sound":"layerbell.caf"
                                                   }
                                                   }, {
                                                   success: function() {},
@@ -107,7 +117,9 @@ Parse.Cloud.afterSave("Request", function(request) {
                                   Parse.Push.send({
                                                   where: pushQuery1,
                                                   data: {
-                                                  alert: "Don't forget to participate on happening \""+eventName+"\" on "+dateFormatted
+                                                  alert: "Don't forget to participate on happening \""+eventName+"\" on "+dateFormatted,
+                                                  "content-available": 1,
+                                                  "sound":"layerbell.caf"
                                                   },
                                                   push_time: before24
                                                   }, {
@@ -119,7 +131,9 @@ Parse.Cloud.afterSave("Request", function(request) {
                                   Parse.Push.send({
                                                   where: pushQuery1,
                                                   data: {
-                                                  alert: "Don't forget to participate on happening \""+eventName+"\" on "+dateFormatted
+                                                  alert: "Don't forget to participate on happening \""+eventName+"\" on "+dateFormatted,
+                                                  "content-available": 1,
+                                                  "sound":"layerbell.caf"
                                                   },
                                                   push_time: before1
                                                   }, {
@@ -139,7 +153,9 @@ Parse.Cloud.afterSave("Request", function(request) {
                                              Parse.Push.send({
                                                              where: pushQuery,
                                                              data: {
-                                                             alert: "Attendance to happening \"" + eventName + "\" accepted"
+                                                             alert: "Attendance to happening \"" + eventName + "\" accepted",
+                                                             "content-available": 1,
+                                                             "sound":"layerbell.caf"
                                                              }
                                                              }, {
                                                              success: function() {},

@@ -35,6 +35,16 @@ extension Array {
     }
 }
 
+extension String {
+    func isEmail() -> Bool {
+        let regex = try! NSRegularExpression(pattern: "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
+            options: [.CaseInsensitive])
+
+        return regex.firstMatchInString(self, options:[],
+            range: NSMakeRange(0, utf16.count)) != nil
+    }
+}
+
 extension UIView {
     func rotate360Degrees(duration: CFTimeInterval = 1.0, completionDelegate: AnyObject? = nil) {
         let rotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
