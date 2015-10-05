@@ -2,18 +2,18 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "login_bg.png"
+      "filename" : "login_bg.jpg",
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "scale" : "2x",
-      "filename" : "login_bg_x2.png"
+      "filename" : "login_bg_x2.jpg",
+      "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x",
-      "filename" : "login_bg_x3.png"
+      "filename" : "login_bg_x3.jpg",
+      "scale" : "3x"
     }
   ],
   "info" : {

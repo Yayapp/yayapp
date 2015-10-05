@@ -10,7 +10,8 @@ import UIKit
 
 class TutorialViewController: UIViewController {
     
-    var hints:[String]!
+//    var hints:[String]!
+    var pageIndex : Int = 0
 
     @IBOutlet weak var tutorialImage: UIImageView!
     @IBOutlet weak var tuorialButton: UIButton!
@@ -20,10 +21,8 @@ class TutorialViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.None
-        let suffix:Int = DeviceType.IS_IPHONE_4_OR_LESS ? 4 : DeviceType.IS_IPHONE_5 ? 5 : DeviceType.IS_IPHONE_6 ? 6 : 61
-        tutorialImage.image = UIImage(named: "\(hints.first!)\(suffix)")
-        Prefs.setPref(hints.first)
-        hints.removeAtIndex(0)
+        tutorialImage.image = UIImage(named: "tut_\(pageIndex+1)")
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -33,16 +32,9 @@ class TutorialViewController: UIViewController {
     
     
     @IBAction func skip(sender: AnyObject) {
-        if hints.isEmpty {
-            dismissViewControllerAnimated(true, completion: {
-                appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.PanningCenterView
+        parentViewController!.dismissViewControllerAnimated(true, completion: {
+        self.appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.PanningCenterView
             })
-        } else {
-            let suffix:Int = DeviceType.IS_IPHONE_4_OR_LESS ? 4 : DeviceType.IS_IPHONE_5 ? 5 : DeviceType.IS_IPHONE_6 ? 6 : 61
-            tutorialImage.image = UIImage(named: "\(hints.first!)\(suffix)")
-            Prefs.setPref(hints.first)
-            hints.removeAtIndex(0)
-        }
     }
 
 }

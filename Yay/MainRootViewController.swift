@@ -9,7 +9,7 @@
 import UIKit
 import MessageUI
 
-class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailComposeViewControllerDelegate, EventCreationDelegate {
+class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailComposeViewControllerDelegate, EventCreationDelegate, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     var rightSwitchBarButtonItem:UIBarButtonItem?
@@ -18,6 +18,8 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
     var todayCenter:NSLayoutConstraint!
     var inviteCode:InviteCode?
     
+    var pageViewController : UIPageViewController!
+    var currentIndex : Int = 0
     
     @IBOutlet weak var today: UIButton!
     @IBOutlet weak var tomorrow: UIButton!
@@ -59,29 +61,79 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
     }
     
     override func viewDidAppear(animated: Bool) {
-        var hints:[String]!=[]
-        if (Prefs.getPref(Prefs.Menu) == false) {
-            hints.append(Prefs.Menu)
+        
+        if Prefs.getPref(Prefs.tut) == false {
+            Prefs.setPref(Prefs.tut)
+            let pageSpacing:NSNumber = DeviceType.IS_IPHONE_4_OR_LESS ? 0 : DeviceType.IS_IPHONE_5 ? 30 : DeviceType.IS_IPHONE_6 ? 35 : 40
+            let dictionary:[String : AnyObject] = [UIPageViewControllerOptionInterPageSpacingKey:pageSpacing]
+            pageViewController = UIPageViewController(transitionStyle:UIPageViewControllerTransitionStyle.Scroll, navigationOrientation: UIPageViewControllerNavigationOrientation.Horizontal, options:dictionary)
+            
+            self.pageViewController!.dataSource = self
+            self.pageViewController!.delegate = self
+            
+            
+            
+            let pageContentViewController:TutorialViewController! = self.viewControllerAtIndex(0)
+            
+            self.pageViewController.setViewControllers([pageContentViewController!], direction: UIPageViewControllerNavigationDirection.Forward, animated: true, completion: nil)
+            
+            pageViewController!.view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height);
+            self.presentViewController(pageViewController, animated: true, completion: nil)
         }
-        if (Prefs.getPref(Prefs.MakeHappening) == false) {
-            hints.append(Prefs.MakeHappening)
-        }
-        if (Prefs.getPref(Prefs.HappeningCategory) == false) {
-            hints.append(Prefs.HappeningCategory)
-        }
-        if (Prefs.getPref(Prefs.HappeningToday) == false) {
-            hints.append(Prefs.HappeningToday)
-        }
-        if (Prefs.getPref(Prefs.HappeningsAround) == false) {
-            hints.append(Prefs.HappeningsAround)
-        }
-        if !hints.isEmpty {
-            let tutorialViewController = self.storyboard!.instantiateViewControllerWithIdentifier("TutorialViewController") as! TutorialViewController
-            tutorialViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
-            tutorialViewController.hints = hints
-            self.presentViewController(tutorialViewController, animated: true, completion: nil)
-        }
+        
+        
     }
+    
+    func swipe(){
+        var i:Int! = 0
+        if(currentIndex<2) {
+            i = currentIndex + 1
+        }
+        self.pageViewController.setViewControllers([self.viewControllerAtIndex(i)!], direction: UIPageViewControllerNavigationDirection.Forward, animated: true, completion: nil)
+    }
+    
+    func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController?
+    {
+        var index = (viewController as! TutorialViewController).pageIndex
+        
+        if (index == 0) || (index == NSNotFound) {
+            return nil
+        }
+        
+        index--
+        
+        return viewControllerAtIndex(index)
+    }
+    
+    func pageViewController(pageViewController: UIPageViewController, viewControllerAfterViewController viewController: UIViewController) -> UIViewController?
+    {
+        var index = (viewController as! TutorialViewController).pageIndex
+        
+        if index == NSNotFound {
+            return nil
+        }
+        
+        index++
+        
+        if (index == 11) {
+            return nil
+        }
+        
+        return viewControllerAtIndex(index)
+    }
+    
+    func viewControllerAtIndex(index: Int) -> TutorialViewController!
+    {
+        
+        // Create a new view controller and pass suitable data.
+        let pageContentViewController = self.storyboard?.instantiateViewControllerWithIdentifier("TutorialViewController") as! TutorialViewController
+        pageContentViewController.pageIndex = index
+        currentIndex = index
+        return pageContentViewController
+        
+    }
+    
+    
 
     func segmentChanged() {
         var vc:EventsViewController

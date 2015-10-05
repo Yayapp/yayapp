@@ -108,24 +108,6 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         // Dispose of any resources that can be recreated.
     }
     
-    override func viewDidAppear(animated: Bool) {
-        if(PFUser.currentUser()?.objectId == user.objectId) {
-            var hints:[String]!=[]
-            if (Prefs.getPref(Prefs.ProfileSocialRanks) == false) {
-                hints.append(Prefs.ProfileSocialRanks)
-            }
-            if (Prefs.getPref(Prefs.Invites) == false) {
-                hints.append(Prefs.Invites)
-            }
-            if !hints.isEmpty {
-                let tutorialViewController = self.storyboard!.instantiateViewControllerWithIdentifier("TutorialViewController") as! TutorialViewController
-                tutorialViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
-                tutorialViewController.hints = hints
-                self.presentViewController(tutorialViewController, animated: true, completion: nil)
-            }
-        }
-    }
-    
     func setAboutMe(text:String){
         let color = UIColor(red:CGFloat(153/255.0), green:CGFloat(113/255.0), blue:CGFloat(0/255.0), alpha: 1)
         let font15 = UIFont.boldSystemFontOfSize(15)

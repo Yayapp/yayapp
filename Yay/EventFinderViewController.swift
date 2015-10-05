@@ -46,15 +46,6 @@ class EventFinderViewController: UIViewController, ChooseLocationDelegate {
         
     }
     
-    override func viewDidAppear(animated: Bool) {
-        if (Prefs.getPref(Prefs.Welcome) == false) {
-            let tutorialViewController = self.storyboard!.instantiateViewControllerWithIdentifier("TutorialViewController") as! TutorialViewController
-            tutorialViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
-            tutorialViewController.hints = [Prefs.Welcome]
-            self.presentViewController(tutorialViewController, animated: true, completion: nil)
-        }
-    }
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

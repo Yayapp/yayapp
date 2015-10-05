@@ -2,18 +2,18 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "homescreen_bg1.png"
+      "filename" : "homescreen_bg1.jpg",
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "scale" : "2x",
-      "filename" : "homescreen_bg1_x2.png"
+      "filename" : "homescreen_bg1_x2.jpg",
+      "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x",
-      "filename" : "homescreen_bg1_x3.png"
+      "filename" : "homescreen_bg1_x3.jpg",
+      "scale" : "3x"
     }
   ],
   "info" : {

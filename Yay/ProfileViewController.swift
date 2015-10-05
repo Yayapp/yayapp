@@ -21,12 +21,6 @@ class ProfileViewController: UITableViewController {
         tableView.tableFooterView = tblView
         tableView.tableFooterView!.hidden = true
         
-        if (Prefs.getPref(Prefs.MenuHappenings) == false) {
-            let tutorialViewController = self.storyboard!.instantiateViewControllerWithIdentifier("TutorialViewController") as! TutorialViewController
-            tutorialViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
-            tutorialViewController.hints = [Prefs.MenuHappenings]
-            self.presentViewController(tutorialViewController, animated: true, completion: nil)
-        }
     }
 
     override func didReceiveMemoryWarning() {
