@@ -39,7 +39,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         EventPhoto.registerSubclass()
         Event.registerSubclass()
         Request.registerSubclass()
-        InviteCode.registerSubclass()
         Message.registerSubclass()
         
         setupParse()

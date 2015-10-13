@@ -13,7 +13,6 @@ typealias EventsResultBlock = ([Event]?, NSError?) -> ()
 typealias MessagesResultBlock = ([Message]?, NSError?) -> ()
 typealias CategoriesResultBlock = ([Category]?, NSError?) -> ()
 typealias EventPhotosResultBlock = ([EventPhoto]?, NSError?) -> ()
-typealias InviteCodesResultBlock = ([InviteCode]?, NSError?) -> ()
 typealias BoolResultBlock = (Bool?, NSError?) -> ()
 
 class ParseHelper {
@@ -208,42 +207,7 @@ class ParseHelper {
             }
         }
     }
-    
-    class func getInviteCode(code:String, block:InviteCodesResultBlock?) {
-        let query = PFQuery(className:InviteCode.parseClassName())
-        query.whereKey("code", equalTo: code)
-        query.findObjectsInBackgroundWithBlock {
-            objects, error in
-            
-            if error == nil {
-                if let objects = objects as? [InviteCode] {
-                    block!(objects, error)
-                }
-            } else {
-                // Log details of the failure
-                print("Error: \(error!) \(error!.userInfo)")
-                block!(nil, error)
-            }
-        }
-    }
-    
-    class func checkIfCodeExist(code:String, block:BoolResultBlock?) {
-        let query = PFQuery(className:InviteCode.parseClassName())
-        query.whereKey("code", equalTo: code)
-        query.findObjectsInBackgroundWithBlock {
-            objects, error in
-            
-            if error == nil {
-                if let objects = objects as? [InviteCode] {
-                    block!(objects.count>0, error)
-                }
-            } else {
-                // Log details of the failure
-                print("Error: \(error!) \(error!.userInfo)")
-                block!(nil, error)
-            }
-        }
-    }
+   
     
     class func countRequests(user:PFUser, completion:(Int)->()) {
         let query1 = PFQuery(className:Event.parseClassName())

@@ -95,10 +95,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         if user["about"] != nil {
             setAboutMe((user["about"]! as! String))
         }
-        let userInvites = user["invites"] as! Int
-        setMyInvites(userInvites)
         view.bringSubviewToFront(uploadPhoto)
-        
         
     }
     
@@ -124,16 +121,6 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 1, inSection: 0)], withRowAnimation: UITableViewRowAnimation.None)
     }
     
-    func setMyInvites(text:Int){
-        let font15 = UIFont.boldSystemFontOfSize(15)
-        let font11 = UIFont.boldSystemFontOfSize(11)
-        let range = NSRange(location: "Invites left: ".characters.count, length: 1)
-        let myMutableString = NSMutableAttributedString(string: "Invites left: \(text)", attributes: [NSFontAttributeName:font15])
-        myMutableString.addAttribute(NSFontAttributeName, value: font11, range: range)
-        myMutableString.addAttribute(NSForegroundColorAttributeName, value: Color.ProfileValuesColor , range: range)
-        invites.attributedText = myMutableString
-    }
-     
     func madeCategoryChoice(categories: [Category]) {
         
         var interestsarr:[String] = []

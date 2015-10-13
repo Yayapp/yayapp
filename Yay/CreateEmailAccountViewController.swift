@@ -9,7 +9,7 @@
 import UIKit
 
 
-class CreateEmailAccountViewController: KeyboardAnimationHelper, EnterCodeDelegate {
+class CreateEmailAccountViewController: KeyboardAnimationHelper {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     var isLogin:Bool! = false
@@ -92,10 +92,7 @@ class CreateEmailAccountViewController: KeyboardAnimationHelper, EnterCodeDelega
             if let error = error {
                 MessageToUser.showDefaultErrorMessage(error.localizedDescription)
             } else {
-                let vc = self.storyboard!.instantiateViewControllerWithIdentifier("EnterCodeViewController") as! EnterCodeViewController
-                vc.delegate = self
-                vc.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
-                self.presentViewController(vc, animated: true, completion: nil)
+                self.proceed()
             }
         }
         }
@@ -189,7 +186,7 @@ class CreateEmailAccountViewController: KeyboardAnimationHelper, EnterCodeDelega
         accountExist.text = "Don't have an account?"
     }
     
-    func validCode() {
+    func proceed() {
         let currentInstallation:PFInstallation = PFInstallation.currentInstallation()
         currentInstallation["user"] = PFUser.currentUser()
         currentInstallation.saveInBackground()

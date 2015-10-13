@@ -16,7 +16,6 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
     
     var thisWeekCenter:NSLayoutConstraint!
     var todayCenter:NSLayoutConstraint!
-    var inviteCode:InviteCode?
     
     var pageViewController : UIPageViewController!
     var currentIndex : Int = 0
@@ -230,35 +229,18 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
     }
     
     func showInvite(){
-        if((PFUser.currentUser()?.objectForKey("invites") as! Int)>0){
-            if MFMailComposeViewController.canSendMail() {
-                randomString({
-                    code in
-                    let inviteACL:PFACL = PFACL()
-                    inviteACL.setPublicWriteAccess(true)
-                    inviteACL.setPublicReadAccess(true)
-                    self.inviteCode = InviteCode()
-                    self.inviteCode!.code = code
-                    self.inviteCode!.limit = 1
-                    self.inviteCode!.ACL = inviteACL
-                    self.inviteCode!.invited = 0
-                    self.inviteCode!.saveInBackground()
-                    let mailComposeViewController = self.configuredMailComposeViewController(code)
-                    self.presentViewController(mailComposeViewController, animated: true, completion: nil)
-                })
-            } else {
-                self.showSendMailErrorAlert()
-            }
+        if MFMailComposeViewController.canSendMail() {
+            let mailComposeViewController = self.configuredMailComposeViewController()
+            self.presentViewController(mailComposeViewController, animated: true, completion: nil)
         } else {
-            let sendMailErrorAlert = UIAlertView(title: "Invite friend", message: "You have no more invites.", delegate: self, cancelButtonTitle: "OK")
-            sendMailErrorAlert.show()
+            self.showSendMailErrorAlert()
         }
     }
     
-    func configuredMailComposeViewController(code:String) -> MFMailComposeViewController {
+    func configuredMailComposeViewController() -> MFMailComposeViewController {
         let userName = PFUser.currentUser()?.objectForKey("name") as! String
         let emailTitle = "\(userName) invited you to Friendzi app"
-        let messageBody = "\(userName) has invited you to join Friendzi. Friendzi is invitation only, Use code \(code) to use the app.\n\nhttp://friendzy.io/"
+        let messageBody = "\(userName) has invited you to join Friendzi. \n\nhttp://friendzy.io/"
         
         let mailComposerVC = MFMailComposeViewController()
         mailComposerVC.mailComposeDelegate = self
@@ -274,13 +256,6 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
     }
     
     func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
-        if result.rawValue != MFMailComposeResultSent.rawValue {
-            inviteCode?.deleteInBackground()
-            inviteCode = nil
-        } else {
-            PFUser.currentUser()?.incrementKey("invites", byAmount: -1)
-            PFUser.currentUser()?.saveInBackground()
-        }
         controller.dismissViewControllerAnimated(true, completion: nil)
     }
     
@@ -362,31 +337,5 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
         }
         segmentChanged()
     }
-   
-    let letters = Array("abcdefghijklmnopqrstuvwxyz0123456789".characters)
-    
-    func randomString(blockResult:((String!) -> Void)?) {
-    
-        let randomString:NSMutableString = NSMutableString(capacity: 5)
-    
-        for _ in 1...5 {
-            randomString.appendString("\(letters[Int(arc4random_uniform(36))])")
-        }
-        
-        ParseHelper.checkIfCodeExist(randomString as String, block: {
-            result, error in
-            if error == nil {
-                if (result == true) {
-                    self.randomString(blockResult)
-                } else {
-                    blockResult!(randomString as String)
-                }
-            } else {
-                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-            }
-        })
-    
-    }
-    
 
 }

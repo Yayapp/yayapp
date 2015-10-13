@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LoginViewController: UIViewController, InstagramDelegate, EnterCodeDelegate {
+class LoginViewController: UIViewController, InstagramDelegate {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     var isLogin:Bool! = false
@@ -34,13 +34,7 @@ class LoginViewController: UIViewController, InstagramDelegate, EnterCodeDelegat
         currentInstallation.saveInBackground()
         self.performSegueWithIdentifier("proceed", sender: nil)
     }
-    
-    func goToCodeInsertion(){
-        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("EnterCodeViewController") as! EnterCodeViewController
-        vc.delegate = self
-        vc.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
-        self.presentViewController(vc, animated: true, completion: nil)
-    }
+   
     
     func setupDefaults(pfuser:PFUser){
         pfuser["distance"] = 20
@@ -60,7 +54,7 @@ class LoginViewController: UIViewController, InstagramDelegate, EnterCodeDelegat
         PFUser.currentUser()?.saveInBackgroundWithBlock({
             result, error in
             if error == nil {
-                self.goToCodeInsertion()
+                self.proceed()
             } else {
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
@@ -179,7 +173,7 @@ class LoginViewController: UIViewController, InstagramDelegate, EnterCodeDelegat
                         if error != nil {
                             MessageToUser.showDefaultErrorMessage("Something went wrong")
                         } else {
-                            self.goToCodeInsertion()
+                            self.doRegistration()
                         }
                     }
                 } else {
@@ -191,14 +185,6 @@ class LoginViewController: UIViewController, InstagramDelegate, EnterCodeDelegat
     }
     func instagramFailure() {
         MessageToUser.showDefaultErrorMessage("Something went wrong")
-    }
-    
-    func validCode() {
-        let currentInstallation:PFInstallation = PFInstallation.currentInstallation()
-        currentInstallation["user"] = PFUser.currentUser()
-        currentInstallation.saveInBackground()
-        
-        self.performSegueWithIdentifier("proceed", sender: nil)
     }
     
     @IBAction func loginEmail(sender: AnyObject) {
