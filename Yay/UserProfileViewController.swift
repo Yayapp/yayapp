@@ -157,11 +157,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if(PFUser.currentUser()?.objectId == user.objectId) {
-            return 4
-        } else {
-            return 3
-        }
+        return 3
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
