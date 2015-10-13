@@ -280,6 +280,7 @@ class ParseHelper {
             if error == nil {
                 if let objects = objects as? [Request] {
                     for request in objects {
+                        UIApplication.sharedApplication().applicationIconBadgeNumber-=1
                         request.accepted = false
                         request.saveInBackground()
                     }

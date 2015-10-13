@@ -91,24 +91,14 @@ class RequestsTableViewController: UITableViewController {
         request.accepted = true
         request.saveInBackground()
         requests.removeAtIndex(sender.tag)
+        UIApplication.sharedApplication().applicationIconBadgeNumber-=1
         
         if(request.event.attendees.count >= request.event.limit) {
             ParseHelper.declineRequests(request.event)
-            ParseHelper.getOwnerRequests(PFUser.currentUser()!, block: {
-                result, error in
-                if (error == nil){
-                    self.requests = result!
-                    self.tableView.reloadData()
-                    UIApplication.sharedApplication().applicationIconBadgeNumber-=1
-                    
-                    self.appDelegate.leftViewController.requestsCountLabel.text = "\(Int(self.appDelegate.leftViewController.requestsCountLabel.text!)!-1)"
-                } else {
-                    MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-                }
-            })
-        } else {
-            tableView.reloadData()
+            requests = requests.filter({$0.event.objectId != request.event.objectId})
         }
+        self.appDelegate.leftViewController.requestsCountLabel.text = "\(self.requests.count)"
+        tableView.reloadData()
     }
     
     @IBAction func decline(sender: AnyObject) {
@@ -117,7 +107,7 @@ class RequestsTableViewController: UITableViewController {
         request.saveInBackground()
         UIApplication.sharedApplication().applicationIconBadgeNumber-=1
         requests.removeAtIndex(sender.tag)
-        self.appDelegate.leftViewController.requestsCountLabel.text = "\(Int(self.appDelegate.leftViewController.requestsCountLabel.text!)!-1)"
+        self.appDelegate.leftViewController.requestsCountLabel.text = "\(self.requests.count)"
         tableView.reloadData()
     }
     
