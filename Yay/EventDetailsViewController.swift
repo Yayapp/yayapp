@@ -9,6 +9,11 @@
 import UIKit
 import MessageUI
 
+protocol EventChangeDelegate : NSObjectProtocol {
+    func eventChanged(event:Event)
+    func eventRemoved(event:Event)
+}
+
 class EventDetailsViewController: UIViewController, MFMailComposeViewControllerDelegate, EventCreationDelegate {
     
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
@@ -18,35 +23,35 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     var currentLocation:CLLocation!
     var attendeeButtons:[UIButton]!
     var attendees:[PFUser] = []
-    var conversation:LYRConversation!
     var delegate:EventChangeDelegate!
     
-    @IBOutlet weak var spinner: UIActivityIndicatorView!
-    @IBOutlet weak var photo: PFImageView!
-    @IBOutlet weak var name: UILabel!
+    @IBOutlet var spinner: UIActivityIndicatorView!
+    @IBOutlet var photo: PFImageView!
+    @IBOutlet var name: UILabel!
     
-    @IBOutlet weak var location: UIButton!
+    @IBOutlet var location: UIButton!
     
-    @IBOutlet weak var descr: UITextView!
-    @IBOutlet weak var date: UILabel!
+    @IBOutlet var descr: UITextView!
+    @IBOutlet var date: UILabel!
     
-    @IBOutlet weak var distance: UILabel!
+    @IBOutlet var distance: UILabel!
     
-    @IBOutlet weak var chatButton: UIButton!
-    @IBOutlet weak var inviteButton: UIButton!
+    @IBOutlet var chatButton: UIButton!
+    @IBOutlet var inviteButton: UIButton!
     
-    @IBOutlet weak var author: UIButton!
+    @IBOutlet var author: UIButton!
     
-    @IBOutlet weak var attend: UIButton!
-    @IBOutlet weak var attended1: UIButton!
+    @IBOutlet var attend: UIButton!
+    @IBOutlet var attended1: UIButton!
     
-    @IBOutlet weak var attended2: UIButton!
+    @IBOutlet var attended2: UIButton!
     
-    @IBOutlet weak var attended3: UIButton!
+    @IBOutlet var attended3: UIButton!
     
-    @IBOutlet weak var attended4: UIButton!
+    @IBOutlet var attended4: UIButton!
     
-    @IBOutlet weak var usersView: UIView!
+    @IBOutlet var usersView: UIView!
+    
     var bottomConstraint: NSLayoutConstraint!
     
     override func viewDidLoad() {
@@ -64,11 +69,11 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
         
         title = event.name
         let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
-        back.tintColor = UIColor(red:CGFloat(3/255.0), green:CGFloat(118/255.0), blue:CGFloat(114/255.0), alpha: 1)
+        back.tintColor = Color.PrimaryActiveColor
         self.navigationItem.setLeftBarButtonItem(back, animated: false)
         if(PFUser.currentUser()?.objectId == event.owner.objectId) {
             let editdone = UIBarButtonItem(image:UIImage(named: "edit_icon"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("editEvent:"))
-            editdone.tintColor = UIColor(red:CGFloat(3/255.0), green:CGFloat(118/255.0), blue:CGFloat(114/255.0), alpha: 1)
+            editdone.tintColor = Color.PrimaryActiveColor
             self.navigationItem.setRightBarButtonItem(editdone, animated: false)
             attend.setImage(UIImage(named: "cancelevent_button"), forState: .Normal)
             self.attend.hidden = false
@@ -120,17 +125,6 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                 }
                 
                 
-                if self.event.conversation != nil {
-                    let query:LYRQuery = LYRQuery(queryableClass: LYRConversation.self)
-                    query.predicate = LYRPredicate(property: "identifier", predicateOperator:LYRPredicateOperator.IsEqualTo, value:NSURL(string:self.event.conversation!))
-                    do {
-                        self.conversation = try self.appDelegate.layerClient.executeQuery(query).firstObject as? LYRConversation
-                    } catch {
-                        self.conversation = nil
-                    }
-                    //            conversation.delete(LYRDeletionMode.AllParticipants, error: &error)
-                }
-                
                 self.event.owner.fetchIfNeededInBackgroundWithBlock({
                     result, error in
                     if error == nil {
@@ -141,14 +135,14 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                                 } catch {
                                     //
                                 }
-                                self.author.layer.borderColor = UIColor(red:CGFloat(250/255.0), green:CGFloat(214/255.0), blue:CGFloat(117/255.0), alpha: 1).CGColor
+                                self.author.layer.borderColor = Color.EventDetailsProfileIconBorder.CGColor
                             } else {
                             avatar.getDataInBackgroundWithBlock({
                                 (data:NSData?, error:NSError?) in
                                 if(error == nil) {
                                     let image = UIImage(data:data!)
                                     self.author.setImage(image, forState: .Normal)
-                                    self.author.layer.borderColor = UIColor(red:CGFloat(250/255.0), green:CGFloat(214/255.0), blue:CGFloat(117/255.0), alpha: 1).CGColor
+                                    self.author.layer.borderColor = Color.EventDetailsProfileIconBorder.CGColor
                                 } else {
                                     MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                                 }
@@ -197,7 +191,6 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
             } else {
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
-            
         })
     }
     
@@ -212,13 +205,7 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
         
         self.date.text = self.dateFormatter.stringFromDate(self.event.startDate)
         self.distance.text = "\(distanceStr)km"
-        self.getLocationString(self.event.location.latitude, longitude: self.event.location.longitude)
-    }
-    
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        CLLocation(latitude: self.event.location.latitude, longitude: self.event.location.longitude).getLocationString(nil, button: location, timezoneCompletion: nil)
     }
     
     
@@ -264,67 +251,10 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
         }
     }
     
-    func getLocationString(latitude: Double, longitude: Double){
-        let geoCoder = CLGeocoder()
-        let cllocation = CLLocation(latitude: latitude, longitude: longitude)
-        let cityCountry:NSMutableString=NSMutableString()
-        geoCoder.reverseGeocodeLocation(cllocation, completionHandler: { (placemarks, error) -> Void in
-            let placeArray = placemarks as [CLPlacemark]!
-            
-            // Place details
-            var placeMark: CLPlacemark!
-            placeMark = placeArray?[0]
-            
-            if let building = placeMark.subThoroughfare {
-                cityCountry.appendString(building)
-            }
-            
-            if let address = placeMark.thoroughfare {
-                if cityCountry.length>0 {
-                    cityCountry.appendString(" ")
-                }
-                cityCountry.appendString(address)
-            }
-            
-            if let zip = placeMark.postalCode {
-                if cityCountry.length>0 {
-                    cityCountry.appendString(", ")
-                }
-                cityCountry.appendString(zip)
-            }
-            if cityCountry.length>0 {
-                self.location.setTitle(cityCountry as String, forState: .Normal)
-            }
-        })
-        
-    }
-    
     @IBAction func chat(sender: AnyObject) {
-        if (attendees.count>0) {
-            if conversation == nil {
-                let participants = NSMutableSet()
-                
-                participants.addObject(event.owner.objectId!)
-                
-                for (_, attendee) in attendees.enumerate() {
-                    participants.addObject(attendee.objectId!)
-                }
-                
-                do {
-                    conversation = try self.appDelegate.layerClient.newConversationWithParticipants(participants as Set<NSObject>, options: [LYRConversationOptionsDistinctByParticipantsKey : false ])
-                } catch {
-                    conversation = nil
-                }
-                if  self.conversation != nil {
-                    conversation.setValue(event.name, forMetadataAtKeyPath: "name")
-                    event.conversation = conversation.identifier.absoluteString
-                    event.saveInBackground()
-                }
-                
-            }
-            let controller = ConversationViewController(layerClient: appDelegate.layerClient)
-            controller.conversation = conversation
-            controller.displaysAddressBar = false
+            if (attendees.count>0) {
+            let controller: MessagesTableViewController = self.storyboard!.instantiateViewControllerWithIdentifier("MessagesTableViewController") as! MessagesTableViewController
+            controller.event = event
             self.navigationController!.pushViewController(controller, animated: true)
         }
     }
@@ -414,7 +344,4 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     }
     
 }
-protocol EventChangeDelegate : NSObjectProtocol {
-    func eventChanged(event:Event)
-    func eventRemoved(event:Event)
-}
+

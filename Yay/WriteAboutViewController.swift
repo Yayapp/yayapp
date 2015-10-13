@@ -8,9 +8,13 @@
 
 import UIKit
 
+protocol WriteAboutDelegate : NSObjectProtocol {
+    func writeAboutDone(text: String)
+}
+
 class WriteAboutViewController: UIViewController {
     
-    @IBOutlet weak var text: UITextView!
+    @IBOutlet var text: UITextView!
     
     var textAbout:String!
 
@@ -33,11 +37,6 @@ class WriteAboutViewController: UIViewController {
         self.view.insertSubview(blurEffectView, atIndex: 0)
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
     @IBAction func ok(sender: AnyObject) {
         delegate.writeAboutDone(text.text)
         dismissViewControllerAnimated(true, completion: nil)
@@ -48,7 +47,4 @@ class WriteAboutViewController: UIViewController {
     }
     
 
-}
-protocol WriteAboutDelegate : NSObjectProtocol {
-    func writeAboutDone(text: String)
 }

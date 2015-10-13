@@ -35,6 +35,5 @@ class Event : PFObject, PFSubclassing {
     @NSManaged var minAge: Int
     @NSManaged var maxAge: Int
     @NSManaged var attendees: [PFUser]
-	@NSManaged var conversation: String?
     @NSManaged var timeZone: String
 }

@@ -8,10 +8,14 @@
 
 import UIKit
 
+protocol InstagramDelegate : NSObjectProtocol {
+    func instagramSuccess(token:String, user:InstagramUser)
+    func instagramFailure()
+}
 
 class InstagramViewController: UIViewController, UIWebViewDelegate {
 
-    @IBOutlet weak var webView: UIWebView!
+    @IBOutlet var webView: UIWebView!
     var delegate:InstagramDelegate?
     
     override func viewDidLoad() {
@@ -26,10 +30,6 @@ class InstagramViewController: UIViewController, UIWebViewDelegate {
         webView.loadRequest(request)
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
     func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
         
@@ -84,7 +84,4 @@ class InstagramViewController: UIViewController, UIWebViewDelegate {
     }
 
 }
-protocol InstagramDelegate : NSObjectProtocol {
-    func instagramSuccess(token:String, user:InstagramUser)
-    func instagramFailure()
-}
+

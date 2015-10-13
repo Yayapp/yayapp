@@ -10,7 +10,7 @@ import UIKit
 
 class StartViewController: UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     
-    @IBOutlet weak var dots: UIPageControl!
+    @IBOutlet var dots: UIPageControl!
     
     var timer:NSTimer!
     var pageViewController : UIPageViewController!
@@ -25,7 +25,6 @@ class StartViewController: UIViewController, UIPageViewControllerDataSource, UIP
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
         let pageSpacing:NSNumber = DeviceType.IS_IPHONE_4_OR_LESS ? 0 : DeviceType.IS_IPHONE_5 ? 30 : DeviceType.IS_IPHONE_6 ? 35 : 40
         let dictionary:[String : AnyObject] = [UIPageViewControllerOptionInterPageSpacingKey:pageSpacing]
         
@@ -34,8 +33,6 @@ class StartViewController: UIViewController, UIPageViewControllerDataSource, UIP
         self.pageViewController!.dataSource = self
         self.pageViewController!.delegate = self
    
-        
-        
         let pageContentViewController:InstructionViewController! = self.viewControllerAtIndex(0)
         
         self.pageViewController.setViewControllers([pageContentViewController!], direction: UIPageViewControllerNavigationDirection.Forward, animated: true, completion: nil)
@@ -48,13 +45,7 @@ class StartViewController: UIViewController, UIPageViewControllerDataSource, UIP
         timer = NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: "swipe", userInfo: nil, repeats: true)
 
     }
-    
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
+ 
     
     @IBAction func login(sender: AnyObject) {
         let vc = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
@@ -108,7 +99,6 @@ class StartViewController: UIViewController, UIPageViewControllerDataSource, UIP
     
     func viewControllerAtIndex(index: Int) -> InstructionViewController!
     {
-        
         // Create a new view controller and pass suitable data.
         let pageContentViewController = self.storyboard?.instantiateViewControllerWithIdentifier("InstructionViewController") as! InstructionViewController
         pageContentViewController.imageName = pageImages[index]
@@ -119,9 +109,7 @@ class StartViewController: UIViewController, UIPageViewControllerDataSource, UIP
         pageContentViewController.titleText = attrString
         pageContentViewController.pageIndex = index
         currentIndex = index
-        
         return pageContentViewController
-        
     }
     
     func pageViewController(pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
@@ -134,25 +122,4 @@ class StartViewController: UIViewController, UIPageViewControllerDataSource, UIP
             timer = NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: "swipe", userInfo: nil, repeats: true)
         }
     }
-}
-enum UIUserInterfaceIdiom : Int
-{
-    case Unspecified
-    case Phone
-    case Pad
-}
-
-struct ScreenSize
-{
-    static let SCREEN_WIDTH = UIScreen.mainScreen().bounds.size.width
-    static let SCREEN_HEIGHT = UIScreen.mainScreen().bounds.size.height
-    static let SCREEN_MAX_LENGTH = max(ScreenSize.SCREEN_WIDTH, ScreenSize.SCREEN_HEIGHT)
-    static let SCREEN_MIN_LENGTH = min(ScreenSize.SCREEN_WIDTH, ScreenSize.SCREEN_HEIGHT)
-}
-struct DeviceType
-{
-    static let IS_IPHONE_4_OR_LESS =  UIDevice.currentDevice().userInterfaceIdiom == .Phone && ScreenSize.SCREEN_MAX_LENGTH < 568.0
-    static let IS_IPHONE_5 = UIDevice.currentDevice().userInterfaceIdiom == .Phone && ScreenSize.SCREEN_MAX_LENGTH == 568.0
-    static let IS_IPHONE_6 = UIDevice.currentDevice().userInterfaceIdiom == .Phone && ScreenSize.SCREEN_MAX_LENGTH == 667.0
-    static let IS_IPHONE_6P = UIDevice.currentDevice().userInterfaceIdiom == .Phone && ScreenSize.SCREEN_MAX_LENGTH == 736.0
 }

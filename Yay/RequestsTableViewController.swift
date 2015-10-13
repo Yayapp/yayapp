@@ -13,7 +13,7 @@ class RequestsTableViewController: UITableViewController {
     var requests:[Request] = []
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 
-    @IBOutlet weak var emptyView: UIView!
+    @IBOutlet var emptyView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,15 +26,10 @@ class RequestsTableViewController: UITableViewController {
         }
         
         let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
-        back.tintColor = UIColor(red:CGFloat(3/255.0), green:CGFloat(118/255.0), blue:CGFloat(114/255.0), alpha: 1)
+        back.tintColor = Color.PrimaryActiveColor
         self.navigationItem.setLeftBarButtonItem(back, animated: false)
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
+
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -69,7 +64,7 @@ class RequestsTableViewController: UITableViewController {
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
         })
-        cell.avatar.layer.borderColor = UIColor(red:CGFloat(3/255.0), green:CGFloat(118/255.0), blue:CGFloat(114/255.0), alpha: 1).CGColor
+        cell.avatar.layer.borderColor = Color.PrimaryActiveColor.CGColor
         cell.accept.tag = indexPath.row;
         cell.accept.addTarget(self, action: "accept:", forControlEvents: .TouchUpInside)
         
@@ -97,19 +92,6 @@ class RequestsTableViewController: UITableViewController {
         request.saveInBackground()
         requests.removeAtIndex(sender.tag)
         
-        if request.event.conversation != nil {
-            let query:LYRQuery = LYRQuery(queryableClass: LYRConversation.self)
-            query.predicate = LYRPredicate(property: "identifier", predicateOperator:LYRPredicateOperator.IsEqualTo, value:NSURL(string:request.event.conversation!))
-            
-            do {
-                let conversation = try self.appDelegate.layerClient.executeQuery(query).firstObject as? LYRConversation
-                let participants = NSMutableSet()
-                participants.addObject(request.attendee.objectId!)
-                try conversation!.addParticipants(participants as Set<NSObject>)
-            } catch  {
-                //
-            }
-        }
         if(request.event.attendees.count >= request.event.limit) {
             ParseHelper.declineRequests(request.event)
             ParseHelper.getOwnerRequests(PFUser.currentUser()!, block: {
@@ -117,6 +99,9 @@ class RequestsTableViewController: UITableViewController {
                 if (error == nil){
                     self.requests = result!
                     self.tableView.reloadData()
+                    UIApplication.sharedApplication().applicationIconBadgeNumber-=1
+                    
+                    self.appDelegate.leftViewController.requestsCountLabel.text = "\(Int(self.appDelegate.leftViewController.requestsCountLabel.text!)!-1)"
                 } else {
                     MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                 }
@@ -130,7 +115,9 @@ class RequestsTableViewController: UITableViewController {
         let request = requests[sender.tag]
         request.accepted = false
         request.saveInBackground()
+        UIApplication.sharedApplication().applicationIconBadgeNumber-=1
         requests.removeAtIndex(sender.tag)
+        self.appDelegate.leftViewController.requestsCountLabel.text = "\(Int(self.appDelegate.leftViewController.requestsCountLabel.text!)!-1)"
         tableView.reloadData()
     }
     

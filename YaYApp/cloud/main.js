@@ -1,20 +1,5 @@
-var fs = require('fs');
-var layer = require('cloud/layer-module.js');
+
 var moment = require('cloud/moment-timezone-with-data.js');
-
-var layerProviderID = 'layer:///providers/325c1b08-305a-11e5-9444-7ceb2e015ed0';
-var layerKeyID = 'layer:///keys/543e166c-306a-11e5-b8ad-f60e4d0122e7';
-var privateKey = fs.readFileSync('cloud/keys/layer-key.js');
-layer.initialize(layerProviderID, layerKeyID, privateKey);
-
-Parse.Cloud.define("generateToken", function(request, response) {
-                   var userID = request.params.userID;
-                   var nonce = request.params.nonce;
-                   if (!userID) throw new Error('Missing userID parameter');
-                   if (!nonce) throw new Error('Missing nonce parameter');
-                   response.success(layer.layerIdentityToken(userID, nonce));
-                   });
-
 
 // Use Parse.Cloud.define to define as many cloud functions as you want.
 // For example:
@@ -22,7 +7,88 @@ Parse.Cloud.define("generateToken", function(request, response) {
 //  response.success("Hello world!");
 //});
 
+Parse.Cloud.job("removePastRequests", function(request, status) {
+                // Set up to modify user data
+                Parse.Cloud.useMasterKey();
+                
+                var Event = Parse.Object.extend("Event");
+                var query = new Parse.Query(Event);
+                query.lessThanOrEqualTo("startDate", new Date())
+                
+                var Request = Parse.Object.extend("Request");
+                var reqQuery = new Parse.Query(Request);
+                reqQuery.matchesQuery('event', query);
+                reqQuery.doesNotExist('accepted')
+                reqQuery.find().then(function(results) {
+                                  return Parse.Object.destroyAll(results);
+                                  }).then(function() {
+                                          // Done
+                                          }, function(error) {
+                                          // Error
+                                          });
+                });
 
+Parse.Cloud.afterSave("Message", function(request) {
+                      
+                      var message = request.object.get('text');
+                      var event = request.object.get('event');
+                      var user = request.object.get('user');
+                      var image = request.object.get('photo');
+                      
+                      
+                      event.fetch({
+                                  success: function(event) {
+                                  
+                                  user.fetch({
+                                             success: function(user) {
+                                             
+                                             var userName = user.get('name');
+                                             var eventName = event.get('name');
+                                             var array = [];
+                                             var attendees = event.get('attendees')
+                                             var fullMessage = ""
+                                             if (image == null) {
+                                                fullMessage = "There is a new message in conversation \"" + eventName + "\" from " + userName + ": " + message
+                                             } else {
+                                                fullMessage = "There is a new photo in conversation \"" + eventName + "\" from " + userName
+                                             }
+                                             
+                                             for(i = 0; i < attendees.length; i++){
+                                                if(user.id != attendees[i].id){
+                                                    array[i]= attendees[i].id;
+                                                }
+                                             }
+                                             
+                                             var userQuery = new Parse.Query(Parse.User);
+                                             userQuery.equalTo('newMessage', true);
+                                             userQuery.containedIn('objectId', array);
+                                             
+                                             var pushQuery = new Parse.Query(Parse.Installation);
+                                             pushQuery.matchesQuery('user', userQuery);
+                                             
+                                             // Send push notification to query
+                                             Parse.Push.send({
+                                                             where: pushQuery,
+                                                             //channels: [ "global" ],
+                                                             data: {
+                                                             "alert": fullMessage,
+                                                             "content-available": 1,
+                                                             "sound":"layerbell.caf",
+                                                             "event_id": event.id,
+                                                             "id": request.object.id
+                                                             }
+                                                             }, {
+                                                             success: function() {
+                                                             // Push was successful
+                                                             },
+                                                             error: function(error) {
+                                                             throw "Got an error " + error.code + " : " + error.message;
+                                                             }
+                                                             });
+                                             
+                                             }});
+                                    }});
+                      });
 Parse.Cloud.afterSave("Event", function(request) {
                       
                       if(request.object.existed()) {
@@ -93,7 +159,9 @@ Parse.Cloud.afterSave("Request", function(request) {
                                                   data: {
                                                   alert: "There is a new attendee to happening \"" + eventName + "\"",
                                                   "content-available": 1,
-                                                  "sound":"layerbell.caf"
+                                                  "sound":"layerbell.caf",
+                                                  badge: "Increment",
+                                                  "request_id":request.object.id
                                                   }
                                                   }, {
                                                   success: function() {},

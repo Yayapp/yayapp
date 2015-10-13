@@ -8,9 +8,13 @@
 
 import UIKit
 
+protocol ChooseDateDelegate : NSObjectProtocol {
+    func madeDateTimeChoice(date: NSDate)
+}
+
 class ChooseDateTimeViewController: UIViewController {
 
-    @IBOutlet weak var datePicker: UIDatePicker!
+    @IBOutlet var datePicker: UIDatePicker!
     
     var delegate: ChooseDateDelegate!
     
@@ -20,10 +24,6 @@ class ChooseDateTimeViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
     @IBAction func ok(sender: AnyObject) {
         delegate.madeDateTimeChoice(datePicker.date)
@@ -43,7 +43,4 @@ class ChooseDateTimeViewController: UIViewController {
     }
     */
 
-}
-protocol ChooseDateDelegate : NSObjectProtocol {
-    func madeDateTimeChoice(date: NSDate)
 }

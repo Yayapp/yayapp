@@ -10,11 +10,11 @@ import UIKit
 
 class RequestTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var avatar: PFImageView!
-    @IBOutlet weak var eventName: UILabel!
-    @IBOutlet weak var name: UILabel!
-    @IBOutlet weak var accept: UIButton!
-    @IBOutlet weak var decline: UIButton!
+    @IBOutlet var avatar: PFImageView!
+    @IBOutlet var eventName: UILabel!
+    @IBOutlet var name: UILabel!
+    @IBOutlet var accept: UIButton!
+    @IBOutlet var decline: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()

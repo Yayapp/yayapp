@@ -10,6 +10,6 @@ import UIKit
 
 class CategoryCollectionViewCell: UICollectionViewCell {
     
-    @IBOutlet weak var name: UILabel!
-    @IBOutlet weak var photo: PFImageView!
+    @IBOutlet var name: UILabel!
+    @IBOutlet var photo: PFImageView!
 }

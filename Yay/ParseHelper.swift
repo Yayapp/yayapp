@@ -10,6 +10,7 @@ import Foundation
 
 typealias RequestsResultBlock = ([Request]?, NSError?) -> ()
 typealias EventsResultBlock = ([Event]?, NSError?) -> ()
+typealias MessagesResultBlock = ([Message]?, NSError?) -> ()
 typealias CategoriesResultBlock = ([Category]?, NSError?) -> ()
 typealias EventPhotosResultBlock = ([EventPhoto]?, NSError?) -> ()
 typealias InviteCodesResultBlock = ([InviteCode]?, NSError?) -> ()
@@ -149,6 +150,47 @@ class ParseHelper {
         }
     }
     
+    class func getConversations(user: PFUser, block:EventsResultBlock?) {
+        let query = PFQuery(className:Event.parseClassName())
+        query.whereKey("attendees", equalTo:user)
+        query.orderByDescending("startDate")
+        query.findObjectsInBackgroundWithBlock {
+            objects, error in
+            
+            if error == nil {
+                if let objects = objects as? [Event] {
+                    block!(objects, error)
+                }
+            } else {
+                // Log details of the failure
+                print("Error: \(error!) \(error!.userInfo)")
+                block!(nil, error)
+            }
+        }
+    }
+    
+    class func getMessages(event:Event, block:MessagesResultBlock?) {
+        let query = PFQuery(className:Message.parseClassName())
+        query.whereKey("event", equalTo:event)
+        query.orderByAscending("createdAt")
+//        query.limit = 20
+//        query.skip = 20// * page
+        query.findObjectsInBackgroundWithBlock {
+            objects, error in
+            
+            if error == nil {
+                if let objects = objects as? [Message] {
+                    block!(objects, error)
+                }
+            } else {
+                // Log details of the failure
+                print("Error: \(error!) \(error!.userInfo)")
+                block!(nil, error)
+            }
+        }
+    }
+    
+    
     class func getEventPhotos(category:Category, block:EventPhotosResultBlock?) {
         let query = PFQuery(className:EventPhoto.parseClassName())
         query.whereKey("category", equalTo: category)
@@ -202,11 +244,30 @@ class ParseHelper {
             }
         }
     }
+    
+    class func countRequests(user:PFUser, completion:(Int)->()) {
+        let query1 = PFQuery(className:Event.parseClassName())
+        query1.whereKey("owner", equalTo:user)
+        query1.whereKey("startDate", greaterThanOrEqualTo: NSDate())
+        
+        let query = PFQuery(className:Request.parseClassName())
+        query.whereKey("event", matchesQuery: query1)
+        query.whereKeyDoesNotExist("accepted")
+        query.countObjectsInBackgroundWithBlock {
+            count, error in
+            if error == nil {
+                completion(Int(count))
+            } else {
+                completion(0)
+            }
+        }
+    }
         
     class func getOwnerRequests(user: PFUser, block:RequestsResultBlock?) {
         
         let query1 = PFQuery(className:Event.parseClassName())
         query1.whereKey("owner", equalTo:user)
+        query1.whereKey("startDate", greaterThanOrEqualTo: NSDate())
         
         let query = PFQuery(className:Request.parseClassName())
         query.whereKey("event", matchesQuery: query1)

@@ -16,16 +16,16 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
     var editdone:UIBarButtonItem!
     var isEditingProfile:Bool = false
     
-    @IBOutlet weak var name: UILabel!
-    @IBOutlet weak var location: UILabel!
+    @IBOutlet var name: UILabel!
+    @IBOutlet var location: UILabel!
     
-    @IBOutlet weak var uploadPhoto: UIButton!
-    @IBOutlet weak var avatar: PFImageView!
-    @IBOutlet weak var eventsCount: UILabel!
-    @IBOutlet weak var interests: UILabel!
-    @IBOutlet weak var about: UILabel!
-    @IBOutlet weak var rankIcon: UIImageView!
-    @IBOutlet weak var invites: UILabel!
+    @IBOutlet var uploadPhoto: UIButton!
+    @IBOutlet var avatar: PFImageView!
+    @IBOutlet var eventsCount: UILabel!
+    @IBOutlet var interests: UILabel!
+    @IBOutlet var about: UILabel!
+    @IBOutlet var rankIcon: UIImageView!
+    @IBOutlet var invites: UILabel!
     
     
     
@@ -35,7 +35,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         
         
         let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
-        back.tintColor = UIColor(red:CGFloat(3/255.0), green:CGFloat(118/255.0), blue:CGFloat(114/255.0), alpha: 1)
+        back.tintColor = Color.PrimaryActiveColor
         self.navigationItem.setLeftBarButtonItem(back, animated: false)
         
         let tblView =  UIView(frame: CGRectZero)
@@ -50,7 +50,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         
         if(PFUser.currentUser()?.objectId == user.objectId) {
             editdone = UIBarButtonItem(image:UIImage(named: "edit_icon"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("editdone:"))
-            editdone.tintColor = UIColor(red:CGFloat(3/255.0), green:CGFloat(118/255.0), blue:CGFloat(114/255.0), alpha: 1)
+            editdone.tintColor = Color.PrimaryActiveColor
             self.navigationItem.setRightBarButtonItem(editdone, animated: false)
         }
         
@@ -102,44 +102,35 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         
     }
     
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
     func setAboutMe(text:String){
-        let color = UIColor(red:CGFloat(153/255.0), green:CGFloat(113/255.0), blue:CGFloat(0/255.0), alpha: 1)
         let font15 = UIFont.boldSystemFontOfSize(15)
         let font11 = UIFont.boldSystemFontOfSize(11)
         let range = NSRange(location: "About Me: ".characters.count, length: text.characters.count)
         let myMutableString = NSMutableAttributedString(string: "About Me: "+text, attributes: [NSFontAttributeName:font15])
         myMutableString.addAttribute(NSFontAttributeName, value: font11, range: range)
-        myMutableString.addAttribute(NSForegroundColorAttributeName, value: color , range: range)
+        myMutableString.addAttribute(NSForegroundColorAttributeName, value: Color.ProfileValuesColor , range: range)
         about.attributedText = myMutableString
         tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 2, inSection: 0)], withRowAnimation: UITableViewRowAnimation.None)
     }
     
     func setMyInterests(text:String){
-        let color = UIColor(red:CGFloat(153/255.0), green:CGFloat(113/255.0), blue:CGFloat(0/255.0), alpha: 1)
         let font15 = UIFont.boldSystemFontOfSize(15)
         let font11 = UIFont.boldSystemFontOfSize(11)
         let range = NSRange(location: "Interests: ".characters.count, length: text.characters.count)
         let myMutableString = NSMutableAttributedString(string: "Interests: "+text, attributes: [NSFontAttributeName:font15])
         myMutableString.addAttribute(NSFontAttributeName, value: font11, range: range)
-        myMutableString.addAttribute(NSForegroundColorAttributeName, value: color , range: range)
+        myMutableString.addAttribute(NSForegroundColorAttributeName, value: Color.ProfileValuesColor , range: range)
         interests.attributedText = myMutableString
         tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 1, inSection: 0)], withRowAnimation: UITableViewRowAnimation.None)
     }
     
     func setMyInvites(text:Int){
-        let color = UIColor(red:CGFloat(153/255.0), green:CGFloat(113/255.0), blue:CGFloat(0/255.0), alpha: 1)
         let font15 = UIFont.boldSystemFontOfSize(15)
         let font11 = UIFont.boldSystemFontOfSize(11)
         let range = NSRange(location: "Invites left: ".characters.count, length: 1)
         let myMutableString = NSMutableAttributedString(string: "Invites left: \(text)", attributes: [NSFontAttributeName:font15])
         myMutableString.addAttribute(NSFontAttributeName, value: font11, range: range)
-        myMutableString.addAttribute(NSForegroundColorAttributeName, value: color , range: range)
+        myMutableString.addAttribute(NSForegroundColorAttributeName, value: Color.ProfileValuesColor , range: range)
         invites.attributedText = myMutableString
     }
      
@@ -261,15 +252,15 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
             uploadPhoto.hidden = false
             editdone.image = UIImage(named:"edit_done_icon")
             isEditingProfile = true
-            interests.backgroundColor = UIColor(red:CGFloat(219/255.0), green:CGFloat(234/255.0), blue:CGFloat(237/255.0), alpha: 1)
-            about.backgroundColor = UIColor(red:CGFloat(219/255.0), green:CGFloat(234/255.0), blue:CGFloat(237/255.0), alpha: 1)
+            interests.backgroundColor = Color.ProfileEditBackground
+            about.backgroundColor = Color.ProfileEditBackground
         }
     }
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         let pickedImage:UIImage = info[UIImagePickerControllerEditedImage] as! UIImage
         let imageData = UIImagePNGRepresentation(pickedImage)
-        let imageFile:PFFile = PFFile(data: imageData!)
+        let imageFile:PFFile = PFFile(data: imageData!)!
         avatar.image = pickedImage
         
         PFUser.currentUser()!.setObject(imageFile, forKey: "avatar")

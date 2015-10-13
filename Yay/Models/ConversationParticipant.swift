@@ -8,18 +8,10 @@
 
 import Foundation
 
-extension PFUser: ATLParticipant {
+extension PFUser {
     
-    public var firstName: String {
+    public var name: String {
         return self.objectForKey("name")! as! String
-    }
-    
-    public var lastName: String {
-        return ""
-    }
-    
-    public var fullName: String {
-        return "\(self.firstName)"
     }
     
     public var participantIdentifier: String {
@@ -37,12 +29,4 @@ extension PFUser: ATLParticipant {
         return nil
     }
     
-    public var avatarInitials: String {
-        let initials = "\(getFirstCharacter(self.firstName))\(getFirstCharacter(self.lastName))"
-        return initials.uppercaseString
-    }
-    
-    private func getFirstCharacter(value: String) -> String {
-        return (value as NSString).substringToIndex(1)
-    }
 }

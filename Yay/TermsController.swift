@@ -12,7 +12,7 @@ class TermsController: UIViewController {
     
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
-    @IBOutlet weak var text: UITextView!
+    @IBOutlet var text: UITextView!
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -25,12 +25,7 @@ class TermsController: UIViewController {
         
         text.attributedText = attrString
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
+   
     
     @IBAction func close(sender: AnyObject) {
         dismissViewControllerAnimated(true, completion: {

@@ -10,8 +10,8 @@ import UIKit
 
 class InstructionViewController: UIViewController {
 
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var backimage: UIImageView!
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var backimage: UIImageView!
     
     var pageIndex : Int = 0
     var titleText : NSAttributedString!
@@ -24,10 +24,6 @@ class InstructionViewController: UIViewController {
         titleLabel.attributedText = titleText
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
 
     /*

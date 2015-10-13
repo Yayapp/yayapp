@@ -5,8 +5,6 @@
 #import <Foundation/Foundation.h>
 #import <MMDrawerController/MMDrawerController.h>
 #import <Bolts/Bolts.h>
-#import <Atlas/Atlas.h>
-#import <LayerKit/LayerKit.h>
 #import <Parse/Parse.h>
 #import <ParseUI/ParseUI.h>
 #import <Parse/PFObject+Subclass.h>
@@ -21,4 +19,5 @@
 #import <TTRangeSlider/TTRangeSlider.h>
 #import <GoogleAppIndexing/GoogleAppIndexing.h>
 #import <APTimeZones/APTimeZones.h>
+#import <JSQMessagesViewController/JSQMessages.h>
 #import "Flurry.h"

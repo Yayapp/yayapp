@@ -10,8 +10,8 @@ import UIKit
 
 class EventPhotoTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var name: UILabel!
-    @IBOutlet weak var photo: PFImageView!
+    @IBOutlet var name: UILabel!
+    @IBOutlet var photo: PFImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()

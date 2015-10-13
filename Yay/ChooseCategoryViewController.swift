@@ -8,17 +8,23 @@
 
 import UIKit
 
+protocol ChooseCategoryDelegate : NSObjectProtocol {
+    func madeCategoryChoice(categories: [Category])
+}
+
 class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
+  
+    @IBOutlet var navBar: UINavigationBar!
     var delegate:ChooseCategoryDelegate!
     var categoriesData:[Category]! = []
     var selectedCategoriesData:[Category]! = []
     var multi:Bool = false
     var isEventCreation:Bool = false
     
-    @IBOutlet weak var categories: UICollectionView!
+    @IBOutlet var categories: UICollectionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +35,8 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         
         if(!isEventCreation) {
             appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.None
+        } else {
+            navBar.topItem?.title = "Categories"
         }
         
         ParseHelper.getCategories({
@@ -40,10 +48,6 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
         })
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
     }
 
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
@@ -142,6 +146,4 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
     }
     
 }
-protocol ChooseCategoryDelegate : NSObjectProtocol {
-    func madeCategoryChoice(categories: [Category])
-}
+

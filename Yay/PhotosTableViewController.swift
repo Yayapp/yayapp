@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol ChooseCategoryPhotoDelegate : NSObjectProtocol {
+    func madeCategoryPhotoChoice(eventPhoto: EventPhoto)
+}
+
 class PhotosTableViewController: UITableViewController {
 
     var eventPhotos:[EventPhoto] = []
@@ -18,7 +22,7 @@ class PhotosTableViewController: UITableViewController {
         super.viewDidLoad()
         
         let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
-        back.tintColor = UIColor(red:CGFloat(3/255.0), green:CGFloat(118/255.0), blue:CGFloat(114/255.0), alpha: 1)
+        back.tintColor = Color.PrimaryActiveColor
         self.navigationItem.setLeftBarButtonItem(back, animated: false)
         
         ParseHelper.getEventPhotos(category, block: {
@@ -33,10 +37,6 @@ class PhotosTableViewController: UITableViewController {
         
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
 
     // MARK: - Table view data source
 
@@ -66,15 +66,6 @@ class PhotosTableViewController: UITableViewController {
         cell.photo.file = eventPhoto.photo
         cell.photo.loadInBackground()
         
-//        eventPhoto.photo.getDataInBackgroundWithBlock({
-//            (data:NSData?, error:NSError?) in
-//            if(error == nil) {
-//                var image = UIImage(data:data!)
-//                cell.photo.image = image!
-//            } else {
-//                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-//            }
-//        })
         return cell
     }
 
@@ -84,6 +75,4 @@ class PhotosTableViewController: UITableViewController {
     }
 
 }
-protocol ChooseCategoryPhotoDelegate : NSObjectProtocol {
-    func madeCategoryPhotoChoice(eventPhoto: EventPhoto)
-}
+

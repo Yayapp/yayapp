@@ -9,13 +9,17 @@
 import UIKit
 import Darwin
 
+protocol EnterCodeDelegate : NSObjectProtocol {
+    func validCode()
+}
+
 class EnterCodeViewController: UIViewController, UITextFieldDelegate {
 
-    @IBOutlet weak var code1: UITextField!
-    @IBOutlet weak var code2: UITextField!
-    @IBOutlet weak var code3: UITextField!
-    @IBOutlet weak var code4: UITextField!
-    @IBOutlet weak var code5: UITextField!
+    @IBOutlet var code1: UITextField!
+    @IBOutlet var code2: UITextField!
+    @IBOutlet var code3: UITextField!
+    @IBOutlet var code4: UITextField!
+    @IBOutlet var code5: UITextField!
     
     var delegate:EnterCodeDelegate!
     
@@ -44,10 +48,6 @@ class EnterCodeViewController: UIViewController, UITextFieldDelegate {
         self.view.insertSubview(blurEffectView, atIndex: 0)
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
     @IBAction func apply(sender: AnyObject) {
         let code = code1.text! + code2.text! + code3.text! + code4.text! + code5.text!
@@ -114,7 +114,4 @@ class EnterCodeViewController: UIViewController, UITextFieldDelegate {
         return newLength <= 1
     }
 
-}
-protocol EnterCodeDelegate : NSObjectProtocol {
-    func validCode()
 }

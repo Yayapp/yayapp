@@ -9,44 +9,51 @@
 import UIKit
 
 
-class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate, EnterCodeDelegate {
+class CreateEmailAccountViewController: KeyboardAnimationHelper, EnterCodeDelegate {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     var isLogin:Bool! = false
-    var animateDistance:CGFloat = 0.0
    
-    @IBOutlet weak var name: UITextField!
+    @IBOutlet var name: UITextField!
     
-    @IBOutlet weak var email: UITextField!
-    @IBOutlet weak var loginEmail: UITextField!
+    @IBOutlet var email: UITextField!
+    @IBOutlet var loginEmail: UITextField!
     
-    @IBOutlet weak var email2: UITextField!
-    @IBOutlet weak var loginPassword: UITextField!
+    @IBOutlet var email2: UITextField!
+    @IBOutlet var loginPassword: UITextField!
     
-    @IBOutlet weak var password1: UITextField!
-    @IBOutlet weak var password2: UITextField!
+    @IBOutlet var password1: UITextField!
+    @IBOutlet var password2: UITextField!
     
-    @IBOutlet weak var switchToLogin: UIButton!
-    @IBOutlet weak var switchToRegister: UIButton!
-    @IBOutlet weak var createAccount: UIButton!
-    @IBOutlet weak var signIn: UIButton!
-    @IBOutlet weak var accountExist: UILabel!
-    @IBOutlet weak var forgotPassword: UIButton!
+    @IBOutlet var switchToLogin: UIButton!
+    @IBOutlet var switchToRegister: UIButton!
+    @IBOutlet var createAccount: UIButton!
+    @IBOutlet var signIn: UIButton!
+    @IBOutlet var accountExist: UILabel!
+    @IBOutlet var forgotPassword: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
        
-        loginEmail.delegate = self
-        loginPassword.delegate = self
-        name.delegate = self
-        email.delegate = self
-        email2.delegate = self
-        password1.delegate = self
-        password2.delegate = self
+        configureTextFields([loginEmail, loginPassword, name, email, email2, password1, password2])
+
         if(isLogin == true){
             switchToLogin(true)
         } else {
             switchToRegister(true)
+        }
+    }
+    
+    func configureTextFields(textFields:[UITextField]){
+        
+        for textField in textFields {
+            let paddingView = UIView(frame: CGRectMake(0, 0, 15, textField.frame.height))
+            textField.leftView = paddingView
+            textField.rightView = paddingView
+            textField.leftViewMode = UITextFieldViewMode.Always
+            textField.rightViewMode = UITextFieldViewMode.Always
+            
+            textField.delegate = self
         }
     }
 
@@ -54,11 +61,6 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate, E
         return true
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
     @IBAction func createAccount(sender: AnyObject) {
         self.view.endEditing(true)
         if (name.text!.isEmpty || email.text!.isEmpty || password1.text!.isEmpty) {
@@ -113,7 +115,6 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate, E
                     currentInstallation["user"] = PFUser.currentUser()
                     currentInstallation.saveInBackground()
                     
-                    self.appDelegate.authenticateInLayer()
                     self.performSegueWithIdentifier("proceed", sender: nil)
                 } else if(error!.code == 101) {
                     MessageToUser.showDefaultErrorMessage("Invalid username or password")
@@ -188,79 +189,11 @@ class CreateEmailAccountViewController: UIViewController, UITextFieldDelegate, E
         accountExist.text = "Don't have an account?"
     }
     
-    
     func validCode() {
         let currentInstallation:PFInstallation = PFInstallation.currentInstallation()
         currentInstallation["user"] = PFUser.currentUser()
         currentInstallation.saveInBackground()
         
-        self.appDelegate.authenticateInLayer()
         self.performSegueWithIdentifier("proceedToPicker", sender: nil)
     }
-    
-    
-    struct MoveKeyboard {
-        static let KEYBOARD_ANIMATION_DURATION : CGFloat = 0.3
-        static let MINIMUM_SCROLL_FRACTION : CGFloat = 0.2;
-        static let MAXIMUM_SCROLL_FRACTION : CGFloat = 0.8;
-        static let PORTRAIT_KEYBOARD_HEIGHT : CGFloat = 216;
-        static let LANDSCAPE_KEYBOARD_HEIGHT : CGFloat = 162;
-    }
-    
-    
-    func textFieldDidBeginEditing(textField: UITextField) {
-        let textFieldRect : CGRect = self.view.window!.convertRect(textField.bounds, fromView: textField)
-        let viewRect : CGRect = self.view.window!.convertRect(self.view.bounds, fromView: self.view)
-        
-        let midline : CGFloat = textFieldRect.origin.y + 0.5 * textFieldRect.size.height
-        let numerator : CGFloat = midline - viewRect.origin.y - MoveKeyboard.MINIMUM_SCROLL_FRACTION * viewRect.size.height
-        let denominator : CGFloat = (MoveKeyboard.MAXIMUM_SCROLL_FRACTION - MoveKeyboard.MINIMUM_SCROLL_FRACTION) * viewRect.size.height
-        var heightFraction : CGFloat = numerator / denominator
-        
-        if heightFraction < 0.0 {
-            heightFraction = 0.0
-        } else if heightFraction > 1.0 {
-            heightFraction = 1.0
-        }
-        
-        let orientation : UIInterfaceOrientation = UIApplication.sharedApplication().statusBarOrientation
-        if (orientation == UIInterfaceOrientation.Portrait || orientation == UIInterfaceOrientation.PortraitUpsideDown) {
-            animateDistance = floor(MoveKeyboard.PORTRAIT_KEYBOARD_HEIGHT * heightFraction)
-        } else {
-            animateDistance = floor(MoveKeyboard.LANDSCAPE_KEYBOARD_HEIGHT * heightFraction)
-        }
-        
-        var viewFrame : CGRect = self.view.frame
-        viewFrame.origin.y -= animateDistance
-        
-        UIView.beginAnimations(nil, context: nil)
-        UIView.setAnimationBeginsFromCurrentState(true)
-        UIView.setAnimationDuration(NSTimeInterval(MoveKeyboard.KEYBOARD_ANIMATION_DURATION))
-        
-        self.view.frame = viewFrame
-        
-        UIView.commitAnimations()
-    }
-    
-    
-    func textFieldDidEndEditing(textField: UITextField) {
-        var viewFrame : CGRect = self.view.frame
-        viewFrame.origin.y += animateDistance
-        
-        UIView.beginAnimations(nil, context: nil)
-        UIView.setAnimationBeginsFromCurrentState(true)
-        
-        UIView.setAnimationDuration(NSTimeInterval(MoveKeyboard.KEYBOARD_ANIMATION_DURATION))
-        
-        self.view.frame = viewFrame
-        
-        UIView.commitAnimations()
-        
-    }
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
-        self.view.endEditing(true)
-        return false
-    }
-
-
 }

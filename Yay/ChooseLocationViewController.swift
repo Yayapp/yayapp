@@ -9,10 +9,14 @@
 import UIKit
 import MapKit
 
+protocol ChooseLocationDelegate : NSObjectProtocol {
+    func madeLocationChoice(coordinates: CLLocationCoordinate2D)
+}
+
 class ChooseLocationViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UISearchBarDelegate {
     
     @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet var mapView: MKMapView!
+    @IBOutlet weak var mapView: MKMapView!
     var lat: CLLocationDegrees?
     var lon: CLLocationDegrees?
     let locationManager = CLLocationManager()
@@ -32,11 +36,6 @@ class ChooseLocationViewController: UIViewController, CLLocationManagerDelegate,
         
         longPressRecogniser.minimumPressDuration = 1.0
         mapView.addGestureRecognizer(longPressRecogniser)
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     @IBAction func ok(sender: AnyObject) {
@@ -102,6 +101,4 @@ class ChooseLocationViewController: UIViewController, CLLocationManagerDelegate,
     }
 
 }
-protocol ChooseLocationDelegate : NSObjectProtocol {
-    func madeLocationChoice(coordinates: CLLocationCoordinate2D)
-}
+

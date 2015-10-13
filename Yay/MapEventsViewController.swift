@@ -12,7 +12,7 @@ import MapKit
 class MapEventsViewController: EventsViewController, MKMapViewDelegate, EventChangeDelegate {
 
     
-    @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet var mapView: MKMapView!
     let regionRadius: CLLocationDistance = 1000
     
     override func viewDidLoad() {
@@ -33,10 +33,6 @@ class MapEventsViewController: EventsViewController, MKMapViewDelegate, EventCha
         
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
     override func reloadAll(events:[Event]) {
         eventsData = events

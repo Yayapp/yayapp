@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 YAY LLC. All rights reserved.
 //
 import UIKit
+
 extension String {
     func MD5() -> String {
         let data = (self as NSString).dataUsingEncoding(NSUTF8StringEncoding)
@@ -42,6 +43,72 @@ extension String {
 
         return regex.firstMatchInString(self, options:[],
             range: NSMakeRange(0, utf16.count)) != nil
+    }
+}
+
+extension PFUser {
+    func getName() -> String {
+        return self.objectForKey("name") as! String
+    }
+    func getImage(completion: (result: UIImage!) -> Void) {
+        let file = self.objectForKey("avatar") as! PFFile
+        file.getDataInBackgroundWithBlock {
+            result, error in
+            var image:UIImage!
+            if error == nil {
+               image = UIImage(data: result!)
+            } else {
+               image = UIImage(named: "upload_pic")
+            }
+            completion(result: image)
+        }
+    }
+}
+
+extension CLLocation {
+    func getLocationString(label:UILabel?, button:UIButton?, timezoneCompletion:((NSTimeZone) -> ())?){
+    let geoCoder = CLGeocoder()
+    let cityCountry:NSMutableString=NSMutableString()
+    geoCoder.reverseGeocodeLocation(self, completionHandler: { (placemarks, error) -> Void in
+        let placeArray = placemarks as [CLPlacemark]!
+        
+        // Place details
+        var placeMark: CLPlacemark!
+        placeMark = placeArray?[0]
+ 
+        if timezoneCompletion != nil {
+        if #available(iOS 9.0, *) {
+            timezoneCompletion!(placeMark.timeZone())
+        } else {
+            timezoneCompletion!(APTimeZones.sharedInstance().timeZoneWithLocation(placeMark.location, countryCode:placeMark.ISOcountryCode))
+        }
+        }
+        if let building = placeMark.subThoroughfare {
+            cityCountry.appendString(building)
+        }
+        
+        if let address = placeMark.thoroughfare {
+            if cityCountry.length>0 {
+                cityCountry.appendString(" ")
+            }
+            cityCountry.appendString(address)
+        }
+        
+        if let zip = placeMark.postalCode {
+            if cityCountry.length>0 {
+                cityCountry.appendString(", ")
+            }
+            cityCountry.appendString(zip)
+        }
+        if cityCountry.length>0 {
+            if label != nil {
+                label!.text = cityCountry as String
+            } else {
+                button!.setTitle(cityCountry as String, forState: .Normal)
+            }
+            
+        }
+    })
     }
 }
 

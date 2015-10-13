@@ -26,4 +26,5 @@ class InviteCode: PFObject , PFSubclassing {
     @NSManaged var code: String
     @NSManaged var limit: Int
     @NSManaged var invited: Int
+    
 }

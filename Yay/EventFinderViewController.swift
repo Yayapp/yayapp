@@ -16,8 +16,8 @@ class EventFinderViewController: UIViewController, ChooseLocationDelegate {
     var isRotating = false
     var shouldStopRotating = false
     
-    @IBOutlet weak var searchingAnimation: UIImageView!
-    @IBOutlet weak var location: UIButton!
+    @IBOutlet var searchingAnimation: UIImageView!
+    @IBOutlet var location: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,10 +46,6 @@ class EventFinderViewController: UIViewController, ChooseLocationDelegate {
         
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
     override func animationDidStop(anim: CAAnimation, finished flag: Bool) {
         if self.shouldStopRotating == false {
@@ -85,7 +81,7 @@ class EventFinderViewController: UIViewController, ChooseLocationDelegate {
     }
     
     func madeLocationChoice(coordinates: CLLocationCoordinate2D){
-        getLocationString(coordinates)
+        CLLocation(latitude: coordinates.latitude, longitude: coordinates.longitude).getLocationString(nil, button: location, timezoneCompletion: nil)
         
         if let user = PFUser.currentUser() {
             user.setObject(PFGeoPoint(latitude: coordinates.latitude, longitude: coordinates.longitude), forKey: "location")
@@ -98,41 +94,5 @@ class EventFinderViewController: UIViewController, ChooseLocationDelegate {
             goToMain()
         }
     }
-    
-    func getLocationString(coordinates: CLLocationCoordinate2D){
-        let geoCoder = CLGeocoder()
-        let cllocation = CLLocation(latitude: coordinates.latitude, longitude: coordinates.longitude)
-        let cityCountry:NSMutableString=NSMutableString()
-        geoCoder.reverseGeocodeLocation(cllocation, completionHandler: { (placemarks, error) -> Void in
-            let placeArray = placemarks as [CLPlacemark]!
-            
-            // Place details
-            var placeMark: CLPlacemark!
-            placeMark = placeArray?[0]
-            
-            if let building = placeMark.subThoroughfare {
-                cityCountry.appendString(building)
-            }
-            
-            if let address = placeMark.thoroughfare {
-                if cityCountry.length>0 {
-                    cityCountry.appendString(" ")
-                }
-                cityCountry.appendString(address)
-            }
-            
-            if let zip = placeMark.postalCode {
-                if cityCountry.length>0 {
-                    cityCountry.appendString(", ")
-                }
-                cityCountry.appendString(zip)
-            }
-            if cityCountry.length>0 {
-                self.location.setTitle(cityCountry as String, forState: .Normal)
-            }
-        })
-        
-    }
-    
 }
 

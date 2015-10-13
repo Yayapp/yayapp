@@ -9,7 +9,11 @@
 import UIKit
 import MapKit
 
-class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLocationDelegate, ChooseCategoryDelegate, ChooseEventPictureDelegate, UIPopoverPresentationControllerDelegate, UITextFieldDelegate, TTRangeSliderDelegate {
+protocol EventCreationDelegate : NSObjectProtocol {
+    func eventCreated(event:Event)
+}
+
+class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, ChooseLocationDelegate, ChooseCategoryDelegate, ChooseEventPictureDelegate, UIPopoverPresentationControllerDelegate, TTRangeSliderDelegate {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     var calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
@@ -26,25 +30,25 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
     var chosenPhoto:PFFile?
     var delegate:EventCreationDelegate!
     var timeZone:NSTimeZone!
-    var animateDistance:CGFloat = 0.0
+    
     var limitInt:Int=1
     
-    @IBOutlet weak var eventImage: UIImageView!
-    @IBOutlet weak var pickCategory: UIButton!
-    @IBOutlet weak var eventPhoto: UIButton!
-    @IBOutlet weak var limit: UITextField!
-    @IBOutlet weak var dateTimeButton: UIButton!
-    @IBOutlet weak var location: UIButton!
+    @IBOutlet var eventImage: UIImageView!
+    @IBOutlet var pickCategory: UIButton!
+    @IBOutlet var eventPhoto: UIButton!
+    @IBOutlet var limit: UITextField!
+    @IBOutlet var dateTimeButton: UIButton!
+    @IBOutlet var location: UIButton!
     
-    @IBOutlet weak var rangeSlider: TTRangeSlider!
-    @IBOutlet weak var rangeLabel: UILabel!
-    @IBOutlet weak var sliderContainer: UIView!
-    @IBOutlet weak var spinner: UIActivityIndicatorView!
-    @IBOutlet weak var name: UITextField!
-    @IBOutlet weak var descr: UITextField!
+    @IBOutlet var rangeSlider: TTRangeSlider!
+    @IBOutlet var rangeLabel: UILabel!
+    @IBOutlet var sliderContainer: UIView!
+    @IBOutlet var spinner: UIActivityIndicatorView!
+    @IBOutlet var name: UITextField!
+    @IBOutlet var descr: UITextField!
 
-    @IBOutlet weak var createButton: UIButton!
-    @IBOutlet weak var cancelButton: UIButton!
+    @IBOutlet var createButton: UIButton!
+    @IBOutlet var cancelButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,14 +69,11 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
         }
         
         let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
-        back.tintColor = UIColor(red:CGFloat(3/255.0), green:CGFloat(118/255.0), blue:CGFloat(114/255.0), alpha: 1)
+        back.tintColor = Color.PrimaryActiveColor
         self.navigationItem.setLeftBarButtonItem(back, animated: false)
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
         
     }
+  
     
     func update() {
         event!.fetchInBackgroundWithBlock({
@@ -156,7 +157,10 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
     func madeLocationChoice(coordinates: CLLocationCoordinate2D){
         latitude = coordinates.latitude
         longitude = coordinates.longitude
-        getLocationString(coordinates)
+        CLLocation(latitude: latitude!, longitude: longitude!).getLocationString(nil, button: location, timezoneCompletion: {
+            result in
+            self.timeZone = result
+        })
     }
     
     
@@ -204,128 +208,14 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
         }
     }
 
-    func getLocationString(coordinates: CLLocationCoordinate2D){
-        let geoCoder = CLGeocoder()
-        let cllocation = CLLocation(latitude: coordinates.latitude, longitude: coordinates.longitude)
-        let cityCountry:NSMutableString=NSMutableString()
-        geoCoder.reverseGeocodeLocation(cllocation, completionHandler: { (placemarks, error) -> Void in
-            let placeArray = placemarks as [CLPlacemark]!
-            
-            // Place details
-            var placeMark: CLPlacemark!
-            placeMark = placeArray?[0]
-            if #available(iOS 9.0, *) {
-                self.timeZone = placeMark.timeZone()
-            } else {
-                self.timeZone = APTimeZones.sharedInstance().timeZoneWithLocation(placeMark.location, countryCode:placeMark.ISOcountryCode)
-            }
-            
-            if let building = placeMark.subThoroughfare {
-                cityCountry.appendString(building)
-            }
-            
-            if let address = placeMark.thoroughfare {
-                if cityCountry.length>0 {
-                    cityCountry.appendString(" ")
-                }
-                cityCountry.appendString(address)
-            }
-            
-            if let zip = placeMark.postalCode {
-                if cityCountry.length>0 {
-                    cityCountry.appendString(", ")
-                }
-                cityCountry.appendString(zip)
-            }
-            if cityCountry.length>0 {
-                self.location.setTitle(cityCountry as String, forState: .Normal)
-            }
-        })
-        
-    }
-    
-
     func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle
     {
         return .None
     }
     
-
-    
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         NSNotificationCenter.defaultCenter().removeObserver(self)
-    }
-   
-    
-    struct MoveKeyboard {
-        static let KEYBOARD_ANIMATION_DURATION : CGFloat = 0.3
-        static let MINIMUM_SCROLL_FRACTION : CGFloat = 0.2;
-        static let MAXIMUM_SCROLL_FRACTION : CGFloat = 0.8;
-        static let PORTRAIT_KEYBOARD_HEIGHT : CGFloat = 216;
-        static let LANDSCAPE_KEYBOARD_HEIGHT : CGFloat = 162;
-    }
-    
-    func textFieldDidBeginEditing(textField: UITextField) {
-        textDidBeginEditing(textField)
-    }
-    
-    func textFieldDidEndEditing(textField: UITextField) {
-        textDidEndEditing()
-    }
-    
-    func textDidBeginEditing(textField: UIView) {
-        let textFieldRect : CGRect = self.view.window!.convertRect(textField.bounds, fromView: textField)
-        let viewRect : CGRect = self.view.window!.convertRect(self.view.bounds, fromView: self.view)
-        
-        let midline : CGFloat = textFieldRect.origin.y + 0.5 * textFieldRect.size.height
-        let numerator : CGFloat = midline - viewRect.origin.y - MoveKeyboard.MINIMUM_SCROLL_FRACTION * viewRect.size.height
-        let denominator : CGFloat = (MoveKeyboard.MAXIMUM_SCROLL_FRACTION - MoveKeyboard.MINIMUM_SCROLL_FRACTION) * viewRect.size.height
-        var heightFraction : CGFloat = numerator / denominator
-        
-        if heightFraction < 0.0 {
-            heightFraction = 0.0
-        } else if heightFraction > 1.0 {
-            heightFraction = 1.0
-        }
-        
-        let orientation : UIInterfaceOrientation = UIApplication.sharedApplication().statusBarOrientation
-        if (orientation == UIInterfaceOrientation.Portrait || orientation == UIInterfaceOrientation.PortraitUpsideDown) {
-            animateDistance = floor(MoveKeyboard.PORTRAIT_KEYBOARD_HEIGHT * heightFraction)
-        } else {
-            animateDistance = floor(MoveKeyboard.LANDSCAPE_KEYBOARD_HEIGHT * heightFraction)
-        }
-        
-        var viewFrame : CGRect = self.view.frame
-        viewFrame.origin.y -= animateDistance
-        
-        UIView.beginAnimations(nil, context: nil)
-        UIView.setAnimationBeginsFromCurrentState(true)
-        UIView.setAnimationDuration(NSTimeInterval(MoveKeyboard.KEYBOARD_ANIMATION_DURATION))
-        
-        self.view.frame = viewFrame
-        
-        UIView.commitAnimations()
-    }
-    
-    
-    func textDidEndEditing() {
-        var viewFrame : CGRect = self.view.frame
-        viewFrame.origin.y += animateDistance
-        
-        UIView.beginAnimations(nil, context: nil)
-        UIView.setAnimationBeginsFromCurrentState(true)
-        
-        UIView.setAnimationDuration(NSTimeInterval(MoveKeyboard.KEYBOARD_ANIMATION_DURATION))
-        
-        self.view.frame = viewFrame
-        
-        UIView.commitAnimations()
-        
-    }
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
-        self.view.endEditing(true)
-        return false
     }
    
     @IBAction func plusLimit(sender: AnyObject) {
@@ -383,7 +273,7 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
             self.event!.maxAge = maxAge
             self.event!.owner = PFUser.currentUser()!
             self.event!.location = PFGeoPoint(latitude: latitude!, longitude: longitude!)
-            self.event!.timeZone = timeZone.name
+            self.event!.timeZone = timeZone!.name
             
             self.event!.saveInBackgroundWithBlock({
                 (result, error) in
@@ -435,7 +325,4 @@ class CreateEventViewController: UIViewController, ChooseDateDelegate, ChooseLoc
     deinit {
         appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.PanningCenterView
     }
-}
-protocol EventCreationDelegate : NSObjectProtocol {
-    func eventCreated(event:Event)
 }

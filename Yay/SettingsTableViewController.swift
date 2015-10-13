@@ -14,18 +14,18 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
     
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
-    @IBOutlet weak var distanceLabel: UILabel!
+    @IBOutlet var distanceLabel: UILabel!
     
-    @IBOutlet weak var distanceSlider: TTRangeSlider!
-    @IBOutlet weak var attAccepted: UISwitch!
+    @IBOutlet var distanceSlider: TTRangeSlider!
+    @IBOutlet var attAccepted: UISwitch!
     
-    @IBOutlet weak var eventNearby: UISwitch!
-    @IBOutlet weak var eventsReminder: UISwitch!
-    @IBOutlet weak var newMessage: UISwitch!
+    @IBOutlet var eventNearby: UISwitch!
+    @IBOutlet var eventsReminder: UISwitch!
+    @IBOutlet var newMessage: UISwitch!
     
-    @IBOutlet weak var maleButton: UIButton!
+    @IBOutlet var maleButton: UIButton!
     
-    @IBOutlet weak var femaleButton: UIButton!
+    @IBOutlet var femaleButton: UIButton!
     
     
     override func viewDidLoad() {
@@ -39,10 +39,10 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
         
         
         let logout = UIBarButtonItem(image:UIImage(named: "logout"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("logout:"))
-        logout.tintColor = UIColor(red:CGFloat(3/255.0), green:CGFloat(118/255.0), blue:CGFloat(114/255.0), alpha: 1)
+        logout.tintColor = Color.PrimaryActiveColor
         self.navigationItem.setRightBarButtonItem(logout, animated: false)
         let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
-        back.tintColor = UIColor(red:CGFloat(3/255.0), green:CGFloat(118/255.0), blue:CGFloat(114/255.0), alpha: 1)
+        back.tintColor = Color.PrimaryActiveColor
         self.navigationItem.setLeftBarButtonItem(back, animated: false)
         appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.None
         distanceSlider.delegate = self
@@ -65,11 +65,6 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
         })
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
     func rangeSlider(sender:TTRangeSlider, didChangeSelectedMinimumValue selectedMinimum:Float, andMaximumValue selectedMaximum:Float){
@@ -107,23 +102,21 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
     }
     
     @IBAction func female(sender: AnyObject) {
-        self.maleButton.backgroundColor = UIColor(red:CGFloat(124/255.0), green:CGFloat(127/255.0), blue:CGFloat(128/255.0), alpha: 1)
-        self.femaleButton.backgroundColor = UIColor(red:CGFloat(253/255.0), green:CGFloat(185/255.0), blue:CGFloat(38/255.0), alpha: 1)
+        self.maleButton.backgroundColor = Color.GenderInactiveColor
+        self.femaleButton.backgroundColor = Color.GenderActiveColor
         PFUser.currentUser()?.setObject(0, forKey: "gender")
         PFUser.currentUser()?.saveInBackground()
     }
     
     @IBAction func male(sender: AnyObject) {
-        self.femaleButton.backgroundColor = UIColor(red:CGFloat(124/255.0), green:CGFloat(127/255.0), blue:CGFloat(128/255.0), alpha: 1)
-        self.maleButton.backgroundColor = UIColor(red:CGFloat(253/255.0), green:CGFloat(185/255.0), blue:CGFloat(38/255.0), alpha: 1)
+        self.femaleButton.backgroundColor = Color.GenderInactiveColor
+        self.maleButton.backgroundColor = Color.GenderActiveColor
         PFUser.currentUser()?.setObject(1, forKey: "gender")
         PFUser.currentUser()?.saveInBackground()
     }
     
     @IBAction func logout(sender: AnyObject) {
-        appDelegate.layerClient.deauthenticateWithCompletion { (success: Bool, error: NSError?) in
-            if error == nil {
-                PFUser.logOutInBackgroundWithBlock({
+        PFUser.logOutInBackgroundWithBlock({
                     error in
                     if error == nil {
                         let startViewController = self.storyboard!.instantiateViewControllerWithIdentifier("StartViewController") as! StartViewController
@@ -133,11 +126,6 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
                         
                     }
                 })
-                
-            } else {
-                print("Failed to deauthenticate: \(error)")
-            }
-        }
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -148,7 +136,7 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
 
     override func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         let header:UITableViewHeaderFooterView = view as! UITableViewHeaderFooterView
-        header.contentView.backgroundColor = UIColor(red:CGFloat(121/255.0), green:CGFloat(205/255.0), blue:CGFloat(205/255.0), alpha: 1)
+        header.contentView.backgroundColor = Color.SettingsHeader
         header.textLabel!.textAlignment = NSTextAlignment.Center
         header.textLabel!.textColor = UIColor.whiteColor()
     }

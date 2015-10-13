@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol ListEventsDelegate : NSObjectProtocol {
+    func madeEventChoice(event: Event)
+}
+
 class ListEventsViewController: EventsViewController, UITableViewDataSource, UITableViewDelegate, EventChangeDelegate {
 
     var eventsFirst:[Event]?
@@ -16,7 +20,7 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
     var currentLocation:CLLocation?
     var delegate:ListEventsDelegate?
     
-    @IBOutlet weak var events: UITableView!
+    @IBOutlet var events: UITableView!
     
     
     override func viewDidLoad() {
@@ -28,7 +32,7 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
         }
         
         let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
-        back.tintColor = UIColor(red:CGFloat(3/255.0), green:CGFloat(118/255.0), blue:CGFloat(114/255.0), alpha: 1)
+        back.tintColor = Color.PrimaryActiveColor
         self.navigationItem.setLeftBarButtonItem(back, animated: false)
         
         if let user = PFUser.currentUser() {
@@ -47,12 +51,6 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
     }
    
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-   
-
     override func reloadAll(eventsList:[Event]) {
         eventsData = eventsList
         events.reloadData()
@@ -66,29 +64,19 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
         
         let cell = events.dequeueReusableCellWithIdentifier("Cell") as! EventsTableViewCell
         let event:Event! = eventsData[indexPath.row]
-        let distanceBetween: CLLocationDistance = CLLocation(latitude: event.location.latitude, longitude: event.location.longitude).distanceFromLocation(currentLocation!)
+        let cllocation = CLLocation(latitude: event.location.latitude, longitude: event.location.longitude)
+        let distanceBetween: CLLocationDistance = cllocation.distanceFromLocation(currentLocation!)
         let distanceStr = String(format: "%.2f", distanceBetween/1000)
         
         cell.title.text = event.name
         
-        getLocationString(cell.location, latitude: event.location.latitude, longitude: event.location.longitude)
+        cllocation.getLocationString(cell.location, button: nil, timezoneCompletion: nil)
         
         cell.date.text = dateFormatter.stringFromDate(event.startDate)
         cell.howFar.text = "\(distanceStr)km"
         
         cell.picture.file = event.photo
         cell.picture.loadInBackground()
-        
-//        event.photo.getDataInBackgroundWithBlock({
-//            (data:NSData?, error:NSError?) in
-//            if(error == nil) {
-//                var image = UIImage(data:data!)
-//                cell.picture.image = image!
-//            } else {
-//                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-//            }
-//        })
-        
         return cell
     }
     
@@ -115,47 +103,10 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
         eventsData = eventsData.filter({$0.objectId != event.objectId})
         events.reloadData()
     }
-   
-    func getLocationString(label:UILabel, latitude: Double, longitude: Double){
-        let geoCoder = CLGeocoder()
-        let cllocation = CLLocation(latitude: latitude, longitude: longitude)
-        let cityCountry:NSMutableString=NSMutableString()
-        geoCoder.reverseGeocodeLocation(cllocation, completionHandler: { (placemarks, error) -> Void in
-            let placeArray = placemarks as [CLPlacemark]!
-            
-            // Place details
-            var placeMark: CLPlacemark!
-            placeMark = placeArray?[0]
-            
-            if let building = placeMark.subThoroughfare {
-                cityCountry.appendString(building)
-            }
-            
-            if let address = placeMark.thoroughfare {
-                if cityCountry.length>0 {
-                    cityCountry.appendString(" ")
-                }
-                cityCountry.appendString(address)
-            }
-            
-            if let zip = placeMark.postalCode {
-                if cityCountry.length>0 {
-                    cityCountry.appendString(", ")
-                }
-                cityCountry.appendString(zip)
-            }
-            if cityCountry.length>0 {
-                label.text = cityCountry as String
-            }
-        })
-        
-    }
     
     @IBAction func backButtonTapped(sender: AnyObject) {
         navigationController?.popViewControllerAnimated(true)
     }
     
 }
-protocol ListEventsDelegate : NSObjectProtocol {
-    func madeEventChoice(event: Event)
-}
+

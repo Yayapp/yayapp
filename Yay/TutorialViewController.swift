@@ -13,8 +13,8 @@ class TutorialViewController: UIViewController {
 //    var hints:[String]!
     var pageIndex : Int = 0
 
-    @IBOutlet weak var tutorialImage: UIImageView!
-    @IBOutlet weak var tuorialButton: UIButton!
+    @IBOutlet var tutorialImage: UIImageView!
+    @IBOutlet var tuorialButton: UIButton!
     
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
@@ -25,11 +25,6 @@ class TutorialViewController: UIViewController {
         
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
     
     @IBAction func skip(sender: AnyObject) {
         parentViewController!.dismissViewControllerAnimated(true, completion: {

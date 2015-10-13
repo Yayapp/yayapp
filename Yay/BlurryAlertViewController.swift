@@ -23,12 +23,12 @@ class BlurryAlertViewController: UIViewController {
     var event:Event?
     var completion:(()->Void)?
     
-    @IBOutlet weak var cancel: UIButton!
-    @IBOutlet weak var about: UILabel!
+    @IBOutlet var cancel: UIButton!
+    @IBOutlet var about: UILabel!
     
-    @IBOutlet weak var message: UILabel!
+    @IBOutlet var message: UILabel!
     
-    @IBOutlet weak var centerButton: UIButton!
+    @IBOutlet var centerButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,11 +54,6 @@ class BlurryAlertViewController: UIViewController {
        
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
 
     @IBAction func okbutton(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion:nil)

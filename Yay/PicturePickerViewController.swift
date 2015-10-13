@@ -13,10 +13,10 @@ class PicturePickerViewController: UIViewController, UIImagePickerControllerDele
     
     let picker = UIImagePickerController()
     
-    @IBOutlet weak var uploadPhoto: UIButton!
-    @IBOutlet weak var avatar: PFImageView!
+    @IBOutlet var uploadPhoto: UIButton!
+    @IBOutlet var avatar: PFImageView!
     
-    @IBOutlet weak var proceed: UIButton!
+    @IBOutlet var proceed: UIButton!
     
     
     override func viewDidLoad() {
@@ -25,25 +25,33 @@ class PicturePickerViewController: UIViewController, UIImagePickerControllerDele
         avatar.layer.borderColor = UIColor.whiteColor().CGColor
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
 
     @IBAction func uploadPhoto(sender: AnyObject) {
-        picker.allowsEditing = true
-        picker.sourceType = UIImagePickerControllerSourceType.Camera
-        picker.cameraCaptureMode = .Photo
-        picker.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
-        picker.showsCameraControls = true;
-        presentViewController(picker, animated: true, completion: nil)
+        let alert = UIAlertController(title: "Choose Option", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
+        alert.addAction(UIAlertAction(title: "Take Photo", style: UIAlertActionStyle.Default, handler: {
+            (action: UIAlertAction) in
+            self.picker.allowsEditing = true
+            self.picker.sourceType = UIImagePickerControllerSourceType.Camera
+            self.picker.cameraCaptureMode = .Photo
+            self.picker.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
+            self.picker.showsCameraControls = true;
+            self.presentViewController(self.picker, animated: true, completion: nil)
+        }))
+        alert.addAction(UIAlertAction(title: "From Library", style: UIAlertActionStyle.Default, handler: {
+            (action: UIAlertAction) in
+            self.picker.allowsEditing = true //2
+            self.picker.sourceType = .PhotoLibrary //3
+            self.picker.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
+            self.presentViewController(self.picker, animated: true, completion: nil)
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+        presentViewController(alert, animated: true, completion: nil)
     }
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         let pickedImage:UIImage = info[UIImagePickerControllerEditedImage] as! UIImage
         let imageData = UIImagePNGRepresentation(pickedImage)
-        let imageFile:PFFile = PFFile(data: imageData!)
+        let imageFile:PFFile = PFFile(data: imageData!)!
         avatar.image = pickedImage
         
         PFUser.currentUser()!.setObject(imageFile, forKey: "avatar")

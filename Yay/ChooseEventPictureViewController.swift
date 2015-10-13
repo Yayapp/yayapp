@@ -8,13 +8,17 @@
 
 import UIKit
 
+protocol ChooseEventPictureDelegate : NSObjectProtocol {
+    func madeEventPictureChoice(photo: PFFile, pickedPhoto: UIImage?)
+}
+
 class ChooseEventPictureViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, ChooseCategoryPhotoDelegate {
 
     let picker = UIImagePickerController()
     var delegate:ChooseEventPictureDelegate!
     var categories:[Category]! = []
     
-    @IBOutlet weak var photos: UITableView!
+    @IBOutlet var photos: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,7 +27,7 @@ class ChooseEventPictureViewController: UIViewController, UITableViewDataSource,
         photos.dataSource = self
         
         let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
-        back.tintColor = UIColor(red:CGFloat(3/255.0), green:CGFloat(118/255.0), blue:CGFloat(114/255.0), alpha: 1)
+        back.tintColor = Color.PrimaryActiveColor
         self.navigationItem.setLeftBarButtonItem(back, animated: false)
         
         ParseHelper.getCategories({
@@ -37,11 +41,6 @@ class ChooseEventPictureViewController: UIViewController, UITableViewDataSource,
         })
     }
 
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return categories.count
@@ -94,7 +93,7 @@ class ChooseEventPictureViewController: UIViewController, UITableViewDataSource,
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         let pickedImage:UIImage = info[UIImagePickerControllerEditedImage] as! UIImage
         let imageData = UIImagePNGRepresentation(pickedImage)
-        let imageFile:PFFile = PFFile(data: imageData!)
+        let imageFile:PFFile = PFFile(data: imageData!)!
         delegate.madeEventPictureChoice(imageFile, pickedPhoto: pickedImage)
         dismissViewControllerAnimated(true, completion: {
             self.navigationController?.popViewControllerAnimated(true)
@@ -111,6 +110,4 @@ class ChooseEventPictureViewController: UIViewController, UITableViewDataSource,
     }
     
 }
-protocol ChooseEventPictureDelegate : NSObjectProtocol {
-    func madeEventPictureChoice(photo: PFFile, pickedPhoto: UIImage?)
-}
+

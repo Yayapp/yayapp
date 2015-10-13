@@ -12,7 +12,9 @@ class ProfileViewController: UITableViewController {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
-    @IBOutlet weak var profileTable: UITableView!
+    @IBOutlet var profileTable: UITableView!
+    @IBOutlet var messagesCountLabel: UILabel!
+    @IBOutlet var requestsCountLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,13 +22,13 @@ class ProfileViewController: UITableViewController {
         let tblView =  UIView(frame: CGRectZero)
         tableView.tableFooterView = tblView
         tableView.tableFooterView!.hidden = true
-        
+        ParseHelper.countRequests(PFUser.currentUser()!, completion: {
+            count in
+            self.requestsCountLabel.text = "\(count)"
+        })
+        messagesCountLabel.text = "\(Prefs.getMessagesCount())"
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         switch (indexPath.row){

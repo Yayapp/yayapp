@@ -12,14 +12,11 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var layerClient: LYRClient!
  
     let LayerAppIDString: NSURL! = NSURL(string: "layer:///apps/staging/325d25d4-305a-11e5-98db-7ceb2e015ed0")
     let ParseAppIDString: String = "u64gQcVtoNGvpS2xq1OniHuumQ5jQJmI3TTbbP1Y"
     let ParseClientKeyString: String = "CnO43FxXa3alSR42IeqJOq3pbLDlNwUd9lDH4kkK"
     
-    //Please note, You must set `LYRConversation *conversation` as a property of the ViewController.
-    var conversation: LYRConversation!
 
     var centerContainer: MMDrawerController?
     var centerViewController:MainNavigationController!
@@ -37,17 +34,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             application.registerUserNotificationSettings(notificationSettings)
             application.registerForRemoteNotifications()
         }
-//        else {
-//            // Register device for iOS7
-//            application.registerForRemoteNotificationTypes([UIRemoteNotificationType.Alert, UIRemoteNotificationType.Sound, UIRemoteNotificationType.Badge])
-//        }
         
         Category.registerSubclass()
         EventPhoto.registerSubclass()
         Event.registerSubclass()
         Request.registerSubclass()
+        InviteCode.registerSubclass()
+        Message.registerSubclass()
+        
         setupParse()
-        setupLayer()
         
         Flurry.startSession("XBT2H8327QRT89B23Y5Q");
         
@@ -75,7 +70,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         centerContainer?.closeDrawerGestureModeMask = MMCloseDrawerGestureMode.PanningCenterView
                
         if (PFUser.currentUser() != nil) {
-                authenticateInLayer()
                 window!.rootViewController = centerContainer
                 window!.makeKeyAndVisible()
         }
@@ -84,13 +78,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     func application( application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData ) {
-        
-        do {
-            try self.layerClient.updateRemoteNotificationDeviceToken(deviceToken)
-        } catch let error as NSError {
-            print(String(format: "Error updating Layer device token for push:%@", error))
-        }
-   
         
         // Store the deviceToken in the current installation and save it to Parse.
         let currentInstallation:PFInstallation = PFInstallation.currentInstallation()
@@ -102,31 +89,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
         
-        let success:Bool = self.layerClient.synchronizeWithRemoteNotification(userInfo, completion: {
-            (changes:[AnyObject]!, error) in
-            if (changes != nil) {
-                if (changes.count>0) {
-                    let message = self.messageFromRemoteNotification(userInfo)
-                    completionHandler(UIBackgroundFetchResult.NewData);
-                } else {
-                    completionHandler(UIBackgroundFetchResult.NoData);
-                }
-            } else {
-                completionHandler(UIBackgroundFetchResult.Failed);
-            }
-        })
-        if (!success) {
             completionHandler(UIBackgroundFetchResult.NoData)
-            if let aps = userInfo["aps"] as? NSDictionary {
-                if let alert = aps["alert"] as? NSDictionary {
-                    if let message = alert["message"] as? NSString {
-                        let blurryAlertViewController = mainStoryBoard.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
-                        blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
-                        blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
-                        blurryAlertViewController.aboutText = message as String
-                        centerViewController.presentViewController(blurryAlertViewController, animated: true, completion: nil)
+        var success:Bool = false
+            if let eventId = userInfo["event_id"] as? String {
+                if (centerViewController != nil && centerViewController.viewControllers.last?.isKindOfClass(MessagesTableViewController) == true) {
+                    let chat = centerViewController.viewControllers.last as! MessagesTableViewController
+                    if chat.event.objectId == eventId {
+                        chat.loadMessage(userInfo["id"]! as! String)
+                        success = true
+                    } else {
+                        application.applicationIconBadgeNumber+=1
+                        Prefs.addMessage(eventId)
+                        leftViewController.messagesCountLabel.text = "\(Prefs.getMessagesCount())"
                     }
-                } else if let alert = aps["alert"] as? NSString {
+                } else {
+                    application.applicationIconBadgeNumber+=1
+                    Prefs.addMessage(eventId)
+                    if leftViewController != nil {
+                        leftViewController.messagesCountLabel.text = "\(Prefs.getMessagesCount())"
+                    }
+                }
+                
+            }
+        if let requestId = userInfo["request_id"] as? String {
+            if (leftViewController != nil) {
+                leftViewController.requestsCountLabel.text = "\(Int(leftViewController.requestsCountLabel.text!)!+1)"
+            }
+        }
+        if !success {
+            if let aps = userInfo["aps"] as? NSDictionary {
+                if let alert = aps["alert"] as? NSString {
                     let blurryAlertViewController = mainStoryBoard.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
                     blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
                     blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
@@ -135,39 +127,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
         }
-        
-        let state:UIApplicationState = application.applicationState
-        if state == UIApplicationState.Background || state == UIApplicationState.Inactive {
-            application.applicationIconBadgeNumber+=1
-        }
-    }
-    
-    func messageFromRemoteNotification(remoteNotification:NSDictionary) -> LYRMessage {
-        let LQSPushMessageIdentifierKeyPath:String = "layer.message_identifier"
-        
-        // Retrieve message URL from Push Notification
-        let messageURL:NSURL = NSURL(string:remoteNotification.valueForKeyPath(LQSPushMessageIdentifierKeyPath) as! String)!
-        
-        // Retrieve LYRMessage from Message URL
-        let query:LYRQuery = LYRQuery(queryableClass:LYRMessage.classForCoder())
-        query.predicate = LYRPredicate(property:"identifier", predicateOperator:LYRPredicateOperator.IsIn, value: NSSet(object:messageURL))
-        
-        let messages:NSOrderedSet?
-        do {
-            messages = try self.layerClient.executeQuery(query)
-        } catch {
-            messages = nil
-        }
-        if (messages != nil) {
-            //            NSLog(@"Query contains %lu messages", (unsigned long)messages.count);
-            let message:LYRMessage = messages!.firstObject! as! LYRMessage
-            let messagePart:LYRMessagePart = message.parts[0] as! LYRMessagePart
-            //            NSLog(@"Pushed Message Contents: %@", [[NSString alloc] initWithData:messagePart.data encoding:NSUTF8StringEncoding]);
-        } else {
-            //            NSLog(@"Query failed with error %@", error);
-        }
-        
-        return messages!.firstObject! as! LYRMessage
     }
     
     func applicationWillResignActive(application: UIApplication) {
@@ -192,11 +151,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-        application.applicationIconBadgeNumber = 0
     }
 
     func applicationDidBecomeActive(application: UIApplication) {
-        application.applicationIconBadgeNumber = 0
         FBSDKAppEvents.activateApp()
     }
 
@@ -216,41 +173,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         PFACL.setDefaultACL(defaultACL, withAccessForCurrentUser: true)
     }
     
-    func setupLayer() {
-        layerClient = LYRClient(appID: LayerAppIDString)
-        layerClient.autodownloadMIMETypes = NSSet(objects: ATLMIMETypeImagePNG, ATLMIMETypeImageJPEG, ATLMIMETypeImageJPEGPreview, ATLMIMETypeImageGIF, ATLMIMETypeImageGIFPreview, ATLMIMETypeLocation) as! Set<NSObject>
-    }
-    
-    func authenticateInLayer(){
-        layerClient.requestAuthenticationNonceWithCompletion ({
-            (nonce:String?, error) in
-                        
-            // Upon reciept of nonce, post to your backend and acquire a Layer identityToken
-            if (nonce != nil) {
-                let user:PFUser = PFUser.currentUser()!
-                let userID:String = user.objectId!
-                PFCloud.callFunctionInBackground("generateToken", withParameters:["nonce" : nonce!, "userID" : userID], block:{
-                    (token:AnyObject?, error:NSError?) in
-                    
-                    if (error != nil) {
-                        print(String(format: "Parse Cloud function failed to be called to generate token with error: %@", error!), terminator: "");
-                    }
-                    else{
-                        // Send the Identity Token to Layer to authenticate the user
-                        self.layerClient.authenticateWithIdentityToken(token as! String, completion:{
-                            (authenticatedUserID:String!, error:NSError?) in
-                            if (error != nil) {
-                                print(String(format: "Parse User failed to authenticate with token with error: %@", error!), terminator: "");
-                            }
-                            else{
-                                print("Parse User authenticated with Layer Identity Token", terminator: "");
-                            }
-                        })
-                    }
-                    
-                })
-            }
-        })
-    }
 }
 

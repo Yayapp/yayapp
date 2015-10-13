@@ -13,7 +13,7 @@ class LoginViewController: UIViewController, InstagramDelegate, EnterCodeDelegat
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     var isLogin:Bool! = false
     
-    @IBOutlet weak var textLabel: UILabel!
+    @IBOutlet var textLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,16 +27,11 @@ class LoginViewController: UIViewController, InstagramDelegate, EnterCodeDelegat
         self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
 
     func proceed(){
         let currentInstallation:PFInstallation = PFInstallation.currentInstallation()
         currentInstallation["user"] = PFUser.currentUser()
         currentInstallation.saveInBackground()
-        self.appDelegate.authenticateInLayer()
         self.performSegueWithIdentifier("proceed", sender: nil)
     }
     
@@ -100,22 +95,14 @@ class LoginViewController: UIViewController, InstagramDelegate, EnterCodeDelegat
                                     response,data, error in
                                     if error == nil {
                                         let picture = PFFile(name: "image.jpg", data: data!)
-                                        PFUser.currentUser()!.setObject(picture, forKey: "avatar")
+                                        PFUser.currentUser()!.setObject(picture!, forKey: "avatar")
                                         PFUser.currentUser()!.saveInBackground()
                                     }
                                     else {
                                         print("Error: \(error!.localizedDescription)")
                                     }
                                 })
-                                
-                                
-//                                do {
-//                                    let imageData :NSData = try NSData(contentsOfURL: url, options: NSDataReadingOptions.DataReadingMappedIfSafe)
-//                                    let imageFile = PFFile(name: "image.jpg", data: imageData) as PFFile
-//                                    PFUser.currentUser()?.setObject(imageFile, forKey: "avatar")
-//                                } catch let error as NSError {
-//                                    MessageToUser.showDefaultErrorMessage(error.description)
-//                                }
+                          
                                 self.doRegistration()
                             } else {
                                 self.proceed()
@@ -137,24 +124,23 @@ class LoginViewController: UIViewController, InstagramDelegate, EnterCodeDelegat
                     let url:NSURL = NSURL(string:"https://api.twitter.com/1.1/users/show.json?screen_name=\(PFTwitterUtils.twitter()!.screenName!)")!
                     let request:NSMutableURLRequest = NSMutableURLRequest(URL:url)
                     PFTwitterUtils.twitter()?.signRequest(request)
-                    var response:NSURLResponse?
-                    let data:NSData = try! NSURLConnection.sendSynchronousRequest(request, returningResponse:&response)
                     
-                    if (error == nil){
-                        let result:NSDictionary = (try! NSJSONSerialization.JSONObjectWithData(data, options:NSJSONReadingOptions.AllowFragments)) as! NSDictionary
-                        let url:NSURL = NSURL(string:result.objectForKey("profile_image_url_https") as! String)!
-                        
-                        
                         do {
-                            let imageData :NSData =  try NSData(contentsOfURL: url, options: NSDataReadingOptions.DataReadingMappedIfSafe)
+                            var response:NSURLResponse?
+                            let data:NSData = try! NSURLConnection.sendSynchronousRequest(request, returningResponse:&response)
                             
-                            let imageFile = PFFile(name: "image.jpg", data: imageData) as PFFile
+                            let result:NSDictionary = (try! NSJSONSerialization.JSONObjectWithData(data, options:NSJSONReadingOptions.AllowFragments)) as! NSDictionary
+                            let pictureUrl:NSURL = NSURL(string:result.objectForKey("profile_image_url_https") as! String)!
+                            let imageData :NSData =  try NSData(contentsOfURL: pictureUrl, options: NSDataReadingOptions.DataReadingMappedIfSafe)
                             
-                            PFUser.currentUser()?.setObject(imageFile, forKey: "avatar")
-                        } catch let error as NSError {
+                            let imageFile = PFFile(name: "image.jpg", data: imageData)
+                            
+                            PFUser.currentUser()?.setObject(imageFile!, forKey: "avatar")
+                            PFUser.currentUser()?.setObject(result.objectForKey("name") as! String, forKey: "name")
+                        } catch {
                             MessageToUser.showDefaultErrorMessage("Something went wrong")
                         }
-                    }
+                    
                     self.doRegistration()
                 } else {
                     self.proceed()
@@ -180,7 +166,7 @@ class LoginViewController: UIViewController, InstagramDelegate, EnterCodeDelegat
                     let pfuser = PFUser()
                     
                     let imageData :NSData = try! NSData(contentsOfURL: user.profilePictureURL, options: NSDataReadingOptions.DataReadingMappedIfSafe)
-                    let imageFile = PFFile(name: "image.jpg", data: imageData) as PFFile
+                    let imageFile = PFFile(name: "image.jpg", data: imageData)
                     
                     self.setupDefaults(pfuser)
                     pfuser["avatar"] = imageFile
@@ -212,7 +198,6 @@ class LoginViewController: UIViewController, InstagramDelegate, EnterCodeDelegat
         currentInstallation["user"] = PFUser.currentUser()
         currentInstallation.saveInBackground()
         
-        self.appDelegate.authenticateInLayer()
         self.performSegueWithIdentifier("proceed", sender: nil)
     }
     

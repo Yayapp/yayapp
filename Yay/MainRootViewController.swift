@@ -21,16 +21,16 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
     var pageViewController : UIPageViewController!
     var currentIndex : Int = 0
     
-    @IBOutlet weak var today: UIButton!
-    @IBOutlet weak var tomorrow: UIButton!
-    @IBOutlet weak var thisWeek: UIButton!
+    @IBOutlet var today: UIButton!
+    @IBOutlet var tomorrow: UIButton!
+    @IBOutlet var thisWeek: UIButton!
     
-    @IBOutlet weak var todayUnderline: UIView!
-    @IBOutlet weak var tomorrowUnderline: UIView!
-    @IBOutlet weak var thisWeekUnderline: UIView!
+    @IBOutlet var todayUnderline: UIView!
+    @IBOutlet var tomorrowUnderline: UIView!
+    @IBOutlet var thisWeekUnderline: UIView!
     
-    @IBOutlet weak var container: UIView!
-    @IBOutlet weak var createEvent: UIButton!
+    @IBOutlet var container: UIView!
+    @IBOutlet var createEvent: UIButton!
     
     var currentVC:UIViewController!
     var isMapView = false
@@ -46,7 +46,7 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
         }
         
         rightSwitchBarButtonItem = UIBarButtonItem(image:UIImage(named: "mapmarkerico"), style: UIBarButtonItemStyle.Plain, target: self, action: "switchTapped:")
-        rightSwitchBarButtonItem!.tintColor = UIColor(red:CGFloat(3/255.0), green:CGFloat(118/255.0), blue:CGFloat(114/255.0), alpha: 1)
+        rightSwitchBarButtonItem!.tintColor = Color.PrimaryActiveColor
         
         self.navigationItem.setRightBarButtonItem(rightSwitchBarButtonItem, animated: true)
 
@@ -55,10 +55,6 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
         
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
     override func viewDidAppear(animated: Bool) {
         
@@ -219,7 +215,7 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
   
     
     func showMessages() {
-        let controller: ConversationListViewController = ConversationListViewController(layerClient: appDelegate.layerClient)
+        let controller: ConversationsTableViewController = self.storyboard!.instantiateViewControllerWithIdentifier("ConversationsTableViewController") as! ConversationsTableViewController
         navigationController?.pushViewController(controller, animated: true)
     }
     
