@@ -13,6 +13,7 @@
 		9901A9681B57D81100947DB8 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9901A9671B57D81100947DB8 /* ProfileViewController.swift */; };
 		9907A3591BCBEC0C00D98A6F /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9907A3581BCBEC0C00D98A6F /* Utils.swift */; settings = {ASSET_TAGS = (); }; };
 		9907A35B1BCBECF500D98A6F /* KeyboardAnimationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9907A35A1BCBECF500D98A6F /* KeyboardAnimationHelper.swift */; settings = {ASSET_TAGS = (); }; };
+		9907A37B1BCE4BED00D98A6F /* Report.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9907A37A1BCE4BEC00D98A6F /* Report.swift */; settings = {ASSET_TAGS = (); }; };
 		990CA7251B8206C000591F33 /* InstructionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990CA7241B8206C000591F33 /* InstructionViewController.swift */; };
 		990CA7271B826BB200591F33 /* WriteAboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990CA7261B826BB200591F33 /* WriteAboutViewController.swift */; };
 		9917D9DA1B567E520081A796 /* MainRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9917D9D91B567E520081A796 /* MainRootViewController.swift */; };
@@ -73,6 +74,7 @@
 		9901A9671B57D81100947DB8 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		9907A3581BCBEC0C00D98A6F /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		9907A35A1BCBECF500D98A6F /* KeyboardAnimationHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardAnimationHelper.swift; sourceTree = "<group>"; };
+		9907A37A1BCE4BEC00D98A6F /* Report.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Report.swift; sourceTree = "<group>"; };
 		990CA7241B8206C000591F33 /* InstructionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstructionViewController.swift; sourceTree = "<group>"; };
 		990CA7261B826BB200591F33 /* WriteAboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WriteAboutViewController.swift; sourceTree = "<group>"; };
 		9917D9D91B567E520081A796 /* MainRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainRootViewController.swift; sourceTree = "<group>"; };
@@ -158,6 +160,7 @@
 				99253FF31B6A67970078B668 /* TempUser.swift */,
 				99BFEC9E1B7A78C700CBFF8B /* ConversationParticipant.swift */,
 				99EF69CB1BC4061700DA0073 /* Message.swift */,
+				9907A37A1BCE4BEC00D98A6F /* Report.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -429,6 +432,7 @@
 				997C23931B67B9960070DDB2 /* CategoryCollectionViewCell.swift in Sources */,
 				99253FF61B6ABBF40078B668 /* Extensions.swift in Sources */,
 				9907A3591BCBEC0C00D98A6F /* Utils.swift in Sources */,
+				9907A37B1BCE4BED00D98A6F /* Report.swift in Sources */,
 				995032991B56741700D792C5 /* CreateEmailAccountViewController.swift in Sources */,
 				9917D9E21B56A94F0081A796 /* MapEventsViewController.swift in Sources */,
 				993D3ED91B8DCA900023B054 /* RequestsTableViewController.swift in Sources */,

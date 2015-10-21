@@ -22,7 +22,7 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         picker.delegate = self
         UIApplication.sharedApplication().applicationIconBadgeNumber -= Prefs.removeMessage(event.objectId!)
         self.appDelegate.leftViewController.messagesCountLabel.text = "\(Prefs.getMessagesCount())"
@@ -54,7 +54,7 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
                 result, error in
                 if error == nil {
                     for (index,message) in result!.enumerate() {
-
+                        
                         if message.photo == nil {
                             self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, text: message.text))
                         } else {
@@ -68,7 +68,7 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
                             })
                             
                             self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, media: media))
-             
+                            
                         }
                         
                     }
@@ -83,10 +83,10 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
         self.senderDisplayName = PFUser.currentUser()!.name
         
         self.collectionView!.collectionViewLayout.springinessEnabled = false
-     
+        
     }
-
-
+    
+    
     override func didPressAccessoryButton(sender: UIButton!) {
         let alert = UIAlertController(title: "Choose Option", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
         alert.addAction(UIAlertAction(title: "Take Photo", style: UIAlertActionStyle.Default, handler: {
@@ -119,11 +119,11 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
                     self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, text: message.text))
                     self.finishReceivingMessage()
                 } else {
-                        message.photo!.getDataInBackgroundWithBlock({
-                            result, error in
-                            self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, media: JSQPhotoMediaItem(image: UIImage(data: result! ))))
-                            self.finishReceivingMessage()
-                        })
+                    message.photo!.getDataInBackgroundWithBlock({
+                        result, error in
+                        self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, media: JSQPhotoMediaItem(image: UIImage(data: result! ))))
+                        self.finishReceivingMessage()
+                    })
                 }
                 
             } else {
@@ -134,7 +134,7 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
     
     override func didPressSendButton(button: UIButton, withMessageText text: String, senderId: String, senderDisplayName: String, date: NSDate) {
         JSQSystemSoundPlayer.jsq_playMessageSentSound()
-
+        
         let message: Message = Message()
         message.user = PFUser.currentUser()!
         message.event = event
@@ -162,7 +162,7 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
     }
     
     override func collectionView(collectionView:JSQMessagesCollectionView, messageBubbleImageDataForItemAtIndexPath indexPath:NSIndexPath) -> JSQMessageBubbleImageDataSource {
-
+        
         let message = messages[indexPath.item]
         if (message.senderId == self.senderId) {
             return JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(UIColor.orangeColor())

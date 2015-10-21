@@ -12,7 +12,7 @@ class TermsController: UIViewController {
     
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
-    @IBOutlet var text: UITextView!
+    @IBOutlet weak var text: UITextView!
     override func viewDidLoad() {
         super.viewDidLoad()
 

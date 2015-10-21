@@ -14,7 +14,7 @@ protocol ChooseDateDelegate : NSObjectProtocol {
 
 class ChooseDateTimeViewController: UIViewController {
 
-    @IBOutlet var datePicker: UIDatePicker!
+    @IBOutlet weak var datePicker: UIDatePicker!
     
     var delegate: ChooseDateDelegate!
     

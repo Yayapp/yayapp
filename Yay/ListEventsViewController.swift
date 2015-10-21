@@ -20,7 +20,7 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
     var currentLocation:CLLocation?
     var delegate:ListEventsDelegate?
     
-    @IBOutlet var events: UITableView!
+    @IBOutlet weak var events: UITableView!
     
     
     override func viewDidLoad() {

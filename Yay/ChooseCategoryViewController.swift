@@ -17,14 +17,14 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
   
-    @IBOutlet var navBar: UINavigationBar!
+    @IBOutlet weak var navBar: UINavigationBar!
     var delegate:ChooseCategoryDelegate!
     var categoriesData:[Category]! = []
     var selectedCategoriesData:[Category]! = []
     var multi:Bool = false
     var isEventCreation:Bool = false
     
-    @IBOutlet var categories: UICollectionView!
+    @IBOutlet weak var categories: UICollectionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()

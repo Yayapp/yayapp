@@ -33,22 +33,22 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
     
     var limitInt:Int=1
     
-    @IBOutlet var eventImage: UIImageView!
-    @IBOutlet var pickCategory: UIButton!
-    @IBOutlet var eventPhoto: UIButton!
-    @IBOutlet var limit: UITextField!
-    @IBOutlet var dateTimeButton: UIButton!
-    @IBOutlet var location: UIButton!
+    @IBOutlet weak var eventImage: UIImageView!
+    @IBOutlet weak var pickCategory: UIButton!
+    @IBOutlet weak var eventPhoto: UIButton!
+    @IBOutlet weak var limit: UITextField!
+    @IBOutlet weak var dateTimeButton: UIButton!
+    @IBOutlet weak var location: UIButton!
     
-    @IBOutlet var rangeSlider: TTRangeSlider!
-    @IBOutlet var rangeLabel: UILabel!
-    @IBOutlet var sliderContainer: UIView!
-    @IBOutlet var spinner: UIActivityIndicatorView!
-    @IBOutlet var name: UITextField!
-    @IBOutlet var descr: UITextField!
+    @IBOutlet weak var rangeSlider: TTRangeSlider!
+    @IBOutlet weak var rangeLabel: UILabel!
+    @IBOutlet weak var sliderContainer: UIView!
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
+    @IBOutlet weak var name: UITextField!
+    @IBOutlet weak var descr: UITextField!
 
-    @IBOutlet var createButton: UIButton!
-    @IBOutlet var cancelButton: UIButton!
+    @IBOutlet weak var createButton: UIButton!
+    @IBOutlet weak var cancelButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -186,14 +186,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
             eventImage.image = pickedPhoto!
             eventImage.contentMode = UIViewContentMode.ScaleAspectFill
         } else {
-            if photo.isDataAvailable {
-                do {
-                    self.eventImage.image = UIImage(data:try photo.getData())
-                    self.eventImage.contentMode = UIViewContentMode.ScaleAspectFill
-                } catch {
-                    //
-                }
-            } else {
+            
                 photo.getDataInBackgroundWithBlock({
                     (data:NSData?, error:NSError?) in
                     if(error == nil) {
@@ -204,7 +197,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
                         MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                     }
                 })
-            }
+            
         }
     }
 

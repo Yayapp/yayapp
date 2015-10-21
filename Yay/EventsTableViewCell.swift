@@ -10,11 +10,11 @@ import UIKit
 
 class EventsTableViewCell: UITableViewCell {
 
-    @IBOutlet var picture: PFImageView!
-    @IBOutlet var title: UILabel!
-    @IBOutlet var location: UILabel!
-    @IBOutlet var date: UILabel!
-    @IBOutlet var howFar: UILabel!
+    @IBOutlet weak var picture: PFImageView!
+    @IBOutlet weak var title: UILabel!
+    @IBOutlet weak var location: UILabel!
+    @IBOutlet weak var date: UILabel!
+    @IBOutlet weak var howFar: UILabel!
     
     
     

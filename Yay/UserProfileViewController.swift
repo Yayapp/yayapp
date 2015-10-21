@@ -16,16 +16,16 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
     var editdone:UIBarButtonItem!
     var isEditingProfile:Bool = false
     
-    @IBOutlet var name: UILabel!
-    @IBOutlet var location: UILabel!
+    @IBOutlet weak var name: UILabel!
+    @IBOutlet weak var location: UILabel!
     
-    @IBOutlet var uploadPhoto: UIButton!
-    @IBOutlet var avatar: PFImageView!
-    @IBOutlet var eventsCount: UILabel!
-    @IBOutlet var interests: UILabel!
-    @IBOutlet var about: UILabel!
-    @IBOutlet var rankIcon: UIImageView!
-    @IBOutlet var invites: UILabel!
+    @IBOutlet weak var uploadPhoto: UIButton!
+    @IBOutlet weak var avatar: PFImageView!
+    @IBOutlet weak var eventsCount: UILabel!
+    @IBOutlet weak var interests: UILabel!
+    @IBOutlet weak var about: UILabel!
+    @IBOutlet weak var rankIcon: UIImageView!
+    @IBOutlet weak var invites: UILabel!
     
     
     

@@ -12,7 +12,7 @@ class ConversationsTableViewController: UITableViewController {
     
     var events:[Event] = []
     
-    @IBOutlet var emptyView: UIView!
+    @IBOutlet weak var emptyView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()

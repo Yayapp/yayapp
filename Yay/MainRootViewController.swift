@@ -20,16 +20,16 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
     var pageViewController : UIPageViewController!
     var currentIndex : Int = 0
     
-    @IBOutlet var today: UIButton!
-    @IBOutlet var tomorrow: UIButton!
-    @IBOutlet var thisWeek: UIButton!
+    @IBOutlet weak var today: UIButton!
+    @IBOutlet weak var tomorrow: UIButton!
+    @IBOutlet weak var thisWeek: UIButton!
     
-    @IBOutlet var todayUnderline: UIView!
-    @IBOutlet var tomorrowUnderline: UIView!
-    @IBOutlet var thisWeekUnderline: UIView!
+    @IBOutlet weak var todayUnderline: UIView!
+    @IBOutlet weak var tomorrowUnderline: UIView!
+    @IBOutlet weak var thisWeekUnderline: UIView!
     
-    @IBOutlet var container: UIView!
-    @IBOutlet var createEvent: UIButton!
+    @IBOutlet weak var container: UIView!
+    @IBOutlet weak var createEvent: UIButton!
     
     var currentVC:UIViewController!
     var isMapView = false
@@ -39,11 +39,7 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
-        if (PFUser.currentUser() != nil) {
-            createEvent.hidden = false
-        }
-        
+ 
         rightSwitchBarButtonItem = UIBarButtonItem(image:UIImage(named: "mapmarkerico"), style: UIBarButtonItemStyle.Plain, target: self, action: "switchTapped:")
         rightSwitchBarButtonItem!.tintColor = Color.PrimaryActiveColor
         
@@ -170,9 +166,14 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
     }
     
     @IBAction func createEvent(sender: AnyObject) {
-        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("CreateEventViewController") as! CreateEventViewController
-        vc.delegate = self
-        navigationController?.pushViewController(vc, animated: true)
+        if PFUser.currentUser() != nil {
+            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("CreateEventViewController") as! CreateEventViewController
+            vc.delegate = self
+            navigationController?.pushViewController(vc, animated: true)
+        } else {
+            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
+            presentViewController(vc, animated: true, completion: nil)
+        }
     }
     
     func eventCreated(event:Event) {

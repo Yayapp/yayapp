@@ -10,13 +10,13 @@ import UIKit
 
 class HappeningsViewController: UIViewController, ListEventsDelegate, EventChangeDelegate {
 
-    @IBOutlet var upcoming: UIButton!
-    @IBOutlet var past: UIButton!
+    @IBOutlet weak var upcoming: UIButton!
+    @IBOutlet weak var past: UIButton!
     
-    @IBOutlet var upcaomingUnderline: UIView!
-    @IBOutlet var pastUnderline: UIView!
+    @IBOutlet weak var upcaomingUnderline: UIView!
+    @IBOutlet weak var pastUnderline: UIView!
     
-    @IBOutlet var container: UIView!
+    @IBOutlet weak var container: UIView!
     
     var eventsData:[Event]!
     var activeViewController:ListEventsViewController!

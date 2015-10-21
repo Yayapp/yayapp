@@ -14,7 +14,7 @@ protocol WriteAboutDelegate : NSObjectProtocol {
 
 class WriteAboutViewController: UIViewController {
     
-    @IBOutlet var text: UITextView!
+    @IBOutlet weak var text: UITextView!
     
     var textAbout:String!
 

@@ -12,7 +12,7 @@ import MapKit
 class MapEventsViewController: EventsViewController, MKMapViewDelegate, EventChangeDelegate {
 
     
-    @IBOutlet var mapView: MKMapView!
+    @IBOutlet weak var mapView: MKMapView!
     let regionRadius: CLLocationDistance = 1000
     
     override func viewDidLoad() {
@@ -53,16 +53,6 @@ class MapEventsViewController: EventsViewController, MKMapViewDelegate, EventCha
         }
     }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView?{
         
         var v = mapView.dequeueReusableAnnotationViewWithIdentifier("pin")
@@ -77,15 +67,6 @@ class MapEventsViewController: EventsViewController, MKMapViewDelegate, EventCha
         let customPointAnnotation = annotation as! CustomPointAnnotation
         let image = customPointAnnotation.event.category["icon"] as! PFFile
         
-        if image.isDataAvailable {
-            do {
-                v!.image =  UIImage(data: try image.getData())
-                v!.bounds.size.height = 30
-                v!.bounds.size.width = 30
-            } catch {
-                //
-            }
-        } else {
             image.getDataInBackgroundWithBlock({
                 (data:NSData?, error:NSError?) in
                 if(error == nil){
@@ -96,7 +77,7 @@ class MapEventsViewController: EventsViewController, MKMapViewDelegate, EventCha
                     MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                 }
             })
-        }
+        
         return v
     }
     

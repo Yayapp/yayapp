@@ -23,12 +23,12 @@ class BlurryAlertViewController: UIViewController {
     var event:Event?
     var completion:(()->Void)?
     
-    @IBOutlet var cancel: UIButton!
-    @IBOutlet var about: UILabel!
+    @IBOutlet weak var cancel: UIButton!
+    @IBOutlet weak var about: UILabel!
     
-    @IBOutlet var message: UILabel!
+    @IBOutlet weak var message: UILabel!
     
-    @IBOutlet var centerButton: UIButton!
+    @IBOutlet weak var centerButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,9 +54,12 @@ class BlurryAlertViewController: UIViewController {
        
     }
 
+    @IBAction func cancel(sender: AnyObject) {
+        self.dismissViewControllerAnimated(true, completion:nil)
+    }
 
     @IBAction func okbutton(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true, completion:nil)
+        self.dismissViewControllerAnimated(true, completion:completion)
     }
     
     @IBAction func deletebutton(sender: AnyObject) {

@@ -25,32 +25,32 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     var attendees:[PFUser] = []
     var delegate:EventChangeDelegate!
     
-    @IBOutlet var spinner: UIActivityIndicatorView!
-    @IBOutlet var photo: PFImageView!
-    @IBOutlet var name: UILabel!
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
+    @IBOutlet weak var photo: PFImageView!
+    @IBOutlet weak var name: UILabel!
     
-    @IBOutlet var location: UIButton!
+    @IBOutlet weak var location: UIButton!
     
-    @IBOutlet var descr: UITextView!
-    @IBOutlet var date: UILabel!
+    @IBOutlet weak var descr: UITextView!
+    @IBOutlet weak var date: UILabel!
     
-    @IBOutlet var distance: UILabel!
+    @IBOutlet weak var distance: UILabel!
     
-    @IBOutlet var chatButton: UIButton!
-    @IBOutlet var inviteButton: UIButton!
+    @IBOutlet weak var chatButton: UIButton!
+    @IBOutlet weak var inviteButton: UIButton!
     
-    @IBOutlet var author: UIButton!
+    @IBOutlet weak var author: UIButton!
     
-    @IBOutlet var attend: UIButton!
-    @IBOutlet var attended1: UIButton!
+    @IBOutlet weak var attend: UIButton!
+    @IBOutlet weak var attended1: UIButton!
     
-    @IBOutlet var attended2: UIButton!
+    @IBOutlet weak var attended2: UIButton!
     
-    @IBOutlet var attended3: UIButton!
+    @IBOutlet weak var attended3: UIButton!
     
-    @IBOutlet var attended4: UIButton!
+    @IBOutlet weak var attended4: UIButton!
     
-    @IBOutlet var usersView: UIView!
+    @IBOutlet weak var usersView: UIView!
     
     var bottomConstraint: NSLayoutConstraint!
     
@@ -64,7 +64,7 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
             attribute: NSLayoutAttribute.Bottom,
             multiplier: 1,
             constant: -20)
-      
+        
         attendeeButtons = [attended1,attended2,attended3,attended4]
         
         title = event.name
@@ -77,6 +77,19 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
             self.navigationItem.setRightBarButtonItem(editdone, animated: false)
             attend.setImage(UIImage(named: "cancelevent_button"), forState: .Normal)
             self.attend.hidden = false
+        } else {
+            if let user = PFUser.currentUser() {
+                ParseHelper.countReports(event,user: user, completion: {
+                    count in
+                    if count == 0 {
+                        let report = UIBarButtonItem(image:UIImage(named: "reporticon"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("reportButtonTapped:"))
+                        report.tintColor = UIColor.redColor()
+                        self.navigationItem.setRightBarButtonItem(report, animated: false)
+                    }
+                })
+            } else {
+                
+            }
         }
         
         dateFormatter.dateFormat = "EEE dd MMM 'at' H:mm"
@@ -90,64 +103,59 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                 for var index = 0; index < (self.event.limit-1); ++index {
                     self.attendeeButtons[index].setImage(UIImage(named: "upload_pic"), forState: .Normal)
                 }
-                
-                let currentPFLocation = PFUser.currentUser()!.objectForKey("location") as! PFGeoPoint
-                self.currentLocation = CLLocation(latitude: currentPFLocation.latitude, longitude: currentPFLocation.longitude)
-                
-                let attendedThisEvent = !(self.event.attendees.filter({$0.objectId == PFUser.currentUser()!.objectId}).count == 0)
-                
-                if(PFUser.currentUser()?.objectId != self.event.owner.objectId) {
+                if let user = PFUser.currentUser() {
+                    let currentPFLocation = user.objectForKey("location") as! PFGeoPoint
+                    self.currentLocation = CLLocation(latitude: currentPFLocation.latitude, longitude: currentPFLocation.longitude)
                     
-                    if !attendedThisEvent && self.event.limit>self.event.attendees.count {
+                    let attendedThisEvent = !(self.event.attendees.filter({$0.objectId == PFUser.currentUser()?.objectId}).count == 0)
+                    
+                    if(PFUser.currentUser()?.objectId != self.event.owner.objectId) {
                         
-                        self.chatButton.enabled = false
-                        
-                        ParseHelper.getUserRequests(self.event, user: PFUser.currentUser()!, block: {
-                            result, error in
-                            if (error == nil) {
-                                if (result == nil || result!.isEmpty){
-                                    self.attend.hidden = false
-                                } else {
-                                    self.attend.removeFromSuperview()
-                                    self.view.addConstraint(self.bottomConstraint)
-                                }
-                            } else {
-                                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-                            }
-                        })
-                    } else {
-                        if !attendedThisEvent {
+                        if !attendedThisEvent && self.event.limit>self.event.attendees.count {
+                            
                             self.chatButton.enabled = false
+                            
+                            ParseHelper.getUserRequests(self.event, user: PFUser.currentUser()!, block: {
+                                result, error in
+                                if (error == nil) {
+                                    if (result == nil || result!.isEmpty){
+                                        self.attend.hidden = false
+                                    } else {
+                                        self.attend.removeFromSuperview()
+                                        self.view.addConstraint(self.bottomConstraint)
+                                    }
+                                } else {
+                                    MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+                                }
+                            })
+                        } else {
+                            if !attendedThisEvent {
+                                self.chatButton.enabled = false
+                            }
+                            self.attend.removeFromSuperview()
+                            self.view.addConstraint(self.bottomConstraint)
                         }
-                        self.attend.removeFromSuperview()
-                        self.view.addConstraint(self.bottomConstraint)
                     }
+                } else {
+                    self.currentLocation = CLLocation(latitude: TempUser.location!.latitude, longitude: TempUser.location!.longitude)
                 }
-                
                 
                 self.event.owner.fetchIfNeededInBackgroundWithBlock({
                     result, error in
                     if error == nil {
                         if let avatar = self.event.owner["avatar"] as? PFFile {
-                            if avatar.isDataAvailable {
-                                do {
-                                    self.author.setImage(UIImage(data: try avatar.getData()), forState: .Normal)
-                                } catch {
-                                    //
-                                }
-                                self.author.layer.borderColor = Color.EventDetailsProfileIconBorder.CGColor
-                            } else {
-                            avatar.getDataInBackgroundWithBlock({
-                                (data:NSData?, error:NSError?) in
-                                if(error == nil) {
-                                    let image = UIImage(data:data!)
-                                    self.author.setImage(image, forState: .Normal)
-                                    self.author.layer.borderColor = Color.EventDetailsProfileIconBorder.CGColor
-                                } else {
-                                    MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-                                }
-                            })
-                            }
+                            
+                                avatar.getDataInBackgroundWithBlock({
+                                    (data:NSData?, error:NSError?) in
+                                    if(error == nil) {
+                                        let image = UIImage(data:data!)
+                                        self.author.setImage(image, forState: .Normal)
+                                        self.author.layer.borderColor = Color.EventDetailsProfileIconBorder.CGColor
+                                    } else {
+                                        MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+                                    }
+                                })
+                            
                         }
                     } else {
                         MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
@@ -164,23 +172,17 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                         result, error in
                         if error == nil {
                             if let attendeeAvatar = attendee["avatar"] as? PFFile {
-                                if attendeeAvatar.isDataAvailable {
-                                    do {
-                                        attendeeButton.setImage(UIImage(data: try attendeeAvatar.getData()), forState: .Normal)
-                                    } catch {
-                                        //
-                                    }
-                                } else {
-                                attendeeAvatar.getDataInBackgroundWithBlock({
-                                    (data:NSData?, error:NSError?) in
-                                    if(error == nil) {
-                                        let image = UIImage(data:data!)
-                                        attendeeButton.setImage(image, forState: .Normal)
-                                    } else {
-                                        MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-                                    }
-                                })
-                                }
+                                
+                                    attendeeAvatar.getDataInBackgroundWithBlock({
+                                        (data:NSData?, error:NSError?) in
+                                        if(error == nil) {
+                                            let image = UIImage(data:data!)
+                                            attendeeButton.setImage(image, forState: .Normal)
+                                        } else {
+                                            MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+                                        }
+                                    })
+                                
                             }
                         } else {
                             MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
@@ -193,6 +195,7 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
             }
         })
     }
+    
     
     func update() {
         let distanceBetween: CLLocationDistance = CLLocation(latitude: self.event.location.latitude, longitude: self.event.location.longitude).distanceFromLocation(self.currentLocation)
@@ -210,62 +213,77 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     
     
     @IBAction func attend(sender: AnyObject) {
-        if(PFUser.currentUser()?.objectId == event.owner.objectId) {
-            let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
-            blurryAlertViewController.action = BlurryAlertViewController.BUTTON_DELETE
-            blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
-            blurryAlertViewController.messageText = "Sorry, are you sure you want to delete this event?"
-            blurryAlertViewController.hasCancelAction = true
-            blurryAlertViewController.event = event
-            blurryAlertViewController.completion = {
-                self.delegate.eventRemoved(self.event)
-                self.navigationController?.popViewControllerAnimated(false)
-            }
-            self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
-        } else {
-            spinner.startAnimating()
-            event.fetchIfNeededInBackgroundWithBlock({
-                (result, error) in
-                
-                let requestACL:PFACL = PFACL()
-                requestACL.setPublicWriteAccess(true)
-                requestACL.setPublicReadAccess(true)
-                let request = Request()
-                request.event = self.event
-                request.attendee = PFUser.currentUser()!
-                request.ACL = requestACL
-                request.saveInBackground()
-                
-                self.spinner.stopAnimating()
-                self.attend.hidden = true
-                self.attend.frame = CGRectZero
-                
+        if let user = PFUser.currentUser() {
+            if(user.objectId == event.owner.objectId) {
                 let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
-                blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
+                blurryAlertViewController.action = BlurryAlertViewController.BUTTON_DELETE
                 blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
-                blurryAlertViewController.aboutText = "Your request has been sent."
-                blurryAlertViewController.messageText = "We will notify you of the outcome."
+                blurryAlertViewController.messageText = "Sorry, are you sure you want to delete this event?"
+                blurryAlertViewController.hasCancelAction = true
+                blurryAlertViewController.event = event
+                blurryAlertViewController.completion = {
+                    self.delegate.eventRemoved(self.event)
+                    self.navigationController?.popViewControllerAnimated(false)
+                }
                 self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
-                
-            })
+            } else {
+                spinner.startAnimating()
+                event.fetchIfNeededInBackgroundWithBlock({
+                    (result, error) in
+                    
+                    let requestACL:PFACL = PFACL()
+                    requestACL.setPublicWriteAccess(true)
+                    requestACL.setPublicReadAccess(true)
+                    let request = Request()
+                    request.event = self.event
+                    request.attendee = user
+                    request.ACL = requestACL
+                    request.saveInBackground()
+                    
+                    self.spinner.stopAnimating()
+                    self.attend.hidden = true
+                    self.attend.frame = CGRectZero
+                    
+                    let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
+                    blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
+                    blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
+                    blurryAlertViewController.aboutText = "Your request has been sent."
+                    blurryAlertViewController.messageText = "We will notify you of the outcome."
+                    self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
+                    
+                })
+            }
+        } else {
+            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
+            presentViewController(vc, animated: true, completion: nil)
         }
     }
     
     @IBAction func chat(sender: AnyObject) {
+        if PFUser.currentUser() != nil {
             if (attendees.count>0) {
-            let controller: MessagesTableViewController = self.storyboard!.instantiateViewControllerWithIdentifier("MessagesTableViewController") as! MessagesTableViewController
-            controller.event = event
-            self.navigationController!.pushViewController(controller, animated: true)
+                let controller: MessagesTableViewController = self.storyboard!.instantiateViewControllerWithIdentifier("MessagesTableViewController") as! MessagesTableViewController
+                controller.event = event
+                self.navigationController!.pushViewController(controller, animated: true)
+            }
+        } else {
+            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
+            presentViewController(vc, animated: true, completion: nil)
         }
     }
     
     
     @IBAction func invite(sender: AnyObject) {
-        let mailComposeViewController = configuredMailComposeViewController()
-        if MFMailComposeViewController.canSendMail() {
-            self.presentViewController(mailComposeViewController, animated: true, completion: nil)
+        if (PFUser.currentUser() != nil) {
+            let mailComposeViewController = configuredMailComposeViewController()
+            if MFMailComposeViewController.canSendMail() {
+                self.presentViewController(mailComposeViewController, animated: true, completion: nil)
+            } else {
+                self.showSendMailErrorAlert()
+            }
         } else {
-            self.showSendMailErrorAlert()
+            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
+            presentViewController(vc, animated: true, completion: nil)
         }
     }
     
@@ -337,6 +355,29 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
         mapItem.name = "\(event.name)"
         mapItem.openInMapsWithLaunchOptions(options)
         
+    }
+    
+    @IBAction func reportButtonTapped(sender: AnyObject) {
+        let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
+        blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
+        blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
+        blurryAlertViewController.hasCancelAction = true
+        blurryAlertViewController.messageText = "You are about to flag this event for inappropriate content. Are you sure?"
+        blurryAlertViewController.completion = {
+            let report = Report()
+            report.event = self.event
+            report.user = PFUser.currentUser()!
+            report.saveInBackgroundWithBlock({
+                result, error in
+                if error == nil {
+                    self.navigationItem.rightBarButtonItem = nil
+                    self.navigationController?.popViewControllerAnimated(true)
+                } else {
+                    MessageToUser.showDefaultErrorMessage("Something went wrong.")
+                }
+            })
+        }
+        self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
     }
     
     @IBAction func backButtonTapped(sender: AnyObject) {

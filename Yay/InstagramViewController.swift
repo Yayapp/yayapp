@@ -15,7 +15,7 @@ protocol InstagramDelegate : NSObjectProtocol {
 
 class InstagramViewController: UIViewController, UIWebViewDelegate {
 
-    @IBOutlet var webView: UIWebView!
+    @IBOutlet weak var webView: UIWebView!
     var delegate:InstagramDelegate?
     
     override func viewDidLoad() {

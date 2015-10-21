@@ -13,10 +13,10 @@ class PicturePickerViewController: UIViewController, UIImagePickerControllerDele
     
     let picker = UIImagePickerController()
     
-    @IBOutlet var uploadPhoto: UIButton!
-    @IBOutlet var avatar: PFImageView!
+    @IBOutlet weak var uploadPhoto: UIButton!
+    @IBOutlet weak var avatar: PFImageView!
     
-    @IBOutlet var proceed: UIButton!
+    @IBOutlet weak var proceed: UIButton!
     
     
     override func viewDidLoad() {

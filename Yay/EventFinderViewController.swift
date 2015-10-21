@@ -16,8 +16,8 @@ class EventFinderViewController: UIViewController, ChooseLocationDelegate {
     var isRotating = false
     var shouldStopRotating = false
     
-    @IBOutlet var searchingAnimation: UIImageView!
-    @IBOutlet var location: UIButton!
+    @IBOutlet weak var searchingAnimation: UIImageView!
+    @IBOutlet weak var location: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()

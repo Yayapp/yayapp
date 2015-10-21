@@ -10,7 +10,7 @@ import UIKit
 
 class StartViewController: UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     
-    @IBOutlet var dots: UIPageControl!
+    @IBOutlet weak var dots: UIPageControl!
     
     var timer:NSTimer!
     var pageViewController : UIPageViewController!

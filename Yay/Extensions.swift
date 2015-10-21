@@ -70,6 +70,8 @@ extension CLLocation {
     let geoCoder = CLGeocoder()
     let cityCountry:NSMutableString=NSMutableString()
     geoCoder.reverseGeocodeLocation(self, completionHandler: { (placemarks, error) -> Void in
+        
+        if error == nil {
         let placeArray = placemarks as [CLPlacemark]!
         
         // Place details
@@ -107,6 +109,7 @@ extension CLLocation {
                 button!.setTitle(cityCountry as String, forState: .Normal)
             }
             
+        }
         }
     })
     }

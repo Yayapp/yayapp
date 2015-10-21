@@ -18,7 +18,7 @@ class ChooseEventPictureViewController: UIViewController, UITableViewDataSource,
     var delegate:ChooseEventPictureDelegate!
     var categories:[Category]! = []
     
-    @IBOutlet var photos: UITableView!
+    @IBOutlet weak var photos: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,17 +52,11 @@ class ChooseEventPictureViewController: UIViewController, UITableViewDataSource,
         let category:Category! = categories[indexPath.row]
         
         cell.name.text = category.name
-        cell.photo.file = category.photo
-        cell.photo.loadInBackground()
-//        category.photo.getDataInBackgroundWithBlock({
-//            (data:NSData?, error:NSError?) in
-//            if(error == nil) {
-//                var image = UIImage(data:data!)
-//                cell.photo.image = image
-//            } else {
-//                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-//            }
-//        })
+        
+            cell.photo.file = category.photo
+            cell.photo.loadInBackground()
+        
+        
         return cell
     }
     

@@ -13,8 +13,8 @@ class TutorialViewController: UIViewController {
 //    var hints:[String]!
     var pageIndex : Int = 0
 
-    @IBOutlet var tutorialImage: UIImageView!
-    @IBOutlet var tuorialButton: UIButton!
+    @IBOutlet weak var tutorialImage: UIImageView!
+    @IBOutlet weak var tuorialButton: UIButton!
     
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     

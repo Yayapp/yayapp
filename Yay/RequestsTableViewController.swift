@@ -13,7 +13,7 @@ class RequestsTableViewController: UITableViewController {
     var requests:[Request] = []
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 
-    @IBOutlet var emptyView: UIView!
+    @IBOutlet weak var emptyView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()

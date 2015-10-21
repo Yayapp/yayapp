@@ -14,18 +14,18 @@ class SettingsTableViewController: UITableViewController, TTRangeSliderDelegate 
     
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
-    @IBOutlet var distanceLabel: UILabel!
+    @IBOutlet weak var distanceLabel: UILabel!
     
-    @IBOutlet var distanceSlider: TTRangeSlider!
-    @IBOutlet var attAccepted: UISwitch!
+    @IBOutlet weak var distanceSlider: TTRangeSlider!
+    @IBOutlet weak var attAccepted: UISwitch!
     
-    @IBOutlet var eventNearby: UISwitch!
-    @IBOutlet var eventsReminder: UISwitch!
-    @IBOutlet var newMessage: UISwitch!
+    @IBOutlet weak var eventNearby: UISwitch!
+    @IBOutlet weak var eventsReminder: UISwitch!
+    @IBOutlet weak var newMessage: UISwitch!
     
-    @IBOutlet var maleButton: UIButton!
+    @IBOutlet weak var maleButton: UIButton!
     
-    @IBOutlet var femaleButton: UIButton!
+    @IBOutlet weak var femaleButton: UIButton!
     
     
     override func viewDidLoad() {

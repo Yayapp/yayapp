@@ -12,9 +12,9 @@ class ProfileViewController: UITableViewController {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
-    @IBOutlet var profileTable: UITableView!
-    @IBOutlet var messagesCountLabel: UILabel!
-    @IBOutlet var requestsCountLabel: UILabel!
+    @IBOutlet weak var profileTable: UITableView!
+    @IBOutlet weak var messagesCountLabel: UILabel!
+    @IBOutlet weak var requestsCountLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -10,8 +10,8 @@ import UIKit
 
 class InstructionViewController: UIViewController {
 
-    @IBOutlet var titleLabel: UILabel!
-    @IBOutlet var backimage: UIImageView!
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var backimage: UIImageView!
     
     var pageIndex : Int = 0
     var titleText : NSAttributedString!

@@ -14,23 +14,23 @@ class CreateEmailAccountViewController: KeyboardAnimationHelper {
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     var isLogin:Bool! = false
    
-    @IBOutlet var name: UITextField!
+    @IBOutlet weak var name: UITextField!
     
-    @IBOutlet var email: UITextField!
-    @IBOutlet var loginEmail: UITextField!
+    @IBOutlet weak var email: UITextField!
+    @IBOutlet weak var loginEmail: UITextField!
     
-    @IBOutlet var email2: UITextField!
-    @IBOutlet var loginPassword: UITextField!
+    @IBOutlet weak var email2: UITextField!
+    @IBOutlet weak var loginPassword: UITextField!
     
-    @IBOutlet var password1: UITextField!
-    @IBOutlet var password2: UITextField!
+    @IBOutlet weak var password1: UITextField!
+    @IBOutlet weak var password2: UITextField!
     
-    @IBOutlet var switchToLogin: UIButton!
-    @IBOutlet var switchToRegister: UIButton!
-    @IBOutlet var createAccount: UIButton!
-    @IBOutlet var signIn: UIButton!
-    @IBOutlet var accountExist: UILabel!
-    @IBOutlet var forgotPassword: UIButton!
+    @IBOutlet weak var switchToLogin: UIButton!
+    @IBOutlet weak var switchToRegister: UIButton!
+    @IBOutlet weak var createAccount: UIButton!
+    @IBOutlet weak var signIn: UIButton!
+    @IBOutlet weak var accountExist: UILabel!
+    @IBOutlet weak var forgotPassword: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()

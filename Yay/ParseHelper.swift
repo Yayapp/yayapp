@@ -30,7 +30,7 @@ class ParseHelper {
         dayComponent.day = 1
         let startTomorrow = calendar!.dateByAddingComponents(dayComponent, toDate: endToday, options: NSCalendarOptions.MatchFirst)
         
-        queryHomeEvents(today, endDate: startTomorrow!, user: user!, categories: categories, block: block)
+        queryHomeEvents(today, endDate: startTomorrow!, user: user, categories: categories, block: block)
 	}
     
     class func getTomorrowEvents(user:PFUser?, categories:[Category], block:EventsResultBlock?) {
@@ -47,7 +47,7 @@ class ParseHelper {
         dayComponent.day = 2
         let startDayAfterTomorrow = calendar!.dateByAddingComponents(dayComponent, toDate: endToday, options: NSCalendarOptions.MatchFirst)
         
-        queryHomeEvents(startTomorrow!, endDate: startDayAfterTomorrow!, user: user!, categories: categories, block: block)
+        queryHomeEvents(startTomorrow!, endDate: startDayAfterTomorrow!, user: user, categories: categories, block: block)
     }
     
     class func getThisWeekEvents(user:PFUser?, categories:[Category], block:EventsResultBlock?) {
@@ -64,7 +64,7 @@ class ParseHelper {
         let endWeek = calendar!.dateByAddingComponents(dayComponent, toDate: today, options: NSCalendarOptions.MatchFirst)
         let startNextWeek = calendar!.startOfDayForDate(endWeek!)
 
-        queryHomeEvents(today, endDate: startNextWeek, user: user!, categories: categories, block: block)
+        queryHomeEvents(today, endDate: startNextWeek, user: user, categories: categories, block: block)
     }
     
     class func queryHomeEvents(startDate:NSDate, endDate:NSDate, user:PFUser?, categories:[Category], block:EventsResultBlock?) {
@@ -208,6 +208,20 @@ class ParseHelper {
         }
     }
    
+    class func countReports(event: Event, user:PFUser, completion:(Int)->()) {
+        let query = PFQuery(className:Report.parseClassName())
+        query.whereKey("user", equalTo:user)
+        query.whereKey("event", equalTo:event)
+        query.countObjectsInBackgroundWithBlock {
+            count, error in
+            if error == nil {
+                completion(Int(count))
+            } else {
+                completion(0)
+            }
+        }
+    }
+    
     
     class func countRequests(user:PFUser, completion:(Int)->()) {
         let query1 = PFQuery(className:Event.parseClassName())

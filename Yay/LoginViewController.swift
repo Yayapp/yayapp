@@ -13,7 +13,7 @@ class LoginViewController: UIViewController, InstagramDelegate {
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     var isLogin:Bool! = false
     
-    @IBOutlet var textLabel: UILabel!
+    @IBOutlet weak var textLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
