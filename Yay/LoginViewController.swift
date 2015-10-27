@@ -65,6 +65,10 @@ class LoginViewController: UIViewController, InstagramDelegate {
         let permissions:[String] = ["email","user_about_me", "user_relationships", "user_birthday", "user_location"]
         PFFacebookUtils.logInInBackgroundWithReadPermissions(permissions) {
             (user: PFUser?, error: NSError?) -> Void in
+            
+            if error != nil {
+                MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
+            }
             if let user = user {
                 
                 if (FBSDKAccessToken.currentAccessToken() != nil){
@@ -112,6 +116,9 @@ class LoginViewController: UIViewController, InstagramDelegate {
     @IBAction func twitterLogin(sender: AnyObject) {
         PFTwitterUtils.logInWithBlock {
             (user: PFUser?, error: NSError?) -> Void in
+            if error != nil {
+                MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
+            }
             if let user = user {
                 
                 if user.isNew {

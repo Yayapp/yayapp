@@ -29,7 +29,7 @@ class PrivacyPolicyController: UIViewController {
 
     @IBAction func close(sender: AnyObject) {
         dismissViewControllerAnimated(true, completion: {
-            appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.PanningCenterView
+            self.appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.PanningCenterView
         })
     }
 

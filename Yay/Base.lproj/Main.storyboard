@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -4248,6 +4248,31 @@
                                 <constraint firstAttribute="centerY" secondItem="hG3-mO-OaJ" secondAttribute="centerY" id="v31-C1-MGL"/>
                             </constraints>
                         </view>
+                        <view key="tableFooterView" contentMode="scaleToFill" id="dy3-dV-fUp">
+                            <rect key="frame" x="0.0" y="446" width="320" height="44"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="hWg-du-lSk">
+                                    <rect key="frame" x="60" y="5" width="200" height="33"/>
+                                    <animations/>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                    <state key="normal" title="Block user">
+                                        <color key="titleColor" red="0.01176470588" green="0.46274509800000002" blue="0.44705882349999998" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="blockUnblock:" destination="FBc-ue-V7y" eventType="touchUpInside" id="SBm-QA-dyE"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                            <animations/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstItem="hWg-du-lSk" firstAttribute="leading" secondItem="dy3-dV-fUp" secondAttribute="leading" constant="60" id="MQN-GW-xJW"/>
+                                <constraint firstAttribute="bottom" secondItem="hWg-du-lSk" secondAttribute="bottom" constant="6" id="WMq-hy-wuf"/>
+                                <constraint firstAttribute="trailing" secondItem="hWg-du-lSk" secondAttribute="trailing" constant="60" id="aAO-Q0-lVO"/>
+                                <constraint firstItem="hWg-du-lSk" firstAttribute="top" secondItem="dy3-dV-fUp" secondAttribute="top" constant="5" id="djF-c6-tdl"/>
+                            </constraints>
+                        </view>
                         <sections>
                             <tableViewSection id="3DT-KH-2sX">
                                 <cells>
@@ -4394,6 +4419,7 @@
                     <connections>
                         <outlet property="about" destination="966-XA-zPp" id="hsh-6g-AVT"/>
                         <outlet property="avatar" destination="hG3-mO-OaJ" id="lmA-sA-yXB"/>
+                        <outlet property="blockUnblock" destination="hWg-du-lSk" id="Qh1-br-WHO"/>
                         <outlet property="eventsCount" destination="yMA-1g-pWs" id="vaE-yP-B4w"/>
                         <outlet property="interests" destination="LaN-hr-ord" id="Bb7-fR-pzX"/>
                         <outlet property="name" destination="AlA-MP-Cy3" id="2xK-sg-2hb"/>

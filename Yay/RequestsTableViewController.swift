@@ -89,16 +89,19 @@ class RequestsTableViewController: UITableViewController {
         request.event.attendees.append(request.attendee)
         request.event.saveInBackground()
         request.accepted = true
-        request.saveInBackground()
-        requests.removeAtIndex(sender.tag)
-        UIApplication.sharedApplication().applicationIconBadgeNumber-=1
+        request.saveInBackgroundWithBlock({
+            done in
+            self.requests.removeAtIndex(sender.tag)
+            UIApplication.sharedApplication().applicationIconBadgeNumber-=1
+            
+            if(request.event.attendees.count >= request.event.limit) {
+                ParseHelper.declineRequests(request.event)
+                self.requests = self.requests.filter({$0.event.objectId != request.event.objectId})
+            }
+            self.appDelegate.leftViewController.requestsCountLabel.text = "\(self.requests.count)"
+            self.tableView.reloadData()
+        })
         
-        if(request.event.attendees.count >= request.event.limit) {
-            ParseHelper.declineRequests(request.event)
-            requests = requests.filter({$0.event.objectId != request.event.objectId})
-        }
-        self.appDelegate.leftViewController.requestsCountLabel.text = "\(self.requests.count)"
-        tableView.reloadData()
     }
     
     @IBAction func decline(sender: AnyObject) {

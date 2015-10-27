@@ -15,9 +15,9 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
     var user:PFUser!
     var editdone:UIBarButtonItem!
     var isEditingProfile:Bool = false
+    var blocked = false
     
     @IBOutlet weak var name: UILabel!
-    @IBOutlet weak var location: UILabel!
     
     @IBOutlet weak var uploadPhoto: UIButton!
     @IBOutlet weak var avatar: PFImageView!
@@ -25,7 +25,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
     @IBOutlet weak var interests: UILabel!
     @IBOutlet weak var about: UILabel!
     @IBOutlet weak var rankIcon: UIImageView!
-    @IBOutlet weak var invites: UILabel!
+    @IBOutlet weak var blockUnblock: UIButton!
     
     
     
@@ -38,9 +38,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         back.tintColor = Color.PrimaryActiveColor
         self.navigationItem.setLeftBarButtonItem(back, animated: false)
         
-        let tblView =  UIView(frame: CGRectZero)
-        tableView.tableFooterView = tblView
-        tableView.tableFooterView!.hidden = true
+        
         tableView.estimatedRowHeight = 100.0
         tableView.rowHeight = UITableViewAutomaticDimension
         
@@ -52,6 +50,23 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
             editdone = UIBarButtonItem(image:UIImage(named: "edit_icon"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("editdone:"))
             editdone.tintColor = Color.PrimaryActiveColor
             self.navigationItem.setRightBarButtonItem(editdone, animated: false)
+            
+            let tblView =  UIView(frame: CGRectZero)
+            tableView.tableFooterView = tblView
+            tableView.tableFooterView!.hidden = true
+            
+        } else {
+            if(PFUser.currentUser() != nil) {
+            
+            ParseHelper.countBlocks(PFUser.currentUser()!, user: user, completion: {
+                count in
+                if count > 0 {
+                    self.blockUnblock.titleLabel?.text = "Unblock user"
+                    self.blocked = true
+                }
+                self.blockUnblock.hidden = false
+            })
+            }
         }
         
         
@@ -239,6 +254,38 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
             about.backgroundColor = Color.ProfileEditBackground
         }
     }
+    
+    @IBAction func blockUnblock(sender: AnyObject) {
+        
+        if blocked == true {
+            ParseHelper.removeBlocks(PFUser.currentUser()!, user: user, completion: {
+                self.blockUnblock.titleLabel?.text = "Block user"
+                self.blocked = false
+            })
+        } else {
+            let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
+            blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
+            blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
+            blurryAlertViewController.hasCancelAction = true
+            blurryAlertViewController.messageText = "You are about to block this user. Are you sure?"
+            blurryAlertViewController.completion = {
+                let block = Block()
+                block.owner = PFUser.currentUser()!
+                block.user = self.user
+                block.saveInBackgroundWithBlock({
+                    result, error in
+                    if error == nil {
+                        self.blockUnblock.titleLabel?.text = "Unblock user"
+                        self.blocked = true
+                    } else {
+                        MessageToUser.showDefaultErrorMessage("Something went wrong.")
+                    }
+                })
+            }
+            self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
+        }
+    }
+    
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         let pickedImage:UIImage = info[UIImagePickerControllerEditedImage] as! UIImage

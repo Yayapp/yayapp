@@ -25,6 +25,7 @@ class ProfileViewController: UITableViewController {
         ParseHelper.countRequests(PFUser.currentUser()!, completion: {
             count in
             self.requestsCountLabel.text = "\(count)"
+            UIApplication.sharedApplication().applicationIconBadgeNumber = count + Prefs.getMessagesCount()
         })
         messagesCountLabel.text = "\(Prefs.getMessagesCount())"
     }

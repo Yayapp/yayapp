@@ -27,6 +27,82 @@ Parse.Cloud.job("removePastRequests", function(request, status) {
                                              // Error
                                              });
                 });
+
+Parse.Cloud.afterSave("Block", function(request) {
+                      Parse.Cloud.useMasterKey();
+                      var user = request.object.get('user');
+                      var owner = request.object.get('owner');
+                      
+                      var Event = Parse.Object.extend("Event");
+                      var query = new Parse.Query(Event);
+                      query.equalTo("owner", owner);
+                      
+                      var Request = Parse.Object.extend("Request");
+                      var reqQuery = new Parse.Query(Request);
+                      reqQuery.equalTo("attendee", user);
+                      reqQuery.matchesQuery('event', query);
+                      reqQuery.find().then(function(results) {
+                                           return Parse.Object.destroyAll(results);
+                                           }).then(function() {
+                                                   query.equalTo("attendees", user)
+                                                   query.include("attendees")
+                                                   query.each(function (event) {
+                                                              event.remove("attendees",user);
+                                                              event.save();      
+                                                              })
+                                                   }, function(error) {
+                                                   // Error
+                                                   });
+                      
+                      
+                      });
+
+
+Parse.Cloud.beforeDelete("Event", function(request, response) {
+                         
+                         Parse.Cloud.useMasterKey();
+                         var Event = Parse.Object.extend("Event");
+                         var query = new Parse.Query(Event);
+                         query.equalTo("objectId", request.object.id);
+                         
+                        var Request = Parse.Object.extend("Request");
+                         var reqQuery = new Parse.Query(Request);
+                         reqQuery.matchesQuery('event', query);
+                         reqQuery.find().then(function(results) {
+                                              return Parse.Object.destroyAll(results);
+                                              }).then(function() {
+                                                      response.success("OK")
+                                                      }, function(error) {
+                                                      response.error(error)
+                                                      });
+                         });
+
+
+Parse.Cloud.beforeDelete(Parse.User, function(request, response) {
+                         
+                         Parse.Cloud.useMasterKey();
+                         
+                         var Event = Parse.Object.extend("Event");
+                         var query = new Parse.Query(Event);
+                         query.equalTo("attendees", Parse.User.current())
+                         query.include("attendees")
+                         query.each(function (event) {
+                                    event.remove("attendees",Parse.User.current());
+                                    event.save();
+                                    })
+                         
+                         var Request = Parse.Object.extend("Request");
+                         var reqQuery = new Parse.Query(Request);
+                         reqQuery.equalTo("attendee", Parse.User.current())
+                         reqQuery.find().then(function(results) {
+                                              return Parse.Object.destroyAll(results);
+                                              }).then(function() {
+                                                      response.success("OK")
+                                                      }, function(error) {
+                                                      response.error(error)
+                                                      });
+                         });
+
 Parse.Cloud.afterSave("Report", function(request) {
                       Parse.Cloud.useMasterKey();
                       var event = request.object.get('event');

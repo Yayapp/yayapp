@@ -241,7 +241,7 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
     func configuredMailComposeViewController() -> MFMailComposeViewController {
         let userName = PFUser.currentUser()?.objectForKey("name") as! String
         let emailTitle = "\(userName) invited you to Friendzi app"
-        let messageBody = "\(userName) has invited you to join Friendzi. \n\nhttp://friendzy.io/"
+        let messageBody = "\(userName) has invited you to join Friendzi. \n\nhttp://friendzi.io/"
         
         let mailComposerVC = MFMailComposeViewController()
         mailComposerVC.mailComposeDelegate = self
@@ -266,6 +266,7 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
             result, error in
             if (error == nil){
                 vc.requests = result!
+                self.appDelegate.leftViewController.requestsCountLabel.text = "\(result!.count)"
                 self.navigationController?.pushViewController(vc, animated: true)
             } else {
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)

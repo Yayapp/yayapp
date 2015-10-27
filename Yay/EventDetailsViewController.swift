@@ -183,6 +183,9 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                                         }
                                     })
                                 
+                            } else {
+                                attendeeButton.setImage(UIImage(named: "upload_pic"), forState: .Normal)
+                                MessageToUser.showDefaultErrorMessage("Some user has no avatar.")
                             }
                         } else {
                             MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
@@ -290,7 +293,7 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     func configuredMailComposeViewController() -> MFMailComposeViewController {
         let userName = PFUser.currentUser()?.objectForKey("name") as! String
         let emailTitle = "\(userName) shared happening from Friendzi app"
-        let messageBody = "Hi, please check this happening \"\(event.name)\" on \(dateFormatter.stringFromDate(event.startDate)).\n\nhttp://friendzy.io/"
+        let messageBody = "Hi, please check this happening \"\(event.name)\" on \(dateFormatter.stringFromDate(event.startDate)).\n\nhttp://friendzi.io/"
         
         
         let mailComposerVC = MFMailComposeViewController()

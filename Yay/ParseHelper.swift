@@ -68,9 +68,15 @@ class ParseHelper {
     }
     
     class func queryHomeEvents(startDate:NSDate, endDate:NSDate, user:PFUser?, categories:[Category], block:EventsResultBlock?) {
+        
+        let query1 = PFQuery(className:Block.parseClassName())
+        query1.whereKey("user", equalTo:user!)
+        
+        
         let query = PFQuery(className:Event.parseClassName())
         query.whereKey("startDate", greaterThan: startDate)
         query.whereKey("startDate", lessThanOrEqualTo: endDate)
+        query.whereKey("owner", doesNotMatchKey: "owner", inQuery: query1)
         query.orderByDescending("startDate")
         if let user = user {
             let location:PFGeoPoint? = user.objectForKey("location") as? PFGeoPoint
@@ -237,6 +243,40 @@ class ParseHelper {
                 completion(Int(count))
             } else {
                 completion(0)
+            }
+        }
+    }
+    
+    class func countBlocks(owner:PFUser, user:PFUser, completion:(Int)->()) {
+  
+        let query = PFQuery(className:Block.parseClassName())
+        query.whereKey("owner", equalTo:owner)
+        query.whereKey("user", equalTo:user)
+        query.countObjectsInBackgroundWithBlock {
+            count, error in
+            if error == nil {
+                completion(Int(count))
+            } else {
+                completion(0)
+            }
+        }
+    }
+    
+    class func removeBlocks(owner:PFUser, user:PFUser, completion:()->()) {
+        
+        let query = PFQuery(className:Block.parseClassName())
+        query.whereKey("owner", equalTo:owner)
+        query.whereKey("user", equalTo:user)
+        query.findObjectsInBackgroundWithBlock {
+            objects, error in
+            
+            if error == nil {
+                if let objects = objects as? [Block] {
+                    for block in objects {
+                        block.deleteInBackground()
+                    }
+                }
+                completion()
             }
         }
     }

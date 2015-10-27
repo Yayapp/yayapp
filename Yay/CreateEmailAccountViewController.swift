@@ -90,7 +90,11 @@ class CreateEmailAccountViewController: KeyboardAnimationHelper {
         user.signUpInBackgroundWithBlock {
             (succeeded: Bool, error: NSError?) -> Void in
             if let error = error {
-                MessageToUser.showDefaultErrorMessage(error.localizedDescription)
+                if error.code == 202 {
+                    MessageToUser.showDefaultErrorMessage("Email \(user.email) already taken")
+                } else {
+                    MessageToUser.showDefaultErrorMessage(error.localizedDescription)
+                }
             } else {
                 self.proceed()
             }
@@ -114,7 +118,7 @@ class CreateEmailAccountViewController: KeyboardAnimationHelper {
                     
                     self.performSegueWithIdentifier("proceed", sender: nil)
                 } else if(error!.code == 101) {
-                    MessageToUser.showDefaultErrorMessage("Invalid username or password")
+                    MessageToUser.showDefaultErrorMessage("Invalid email or password")
                 } else {
                     MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
                 }
@@ -132,7 +136,7 @@ class CreateEmailAccountViewController: KeyboardAnimationHelper {
         let alert = UIAlertController(title: "Reset password", message: nil, preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "Reset", style: UIAlertActionStyle.Default, handler: {
             (action: UIAlertAction) in
-            if (!tField.text!.isEmpty && tField.text!.isEmail() == false) {
+            if (!tField.text!.isEmpty && tField.text!.isEmail()) {
                 PFUser.requestPasswordResetForEmailInBackground(tField.text!, block: {
                     result, error in
                     if(error == nil) {
