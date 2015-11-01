@@ -268,6 +268,8 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                 let controller: MessagesTableViewController = self.storyboard!.instantiateViewControllerWithIdentifier("MessagesTableViewController") as! MessagesTableViewController
                 controller.event = event
                 self.navigationController!.pushViewController(controller, animated: true)
+            } else {
+                MessageToUser.showDefaultErrorMessage("There are no attendees yet.")
             }
         } else {
             let vc = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController

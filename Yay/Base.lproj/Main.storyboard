@@ -1356,7 +1356,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <animations/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Searching" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HK6-0X-9kn">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Searching" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HK6-0X-9kn">
                                 <rect key="frame" x="16" y="115" width="288" height="22"/>
                                 <animations/>
                                 <constraints>
@@ -1402,7 +1402,7 @@
                                     <constraint firstAttribute="width" secondItem="8al-Yo-MZ2" secondAttribute="height" multiplier="1:1" id="yBt-sZ-Lzp"/>
                                 </constraints>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="8ML-Vz-ebr">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="8ML-Vz-ebr">
                                 <rect key="frame" x="85" y="28" width="150" height="30"/>
                                 <animations/>
                                 <constraints>
@@ -3163,7 +3163,7 @@
                                     <constraint firstAttribute="width" secondItem="k71-4i-rrt" secondAttribute="height" multiplier="1:1" id="1mY-k6-1eb"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
-                                <state key="normal" title="+" backgroundImage="NrOfAttendees_plus">
+                                <state key="normal" backgroundImage="NrOfAttendees_plus">
                                     <color key="titleColor" red="0.99215686270000003" green="0.72549019609999998" blue="0.14901960780000001" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -3274,7 +3274,7 @@
                                     <constraint firstAttribute="width" secondItem="Ecn-ay-VBY" secondAttribute="height" multiplier="1:1" id="WQT-8B-p6x"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
-                                <state key="normal" title="-" backgroundImage="NrOfAttendees_minus">
+                                <state key="normal" backgroundImage="NrOfAttendees_minus">
                                     <color key="titleColor" red="0.99215686270000003" green="0.72549019609999998" blue="0.14901960780000001" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -4496,24 +4496,24 @@
         <image name="calendarico" width="30" height="32"/>
         <image name="cancelevent_button" width="75" height="75"/>
         <image name="categoriesico" width="30" height="30"/>
-        <image name="chatico" width="39" height="43"/>
+        <image name="chatico" width="864" height="1152"/>
         <image name="closeico" width="24" height="24"/>
         <image name="createevent_button" width="75" height="75"/>
         <image name="distancerange_homeicon" width="32" height="32"/>
         <image name="example_cover" width="640" height="483"/>
         <image name="eye_ico" width="44" height="33"/>
         <image name="facebooksignup" width="76" height="76"/>
-        <image name="female" width="19" height="31"/>
+        <image name="female" width="864" height="1152"/>
         <image name="getstarted" width="280" height="80"/>
         <image name="instasignup" width="76" height="76"/>
-        <image name="interests" width="45" height="43"/>
+        <image name="interests" width="42" height="42"/>
         <image name="invites_icon" width="32" height="32"/>
         <image name="login" width="186" height="81"/>
         <image name="loginbutton" width="186" height="81"/>
         <image name="logo" width="247" height="48"/>
         <image name="mail_signup" width="76" height="76"/>
-        <image name="male" width="27" height="29"/>
-        <image name="mapmarkerico" width="23" height="32"/>
+        <image name="male" width="864" height="1152"/>
+        <image name="mapmarkerico" width="21" height="30"/>
         <image name="mapmarkericon" width="45" height="61"/>
         <image name="notifications_backarrow" width="28" height="22"/>
         <image name="okbutton" width="127" height="72"/>
@@ -4532,6 +4532,6 @@
         <image name="userico" width="30" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="2Pf-XM-slc"/>
+        <segue reference="Whz-e9-xMk"/>
     </inferredMetricsTieBreakers>
 </document>

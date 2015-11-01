@@ -1,19 +1,8 @@
 {
   "images" : [
     {
-      "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "cancel_button.png"
-    },
-    {
-      "idiom" : "universal",
-      "scale" : "2x",
-      "filename" : "cancel_button_x2.png"
-    },
-    {
-      "idiom" : "universal",
-      "scale" : "3x",
-      "filename" : "cancel_button_x3.png"
+      "idiom" : "iphone",
+      "filename" : "reject.pdf"
     }
   ],
   "info" : {

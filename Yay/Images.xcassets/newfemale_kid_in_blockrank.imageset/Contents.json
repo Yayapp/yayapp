@@ -1,19 +1,24 @@
 {
   "images" : [
     {
-      "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "social_rank_newkidfemale.png"
+      "idiom" : "iphone",
+      "filename" : "social_rank_newkidfemale.png",
+      "scale" : "1x"
     },
     {
-      "idiom" : "universal",
-      "scale" : "2x",
-      "filename" : "social_rank_newkidfemale_x2.png"
+      "idiom" : "iphone",
+      "filename" : "social_rank_newkidfemale_x2.png",
+      "scale" : "2x"
     },
     {
-      "idiom" : "universal",
-      "scale" : "3x",
-      "filename" : "social_rank_newkidfemale_x3.png"
+      "idiom" : "iphone",
+      "filename" : "social_rank_newkidfemale_x3.png",
+      "scale" : "3x"
+    },
+    {
+      "idiom" : "iphone",
+      "filename" : "newkidF.pdf",
+      "unassigned" : true
     }
   ],
   "info" : {

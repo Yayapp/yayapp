@@ -1,19 +1,24 @@
 {
   "images" : [
     {
-      "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "twitter.png"
+      "idiom" : "iphone",
+      "filename" : "twitter.png",
+      "scale" : "1x"
     },
     {
-      "idiom" : "universal",
-      "scale" : "2x",
-      "filename" : "twitter_x2.png"
+      "idiom" : "iphone",
+      "filename" : "twitter_x2.png",
+      "scale" : "2x"
     },
     {
-      "idiom" : "universal",
-      "scale" : "3x",
-      "filename" : "twitter_x3.png"
+      "idiom" : "iphone",
+      "filename" : "twitter_x3.png",
+      "scale" : "3x"
+    },
+    {
+      "idiom" : "iphone",
+      "filename" : "twitter.pdf",
+      "unassigned" : true
     }
   ],
   "info" : {

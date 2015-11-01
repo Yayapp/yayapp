@@ -1,19 +1,24 @@
 {
   "images" : [
     {
-      "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "list_view_icon.png"
+      "idiom" : "iphone",
+      "filename" : "list_view_icon.png",
+      "scale" : "1x"
     },
     {
-      "idiom" : "universal",
-      "scale" : "2x",
-      "filename" : "list_view_icon_x2.png"
+      "idiom" : "iphone",
+      "filename" : "list_view_icon_x2.png",
+      "scale" : "2x"
     },
     {
-      "idiom" : "universal",
-      "scale" : "3x",
-      "filename" : "list_view_icon_x3.png"
+      "idiom" : "iphone",
+      "filename" : "list_view_icon_x3.png",
+      "scale" : "3x"
+    },
+    {
+      "idiom" : "iphone",
+      "filename" : "listview.pdf",
+      "unassigned" : true
     }
   ],
   "info" : {

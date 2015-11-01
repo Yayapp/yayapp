@@ -1,19 +1,8 @@
 {
   "images" : [
     {
-      "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "distance_range_home.png"
-    },
-    {
-      "idiom" : "universal",
-      "scale" : "2x",
-      "filename" : "distance_range_home_x2.png"
-    },
-    {
-      "idiom" : "universal",
-      "scale" : "3x",
-      "filename" : "distance_range_home_x3.png"
+      "idiom" : "iphone",
+      "filename" : "distancerange.pdf"
     }
   ],
   "info" : {

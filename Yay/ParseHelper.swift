@@ -69,16 +69,15 @@ class ParseHelper {
     
     class func queryHomeEvents(startDate:NSDate, endDate:NSDate, user:PFUser?, categories:[Category], block:EventsResultBlock?) {
         
-        let query1 = PFQuery(className:Block.parseClassName())
-        query1.whereKey("user", equalTo:user!)
-        
-        
         let query = PFQuery(className:Event.parseClassName())
         query.whereKey("startDate", greaterThan: startDate)
         query.whereKey("startDate", lessThanOrEqualTo: endDate)
-        query.whereKey("owner", doesNotMatchKey: "owner", inQuery: query1)
+        
         query.orderByDescending("startDate")
         if let user = user {
+            let query1 = PFQuery(className:Block.parseClassName())
+            query1.whereKey("user", equalTo:user)
+            query.whereKey("owner", doesNotMatchKey: "owner", inQuery: query1)
             let location:PFGeoPoint? = user.objectForKey("location") as? PFGeoPoint
             let distance = user.objectForKey("distance") as? Double
             query.whereKey("location", nearGeoPoint: location!, withinKilometers: distance!)

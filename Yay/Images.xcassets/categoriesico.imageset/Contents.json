@@ -1,19 +1,8 @@
 {
   "images" : [
     {
-      "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "categories_icon.png"
-    },
-    {
-      "idiom" : "universal",
-      "scale" : "2x",
-      "filename" : "categories_icon_x2.png"
-    },
-    {
-      "idiom" : "universal",
-      "scale" : "3x",
-      "filename" : "categories_icon_x3.png"
+      "idiom" : "iphone",
+      "filename" : "categories.pdf"
     }
   ],
   "info" : {

@@ -1,19 +1,8 @@
 {
   "images" : [
     {
-      "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "mapmarket_ico.png"
-    },
-    {
-      "idiom" : "universal",
-      "scale" : "2x",
-      "filename" : "mapmarket_ico_x2.png"
-    },
-    {
-      "idiom" : "universal",
-      "scale" : "3x",
-      "filename" : "mapmarket_ico_x3.png"
+      "idiom" : "iphone",
+      "filename" : "mapmarker.pdf"
     }
   ],
   "info" : {
