@@ -288,8 +288,8 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
     
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        let pickedImage:UIImage = info[UIImagePickerControllerEditedImage] as! UIImage
-        let imageData = UIImagePNGRepresentation(pickedImage)
+        let pickedImage:UIImage = (info[UIImagePickerControllerEditedImage] as! UIImage).resizeToDefault()
+        let imageData = UIImageJPEGRepresentation(pickedImage, 70)
         let imageFile:PFFile = PFFile(data: imageData!)!
         avatar.image = pickedImage
         

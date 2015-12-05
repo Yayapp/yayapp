@@ -205,13 +205,13 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
         let distanceStr = String(format: "%.2f", distanceBetween/1000)
         self.title  = self.event.name
         self.name.text = self.event.name
-        self.descr.text = self.event.summary
+        self.descr.text = "\(self.event.name)\n\(self.event.summary)"
         self.photo.file = self.event.photo
         self.photo.loadInBackground()
         
         self.date.text = self.dateFormatter.stringFromDate(self.event.startDate)
         self.distance.text = "\(distanceStr)km"
-        CLLocation(latitude: self.event.location.latitude, longitude: self.event.location.longitude).getLocationString(nil, button: location, timezoneCompletion: nil)
+        CLLocation(latitude: self.event.location.latitude, longitude: self.event.location.longitude).setLocationString(self.descr, button: location, timezoneCompletion: nil)
     }
     
     

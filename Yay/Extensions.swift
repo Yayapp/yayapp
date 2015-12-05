@@ -113,6 +113,54 @@ extension CLLocation {
         }
     })
     }
+    
+    func setLocationString(label:UITextView, button:UIButton, timezoneCompletion:((NSTimeZone) -> ())?){
+        let geoCoder = CLGeocoder()
+        let cityCountry:NSMutableString=NSMutableString()
+        geoCoder.reverseGeocodeLocation(self, completionHandler: { (placemarks, error) -> Void in
+            
+            if error == nil {
+                let placeArray = placemarks as [CLPlacemark]!
+                
+                // Place details
+                var placeMark: CLPlacemark!
+                placeMark = placeArray?[0]
+                
+                if timezoneCompletion != nil {
+                    if #available(iOS 9.0, *) {
+                        timezoneCompletion!(placeMark.timeZone())
+                    } else {
+                        timezoneCompletion!(APTimeZones.sharedInstance().timeZoneWithLocation(placeMark.location, countryCode:placeMark.ISOcountryCode))
+                    }
+                }
+                if let building = placeMark.subThoroughfare {
+                    cityCountry.appendString(building)
+                }
+                
+                if let address = placeMark.thoroughfare {
+                    if cityCountry.length>0 {
+                        cityCountry.appendString(" ")
+                    }
+                    cityCountry.appendString(address)
+                }
+                
+                if let zip = placeMark.postalCode {
+                    if cityCountry.length>0 {
+                        cityCountry.appendString(", ")
+                    }
+                    cityCountry.appendString(zip)
+                }
+                if cityCountry.length>0 {
+                    
+                        label.text = label.text.stringByReplacingOccurrencesOfString("\n", withString: "\n\(cityCountry as String)\n")
+                    
+                        button.setTitle(cityCountry as String, forState: .Normal)
+                    
+                    
+                }
+            }
+        })
+    }
 }
 
 extension UIView {
@@ -129,3 +177,34 @@ extension UIView {
     }
 }
 
+extension UIImage {
+func resizeToDefault() -> UIImage {
+    let size = self.size
+    
+    if self.size.width>800 && self.size.height>600 {
+    let widthRatio  = 800  / self.size.width
+    let heightRatio = 600 / self.size.height
+    
+    // Figure out what our orientation is, and use that to form the rectangle
+    var newSize: CGSize
+    if(widthRatio > heightRatio) {
+        newSize = CGSizeMake(size.width * heightRatio, size.height * heightRatio)
+    } else {
+        newSize = CGSizeMake(size.width * widthRatio,  size.height * widthRatio)
+    }
+    
+    // This is the rect that we've calculated out and this is what is actually used below
+    let rect = CGRectMake(0, 0, newSize.width, newSize.height)
+    
+    // Actually do the resizing to the rect using the ImageContext stuff
+    UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+    self.drawInRect(rect)
+    let newImage = UIGraphicsGetImageFromCurrentImageContext()
+    UIGraphicsEndImageContext()
+    
+    return newImage
+    } else {
+        return self
+    }
+}
+}

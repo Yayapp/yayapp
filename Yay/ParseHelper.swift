@@ -56,7 +56,7 @@ class ParseHelper {
         
         let today = NSDate()
         
-        let weekEndDay = 9-calendar!.components(NSCalendarUnit.Weekday, fromDate: today).weekday
+        let weekEndDay = 7
         
         let dayComponent = NSDateComponents()
         dayComponent.day = weekEndDay
@@ -79,8 +79,9 @@ class ParseHelper {
             query1.whereKey("user", equalTo:user)
             query.whereKey("owner", doesNotMatchKey: "owner", inQuery: query1)
             let location:PFGeoPoint? = user.objectForKey("location") as? PFGeoPoint
-            let distance = user.objectForKey("distance") as? Double
-            query.whereKey("location", nearGeoPoint: location!, withinKilometers: distance!)
+            if let distance = user.objectForKey("distance") as? Double {
+                query.whereKey("location", nearGeoPoint: location!, withinKilometers: distance)
+            }
             if let dob = user["dob"] as? NSDate {
                 let age = NSCalendar.currentCalendar().component(NSCalendarUnit.Year, fromDate: dob )
                 query.whereKey("minAge", lessThanOrEqualTo: age)

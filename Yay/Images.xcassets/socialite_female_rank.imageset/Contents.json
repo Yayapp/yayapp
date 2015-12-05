@@ -2,23 +2,7 @@
   "images" : [
     {
       "idiom" : "iphone",
-      "filename" : "social_rank_socialitefemale.png",
-      "scale" : "1x"
-    },
-    {
-      "idiom" : "iphone",
-      "filename" : "social_rank_socialitefemale_x2.png",
-      "scale" : "2x"
-    },
-    {
-      "idiom" : "iphone",
-      "filename" : "social_rank_socialitefemale_x2-1.png",
-      "scale" : "3x"
-    },
-    {
-      "idiom" : "iphone",
-      "filename" : "socialiteF.pdf",
-      "unassigned" : true
+      "filename" : "socialiteF-1.pdf"
     }
   ],
   "info" : {

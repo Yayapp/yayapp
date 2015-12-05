@@ -2,23 +2,7 @@
   "images" : [
     {
       "idiom" : "iphone",
-      "filename" : "social_rank_mrpopular.png",
-      "scale" : "1x"
-    },
-    {
-      "idiom" : "iphone",
-      "filename" : "social_rank_mrpopular_X2.png",
-      "scale" : "2x"
-    },
-    {
-      "idiom" : "iphone",
-      "filename" : "social_rank_mrpopular_x3.png",
-      "scale" : "3x"
-    },
-    {
-      "idiom" : "iphone",
-      "filename" : "mrpopular.pdf",
-      "unassigned" : true
+      "filename" : "mrpopular-1.pdf"
     }
   ],
   "info" : {

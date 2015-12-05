@@ -2,23 +2,7 @@
   "images" : [
     {
       "idiom" : "iphone",
-      "filename" : "addfriend_ico.png",
-      "scale" : "1x"
-    },
-    {
-      "idiom" : "iphone",
-      "filename" : "addfriend_ico_x2.png",
-      "scale" : "2x"
-    },
-    {
-      "idiom" : "iphone",
-      "filename" : "addfriend_ico_x3.png",
-      "scale" : "3x"
-    },
-    {
-      "idiom" : "iphone",
-      "filename" : "addpeople_active.pdf",
-      "unassigned" : true
+      "filename" : "addpeople_active-1.pdf"
     }
   ],
   "info" : {
