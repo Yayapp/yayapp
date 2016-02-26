@@ -7,10 +7,15 @@
 //
 
 import UIKit
+protocol EventChangeDelegate : NSObjectProtocol {
+    func eventChanged(event:Event)
+    func eventRemoved(event:Event)
+}
 
-class EventsViewController: UIViewController {
+class EventsViewController: UIViewController, EventChangeDelegate {
 
     var eventsData:[Event]=[]
+    var delegate:ListEventsDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,5 +24,11 @@ class EventsViewController: UIViewController {
 
     func reloadAll(events:[Event]) {
         
+    }
+    
+    func eventChanged(event:Event) {
+    }
+    
+    func eventRemoved(event:Event) {
     }
 }

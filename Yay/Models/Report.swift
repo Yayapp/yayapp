@@ -23,7 +23,8 @@ class Report : PFObject, PFSubclassing {
         return "Report"
     }
     
-    @NSManaged var event: Event
+    @NSManaged var event: Event?
+    @NSManaged var group: Category?
     @NSManaged var user: PFUser
     
 }

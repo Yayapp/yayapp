@@ -8,42 +8,66 @@
 
 import UIKit
 
-protocol ChooseCategoryDelegate : NSObjectProtocol {
-    func madeCategoryChoice(categories: [Category])
-}
-
-class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UISearchBarDelegate, GroupCreationDelegate {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
+    @IBOutlet weak var allButton: UIButton!
+    @IBOutlet weak var publicButton: UIButton!
+    @IBOutlet weak var privateButton: UIButton!
+    
+    @IBOutlet weak var allUnderline: UIView!
+    @IBOutlet weak var publicUnderline: UIView!
+    @IBOutlet weak var privateUnderline: UIView!
   
     @IBOutlet weak var navBar: UINavigationBar!
-    var delegate:ChooseCategoryDelegate!
-    var categoriesData:[Category]! = []
-    var selectedCategoriesData:[Category]! = []
-    var multi:Bool = false
-    var isEventCreation:Bool = false
     
     @IBOutlet weak var categories: UICollectionView!
+    
+    @IBOutlet weak var filterContainer: UIImageView!
+    var categoriesData:[Category]! = []
+    var privateCategoriesData:[Category]! = []
+    var publicCategoriesData:[Category]! = []
+    var selectedCategoriesData:[Category]! = []
+    var selectedCategoryType: CategoryType = CategoryType.All
+    var isEventCreation:Bool = false
+    var bottomConstraint:NSLayoutConstraint!
+    var topConstraint:NSLayoutConstraint!
+    
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        bottomConstraint = NSLayoutConstraint (item: categories,
+            attribute: NSLayoutAttribute.Bottom,
+            relatedBy: NSLayoutRelation.Equal,
+            toItem: view,
+            attribute: NSLayoutAttribute.Bottom,
+            multiplier: 1,
+            constant: -20)
+        
         categories.delegate = self
         categories.dataSource = self
-        categories.allowsMultipleSelection = true
         
-        if(!isEventCreation) {
-            appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.None
-        } else {
-            navBar.topItem?.title = "Categories"
-        }
+        ParseHelper.getUserCategories(PFUser.currentUser()!, block: {
+            (categoriesList:[Category]?, error:NSError?) in
+            if(error == nil) {
+                self.selectedCategoriesData = categoriesList!
+                self.allAction(true)
+            } else {
+                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+            }
+        })
+        
         
         ParseHelper.getCategories({
             (categoriesList:[Category]?, error:NSError?) in
             if(error == nil) {
                 self.categoriesData = categoriesList!
-                self.categories.reloadData()
+                self.privateCategoriesData = self.categoriesData.filter({$0.isPrivate})
+                self.publicCategoriesData = self.categoriesData.filter({!$0.isPrivate})
+                self.allAction(true)
             } else {
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
@@ -51,99 +75,207 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
     }
 
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-        return 1
+        if selectedCategoryType == CategoryType.All{
+            return 2
+        } else {
+            return 1
+        }
     }
 
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return categoriesData.count
+        switch (selectedCategoryType) {
+            case .Private: return privateCategoriesData.count
+            case .Public: return publicCategoriesData.count
+            default: if section == 0{
+                        return publicCategoriesData.count
+                    } else {
+                        return privateCategoriesData.count
+                    }
+        }
     }
 
+    internal func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
+        
+        switch kind {
+            //2
+        case UICollectionElementKindSectionHeader:
+            //3
+            let headerView =
+            collectionView.dequeueReusableSupplementaryViewOfKind(kind,
+                withReuseIdentifier: "CategoryHeader",
+                forIndexPath: indexPath)
+                as! CategoryHeader
+            if selectedCategoryType == CategoryType.All{
+                if(indexPath.section == 0) {
+                    headerView.name.text = "Public Groups"
+                } else {
+                    headerView.name.text = "Private Groups"
+                }
+            } else {
+                headerView.name.text = ""
+            }
+            return headerView
+        default:
+            //4
+            assert(false, "Unexpected element kind")
+        }
+        return CategoryHeader()
+    }
+    
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! CategoryCollectionViewCell
     
-        let category = categoriesData[indexPath.row]
-        cell.name.text = category.name
+        var category:Category
         
-//        if (category.photoSelected.isDataAvailable) {
-//            if (contains(self.selectedCategoriesData, category)) {
-//                cell.photo.image = self.toCobalt(UIImage(data:category.photoSelected.getData()!)!)
-//            } else {
-//                cell.photo.image = UIImage(data:category.photoSelected.getData()!)
-//            }
-//        } else {
-            category.photoSelected.getDataInBackgroundWithBlock({
+        switch (selectedCategoryType) {
+        case .Private: category = privateCategoriesData[indexPath.row]
+        case .Public: category = publicCategoriesData[indexPath.row]
+        default: if(indexPath.section == 0) {
+                    category = publicCategoriesData[indexPath.row]
+                } else {
+                    category = privateCategoriesData[indexPath.row]
+                }
+        }
+        cell.name.text = category.name
+        category.photo.getDataInBackgroundWithBlock({
                 (data:NSData?, error:NSError?) in
                 if(error == nil) {
                     let image = UIImage(data:data!)
-                    if (self.selectedCategoriesData.contains(category)) {
-                        cell.photo.image = self.toCobalt(image!)
-                    } else {
-                        cell.photo.image = image!
-                    }
                     
+                    cell.photo.image = image!
+                    cell.photo.layer.cornerRadius = CGRectGetWidth(cell.photo.frame)/2.0
+                    cell.photo.layer.masksToBounds = true
                 } else {
                     MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                 }
             })
 //        }
+        if (self.selectedCategoriesData.contains(category)) {
+            cell.switched.on = true
+        } else {
+            cell.switched.on = false
+        }
+        cell.switched.tag = indexPath.row;
+        cell.switched.addTarget(self, action: "switched:", forControlEvents: .TouchUpInside)
         
         return cell
     }
 
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        let category = categoriesData[indexPath.row]
-//        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! CategoryCollectionViewCell
+        var category:Category
+        
+        switch (selectedCategoryType) {
+        case .Private: category = privateCategoriesData[indexPath.row]
+        case .Public: category = publicCategoriesData[indexPath.row]
+        default: if(indexPath.section == 0) {
+            category = publicCategoriesData[indexPath.row]
+        } else {
+            category = privateCategoriesData[indexPath.row]
+            }
+        }
+        performSegueWithIdentifier("details", sender: category)
+    }
+    
+//    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+//        return CGSize(width: (categories.bounds.size.width/3 - 10), height: (categories.bounds.size.width/2));
+//    }
+    
+    @IBAction func allAction(sender: AnyObject) {
+        allUnderline.hidden = false
+        privateUnderline.hidden = true
+        publicUnderline.hidden = true
+        selectedCategoryType = CategoryType.All
+        allButton.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
+        publicButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        privateButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        categories.reloadData()
+    }
+    
+    @IBAction func publicAction(sender: AnyObject) {
+        allUnderline.hidden = true
+        privateUnderline.hidden = true
+        publicUnderline.hidden = false
+        selectedCategoryType = CategoryType.Public
+        allButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        publicButton.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
+        privateButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        categories.reloadData()
+    }
+    
+    @IBAction func privateAction(sender: AnyObject) {
+        allUnderline.hidden = true
+        privateUnderline.hidden = false
+        publicUnderline.hidden = true
+        selectedCategoryType = CategoryType.Private
+        allButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        publicButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        privateButton.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
+        categories.reloadData()
+    }
+    
+    @IBAction func switched(sender: AnyObject) {
+        let category = categoriesData[sender.tag]
+    
         if (selectedCategoriesData.contains(category)){
             selectedCategoriesData = selectedCategoriesData.filter({$0.objectId != category.objectId})
-            collectionView.reloadItemsAtIndexPaths([indexPath])
         } else {
-            if(multi){
-                selectedCategoriesData.append(category)
-            } else {
-                if(!selectedCategoriesData.isEmpty){
-                    collectionView.reloadItemsAtIndexPaths([NSIndexPath(forRow: categoriesData.indexOf(selectedCategoriesData.first!)!, inSection: 0)])
-                }
-                selectedCategoriesData = [category]
-            }
-            collectionView.reloadItemsAtIndexPaths([indexPath])
+            selectedCategoriesData.append(category)
+        }
+        if (!isEventCreation){
+            category.attendees.append(PFUser.currentUser()!)
+            category.saveInBackground()
         }
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        return CGSize(width: categories.bounds.size.width/2-0.5, height: categories.bounds.size.height/4);
-    }
-    
-    @IBAction func close(sender: AnyObject) {
-        delegate.madeCategoryChoice(selectedCategoriesData)
-        self.dismissViewControllerAnimated(true, completion:nil)
+    @IBAction func searchAction(sender: AnyObject) {
+        
+        let searchController = UISearchController(searchResultsController: nil)
+        searchController.searchBar.delegate = self
+        presentViewController(searchController, animated: true, completion: nil)
+        
     }
 
-    func toCobalt(image:UIImage) -> UIImage{
-        let inputImage:CIImage = CIImage(CGImage: image.CGImage!)
-        
-        // Make the filter
-        let colorMatrixFilter:CIFilter = CIFilter(name: "CIColorMatrix")!
-        colorMatrixFilter.setDefaults()
-        colorMatrixFilter.setValue(inputImage, forKey:kCIInputImageKey)
-        colorMatrixFilter.setValue(CIVector(x:1, y:1, z:1, w:0), forKey:"inputRVector")
-        colorMatrixFilter.setValue(CIVector(x:0, y:1, z:0, w:0), forKey:"inputGVector")
-        colorMatrixFilter.setValue(CIVector(x:0, y:0, z:1, w:0), forKey:"inputBVector")
-        colorMatrixFilter.setValue(CIVector(x:1, y:0, z:0, w:1), forKey:"inputAVector")
-        
-        // Get the output image recipe
-        let outputImage:CIImage = colorMatrixFilter.outputImage!
-        
-        // Create the context and instruct CoreImage to draw the output image recipe into a CGImage
-        let context:CIContext = CIContext(options:nil)
-        let cgimg:CGImageRef = context.createCGImage(outputImage, fromRect:outputImage.extent) // 10
-        
-        return UIImage(CGImage:cgimg)
-    }
-    deinit {
-        if(!isEventCreation) {
-            appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.PanningCenterView
-        }
+    
+    func searchBar(searchBar: UISearchBar,
+        textDidChange searchText: String) {
+        search(searchText)
     }
     
+    func searchBar(searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        search(searchBar.text!)
+    }
+    
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+
+    func search(searchText:String){
+        ParseHelper.searchCategories(searchText, block: {
+            (categoriesList:[Category]?, error:NSError?) in
+            if(error == nil) {
+                self.categoriesData = categoriesList!
+                self.privateCategoriesData = self.categoriesData.filter({$0.isPrivate})
+                self.publicCategoriesData = self.categoriesData.filter({!$0.isPrivate})
+                self.allAction(true)
+            } else {
+                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+            }
+        })
+        
+    }
+    
+    func groupCreated(group:Category) {
+        categoriesData.append(group)
+        allAction(true)
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if(segue.identifier == "details") {
+            let vc = (segue.destinationViewController as! GroupDetailsViewController)
+            vc.group = sender as! Category
+            vc.selectedCategoriesData = selectedCategoriesData
+        }
+    }
 }
 

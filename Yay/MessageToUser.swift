@@ -19,5 +19,14 @@ class MessageToUser {
         alert.addButtonWithTitle("OK")
         alert.show()
     }
+    
+    static func showDefaultErrorMessage(textId:String!, delegate:UIAlertViewDelegate) {
+        let alert = UIAlertView()
+        alert.title = "Ooops"
+        alert.message = textId
+        alert.addButtonWithTitle("OK")
+        alert.delegate = delegate
+        alert.show()
+    }
 
 }

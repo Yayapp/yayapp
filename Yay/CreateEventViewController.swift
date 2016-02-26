@@ -13,7 +13,7 @@ protocol EventCreationDelegate : NSObjectProtocol {
     func eventCreated(event:Event)
 }
 
-class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, ChooseLocationDelegate, ChooseCategoryDelegate, ChooseEventPictureDelegate, UIPopoverPresentationControllerDelegate, TTRangeSliderDelegate {
+class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, ChooseLocationDelegate, CategoryPickerDelegate, ChooseEventPictureDelegate, WriteAboutDelegate, UIPopoverPresentationControllerDelegate {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     var calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
@@ -21,45 +21,51 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
     var event:Event?
     
     let dateFormatter = NSDateFormatter()
-    var minAge:Int! = 16
-    var maxAge:Int! = 99
     var longitude: Double?
     var latitude: Double?
     var chosenDate:NSDate?
-    var chosenCategory:Category?
+    var chosenCategories:[Category]! = []
     var chosenPhoto:PFFile?
     var delegate:EventCreationDelegate!
     var timeZone:NSTimeZone!
+    var attendeesButtons:[UIButton]!=[]
+    var descriptionText:String!=""
     
     var limitInt:Int=1
     
     @IBOutlet weak var eventImage: UIImageView!
     @IBOutlet weak var pickCategory: UIButton!
     @IBOutlet weak var eventPhoto: UIButton!
-    @IBOutlet weak var limit: UITextField!
     @IBOutlet weak var dateTimeButton: UIButton!
     @IBOutlet weak var location: UIButton!
     
-    @IBOutlet weak var rangeSlider: TTRangeSlider!
-    @IBOutlet weak var rangeLabel: UILabel!
-    @IBOutlet weak var sliderContainer: UIView!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     @IBOutlet weak var name: UITextField!
-    @IBOutlet weak var descr: UITextField!
+    @IBOutlet weak var descr: UIButton!
 
     @IBOutlet weak var createButton: UIButton!
-    @IBOutlet weak var cancelButton: UIButton!
+    
+    @IBOutlet weak var author: UIButton!
+    
+    @IBOutlet weak var attendee1: UIButton!
+    
+    @IBOutlet weak var attendee2: UIButton!
+    
+    @IBOutlet weak var attendee3: UIButton!
+    
+    @IBOutlet weak var attendee4: UIButton!
+    
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        attendeesButtons = [attendee1, attendee2, attendee3, attendee4]
         
         pickCategory.layer.borderColor = UIColor.whiteColor().CGColor
-        descr.delegate = self
         name.delegate = self
         dateFormatter.dateFormat = "EEE dd MMM 'at' H:mm"
-        rangeSlider.delegate = self
-        appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.None
         
         if event != nil {
             update()
@@ -68,10 +74,17 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
             title = "Create Event"
         }
         
-        let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
-        back.tintColor = Color.PrimaryActiveColor
-        self.navigationItem.setLeftBarButtonItem(back, animated: false)
+    let avatar = PFUser.currentUser()?.objectForKey("avatar") as! PFFile
         
+        avatar.getDataInBackgroundWithBlock({
+            (data:NSData?, error:NSError?) in
+            if(error == nil) {
+                let image = UIImage(data:data!)
+                self.author.setImage(image, forState: .Normal)
+            } else {
+                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+            }
+        })
     }
   
     
@@ -81,13 +94,13 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
             if error == nil {
                 self.title  = self.event!.name
                 self.name.text = self.event!.name
-                self.descr.text = self.event!.summary
+                self.descriptionText = self.event!.summary
+                self.descr.setTitle(self.event!.summary, forState: .Normal)
                 self.limitInt = self.event!.limit-1
-                self.limit.text = "\(self.limitInt)"
-                self.rangeSlider.selectedMinimum = Float(self.event!.minAge)
-                self.rangeSlider.selectedMaximum = Float(self.event!.maxAge)
-                self.rangeLabel.text = "\(Int(self.rangeSlider.selectedMinimum))-\(Int(self.rangeSlider.selectedMaximum))"
-                self.madeCategoryChoice([self.event!.category])
+                let dummyButton:UIButton = UIButton()
+                dummyButton.tag = self.limitInt - 1
+                self.changeLimit(dummyButton)
+                self.madeCategoryChoice(self.event!.categories)
                 self.madeEventPictureChoice(self.event!.photo, pickedPhoto: nil)
                 self.madeDateTimeChoice(self.event!.startDate)
                 self.madeLocationChoice(CLLocationCoordinate2D(latitude: self.event!.location.latitude, longitude: self.event!.location.longitude))
@@ -97,13 +110,6 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
         })
         
     }
-    
-    func rangeSlider(sender:TTRangeSlider, didChangeSelectedMinimumValue selectedMinimum:Float, andMaximumValue selectedMaximum:Float){
-        minAge = Int(selectedMinimum)
-        maxAge = Int(selectedMaximum)
-        rangeLabel.text = "\(Int(selectedMinimum))-\(Int(selectedMaximum))"
-    }
-  
     
     @IBAction func openDateTimePicker(sender: AnyObject) {
         let map = self.storyboard!.instantiateViewControllerWithIdentifier("ChooseDateTimeViewController") as! ChooseDateTimeViewController
@@ -121,14 +127,6 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
         
     }
     
-    @IBAction func openLocationPicker(sender: AnyObject) {
-        let map = self.storyboard!.instantiateViewControllerWithIdentifier("ChooseLocationViewController") as! ChooseLocationViewController
-        map.delegate = self
-        map.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
-        map.setEditing (true,animated: true)
-        presentViewController(map, animated: true, completion: nil)
-    }
-    
     @IBAction func openPhotoPicker(sender: AnyObject) {
         let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ChooseEventPictureViewController") as! ChooseEventPictureViewController
         vc.delegate = self
@@ -136,12 +134,10 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
     }
     
     @IBAction func openCategoryPicker(sender: AnyObject) {
-        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ChooseCategoryViewController") as! ChooseCategoryViewController
-        vc.delegate = self
-        vc.isEventCreation = true
-        if chosenCategory != nil {
-            vc.selectedCategoriesData = [chosenCategory!]
-        }
+        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("CategoryPickerViewController") as! CategoryPickerViewController
+        vc.categoryDelegate = self
+        vc.selectedCategoriesData = chosenCategories
+        
         vc.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
         presentViewController(vc, animated: true, completion: nil)
     }
@@ -165,16 +161,15 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
     
     
     func madeCategoryChoice(categories: [Category]) {
-        chosenCategory = categories.first
-        if(chosenCategory != nil){
-            chosenCategory?.fetchInBackgroundWithBlock({
-                result, error in
-                if error == nil {
-                    self.pickCategory.setTitle(self.chosenCategory!.name, forState: .Normal)
-                } else {
-                    MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-                }
-            })
+        chosenCategories = categories
+        if(chosenCategories.count > 0){
+            var names:[String] = []
+            for (_, category) in (chosenCategories?.enumerate())! {
+                names.append(category.name)
+            }
+            
+           self.pickCategory.setTitle(names.joinWithSeparator(", "), forState: .Normal)
+            
         } else {
             pickCategory.setTitle("PICK CATEGORY", forState: .Normal)
         }
@@ -211,22 +206,34 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
    
-    @IBAction func plusLimit(sender: AnyObject) {
-        if limitInt < 4 {
-            limitInt++
-            limit.text = "\(limitInt)"
+    @IBAction func changeLimit(sender: AnyObject) {
+        limitInt = sender.tag + 1
+        for(index, attendeeButton) in attendeesButtons.enumerate(){
+            var buttonImage:UIImage
+            if(index>sender.tag){
+                buttonImage = UIImage(named: "accept")!
+            } else {
+                buttonImage = UIImage(named: "searchingicon")!
+            }
+            attendeeButton.setImage(buttonImage, forState: .Normal)
         }
-    }
-    @IBAction func minusLimit(sender: AnyObject) {
-        if limitInt > 1 {
-            limitInt--
-            limit.text = "\(limitInt)"
-        }
+        
     }
     
-    @IBAction func cancel(sender: AnyObject) {
-        navigationController?.popViewControllerAnimated(true)
+    @IBAction func openAboutMeEditor(sender: AnyObject) {
+        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("WriteAboutViewController") as! WriteAboutViewController
+        vc.delegate = self
+        vc.textAbout = descriptionText
+        vc.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
+        presentViewController(vc, animated: true, completion: nil)
     }
+    
+    func writeAboutDone(text: String) {
+        self.descriptionText = text
+        self.descr.setTitle(text, forState: .Normal)
+    }
+
+   
 
     @IBAction func create(sender: AnyObject) {
         
@@ -236,34 +243,31 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
             MessageToUser.showDefaultErrorMessage("Please choose location")
         } else if chosenDate == nil {
             MessageToUser.showDefaultErrorMessage("Please choose date")
-        } else if descr.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).isEmpty {
+        } else if descriptionText.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).isEmpty {
             MessageToUser.showDefaultErrorMessage("Please enter description")
-        } else if chosenCategory == nil {
+        } else if chosenCategories.count == 0 {
             MessageToUser.showDefaultErrorMessage("Please choose category")
         } else if chosenPhoto == nil {
             MessageToUser.showDefaultErrorMessage("Please choose photo")
         } else {
             spinner.startAnimating()
             createButton.enabled = false
-            cancelButton.enabled = false
             
             if event == nil {
                 let eventACL:PFACL = PFACL()
-                eventACL.setPublicWriteAccess(true)
-                eventACL.setPublicReadAccess(true)
+                eventACL.publicWriteAccess = true
+                eventACL.publicReadAccess = true
                 
                 self.event = Event()
                 self.event!.ACL = eventACL
                 self.event!.attendees = []
             }
             self.event!.name = name.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-            self.event!.summary = descr.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-            self.event!.category = chosenCategory!
+            self.event!.summary = descriptionText.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+            self.event!.categories = chosenCategories
             self.event!.startDate = chosenDate!
             self.event!.photo = chosenPhoto!
             self.event!.limit = (limitInt+1)
-            self.event!.minAge = minAge
-            self.event!.maxAge = maxAge
             self.event!.owner = PFUser.currentUser()!
             self.event!.location = PFGeoPoint(latitude: latitude!, longitude: longitude!)
             self.event!.timeZone = timeZone!.name
@@ -275,47 +279,34 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
                     self.event!.saveInBackgroundWithBlock({
                         (result, error) in
                         
-                        if ((PFUser.currentUser()?.objectForKey("eventsReminder") as! Bool)) {
-                            let components = NSDateComponents()
-                            
-                            components.hour = -1
-                            let hourBefore = self.calendar!.dateByAddingComponents(components, toDate: self.event!.startDate, options: [])
-                            components.hour = -24
-                            let hour24Before = self.calendar!.dateByAddingComponents(components, toDate: self.event!.startDate, options: [])
-                            
-                            
-                            let localNotification1:UILocalNotification = UILocalNotification()
-                            localNotification1.alertAction = "\(self.event!.name)"
-                            localNotification1.alertBody = "Don't forget to participate on happening \"\(self.event!.name)\" on \(self.dateFormatter.stringFromDate(self.event!.startDate))"
-                            localNotification1.fireDate = hourBefore
-                            UIApplication.sharedApplication().scheduleLocalNotification(localNotification1)
-                            
-                            let localNotification24:UILocalNotification = UILocalNotification()
-                            localNotification24.alertAction = "\(self.event!.name)"
-                            localNotification24.alertBody = "Don't forget to participate on happening \"\(self.event!.name)\" on \(self.dateFormatter.stringFromDate(self.event!.startDate))"
-                            localNotification24.fireDate = hour24Before
-                            UIApplication.sharedApplication().scheduleLocalNotification(localNotification24)
-                        }
                         
+                        
+                        let root = self.tabBarController?.viewControllers![2] as! UINavigationController
+                        root.popViewControllerAnimated(false)
+                        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("CreateEventViewController") as! CreateEventViewController
+                        root.pushViewController(vc, animated: false)
                         self.spinner.stopAnimating()
-                        self.delegate.eventCreated(self.event!)
-                        self.navigationController?.popViewControllerAnimated(true)
+                        self.tabBarController?.selectedIndex = 0
+                        
                     })
                 } else {
                     self.spinner.stopAnimating()
                     self.createButton.enabled = false
-                    self.cancelButton.enabled = false
                 }
             })
         }
     }
     
-    @IBAction func backButtonTapped(sender: AnyObject) {
-        navigationController?.popViewControllerAnimated(true)
-    }
-   
-    
-    deinit {
-        appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.PanningCenterView
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if(segue.identifier == "category") {
+            
+            let vc = (segue.destinationViewController as! CategoryPickerViewController)
+                vc.categoryDelegate = self
+                vc.selectedCategoriesData = chosenCategories
+        } else {
+            let vc = (segue.destinationViewController as! ChooseLocationViewController)
+            vc.delegate = self
+        }
     }
 }

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-class Message : PFObject, PFSubclassing {
+class Message : PFObject, PFSubclassing, Notification {
     
     override class func initialize() {
         struct Static {
@@ -22,8 +22,39 @@ class Message : PFObject, PFSubclassing {
         return "Message"
     }
     
-    @NSManaged var event: Event
+    @NSManaged var event: Event?
+    @NSManaged var group: Category?
     @NSManaged var user: PFUser
     @NSManaged var text: String?
     @NSManaged var photo: PFFile?
+    
+    
+    func getPhoto() -> PFFile {
+        return user["avatar"] as! PFFile
+    }
+    
+    func getTitle() -> String {
+        if self["event"] != nil {
+            return "\(user.name) in \(event!.name)"
+        } else {
+            return "\(user.name) in \(group!.name)"
+        }
+        
+    }
+    
+    func getText() -> String {
+        return text!
+    }
+    
+    func isSelectable() -> Bool {
+        return true
+    }
+    
+    func isDecidable() -> Bool {
+        return false
+    }
+    
+    func getIcon() -> UIImage {
+        return UIImage(named: "play.png")!
+    }
 }

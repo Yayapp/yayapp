@@ -20,10 +20,6 @@ class PhotosTableViewController: PFQueryTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
-        back.tintColor = Color.PrimaryActiveColor
-        self.navigationItem.setLeftBarButtonItem(back, animated: false)
     }
     
     
@@ -52,11 +48,6 @@ class PhotosTableViewController: PFQueryTableViewController {
         cell.photo.loadInBackground()
         
         return cell
-    }
-
-    
-    @IBAction func backButtonTapped(sender: AnyObject) {
-        navigationController?.popViewControllerAnimated(true)
     }
 
 }

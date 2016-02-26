@@ -20,7 +20,6 @@ class TutorialViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.None
         tutorialImage.image = UIImage(named: "tut_\(pageIndex+1)")
         
     }
@@ -28,7 +27,6 @@ class TutorialViewController: UIViewController {
     
     @IBAction func skip(sender: AnyObject) {
         parentViewController!.dismissViewControllerAnimated(true, completion: {
-        self.appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.PanningCenterView
             })
     }
 

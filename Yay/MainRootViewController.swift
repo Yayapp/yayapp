@@ -9,16 +9,10 @@
 import UIKit
 import MessageUI
 
-class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailComposeViewControllerDelegate, EventCreationDelegate, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+class MainRootViewController: UIViewController, MFMailComposeViewControllerDelegate, EventCreationDelegate, ListEventsDelegate {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     var rightSwitchBarButtonItem:UIBarButtonItem?
-    
-    var thisWeekCenter:NSLayoutConstraint!
-    var todayCenter:NSLayoutConstraint!
-    
-    var pageViewController : UIPageViewController!
-    var currentIndex : Int = 0
     
     @IBOutlet weak var today: UIButton!
     @IBOutlet weak var tomorrow: UIButton!
@@ -31,7 +25,7 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
     @IBOutlet weak var container: UIView!
     @IBOutlet weak var createEvent: UIButton!
     
-    var currentVC:UIViewController!
+    var currentVC:EventsViewController!
     var isMapView = false
     var eventsData:[Event]!=[]
     var chosenCategories:[Category] = []
@@ -39,15 +33,15 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
     
     override func viewDidLoad() {
         super.viewDidLoad()
- 
-        rightSwitchBarButtonItem = UIBarButtonItem(image:UIImage(named: "mapmarkerico"), style: UIBarButtonItemStyle.Plain, target: self, action: "switchTapped:")
-        rightSwitchBarButtonItem!.tintColor = Color.PrimaryActiveColor
-        
-        self.navigationItem.setRightBarButtonItem(rightSwitchBarButtonItem, animated: true)
-
+        let image : UIImage = UIImage(named: "logo")!
+        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        imageView.contentMode = .ScaleAspectFit
+        imageView.image = image
+        self.navigationItem.titleView = imageView
+    }
+    
+    override func viewWillAppear(animated: Bool) {
         today(true)
-        
-        
     }
 
     
@@ -55,75 +49,12 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
         
         if Prefs.getPref(Prefs.tut) == false {
             Prefs.setPref(Prefs.tut)
-            let pageSpacing:NSNumber = DeviceType.IS_IPHONE_4_OR_LESS ? 0 : DeviceType.IS_IPHONE_5 ? 30 : DeviceType.IS_IPHONE_6 ? 35 : 40
-            let dictionary:[String : AnyObject] = [UIPageViewControllerOptionInterPageSpacingKey:pageSpacing]
-            pageViewController = UIPageViewController(transitionStyle:UIPageViewControllerTransitionStyle.Scroll, navigationOrientation: UIPageViewControllerNavigationOrientation.Horizontal, options:dictionary)
+     
             
-            self.pageViewController!.dataSource = self
-            self.pageViewController!.delegate = self
-            
-            
-            
-            let pageContentViewController:TutorialViewController! = self.viewControllerAtIndex(0)
-            
-            self.pageViewController.setViewControllers([pageContentViewController!], direction: UIPageViewControllerNavigationDirection.Forward, animated: true, completion: nil)
-            
-            pageViewController!.view.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height);
-            self.presentViewController(pageViewController, animated: true, completion: nil)
         }
         
         
     }
-    
-    func swipe(){
-        var i:Int! = 0
-        if(currentIndex<2) {
-            i = currentIndex + 1
-        }
-        self.pageViewController.setViewControllers([self.viewControllerAtIndex(i)!], direction: UIPageViewControllerNavigationDirection.Forward, animated: true, completion: nil)
-    }
-    
-    func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController?
-    {
-        var index = (viewController as! TutorialViewController).pageIndex
-        
-        if (index == 0) || (index == NSNotFound) {
-            return nil
-        }
-        
-        index--
-        
-        return viewControllerAtIndex(index)
-    }
-    
-    func pageViewController(pageViewController: UIPageViewController, viewControllerAfterViewController viewController: UIViewController) -> UIViewController?
-    {
-        var index = (viewController as! TutorialViewController).pageIndex
-        
-        if index == NSNotFound {
-            return nil
-        }
-        
-        index++
-        
-        if (index == 11) {
-            return nil
-        }
-        
-        return viewControllerAtIndex(index)
-    }
-    
-    func viewControllerAtIndex(index: Int) -> TutorialViewController!
-    {
-        
-        // Create a new view controller and pass suitable data.
-        let pageContentViewController = self.storyboard?.instantiateViewControllerWithIdentifier("TutorialViewController") as! TutorialViewController
-        pageContentViewController.pageIndex = index
-        currentIndex = index
-        return pageContentViewController
-        
-    }
-    
     
 
     func segmentChanged() {
@@ -133,6 +64,7 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
         } else {
             vc = self.storyboard!.instantiateViewControllerWithIdentifier("ListEventsViewController") as! ListEventsViewController
         }
+        vc.delegate = self
         if(selectedSegment == 0) {
             ParseHelper.getTodayEvents(PFUser.currentUser(), categories: chosenCategories, block: {
                 (eventsList:[Event]?, error:NSError?) in
@@ -185,9 +117,11 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
         todayUnderline.hidden = false
         tomorrowUnderline.hidden = true
         thisWeekUnderline.hidden = true
-        today.titleLabel?.font = UIFont.boldSystemFontOfSize(15)
-        tomorrow.titleLabel?.font = UIFont.systemFontOfSize(15)
-        thisWeek.titleLabel?.font = UIFont.systemFontOfSize(15)
+
+        today.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
+        tomorrow.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        thisWeek.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        
         segmentChanged()
     }
     
@@ -196,9 +130,12 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
         todayUnderline.hidden = true
         tomorrowUnderline.hidden = false
         thisWeekUnderline.hidden = true
-        today.titleLabel?.font = UIFont.systemFontOfSize(15)
-        tomorrow.titleLabel?.font = UIFont.boldSystemFontOfSize(15)
-        thisWeek.titleLabel?.font = UIFont.systemFontOfSize(15)
+        
+        today.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        tomorrow.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
+        thisWeek.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        
+
         segmentChanged()
     }
     
@@ -207,9 +144,12 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
         todayUnderline.hidden = true
         tomorrowUnderline.hidden = true
         thisWeekUnderline.hidden = false
-        today.titleLabel?.font = UIFont.systemFontOfSize(15)
-        tomorrow.titleLabel?.font = UIFont.systemFontOfSize(15)
-        thisWeek.titleLabel?.font = UIFont.boldSystemFontOfSize(15)
+        today.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        tomorrow.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        thisWeek.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
+//        today.titleLabel?.font = UIFont.systemFontOfSize(15)
+//        tomorrow.titleLabel?.font = UIFont.systemFontOfSize(15)
+//        thisWeek.titleLabel?.font = UIFont.boldSystemFontOfSize(15)
         segmentChanged()
     }
   
@@ -224,10 +164,7 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
         vc.user = PFUser.currentUser()
         navigationController?.pushViewController(vc, animated: true)
     }
-    
-    func showSettings(){
-        performSegueWithIdentifier("settings", sender: nil)
-    }
+
     
     func showInvite(){
         if MFMailComposeViewController.canSendMail() {
@@ -260,25 +197,10 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
         controller.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    func showRequests(){
-        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("RequestsTableViewController") as! RequestsTableViewController
-        ParseHelper.getOwnerRequests(PFUser.currentUser()!, block: {
-            result, error in
-            if (error == nil){
-                vc.requests = result!
-                self.appDelegate.leftViewController.requestsCountLabel.text = "\(result!.count)"
-                self.navigationController?.pushViewController(vc, animated: true)
-            } else {
-                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-            }
-        })
-        
-    }
-    
-    func showHappenings(){
-        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("HappeningsViewController") as! HappeningsViewController
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
+//    func showHappenings(){
+//        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("HappeningsViewController") as! HappeningsViewController
+//        self.navigationController?.pushViewController(vc, animated: true)
+//    }
     
     func showTerms(){
         let vc = self.storyboard!.instantiateViewControllerWithIdentifier("TermsController") as! TermsController
@@ -289,18 +211,11 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
         let vc = self.storyboard!.instantiateViewControllerWithIdentifier("PrivacyPolicyController") as! PrivacyPolicyController
         presentViewController(vc, animated: true, completion: nil)
     }
-    
-    
-    @IBAction func openCategoryPicker(sender: AnyObject) {
-        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ChooseCategoryViewController") as! ChooseCategoryViewController
-        vc.delegate = self
-        vc.selectedCategoriesData = chosenCategories
-        vc.multi = true
-        vc.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
-        presentViewController(vc, animated: true, completion: nil)
+    func madeEventChoice(event: Event) {
+        performSegueWithIdentifier("event_details", sender: event)
     }
     
-    
+        
     func madeCategoryChoice(categories: [Category]) {
         chosenCategories = categories
         segmentChanged()
@@ -318,7 +233,7 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
         }
     }
     
-    func updateActiveViewController(activeViewController: UIViewController?) {
+    func updateActiveViewController(activeViewController: EventsViewController!) {
         if activeViewController != nil {
             addChildViewController(activeViewController!)
             activeViewController!.view.frame = container.bounds
@@ -329,15 +244,27 @@ class MainRootViewController: UIViewController, ChooseCategoryDelegate, MFMailCo
         removeInactiveViewController(currentVC)
         currentVC = activeViewController
     }
-
-    func switchTapped(sender:UIButton) {
+    
+    
+    @IBAction func switchTapped(sender: AnyObject) {
         isMapView = !isMapView
         if isMapView {
-            rightSwitchBarButtonItem!.image = UIImage(named: "listico")
+            navigationItem.rightBarButtonItem!.image = UIImage(named: "listico")
         } else {
-            rightSwitchBarButtonItem!.image = UIImage(named: "mapmarkerico")
+            navigationItem.rightBarButtonItem!.image = UIImage(named: "mapmarkerico")
         }
         segmentChanged()
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if(segue.identifier == "event_details") {
+            if let event = sender as? Event {
+                let vc = (segue.destinationViewController as! EventDetailsViewController)
+                vc.event = event
+                vc.delegate = currentVC
+            }
+        }
     }
 
 }

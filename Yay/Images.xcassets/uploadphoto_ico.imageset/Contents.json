@@ -2,18 +2,7 @@
   "images" : [
     {
       "idiom" : "iphone",
-      "filename" : "uploadphoto_ico.png",
-      "scale" : "1x"
-    },
-    {
-      "idiom" : "iphone",
-      "filename" : "uploadphoto_ico_x2.png",
-      "scale" : "2x"
-    },
-    {
-      "idiom" : "iphone",
-      "filename" : "uploadphoto_ico_x3.png",
-      "scale" : "3x"
+      "filename" : "add-profile-photo.pdf"
     }
   ],
   "info" : {

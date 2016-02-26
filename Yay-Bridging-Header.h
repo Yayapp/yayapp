@@ -17,6 +17,7 @@
 #import <AFNetworking/AFNetworking.h>
 #import <CommonCrypto/CommonCrypto.h>
 #import <TTRangeSlider/TTRangeSlider.h>
+#import <TTGTagCollectionView/TTGTextTagCollectionView.h>
 #import <GoogleAppIndexing/GoogleAppIndexing.h>
 #import <APTimeZones/APTimeZones.h>
 #import <JSQMessagesViewController/JSQMessages.h>

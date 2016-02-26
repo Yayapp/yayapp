@@ -15,6 +15,11 @@ class PicturePickerViewController: UIViewController, UIImagePickerControllerDele
     
     @IBOutlet weak var uploadPhoto: UIButton!
     @IBOutlet weak var avatar: PFImageView!
+    @IBOutlet weak var maleButton: UIButton!
+    @IBOutlet weak var femaleButton: UIButton!
+    @IBOutlet weak var genderImage: UIImageView!
+    @IBOutlet weak var bioField: UITextField!
+    @IBOutlet weak var nameLabel: UILabel!
     
     @IBOutlet weak var proceed: UIButton!
     
@@ -22,7 +27,8 @@ class PicturePickerViewController: UIViewController, UIImagePickerControllerDele
     override func viewDidLoad() {
         super.viewDidLoad()
         picker.delegate = self
-        avatar.layer.borderColor = UIColor.whiteColor().CGColor
+        nameLabel.text = PFUser.currentUser()!.objectForKey("name") as! String
+        
     }
 
 
@@ -58,7 +64,7 @@ class PicturePickerViewController: UIViewController, UIImagePickerControllerDele
         PFUser.currentUser()!.saveInBackgroundWithBlock({
             result, error in
             if error == nil {
-                self.proceed.hidden = false
+                self.check()
                 self.dismissViewControllerAnimated(true, completion: nil)
             } else {
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
@@ -76,5 +82,34 @@ class PicturePickerViewController: UIViewController, UIImagePickerControllerDele
         alertVC.addAction(okAction)
         presentViewController(alertVC, animated: true, completion: nil)
     }
+    
+    func check(){
+        if(PFUser.currentUser()?.objectForKey("gender") != nil && PFUser.currentUser()?.objectForKey("avatar") != nil) {
+            proceed.hidden = false
+        }
+    }
 
+    @IBAction func maleAction(sender: AnyObject) {
+        maleButton.backgroundColor = Color.GenderActiveColor
+        femaleButton.backgroundColor = UIColor.whiteColor()
+        genderImage.image = UIImage(named: "newkid_rank")
+        PFUser.currentUser()?.setObject(1, forKey: "gender")
+        PFUser.currentUser()?.saveInBackground()
+        check()
+    }
+    @IBAction func femaleAction(sender: AnyObject) {
+        maleButton.backgroundColor = UIColor.whiteColor()
+        femaleButton.backgroundColor = Color.GenderActiveColor
+        genderImage.image = UIImage(named: "newfemale_kid_in_blockrank")
+        PFUser.currentUser()?.setObject(0, forKey: "gender")
+        PFUser.currentUser()?.saveInBackground()
+        check()
+    }
+    
+    @IBAction func proceedAction(sender: AnyObject) {
+        PFUser.currentUser()?.setObject(bioField.text!, forKey: "about")
+        PFUser.currentUser()?.saveInBackground()
+        
+    }
+    
 }

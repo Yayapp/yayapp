@@ -17,12 +17,6 @@ class ConversationsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "Messages"
-        
-        let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
-        back.tintColor = Color.PrimaryActiveColor
-        self.navigationItem.setLeftBarButtonItem(back, animated: false)
-        
         ParseHelper.getConversations(PFUser.currentUser()!, block: {
             result, error in
             if error == nil {
@@ -62,12 +56,16 @@ class ConversationsTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let vc:MessagesTableViewController = self.storyboard!.instantiateViewControllerWithIdentifier("MessagesTableViewController") as! MessagesTableViewController
-        vc.event = events[indexPath.row]
-        self.navigationController?.pushViewController(vc, animated: true)
+        performSegueWithIdentifier("messages", sender: indexPath)
     }
-
-    @IBAction func backButtonTapped(sender: AnyObject) {
-        navigationController?.popViewControllerAnimated(true)
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if(segue.identifier == "messages") {
+            if let indexPath = sender as? NSIndexPath {
+            let vc = (segue.destinationViewController as! MessagesTableViewController)
+            vc.event = events[indexPath.row]
+            }
+        }
     }
 }

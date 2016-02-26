@@ -14,7 +14,8 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
     
     let picker = UIImagePickerController()
     
-    var event: Event!
+    var event: Event?
+    var group: Category?
     var messages:[JSQMessage] = []
     
     var avatars:[String:JSQMessagesAvatarImage] = [:]
@@ -24,66 +25,112 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
         super.viewDidLoad()
         
         picker.delegate = self
-        UIApplication.sharedApplication().applicationIconBadgeNumber -= Prefs.removeMessage(event.objectId!)
-        self.appDelegate.leftViewController.messagesCountLabel.text = "\(Prefs.getMessagesCount())"
         
-        title = event.name
-        let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
-        back.tintColor = Color.PrimaryActiveColor
-        self.navigationItem.setLeftBarButtonItem(back, animated: false)
+        self.edgesForExtendedLayout = UIRectEdge.None
+        inputToolbar?.contentView?.leftBarButtonItem?.setImage(UIImage(named: "add-photo-vid"), forState: .Normal)
+        inputToolbar?.contentView?.leftBarButtonItem?.setImage(UIImage(named: "add-photo-vid"), forState: .Highlighted)
+        
+        inputToolbar?.contentView?.layer.borderWidth = 1
+        inputToolbar?.contentView?.layer.borderColor = Color.DefaultBorderColor.CGColor
+        inputToolbar!.contentView!.textView!.placeHolder = "Message..."
+        inputToolbar!.contentView!.textView!.layer.borderWidth = 1
+        inputToolbar?.contentView?.textView!.layer.borderColor = Color.DefaultBorderColor.CGColor
+        inputToolbar!.contentView!.textView!.layer.cornerRadius = 0
+        inputToolbar?.contentView?.backgroundColor = Color.PrimaryBackgroundColor
+        inputToolbar?.contentView?.textView?.frame.size = CGSize(width: (inputToolbar?.contentView?.textView?.frame.width)!,height: (inputToolbar?.contentView?.frame.height)!)
+        
+        if event != nil {
+            UIApplication.sharedApplication().applicationIconBadgeNumber -= Prefs.removeMessage(event!.objectId!)
+            //        self.appDelegate.leftViewController.messagesCountLabel.text = "\(Prefs.getMessagesCount())"
+            
+            title = event!.name
+        } else {
+            UIApplication.sharedApplication().applicationIconBadgeNumber -= Prefs.removeMessage(group!.objectId!)
+            //        self.appDelegate.leftViewController.messagesCountLabel.text = "\(Prefs.getMessagesCount())"
+            
+            title = group!.name
+        }
         
         dateFormatter.dateFormat = "MM/dd/yy h:mm a"
         
-        event.fetchInBackgroundWithBlock({
+        
+        if event != nil {
+        event!.fetchInBackgroundWithBlock({
             result, error in
-            for attendee in self.event.attendees {
-                attendee.fetchInBackgroundWithBlock({
-                    result, error in
-                    if error == nil {
-                        attendee.getImage({
-                            result in
-                            self.avatars[attendee.objectId!] = JSQMessagesAvatarImageFactory.avatarImageWithImage(result, diameter: 45)
-                        })
-                    } else {
-                        self.avatars[attendee.objectId!] = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(named: "upload_pic"), diameter: 45)
-                    }
-                })
-            }
             
-            ParseHelper.getMessages(self.event, block: {
+            self.processAttendees(self.event!.attendees)
+            
+            ParseHelper.getMessages(self.event!, block: {
                 result, error in
                 if error == nil {
-                    for (index,message) in result!.enumerate() {
-                        
-                        if message.photo == nil {
-                            self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, text: message.text))
-                        } else {
-                            let media = JSQPhotoMediaItem()
-                            message.photo!.getDataInBackgroundWithBlock({
-                                result, error in
-                                if error == nil {
-                                    media.image = UIImage(data: result! )
-                                    self.collectionView!.reloadItemsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)])
-                                }
-                            })
-                            
-                            self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, media: media))
-                            
-                        }
-                        
-                    }
+                    self.processMessages(result!)
                     self.finishReceivingMessage()
                 } else {
                     MessageToUser.showDefaultErrorMessage("Something went wrong.")
                 }
             })
         })
+        } else {
+            group!.fetchInBackgroundWithBlock({
+                result, error in
+                
+                self.processAttendees(self.group!.attendees)
+                
+                ParseHelper.getMessages(self.group!, block: {
+                    result, error in
+                    if error == nil {
+                        self.processMessages(result!)
+                        self.finishReceivingMessage()
+                    } else {
+                        MessageToUser.showDefaultErrorMessage("Something went wrong.")
+                    }
+                })
+            })
+        }
         
         self.senderId = PFUser.currentUser()!.objectId;
         self.senderDisplayName = PFUser.currentUser()!.name
         
         self.collectionView!.collectionViewLayout.springinessEnabled = false
         
+    }
+    
+    func processAttendees(result:[PFUser]){
+        for attendee in result {
+            attendee.fetchInBackgroundWithBlock({
+                result, error in
+                if error == nil {
+                    attendee.getImage({
+                        result in
+                        self.avatars[attendee.objectId!] = JSQMessagesAvatarImageFactory.avatarImageWithImage(result, diameter: 45)
+                    })
+                } else {
+                    self.avatars[attendee.objectId!] = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(named: "upload_pic"), diameter: 45)
+                }
+            })
+        }
+    }
+    
+    func processMessages(result:[Message]){
+        for (index,message) in result.enumerate() {
+            
+            if message.photo == nil {
+                self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, text: message.text))
+            } else {
+                let media = JSQPhotoMediaItem()
+                message.photo!.getDataInBackgroundWithBlock({
+                    result, error in
+                    if error == nil {
+                        media.image = UIImage(data: result! )
+                        self.collectionView!.reloadItemsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)])
+                    }
+                })
+                
+                self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, media: media))
+                
+            }
+            
+        }
     }
     
     
@@ -137,7 +184,11 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
         
         let message: Message = Message()
         message.user = PFUser.currentUser()!
-        message.event = event
+        if event != nil {
+            message.event = event!
+        } else {
+            message.group = group!
+        }
         message.text = text
         message.saveInBackgroundWithBlock({
             result, error in
@@ -186,7 +237,11 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
         
         let message: Message = Message()
         message.user = PFUser.currentUser()!
-        message.event = event
+        if event != nil {
+            message.event = event!
+        } else {
+            message.group = group!
+        }
         message.photo = imageFile
         message.saveInBackgroundWithBlock({
             result, error in
@@ -211,9 +266,5 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
         let okAction = UIAlertAction(title: "OK", style:.Default, handler: nil)
         alertVC.addAction(okAction)
         presentViewController(alertVC, animated: true, completion: nil)
-    }
-    
-    @IBAction func backButtonTapped(sender: AnyObject) {
-        navigationController?.popViewControllerAnimated(true)
     }
 }

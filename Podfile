@@ -1,6 +1,7 @@
 
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
+
 pod 'MMDrawerController'
 pod 'FBSDKCoreKit'
 pod 'FBSDKLoginKit'
@@ -17,3 +18,4 @@ pod 'Flurry-iOS-SDK/FlurrySDK'
 pod 'GoogleAppIndexing'
 pod 'APTimeZones'
 pod 'JSQMessagesViewController'
+pod "TTGTagCollectionView"

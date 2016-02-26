@@ -9,26 +9,31 @@
 import UIKit
 
 class RequestsTableViewController: UITableViewController {
-    
+
     var requests:[Request] = []
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 
     @IBOutlet weak var emptyView: UIView!
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if !requests.isEmpty {
-            emptyView.hidden = true
-            let tblView =  UIView(frame: CGRectZero)
-            tableView.tableFooterView = tblView
-            tableView.tableFooterView!.hidden = true
+        ParseHelper.getOwnerRequests(PFUser.currentUser()!, block: {
+            result, error in
+            if (error == nil){
+                self.requests = result!
+                if !self.requests.isEmpty {
+                    self.emptyView.hidden = true
+                    let tblView =  UIView(frame: CGRectZero)
+                    self.tableView.tableFooterView = tblView
+                    self.tableView.tableFooterView!.hidden = true
+                }
+            } else {
+                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+            }
+        })
         }
-        
-        let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
-        back.tintColor = Color.PrimaryActiveColor
-        self.navigationItem.setLeftBarButtonItem(back, animated: false)
-    }
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
@@ -43,10 +48,10 @@ class RequestsTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell") as! RequestTableViewCell
         let request:Request! = requests[indexPath.row]
         
-        request.event.fetchIfNeededInBackgroundWithBlock({
+        request.event!.fetchIfNeededInBackgroundWithBlock({
             result, error in
             if error == nil {
-                cell.eventName.text = request.event.name
+                cell.eventName.text = request.event!.name
             } else {
                 cell.eventName.text = ""
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
@@ -86,19 +91,19 @@ class RequestsTableViewController: UITableViewController {
         
         let request = requests[sender.tag]
         
-        request.event.attendees.append(request.attendee)
-        request.event.saveInBackground()
+        request.event!.attendees.append(request.attendee)
+        request.event!.saveInBackground()
         request.accepted = true
         request.saveInBackgroundWithBlock({
             done in
             self.requests.removeAtIndex(sender.tag)
             UIApplication.sharedApplication().applicationIconBadgeNumber-=1
             
-            if(request.event.attendees.count >= request.event.limit) {
-                ParseHelper.declineRequests(request.event)
-                self.requests = self.requests.filter({$0.event.objectId != request.event.objectId})
+            if(request.event!.attendees.count >= request.event!.limit) {
+                ParseHelper.declineRequests(request.event!)
+                self.requests = self.requests.filter({$0.event!.objectId != request.event!.objectId})
             }
-            self.appDelegate.leftViewController.requestsCountLabel.text = "\(self.requests.count)"
+//            self.appDelegate.leftViewController.requestsCountLabel.text = "\(self.requests.count)"
             self.tableView.reloadData()
         })
         
@@ -110,11 +115,7 @@ class RequestsTableViewController: UITableViewController {
         request.saveInBackground()
         UIApplication.sharedApplication().applicationIconBadgeNumber-=1
         requests.removeAtIndex(sender.tag)
-        self.appDelegate.leftViewController.requestsCountLabel.text = "\(self.requests.count)"
+//        self.appDelegate.leftViewController.requestsCountLabel.text = "\(self.requests.count)"
         tableView.reloadData()
-    }
-    
-    @IBAction func backButtonTapped(sender: AnyObject) {
-        navigationController?.popViewControllerAnimated(true)
     }
 }

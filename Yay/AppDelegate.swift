@@ -12,15 +12,12 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var mainNavigation: UITabBarController?
  
     let LayerAppIDString: NSURL! = NSURL(string: "layer:///apps/staging/325d25d4-305a-11e5-98db-7ceb2e015ed0")
     let ParseAppIDString: String = "u64gQcVtoNGvpS2xq1OniHuumQ5jQJmI3TTbbP1Y"
     let ParseClientKeyString: String = "CnO43FxXa3alSR42IeqJOq3pbLDlNwUd9lDH4kkK"
     
-
-    var centerContainer: MMDrawerController?
-    var centerViewController:MainNavigationController!
-    var leftViewController:ProfileViewController!
     var mainStoryBoard: UIStoryboard!
 
 
@@ -53,23 +50,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         mainStoryBoard = rootViewController?.storyboard
         
-        centerViewController = mainStoryBoard.instantiateViewControllerWithIdentifier("MainNavigationController") as! MainNavigationController
         
-        leftViewController = mainStoryBoard.instantiateViewControllerWithIdentifier("ProfileViewController") as! ProfileViewController
         
-        let navLeft = UINavigationController(rootViewController: leftViewController)
+        mainNavigation = mainStoryBoard.instantiateViewControllerWithIdentifier("mainTabView") as! UITabBarController
         
-        Flurry.logAllPageViewsForTarget(navLeft);
+        Flurry.logAllPageViewsForTarget(mainNavigation);
         Flurry.setDebugLogEnabled(true)
         Flurry.setCrashReportingEnabled(true)
         
-        centerContainer = MMDrawerController(centerViewController: centerViewController, leftDrawerViewController: navLeft)
         
-        centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.PanningCenterView
-        centerContainer?.closeDrawerGestureModeMask = MMCloseDrawerGestureMode.PanningCenterView
-               
         if (PFUser.currentUser() != nil) {
-                window!.rootViewController = centerContainer
+                window!.rootViewController = mainNavigation
                 window!.makeKeyAndVisible()
         }
         return true
@@ -91,29 +82,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             completionHandler(UIBackgroundFetchResult.NoData)
         var success:Bool = false
             if let eventId = userInfo["event_id"] as? String {
-                if (centerViewController != nil && centerViewController.viewControllers.last?.isKindOfClass(MessagesTableViewController) == true) {
-                    let chat = centerViewController.viewControllers.last as! MessagesTableViewController
-                    if chat.event.objectId == eventId {
-                        chat.loadMessage(userInfo["id"]! as! String)
-                        success = true
-                    } else {
-                        application.applicationIconBadgeNumber+=1
-                        Prefs.addMessage(eventId)
-                        leftViewController.messagesCountLabel.text = "\(Prefs.getMessagesCount())"
-                    }
-                } else {
-                    application.applicationIconBadgeNumber+=1
-                    Prefs.addMessage(eventId)
-                    if leftViewController != nil {
-                        leftViewController.messagesCountLabel.text = "\(Prefs.getMessagesCount())"
-                    }
-                }
+//                if (centerViewController != nil && centerViewController.viewControllers.last?.isKindOfClass(MessagesTableViewController) == true) {
+//                    let chat = centerViewController.viewControllers.last as! MessagesTableViewController
+//                    if chat.event.objectId == eventId {
+//                        chat.loadMessage(userInfo["id"]! as! String)
+//                        success = true
+//                    } else {
+//                        application.applicationIconBadgeNumber+=1
+//                        Prefs.addMessage(eventId)
+//                        leftViewController.messagesCountLabel.text = "\(Prefs.getMessagesCount())"
+//                    }
+//                } else {
+//                    application.applicationIconBadgeNumber+=1
+//                    Prefs.addMessage(eventId)
+//                    if leftViewController != nil {
+//                        leftViewController.messagesCountLabel.text = "\(Prefs.getMessagesCount())"
+//                    }
+//                }
                 
             }
         if let requestId = userInfo["request_id"] as? String {
-            if (leftViewController != nil) {
-                leftViewController.requestsCountLabel.text = "\(Int(leftViewController.requestsCountLabel.text!)!+1)"
-            }
+//            if (leftViewController != nil) {
+//                leftViewController.requestsCountLabel.text = "\(Int(leftViewController.requestsCountLabel.text!)!+1)"
+//            }
         }
         if !success {
             if let aps = userInfo["aps"] as? NSDictionary {
@@ -122,7 +113,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
                     blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
                     blurryAlertViewController.aboutText = alert as String
-                    centerViewController.presentViewController(blurryAlertViewController, animated: true, completion: nil)
+                    mainNavigation!.presentViewController(blurryAlertViewController, animated: true, completion: nil)
                 }
             }
         }
@@ -168,7 +159,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Set default ACLs
         let defaultACL: PFACL = PFACL()
-        defaultACL.setPublicReadAccess(true)
+        defaultACL.publicReadAccess = true
         PFACL.setDefaultACL(defaultACL, withAccessForCurrentUser: true)
     }
     

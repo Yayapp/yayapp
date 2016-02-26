@@ -234,51 +234,6 @@ Parse.Cloud.afterSave("Message", function(request) {
                                              }});
                                   }});
                       });
-Parse.Cloud.afterSave("Event", function(request) {
-                      
-                      if(request.object.existed()) {
-                      return;
-                      }
-                      
-                      
-                      var eventName = request.object.get('name');
-                      var location = request.object.get('location');
-                      var timeZone = request.object.get('timeZone');
-                      var user = request.object.get('owner');
-                      
-                      
-                      var date = moment.tz(new Date(request.object.get('startDate')), timeZone);
-                      var dateFormatted = moment(date).format("ddd DD MMM") +" at "+ moment(date).format("H:mm");
-                      
-                      var userQuery = new Parse.Query(Parse.User);
-                      userQuery.withinKilometers("location", location, 20.0);
-                      userQuery.equalTo('eventNearby', true);
-                      userQuery.notEqualTo('objectId', user.id);
-                      
-                      
-                      // Find devices associated with these users
-                      var pushQuery = new Parse.Query(Parse.Installation);
-                      pushQuery.matchesQuery('user', userQuery);
-                      
-                      // Send push notification to query
-                      Parse.Push.send({
-                                      where: pushQuery,
-                                      //channels: [ "global" ],
-                                      data: {
-                                      alert: "There is a new happening \"" + eventName + "\" on " + dateFormatted + " near you within 20km",
-                                      "content-available": 1,
-                                      "sound":"layerbell.caf"
-                                      }
-                                      }, {
-                                      success: function() {
-                                      // Push was successful
-                                      },
-                                      error: function(error) {
-                                      throw "Got an error " + error.code + " : " + error.message;
-                                      }
-                                      });
-                      
-                      });
 
 Parse.Cloud.afterSave("Request", function(request) {
                       var accepted = request.object.get('accepted');
@@ -313,49 +268,7 @@ Parse.Cloud.afterSave("Request", function(request) {
                                                   error: function(error) {
                                                   throw "Got an error " + error.code + " : " + error.message;
                                                   }});
-                                  if(owner.get('eventsReminder')){
-                                  var pushQuery1 = new Parse.Query(Parse.Installation);
-                                  pushQuery1.equalTo('user', user);
-                                  var before24 = moment.tz(new Date(event.get('startDate')), timeZone);
-                                  before24.setHours(before24.getHours()-24);
-                                  var before1 = moment.tz(new Date(event.get('startDate')), timeZone);
-                                  before1.setHours(before1.getHours()-1);
                                   
-                                  
-                                  
-                                  var date = moment.tz(new Date(event.get('startDate')), timeZone);
-                                  
-                                  var dateFormatted = moment(date).format("ddd DD MMM") +" at "+ moment(date).format("H:mm");
-                                  
-                                  Parse.Push.send({
-                                                  where: pushQuery1,
-                                                  data: {
-                                                  alert: "Don't forget to participate on happening \""+eventName+"\" on "+dateFormatted,
-                                                  "content-available": 1,
-                                                  "sound":"layerbell.caf"
-                                                  },
-                                                  push_time: before24
-                                                  }, {
-                                                  success: function() {},
-                                                  error: function(error) {
-                                                  throw "Got an error " + error.code + " : " + error.message;
-                                                  }
-                                                  });
-                                  Parse.Push.send({
-                                                  where: pushQuery1,
-                                                  data: {
-                                                  alert: "Don't forget to participate on happening \""+eventName+"\" on "+dateFormatted,
-                                                  "content-available": 1,
-                                                  "sound":"layerbell.caf"
-                                                  },
-                                                  push_time: before1
-                                                  }, {
-                                                  success: function() {},
-                                                  error: function(error) {
-                                                  throw "Got an error " + error.code + " : " + error.message;
-                                                  }
-                                                  });
-                                  }
                                   } else if (accepted) {
                                   user.fetch({
                                              success: function(user) {

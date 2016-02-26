@@ -9,10 +9,7 @@
 import UIKit
 import MessageUI
 
-protocol EventChangeDelegate : NSObjectProtocol {
-    func eventChanged(event:Event)
-    func eventRemoved(event:Event)
-}
+
 
 class EventDetailsViewController: UIViewController, MFMailComposeViewControllerDelegate, EventCreationDelegate {
     
@@ -37,11 +34,10 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     @IBOutlet weak var distance: UILabel!
     
     @IBOutlet weak var chatButton: UIButton!
-    @IBOutlet weak var inviteButton: UIButton!
+    @IBOutlet weak var detailsButton: UIButton!
     
     @IBOutlet weak var author: UIButton!
     
-    @IBOutlet weak var attend: UIButton!
     @IBOutlet weak var attended1: UIButton!
     
     @IBOutlet weak var attended2: UIButton!
@@ -50,33 +46,27 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     
     @IBOutlet weak var attended4: UIButton!
     
-    @IBOutlet weak var usersView: UIView!
+    @IBOutlet weak var detailsUnderline: UIView!
     
-    var bottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var chatUnderline: UIView!
+    
+    @IBOutlet weak var messagesContainer: UIView!
+   
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        bottomConstraint = NSLayoutConstraint (item: usersView,
-            attribute: NSLayoutAttribute.Bottom,
-            relatedBy: NSLayoutRelation.Equal,
-            toItem: view,
-            attribute: NSLayoutAttribute.Bottom,
-            multiplier: 1,
-            constant: -20)
+        descr.textContainerInset = UIEdgeInsetsMake(10, 10, 10, 10)
         
         attendeeButtons = [attended1,attended2,attended3,attended4]
         
         title = event.name
-        let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
-        back.tintColor = Color.PrimaryActiveColor
-        self.navigationItem.setLeftBarButtonItem(back, animated: false)
+        
         if(PFUser.currentUser()?.objectId == event.owner.objectId) {
             let editdone = UIBarButtonItem(image:UIImage(named: "edit_icon"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("editEvent:"))
             editdone.tintColor = Color.PrimaryActiveColor
             self.navigationItem.setRightBarButtonItem(editdone, animated: false)
-            attend.setImage(UIImage(named: "cancelevent_button"), forState: .Normal)
-            self.attend.hidden = false
+//            attend.setImage(UIImage(named: "cancelevent_button"), forState: .Normal)
         } else {
             if let user = PFUser.currentUser() {
                 ParseHelper.countReports(event,user: user, completion: {
@@ -103,42 +93,10 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                 for var index = 0; index < (self.event.limit-1); ++index {
                     self.attendeeButtons[index].setImage(UIImage(named: "upload_pic"), forState: .Normal)
                 }
-                if let user = PFUser.currentUser() {
-                    let currentPFLocation = user.objectForKey("location") as! PFGeoPoint
+                    let currentPFLocation = PFUser.currentUser()!.objectForKey("location") as! PFGeoPoint
                     self.currentLocation = CLLocation(latitude: currentPFLocation.latitude, longitude: currentPFLocation.longitude)
                     
-                    let attendedThisEvent = !(self.event.attendees.filter({$0.objectId == PFUser.currentUser()?.objectId}).count == 0)
-                    
-                    if(PFUser.currentUser()?.objectId != self.event.owner.objectId) {
-                        
-                        if !attendedThisEvent && self.event.limit>self.event.attendees.count {
-                            
-                            self.chatButton.enabled = false
-                            
-                            ParseHelper.getUserRequests(self.event, user: PFUser.currentUser()!, block: {
-                                result, error in
-                                if (error == nil) {
-                                    if (result == nil || result!.isEmpty){
-                                        self.attend.hidden = false
-                                    } else {
-                                        self.attend.removeFromSuperview()
-                                        self.view.addConstraint(self.bottomConstraint)
-                                    }
-                                } else {
-                                    MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-                                }
-                            })
-                        } else {
-                            if !attendedThisEvent {
-                                self.chatButton.enabled = false
-                            }
-                            self.attend.removeFromSuperview()
-                            self.view.addConstraint(self.bottomConstraint)
-                        }
-                    }
-                } else {
-                    self.currentLocation = CLLocation(latitude: TempUser.location!.latitude, longitude: TempUser.location!.longitude)
-                }
+                
                 
                 self.event.owner.fetchIfNeededInBackgroundWithBlock({
                     result, error in
@@ -150,7 +108,7 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                                     if(error == nil) {
                                         let image = UIImage(data:data!)
                                         self.author.setImage(image, forState: .Normal)
-                                        self.author.layer.borderColor = Color.EventDetailsProfileIconBorder.CGColor
+                                        self.author.layer.cornerRadius = self.author.frame.width/2
                                     } else {
                                         MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                                     }
@@ -182,7 +140,6 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                                             MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                                         }
                                     })
-                                
                             } else {
                                 attendeeButton.setImage(UIImage(named: "upload_pic"), forState: .Normal)
                                 MessageToUser.showDefaultErrorMessage("Some user has no avatar.")
@@ -191,6 +148,34 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                             MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                         }
                     })
+                }
+                
+                let attendedThisEvent = !(self.event.attendees.filter({$0.objectId == PFUser.currentUser()?.objectId}).count == 0)
+                
+                if(PFUser.currentUser()?.objectId != self.event.owner.objectId) {
+                    
+                    if !attendedThisEvent && self.event.limit>self.event.attendees.count {
+                        
+                        self.chatButton.enabled = false
+                        
+                        ParseHelper.getUserRequests(self.event, user: PFUser.currentUser()!, block: {
+                            result, error in
+                            if (error == nil) {
+                                if (result == nil || result!.isEmpty){
+                                    let attendeeButton = self.attendeeButtons[self.attendees.count]
+                                    attendeeButton.addTarget(self, action: "attend:", forControlEvents: .TouchUpInside)
+                                    attendeeButton.setTitle("JOIN", forState: .Normal)
+                                    attendeeButton.hidden = false
+                                }
+                            } else {
+                                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+                            }
+                        })
+                    } else {
+                        if !attendedThisEvent {
+                            self.chatButton.enabled = false
+                        }
+                    }
                 }
                 self.update()
             } else {
@@ -205,17 +190,17 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
         let distanceStr = String(format: "%.2f", distanceBetween/1000)
         self.title  = self.event.name
         self.name.text = self.event.name
-        self.descr.text = "\(self.event.name)\n\(self.event.summary)"
+        self.descr.text = self.event.summary
         self.photo.file = self.event.photo
         self.photo.loadInBackground()
         
         self.date.text = self.dateFormatter.stringFromDate(self.event.startDate)
         self.distance.text = "\(distanceStr)km"
-        CLLocation(latitude: self.event.location.latitude, longitude: self.event.location.longitude).setLocationString(self.descr, button: location, timezoneCompletion: nil)
+        CLLocation(latitude: self.event.location.latitude, longitude: self.event.location.longitude).getLocationString(nil, button: location, timezoneCompletion: nil)
     }
     
     
-    @IBAction func attend(sender: AnyObject) {
+    @IBAction func attend(sender: UIButton) {
         if let user = PFUser.currentUser() {
             if(user.objectId == event.owner.objectId) {
                 let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
@@ -225,7 +210,9 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                 blurryAlertViewController.hasCancelAction = true
                 blurryAlertViewController.event = event
                 blurryAlertViewController.completion = {
-                    self.delegate.eventRemoved(self.event)
+                    if self.delegate != nil {
+                        self.delegate.eventRemoved(self.event)
+                    }
                     self.navigationController?.popViewControllerAnimated(false)
                 }
                 self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
@@ -235,8 +222,8 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                     (result, error) in
                     
                     let requestACL:PFACL = PFACL()
-                    requestACL.setPublicWriteAccess(true)
-                    requestACL.setPublicReadAccess(true)
+                    requestACL.publicWriteAccess = true
+                    requestACL.publicReadAccess = true
                     let request = Request()
                     request.event = self.event
                     request.attendee = user
@@ -244,8 +231,7 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                     request.saveInBackground()
                     
                     self.spinner.stopAnimating()
-                    self.attend.hidden = true
-                    self.attend.frame = CGRectZero
+                    sender.hidden = true
                     
                     let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
                     blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
@@ -276,6 +262,19 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
             presentViewController(vc, animated: true, completion: nil)
         }
     }
+    
+    @IBAction func switchToDetails(sender: AnyObject) {
+        chatUnderline.hidden = true
+        detailsUnderline.hidden = false
+        messagesContainer.hidden = true
+    }
+    
+    @IBAction func switchToChat(sender: AnyObject) {
+        chatUnderline.hidden = false
+        detailsUnderline.hidden = true
+        messagesContainer.hidden = false
+    }
+    
     
     
     @IBAction func invite(sender: AnyObject) {
@@ -333,7 +332,9 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     func eventCreated(event:Event) {
         self.event = event
         update()
-        delegate.eventChanged(event)
+        if self.delegate != nil {
+            delegate.eventChanged(event)
+        }
     }
     
     @IBAction func editEvent(sender: AnyObject){
@@ -385,8 +386,12 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
         self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
     }
     
-    @IBAction func backButtonTapped(sender: AnyObject) {
-        navigationController?.popViewControllerAnimated(true)
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if(segue.identifier == "chat") {
+            let vc = (segue.destinationViewController as! MessagesTableViewController)
+            vc.event = event
+        }
     }
     
 }

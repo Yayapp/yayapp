@@ -23,17 +23,14 @@ class Event : PFObject, PFSubclassing {
 		return "Event"
 	}
 	
-	@NSManaged var category: Category
+	@NSManaged var categories: [Category]
 	@NSManaged var name: String
 	@NSManaged var owner: PFUser
 	@NSManaged var location: PFGeoPoint
-	@NSManaged var address: String
 	@NSManaged var startDate: NSDate
 	@NSManaged var summary: String
 	@NSManaged var photo: PFFile
     @NSManaged var limit: Int
-    @NSManaged var minAge: Int
-    @NSManaged var maxAge: Int
     @NSManaged var attendees: [PFUser]
     @NSManaged var timeZone: String
 }

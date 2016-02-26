@@ -67,33 +67,46 @@ class ParseHelper {
         queryHomeEvents(today, endDate: startNextWeek, user: user, categories: categories, block: block)
     }
     
-    class func queryHomeEvents(startDate:NSDate, endDate:NSDate, user:PFUser?, categories:[Category], block:EventsResultBlock?) {
+    class func queryHomeEvents(startDate:NSDate, endDate:NSDate, user:PFUser!, categories:[Category], block:EventsResultBlock?) {
         
         let query = PFQuery(className:Event.parseClassName())
-        query.whereKey("startDate", greaterThan: startDate)
+        query.whereKey("startDate", greaterThan: NSDate())
         query.whereKey("startDate", lessThanOrEqualTo: endDate)
         
         query.orderByDescending("startDate")
-        if let user = user {
+        
             let query1 = PFQuery(className:Block.parseClassName())
-            query1.whereKey("user", equalTo:user)
+            query1.whereKey("user", equalTo:user!)
             query.whereKey("owner", doesNotMatchKey: "owner", inQuery: query1)
-            let location:PFGeoPoint? = user.objectForKey("location") as? PFGeoPoint
+            let location:PFGeoPoint? = user!.objectForKey("location") as? PFGeoPoint
             if let distance = user.objectForKey("distance") as? Double {
                 query.whereKey("location", nearGeoPoint: location!, withinKilometers: distance)
             }
-            if let dob = user["dob"] as? NSDate {
-                let age = NSCalendar.currentCalendar().component(NSCalendarUnit.Year, fromDate: dob )
-                query.whereKey("minAge", lessThanOrEqualTo: age)
-                query.whereKey("maxAge", greaterThanOrEqualTo: age)
-            }
-        } else {
-            let location:PFGeoPoint = PFGeoPoint(latitude:TempUser.location!.latitude, longitude:TempUser.location!.longitude)
-            query.whereKey("location", nearGeoPoint: location, withinKilometers: Double(100))
+        
+        if (!categories.isEmpty) {
+            query.whereKey("categories", containedIn: categories)
+        }
+        
+        queryEvent(query, block: block)
+    }
+    
+    class func queryEventsForCategories(user:PFUser!, categories:[Category], block:EventsResultBlock?) {
+        
+        let query = PFQuery(className:Event.parseClassName())
+        query.whereKey("startDate", greaterThan: NSDate())
+        
+        query.orderByDescending("startDate")
+        
+        let query1 = PFQuery(className:Block.parseClassName())
+        query1.whereKey("user", equalTo:user!)
+        query.whereKey("owner", doesNotMatchKey: "owner", inQuery: query1)
+        let location:PFGeoPoint? = user!.objectForKey("location") as? PFGeoPoint
+        if let distance = user.objectForKey("distance") as? Double {
+            query.whereKey("location", nearGeoPoint: location!, withinKilometers: distance)
         }
         
         if (!categories.isEmpty) {
-            query.whereKey("category", containedIn: categories)
+            query.whereKey("categories", containedIn: categories)
         }
         
         queryEvent(query, block: block)
@@ -137,9 +150,70 @@ class ParseHelper {
         }
     }
     
+    class func getUserCategories(user: PFUser, block:CategoriesResultBlock?) {
+        
+        let query = PFQuery(className:Category.parseClassName())
+        query.whereKey("attendees", equalTo:user)
+        
+        query.findObjectsInBackgroundWithBlock {
+            objects, error in
+            
+            if error == nil {
+                if let objects = objects as? [Category] {
+                    block!(objects, error)
+                }
+            } else {
+                // Log details of the failure
+                print("Error: \(error!) \(error!.userInfo)")
+                block!(nil, error)
+            }
+        }
+    }
+    
+    class func getUserCategoriesForEvent(user: PFUser, block:CategoriesResultBlock?) {
+        
+        let query1 = PFQuery(className:Category.parseClassName())
+        query1.whereKey("owner", equalTo:user)
+        
+        let query2 = PFQuery(className:Category.parseClassName())
+        query2.whereKey("isPrivate", equalTo:false)
+        
+        let query = PFQuery.orQueryWithSubqueries([query1, query2])
+        query.findObjectsInBackgroundWithBlock {
+            objects, error in
+            
+            if error == nil {
+                if let objects = objects as? [Category] {
+                    block!(objects, error)
+                }
+            } else {
+                // Log details of the failure
+                print("Error: \(error!) \(error!.userInfo)")
+                block!(nil, error)
+            }
+        }
+    }
     
     class func getCategories(block:CategoriesResultBlock?) {
         let query = PFQuery(className:Category.parseClassName())
+        query.findObjectsInBackgroundWithBlock {
+            objects, error in
+            
+            if error == nil {
+                if let objects = objects as? [Category] {
+                    block!(objects, error)
+                }
+            } else {
+                // Log details of the failure
+                print("Error: \(error!) \(error!.userInfo)")
+                block!(nil, error)
+            }
+        }
+    }
+    
+    class func searchCategories(text:String, block:CategoriesResultBlock?) {
+        let query = PFQuery(className:Category.parseClassName())
+        query.whereKey("name", matchesRegex: text, modifiers: "i")
         query.findObjectsInBackgroundWithBlock {
             objects, error in
             
@@ -180,6 +254,27 @@ class ParseHelper {
         query.orderByAscending("createdAt")
 //        query.limit = 20
 //        query.skip = 20// * page
+        query.findObjectsInBackgroundWithBlock {
+            objects, error in
+            
+            if error == nil {
+                if let objects = objects as? [Message] {
+                    block!(objects, error)
+                }
+            } else {
+                // Log details of the failure
+                print("Error: \(error!) \(error!.userInfo)")
+                block!(nil, error)
+            }
+        }
+    }
+    
+    class func getMessages(group:Category, block:MessagesResultBlock?) {
+        let query = PFQuery(className:Message.parseClassName())
+        query.whereKey("group", equalTo:group)
+        query.orderByAscending("createdAt")
+        //        query.limit = 20
+        //        query.skip = 20// * page
         query.findObjectsInBackgroundWithBlock {
             objects, error in
             
@@ -310,6 +405,99 @@ class ParseHelper {
         query.whereKey("attendee", equalTo:user)
         query.whereKey("event", equalTo:event)
         query.findObjectsInBackgroundWithBlock {
+            objects, error in
+            
+            if error == nil {
+                if let objects = objects as? [Request] {
+                    block!(objects, error)
+                }
+            } else {
+                // Log details of the failure
+                print("Error: \(error!) \(error!.userInfo)")
+                block!(nil, error)
+            }
+        }
+    }
+    
+    class func getUserRequests(group:Category, user: PFUser, block:RequestsResultBlock?) {
+        let query = PFQuery(className:Request.parseClassName())
+        query.whereKey("attendee", equalTo:user)
+        query.whereKey("group", equalTo:group)
+        query.findObjectsInBackgroundWithBlock {
+            objects, error in
+            
+            if error == nil {
+                if let objects = objects as? [Request] {
+                    block!(objects, error)
+                }
+            } else {
+                // Log details of the failure
+                print("Error: \(error!) \(error!.userInfo)")
+                block!(nil, error)
+            }
+        }
+    }
+    
+    class func getRecentMessages(block:MessagesResultBlock?) {
+        let query = PFQuery(className:Message.parseClassName())
+        query.orderByDescending("createdAt")
+    
+        query.findObjectsInBackgroundWithBlock {
+            objects, error in
+            
+            if error == nil {
+                if let objects = objects as? [Message] {
+                    block!(objects, error)
+                }
+            } else {
+                // Log details of the failure
+                print("Error: \(error!) \(error!.userInfo)")
+                block!(nil, error)
+            }
+        }
+    }
+
+    
+    class func getRecentRequests(user: PFUser, block:RequestsResultBlock?) {
+        
+        let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+        
+        let today = NSDate()
+        
+        let weekEndDay = -7
+        
+        let dayComponent = NSDateComponents()
+        dayComponent.day = weekEndDay
+        
+        let startDay = calendar!.dateByAddingComponents(dayComponent, toDate: today, options: NSCalendarOptions.MatchFirst)
+//        let startNextWeek = calendar!.startOfDayForDate(endWeek!)
+        
+        let queryEvent = PFQuery(className:Event.parseClassName())
+        queryEvent.whereKey("owner", equalTo:user)
+        
+        let queryGroup = PFQuery(className:Category.parseClassName())
+        queryGroup.whereKey("owner", equalTo:user)
+        
+        let queryFilterEvent = PFQuery(className:Request.parseClassName())
+        queryFilterEvent.whereKey("event", matchesQuery: queryEvent)
+        queryFilterEvent.whereKey("updatedAt", greaterThanOrEqualTo: startDay!)
+        queryFilterEvent.whereKeyDoesNotExist("accepted")
+        
+        let queryFilterGroup = PFQuery(className:Request.parseClassName())
+        queryFilterGroup.whereKey("group", matchesQuery: queryGroup)
+        queryFilterGroup.whereKey("updatedAt", greaterThanOrEqualTo: startDay!)
+        queryFilterGroup.whereKeyDoesNotExist("accepted")
+        
+        let queryEventGroup = PFQuery.orQueryWithSubqueries([queryFilterEvent, queryFilterGroup])
+        
+        let query2 = PFQuery(className:Request.parseClassName())
+        query2.whereKey("attendee", equalTo:user)
+        query2.whereKey("updatedAt", greaterThanOrEqualTo: startDay!)
+        query2.whereKeyExists("accepted")
+        
+        let queryFinal = PFQuery.orQueryWithSubqueries([queryEventGroup, query2])
+        
+        queryFinal.findObjectsInBackgroundWithBlock {
             objects, error in
             
             if error == nil {

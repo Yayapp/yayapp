@@ -13,15 +13,30 @@ class LoginViewController: UIViewController, InstagramDelegate {
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     var isLogin:Bool! = false
     
+    @IBOutlet weak var signIn: UIButton!
+    @IBOutlet weak var forgotPassword: UIButton!
+    @IBOutlet weak var password: UITextField!
+    @IBOutlet weak var email: UITextField!
     @IBOutlet weak var textLabel: UILabel!
+    @IBOutlet weak var createEmailAccount: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         if (isLogin == true) {
-            textLabel.text = "Log in to make it Happen"
+            textLabel.text = "Sign in with"
+            createEmailAccount.hidden = true
+            signIn.hidden = false
+            email.hidden = false
+            forgotPassword.hidden = false
+            password.hidden = false
         } else {
-            textLabel.text = "Sign up to make it Happen"
+            textLabel.text = "Join with"
+            createEmailAccount.hidden = false
+            signIn.hidden = true
+            email.hidden = true
+            forgotPassword.hidden = true
+            password.hidden = true
         }
         
         self.navigationController?.setNavigationBarHidden(true, animated: false)
@@ -39,11 +54,10 @@ class LoginViewController: UIViewController, InstagramDelegate {
     func setupDefaults(pfuser:PFUser){
         pfuser["distance"] = 20
         pfuser["gender"] = 1
-        pfuser["interests"] = []
         pfuser["attAccepted"] = true
         pfuser["eventNearby"] = true
         pfuser["newMessage"] = true
-        pfuser["invites"] = 3
+        pfuser["invites"] = 5
         pfuser["eventsReminder"] = true
     }
     
@@ -198,6 +212,58 @@ class LoginViewController: UIViewController, InstagramDelegate {
         let vc = self.storyboard!.instantiateViewControllerWithIdentifier("CreateEmailAccountViewController") as! CreateEmailAccountViewController
         vc.isLogin = isLogin
         presentViewController(vc, animated: true, completion: nil)
+    }
+    
+    @IBAction func signIn(sender: AnyObject) {
+        self.view.endEditing(true)
+        if (email.text!.isEmpty || password.text!.isEmpty) {
+            MessageToUser.showDefaultErrorMessage("Please fill all fields to Sign In.")
+        } else if email.text!.isEmail() == false {
+            MessageToUser.showDefaultErrorMessage("Email is invalid.")
+        } else {
+            PFUser.logInWithUsernameInBackground(email.text!, password:password.text!) {
+                (user: PFUser?, error: NSError?) -> Void in
+                if user != nil {
+                    let currentInstallation:PFInstallation = PFInstallation.currentInstallation()
+                    currentInstallation["user"] = PFUser.currentUser()
+                    currentInstallation.saveInBackground()
+                    
+                    self.performSegueWithIdentifier("proceed", sender: nil)
+                } else if(error!.code == 101) {
+                    MessageToUser.showDefaultErrorMessage("Invalid email or password")
+                } else {
+                    MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
+                }
+            }
+        }
+    }
+    
+    
+    @IBAction func forgotPassword(sender: AnyObject) {
+        var tField: UITextField!
+        let alert = UIAlertController(title: "Reset password", message: nil, preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "Reset", style: UIAlertActionStyle.Default, handler: {
+            (action: UIAlertAction) in
+            if (!tField.text!.isEmpty && tField.text!.isEmail()) {
+                PFUser.requestPasswordResetForEmailInBackground(tField.text!, block: {
+                    result, error in
+                    if(error == nil) {
+                        MessageToUser.showMessage("Reset password", textId: "We've sent you password reset instructions. Please check your email.")
+                    } else {
+                        MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+                    }
+                })
+            } else {
+                MessageToUser.showDefaultErrorMessage("Please enter valid email")
+            }
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default, handler: nil))
+        alert.addTextFieldWithConfigurationHandler({(textField) in
+            tField = textField
+            tField.placeholder = "Email"
+        })
+        self.presentViewController(alert, animated: true, completion: nil)
     }
     
     @IBAction func close(sender: AnyObject) {

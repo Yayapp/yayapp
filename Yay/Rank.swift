@@ -35,7 +35,7 @@ enum Rank {
         case BUTTERFLY:
             return UIImage(named: "socialbuttefly_rank")!
         case SOCIALITE:
-            return UIImage(named: gender == 0 ? "socialite_female_rank" : "socialiterank")!
+            return UIImage(named: "socialiterank")!
         
         }
     }

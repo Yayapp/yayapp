@@ -9,12 +9,11 @@
 import UIKit
 import MapKit
 
-class EventFinderViewController: UIViewController, ChooseLocationDelegate {
+class EventFinderViewController: UIViewController, UIAlertViewDelegate, ChooseLocationDelegate {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
-    var isRotating = false
-    var shouldStopRotating = false
+   
     
     @IBOutlet weak var searchingAnimation: UIImageView!
     @IBOutlet weak var location: UIButton!
@@ -22,54 +21,11 @@ class EventFinderViewController: UIViewController, ChooseLocationDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if self.isRotating == false {
-            self.searchingAnimation.rotate360Degrees(completionDelegate: self)
-            self.isRotating = true
-        }
-        
-        PFGeoPoint.geoPointForCurrentLocationInBackground( {
-            (geoPoint:PFGeoPoint?, error:NSError?) in
-            if (error == nil) {
-                if PFUser.currentUser() != nil {
-                   PFUser.currentUser()!.setObject(geoPoint!, forKey:"location")
-                    PFUser.currentUser()!.saveInBackground()
-                } else {
-                    TempUser.location = CLLocationCoordinate2D(latitude: geoPoint!.latitude, longitude: geoPoint!.longitude)
-                }
-                self.shouldStopRotating = true
-                self.goToMain()
-            } else {
-                MessageToUser.showDefaultErrorMessage("Can't retreive location automatically. Please choose location manually")
-                self.shouldStopRotating = true
-            }
-        })
-        
     }
     
-    
-    override func animationDidStop(anim: CAAnimation, finished flag: Bool) {
-        if self.shouldStopRotating == false {
-            self.searchingAnimation.rotate360Degrees(completionDelegate: self)
-        } else {
-            self.reset()
-        }
-    }
-    
-    func reset() {
-        self.isRotating = false
-        self.shouldStopRotating = false
-    }
-
     func goToMain() {
-        if((PFUser.currentUser()) != nil) {
-            appDelegate.window!.rootViewController?.dismissViewControllerAnimated(false, completion: nil)
-                self.appDelegate.window!.rootViewController = self.appDelegate.centerContainer
-                self.appDelegate.window!.makeKeyAndVisible()
- 
-        } else {
-            let main = self.storyboard!.instantiateViewControllerWithIdentifier("MainNavigationController") as! MainNavigationController
-            presentViewController(main, animated: true, completion: nil)
-        }
+            appDelegate.window!.rootViewController = appDelegate.mainNavigation
+            appDelegate.window!.makeKeyAndVisible()
     }
     
     @IBAction func openLocationPicker(sender: AnyObject) {
@@ -83,15 +39,35 @@ class EventFinderViewController: UIViewController, ChooseLocationDelegate {
     func madeLocationChoice(coordinates: CLLocationCoordinate2D){
         CLLocation(latitude: coordinates.latitude, longitude: coordinates.longitude).getLocationString(nil, button: location, timezoneCompletion: nil)
         
-        if let user = PFUser.currentUser() {
-            user.setObject(PFGeoPoint(latitude: coordinates.latitude, longitude: coordinates.longitude), forKey: "location")
-            user.saveInBackgroundWithBlock({
+            PFUser.currentUser()!.setObject(PFGeoPoint(latitude: coordinates.latitude, longitude: coordinates.longitude), forKey: "location")
+            PFUser.currentUser()!.saveInBackgroundWithBlock({
                 result, error in
                 self.goToMain()
             })
-        } else {
-            TempUser.location = coordinates
-            goToMain()
+        
+    }
+    
+    @IBAction func allowAction(sender: AnyObject) {
+        PFGeoPoint.geoPointForCurrentLocationInBackground( {
+            (geoPoint:PFGeoPoint?, error:NSError?) in
+            if (error == nil) {
+                    PFUser.currentUser()!.setObject(geoPoint!, forKey:"location")
+                    PFUser.currentUser()!.saveInBackground()
+                
+                self.goToMain()
+            } else {
+                MessageToUser.showDefaultErrorMessage("Can't retreive location automatically. Please choose location manually", delegate: self)
+            }
+        })
+    }
+    
+    func alertView(View: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        
+        switch buttonIndex {
+            
+        default:
+            openLocationPicker(true)
+            
         }
     }
 }

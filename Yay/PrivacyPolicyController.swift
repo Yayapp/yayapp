@@ -16,7 +16,6 @@ class PrivacyPolicyController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.None
         
             let attrString = try? NSMutableAttributedString(
             data: text.text.dataUsingEncoding(NSUnicodeStringEncoding, allowLossyConversion: false)!,
@@ -29,7 +28,6 @@ class PrivacyPolicyController: UIViewController {
 
     @IBAction func close(sender: AnyObject) {
         dismissViewControllerAnimated(true, completion: {
-            self.appDelegate.centerContainer?.openDrawerGestureModeMask = MMOpenDrawerGestureMode.PanningCenterView
         })
     }
 

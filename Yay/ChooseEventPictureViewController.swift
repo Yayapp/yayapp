@@ -26,10 +26,6 @@ class ChooseEventPictureViewController: UIViewController, UITableViewDataSource,
         photos.delegate = self
         photos.dataSource = self
         
-        let back = UIBarButtonItem(image:UIImage(named: "notifications_backarrow"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("backButtonTapped:"))
-        back.tintColor = Color.PrimaryActiveColor
-        self.navigationItem.setLeftBarButtonItem(back, animated: false)
-        
         ParseHelper.getCategories({
             (categories:[Category]?, error:NSError?) in
             if(error == nil) {
@@ -97,10 +93,6 @@ class ChooseEventPictureViewController: UIViewController, UITableViewDataSource,
     //What to do if the image picker cancels.
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    @IBAction func backButtonTapped(sender: AnyObject) {
-        navigationController?.popViewControllerAnimated(true)
     }
     
 }

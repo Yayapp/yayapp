@@ -12,4 +12,6 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var photo: PFImageView!
+    @IBOutlet weak var switched: UISwitch!
+    
 }
