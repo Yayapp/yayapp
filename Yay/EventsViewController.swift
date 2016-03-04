@@ -8,6 +8,7 @@
 
 import UIKit
 protocol EventChangeDelegate : NSObjectProtocol {
+    func eventCreated(event:Event)
     func eventChanged(event:Event)
     func eventRemoved(event:Event)
 }
@@ -24,6 +25,9 @@ class EventsViewController: UIViewController, EventChangeDelegate {
 
     func reloadAll(events:[Event]) {
         
+    }
+    
+    func eventCreated(event:Event) {
     }
     
     func eventChanged(event:Event) {

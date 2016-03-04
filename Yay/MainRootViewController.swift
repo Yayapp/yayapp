@@ -9,7 +9,7 @@
 import UIKit
 import MessageUI
 
-class MainRootViewController: UIViewController, MFMailComposeViewControllerDelegate, EventCreationDelegate, ListEventsDelegate {
+class MainRootViewController: UIViewController, ListEventsDelegate, EventChangeDelegate, UIPopoverPresentationControllerDelegate {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     var rightSwitchBarButtonItem:UIBarButtonItem?
@@ -23,7 +23,6 @@ class MainRootViewController: UIViewController, MFMailComposeViewControllerDeleg
     @IBOutlet weak var thisWeekUnderline: UIView!
     
     @IBOutlet weak var container: UIView!
-    @IBOutlet weak var createEvent: UIButton!
     
     var currentVC:EventsViewController!
     var isMapView = false
@@ -97,19 +96,37 @@ class MainRootViewController: UIViewController, MFMailComposeViewControllerDeleg
         updateActiveViewController(vc)
     }
     
-    @IBAction func createEvent(sender: AnyObject) {
-        if PFUser.currentUser() != nil {
-            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("CreateEventViewController") as! CreateEventViewController
-            vc.delegate = self
-            navigationController?.pushViewController(vc, animated: true)
-        } else {
-            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
-            presentViewController(vc, animated: true, completion: nil)
-        }
-    }
+//    @IBAction func createEvent(sender: AnyObject) {
+//            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("CreateEventViewController") as! CreateEventViewController
+//            vc.delegate = self
+//            navigationController?.pushViewController(vc, animated: true)
+//    }
     
     func eventCreated(event:Event) {
         segmentChanged()
+        invite(event)
+    }
+    func eventChanged(event: Event) {
+        segmentChanged()
+    }
+    func eventRemoved(event:Event) {
+        segmentChanged()
+    }
+    
+    func invite(event:Event){
+        let map = self.storyboard!.instantiateViewControllerWithIdentifier("InviteViewController") as! InviteViewController
+        
+        map.modalPresentationStyle = UIModalPresentationStyle.Popover
+        map.preferredContentSize = CGSizeMake(self.view.frame.width, 300)
+        map.event = event
+        
+        let detailPopover: UIPopoverPresentationController = map.popoverPresentationController!
+        detailPopover.delegate = self
+        detailPopover.sourceView = self.navigationItem.titleView
+//        detailPopover.permittedArrowDirections = UIPopoverArrowDirection.Up
+        
+        presentViewController(map,
+            animated: true, completion:nil)
     }
     
     @IBAction func today(sender: AnyObject) {
@@ -166,51 +183,6 @@ class MainRootViewController: UIViewController, MFMailComposeViewControllerDeleg
     }
 
     
-    func showInvite(){
-        if MFMailComposeViewController.canSendMail() {
-            let mailComposeViewController = self.configuredMailComposeViewController()
-            self.presentViewController(mailComposeViewController, animated: true, completion: nil)
-        } else {
-            self.showSendMailErrorAlert()
-        }
-    }
-    
-    func configuredMailComposeViewController() -> MFMailComposeViewController {
-        let userName = PFUser.currentUser()?.objectForKey("name") as! String
-        let emailTitle = "\(userName) invited you to Friendzi app"
-        let messageBody = "\(userName) has invited you to join Friendzi. \n\nhttp://friendzi.io/"
-        
-        let mailComposerVC = MFMailComposeViewController()
-        mailComposerVC.mailComposeDelegate = self
-        mailComposerVC.setSubject(emailTitle)
-        mailComposerVC.setMessageBody(messageBody, isHTML: false)
-        
-        return mailComposerVC
-    }
-    
-    func showSendMailErrorAlert() {
-        let sendMailErrorAlert = UIAlertView(title: "Could Not Send Email", message: "Your device could not send e-mail.  Please check e-mail configuration and try again.", delegate: self, cancelButtonTitle: "OK")
-        sendMailErrorAlert.show()
-    }
-    
-    func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
-        controller.dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-//    func showHappenings(){
-//        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("HappeningsViewController") as! HappeningsViewController
-//        self.navigationController?.pushViewController(vc, animated: true)
-//    }
-    
-    func showTerms(){
-        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("TermsController") as! TermsController
-        presentViewController(vc, animated: true, completion: nil)
-    }
-    
-    func showPrivacy(){
-        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("PrivacyPolicyController") as! PrivacyPolicyController
-        presentViewController(vc, animated: true, completion: nil)
-    }
     func madeEventChoice(event: Event) {
         performSegueWithIdentifier("event_details", sender: event)
     }
@@ -245,6 +217,10 @@ class MainRootViewController: UIViewController, MFMailComposeViewControllerDeleg
         currentVC = activeViewController
     }
     
+    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle
+    {
+        return UIModalPresentationStyle.None
+    }
     
     @IBAction func switchTapped(sender: AnyObject) {
         isMapView = !isMapView
@@ -262,6 +238,7 @@ class MainRootViewController: UIViewController, MFMailComposeViewControllerDeleg
             if let event = sender as? Event {
                 let vc = (segue.destinationViewController as! EventDetailsViewController)
                 vc.event = event
+                vc.delegate = self
                 vc.delegate = currentVC
             }
         }

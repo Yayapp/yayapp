@@ -10,9 +10,6 @@
 import UIKit
 import MapKit
 
-protocol GroupCreationDelegate : NSObjectProtocol {
-    func groupCreated(group:Category)
-}
 
 class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate, ChooseEventPictureDelegate, WriteAboutDelegate, UIPopoverPresentationControllerDelegate {
     
@@ -24,8 +21,9 @@ class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate
     var longitude: Double?
     var latitude: Double?
     var chosenPhoto:PFFile?
-    var delegate:GroupCreationDelegate!
+    var delegate:GroupChangeDelegate!
     var descriptionText:String!=""
+    var isEditingGroup:Bool! = false
     
     
     @IBOutlet weak var eventImage: UIImageView!
@@ -49,6 +47,7 @@ class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate
         if group != nil {
             update()
             title = "Edit Event"
+            isEditingGroup = true
         } else {
             title = "Create Event"
         }
@@ -187,7 +186,11 @@ class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate
                     self.group!.addObject(PFUser.currentUser()!, forKey: "attendees")
                     self.group!.saveInBackgroundWithBlock({
                         (result, error) in
-                        self.delegate.groupCreated(self.group!)
+                        if self.isEditingGroup == true {
+                            self.delegate.groupChanged(self.group!)
+                        } else {
+                            self.delegate.groupCreated(self.group!)
+                        }
                         self.navigationController?.popViewControllerAnimated(true)
                     })
                 } else {

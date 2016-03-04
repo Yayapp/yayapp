@@ -79,9 +79,13 @@ class Request : PFObject, PFSubclassing, Notification {
     
     func getIcon() -> UIImage {
             if accepted {
-                return UIImage(named: "play.png")!
+                return UIImage(named: "accept")!
             } else {
-                return UIImage(named: "play.png")!
+                if isDecidable() {
+                    return UIImage(named: "createevent_button")!
+                } else {
+                    return UIImage(named: "reject")!
+                }
             }
     }
     

@@ -9,10 +9,6 @@
 import UIKit
 import MapKit
 
-protocol EventCreationDelegate : NSObjectProtocol {
-    func eventCreated(event:Event)
-}
-
 class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, ChooseLocationDelegate, CategoryPickerDelegate, ChooseEventPictureDelegate, WriteAboutDelegate, UIPopoverPresentationControllerDelegate {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
@@ -26,10 +22,11 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
     var chosenDate:NSDate?
     var chosenCategories:[Category]! = []
     var chosenPhoto:PFFile?
-    var delegate:EventCreationDelegate!
+    var delegate:EventChangeDelegate!
     var timeZone:NSTimeZone!
     var attendeesButtons:[UIButton]!=[]
     var descriptionText:String!=""
+    var isEventEditing:Bool! = false
     
     var limitInt:Int=1
     
@@ -72,6 +69,10 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
             title = "Edit Event"
         } else {
             title = "Create Event"
+        }
+        
+        if delegate == nil {
+            delegate = (tabBarController?.viewControllers![0] as! UINavigationController).viewControllers[0] as! MainRootViewController
         }
         
     let avatar = PFUser.currentUser()?.objectForKey("avatar") as! PFFile
@@ -124,7 +125,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
         detailPopover.permittedArrowDirections = UIPopoverArrowDirection.Down
         presentViewController(map,
             animated: true, completion:nil)
-        
+        textFieldShouldReturn(name)
     }
     
     @IBAction func openPhotoPicker(sender: AnyObject) {
@@ -279,7 +280,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
                     self.event!.saveInBackgroundWithBlock({
                         (result, error) in
                         
-                        
+                        self.delegate.eventCreated(self.event!)
                         
                         let root = self.tabBarController?.viewControllers![2] as! UINavigationController
                         root.popViewControllerAnimated(false)
@@ -287,7 +288,6 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
                         root.pushViewController(vc, animated: false)
                         self.spinner.stopAnimating()
                         self.tabBarController?.selectedIndex = 0
-                        
                     })
                 } else {
                     self.spinner.stopAnimating()

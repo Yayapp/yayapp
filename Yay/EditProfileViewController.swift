@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EditProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate,UIPopoverPresentationControllerDelegate {
+class EditProfileViewController: KeyboardAnimationHelper, UIImagePickerControllerDelegate, UINavigationControllerDelegate,UIPopoverPresentationControllerDelegate {
     
     
     let picker = UIImagePickerController()
@@ -25,12 +25,23 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
     
     @IBOutlet weak var avatar: PFImageView!
     
-    @IBOutlet weak var about: UITextField!
+    @IBOutlet weak var about: UITextView!
+    
+    var placeholderLabel : UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         picker.delegate = self
-        
+        name.delegate = self
+        about.delegate = self
+        placeholderLabel = UILabel()
+        placeholderLabel.text = "Bio"
+        placeholderLabel.font = UIFont.boldSystemFontOfSize(about.font!.pointSize)
+        placeholderLabel.sizeToFit()
+        about.addSubview(placeholderLabel)
+        placeholderLabel.frame.origin = CGPointMake(5, about.font!.pointSize / 2)
+        placeholderLabel.textColor = UIColor(white: 0, alpha: 0.3)
+        placeholderLabel.hidden = !about.text!.isEmpty
         
         name.text = PFUser.currentUser()!.objectForKey("name") as? String
       
@@ -49,9 +60,13 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
             avatar.layer.borderColor = UIColor.whiteColor().CGColor
         }
         about.text = PFUser.currentUser()!.objectForKey("about") as? String
-        
+        textViewDidChange(about)
     }
     
+    func textViewDidChange(textView: UITextView) {
+        
+        placeholderLabel.hidden = !textView.text.isEmpty
+    }
    
     
     @IBAction func uploadPhoto(sender: AnyObject) {
@@ -92,6 +107,7 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
             if error != nil {
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             } else {
+                (self.navigationController?.viewControllers[0] as! UserProfileViewController).update(self.name.text!, aboutText: self.about.text, avatarFile: PFUser.currentUser()!.objectForKey("avatar") as! PFFile)
                 self.navigationController?.popViewControllerAnimated(true)
             }
         })

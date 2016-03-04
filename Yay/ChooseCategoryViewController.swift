@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UISearchBarDelegate, GroupCreationDelegate {
+class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UISearchBarDelegate, GroupChangeDelegate, UIPopoverPresentationControllerDelegate {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
@@ -213,6 +213,21 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         categories.reloadData()
     }
     
+    func invite(group:Category){
+        let map = self.storyboard!.instantiateViewControllerWithIdentifier("InviteViewController") as! InviteViewController
+        
+        map.modalPresentationStyle = UIModalPresentationStyle.Popover
+        map.preferredContentSize = CGSizeMake(self.view.frame.width, 300)
+        map.group = group
+        
+        let detailPopover: UIPopoverPresentationController = map.popoverPresentationController!
+        detailPopover.delegate = self
+        detailPopover.sourceView = categories
+        
+        presentViewController(map,
+            animated: true, completion:nil)
+    }
+    
     @IBAction func switched(sender: AnyObject) {
         let category = categoriesData[sender.tag]
     
@@ -264,9 +279,19 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         
     }
     
+    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle
+    {
+        return UIModalPresentationStyle.None
+    }
+    
     func groupCreated(group:Category) {
         categoriesData.append(group)
         allAction(true)
+        invite(group)
+    }
+    func groupChanged(group:Category) {
+    }
+    func groupRemoved(group:Category) {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -274,7 +299,11 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         if(segue.identifier == "details") {
             let vc = (segue.destinationViewController as! GroupDetailsViewController)
             vc.group = sender as! Category
+            vc.delegate = self
             vc.selectedCategoriesData = selectedCategoriesData
+        } else if(segue.identifier == "create") {
+            let vc = (segue.destinationViewController as! CreateGroupViewController)
+            vc.delegate = self
         }
     }
 }

@@ -11,10 +11,11 @@ import MessageUI
 
 
 protocol GroupChangeDelegate : NSObjectProtocol {
+    func groupCreated(group:Category)
     func groupChanged(group:Category)
     func groupRemoved(group:Category)
 }
-class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerDelegate, GroupCreationDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
+class GroupDetailsViewController: UIViewController, UIPopoverPresentationControllerDelegate, GroupChangeDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
     
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
@@ -23,6 +24,7 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
     var delegate:GroupChangeDelegate!
     var currentLocation:CLLocation!
     var selectedCategoriesData:[Category]! = []
+    var report:UIBarButtonItem!
     
     @IBOutlet weak var attendeesButtons: UICollectionView!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
@@ -51,6 +53,9 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
     
     @IBOutlet weak var descr: UITextView!
     
+    @IBOutlet weak var editButton: UIButton!
+    
+    @IBOutlet weak var cancelButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,10 +68,23 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
         members.text = "\(group.attendees.count) members"
         
         if(PFUser.currentUser()?.objectId == group.owner?.objectId) {
-            let editdone = UIBarButtonItem(image:UIImage(named: "edit_icon"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("editGroup:"))
-            editdone.tintColor = Color.PrimaryActiveColor
-            self.navigationItem.setRightBarButtonItem(editdone, animated: false)
-            //            attend.setImage(UIImage(named: "cancelevent_button"), forState: .Normal)
+            
+            let invite = UIBarButtonItem(title: "Invite", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("invite:"))
+            
+            self.navigationItem.setRightBarButtonItem(invite, animated: false)
+            
+            cancelButton.hidden = false
+            editButton.hidden = false
+        } else {
+            if let user = PFUser.currentUser() {
+                ParseHelper.countReports(group,user: user, completion: {
+                    count in
+                    if count == 0 {
+                        self.report = UIBarButtonItem(image:UIImage(named: "reporticon"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("reportButtonTapped:"))
+                        self.navigationItem.setRightBarButtonItem(self.report, animated: false)
+                    }
+                })
+            } 
         }
         
         
@@ -191,21 +209,6 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
     
     @IBAction func attend(sender: UIButton) {
         if let user = PFUser.currentUser() {
-            //            if(user.objectId == event.owner.objectId) {
-            //                let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
-            //                blurryAlertViewController.action = BlurryAlertViewController.BUTTON_DELETE
-            //                blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
-            //                blurryAlertViewController.messageText = "Sorry, are you sure you want to delete this event?"
-            //                blurryAlertViewController.hasCancelAction = true
-            //                blurryAlertViewController.group = group
-            //                blurryAlertViewController.completion = {
-            //                    if self.delegate != nil {
-            //                        self.delegate.groupRemoved(self.group)
-            //                    }
-            //                    self.navigationController?.popViewControllerAnimated(false)
-            //                }
-            //                self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
-            //            } else {
             spinner.startAnimating()
             group.fetchIfNeededInBackgroundWithBlock({
                 (result, error) in
@@ -257,6 +260,10 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
         detailsUnderline.hidden = false
         messagesContainer.hidden = true
         eventsContainer.hidden = false
+        if(PFUser.currentUser()?.objectId == group.owner?.objectId) {
+            cancelButton.hidden = false
+            editButton.hidden = false
+        }
     }
     
     @IBAction func switchToChat(sender: AnyObject) {
@@ -264,46 +271,30 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
         detailsUnderline.hidden = true
         messagesContainer.hidden = false
         eventsContainer.hidden = true
+        cancelButton.hidden = true
+        editButton.hidden = true
     }
     
+    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle
+    {
+        return UIModalPresentationStyle.None
+    }
     
     
     @IBAction func invite(sender: AnyObject) {
-        if (PFUser.currentUser() != nil) {
-            let mailComposeViewController = configuredMailComposeViewController()
-            if MFMailComposeViewController.canSendMail() {
-                self.presentViewController(mailComposeViewController, animated: true, completion: nil)
-            } else {
-                self.showSendMailErrorAlert()
-            }
-        } else {
-            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
-            presentViewController(vc, animated: true, completion: nil)
-        }
-    }
-    
-    func configuredMailComposeViewController() -> MFMailComposeViewController {
-        let userName = PFUser.currentUser()?.objectForKey("name") as! String
-        let emailTitle = "\(userName) shared happening from Friendzi app"
-        let messageBody = "Hi, please check this group \"\(group.name)\".\n\nhttp://friendzi.io/"
+        let map = self.storyboard!.instantiateViewControllerWithIdentifier("InviteViewController") as! InviteViewController
         
+        map.modalPresentationStyle = UIModalPresentationStyle.Popover
+        map.preferredContentSize = CGSizeMake(self.view.frame.width, 300)
+        map.group = group
         
-        let mailComposerVC = MFMailComposeViewController()
-        mailComposerVC.mailComposeDelegate = self
+        let detailPopover: UIPopoverPresentationController = map.popoverPresentationController!
+        detailPopover.delegate = self
+        detailPopover.barButtonItem = sender as? UIBarButtonItem
+        detailPopover.permittedArrowDirections = UIPopoverArrowDirection.Up
         
-        mailComposerVC.setSubject(emailTitle)
-        mailComposerVC.setMessageBody(messageBody, isHTML: false)
-        
-        return mailComposerVC
-    }
-    
-    func showSendMailErrorAlert() {
-        let sendMailErrorAlert = UIAlertView(title: "Could Not Send Email", message: "Your device could not send e-mail.  Please check e-mail configuration and try again.", delegate: self, cancelButtonTitle: "OK")
-        sendMailErrorAlert.show()
-    }
-    
-    func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
-        controller.dismissViewControllerAnimated(true, completion: nil)
+        presentViewController(map,
+            animated: true, completion:nil)
     }
     
     @IBAction func authorProfile(sender: AnyObject) {
@@ -320,15 +311,34 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
         navigationController?.pushViewController(userProfileViewController, animated: true)
     }
     
-    func groupCreated(group:Category) {
+    func groupChanged(group: Category) {
         self.group = group
         update()
         if self.delegate != nil {
             delegate.groupChanged(group)
         }
     }
+    func groupCreated(group: Category){}
+    func groupRemoved(group:Category){}
     
-    @IBAction func editEvent(sender: AnyObject){
+    @IBAction func cancelGroup(sender: AnyObject) {
+        
+        let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
+        blurryAlertViewController.action = BlurryAlertViewController.BUTTON_DELETE
+        blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
+        blurryAlertViewController.messageText = "Sorry, are you sure you want to delete this group?"
+        blurryAlertViewController.hasCancelAction = true
+        blurryAlertViewController.group = group
+        blurryAlertViewController.completion = {
+            if self.delegate != nil {
+                self.delegate.groupRemoved(self.group)
+            }
+            self.navigationController?.popViewControllerAnimated(false)
+        }
+        self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
+    }
+    
+    @IBAction func editGroup(sender: AnyObject){
         let vc = self.storyboard!.instantiateViewControllerWithIdentifier("CreateGroupViewController") as! CreateGroupViewController
         vc.group = group
         vc.delegate = self

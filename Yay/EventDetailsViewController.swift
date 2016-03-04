@@ -11,7 +11,7 @@ import MessageUI
 
 
 
-class EventDetailsViewController: UIViewController, MFMailComposeViewControllerDelegate, EventCreationDelegate {
+class EventDetailsViewController: UIViewController, UIPopoverPresentationControllerDelegate, EventChangeDelegate {
     
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
@@ -21,6 +21,7 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     var attendeeButtons:[UIButton]!
     var attendees:[PFUser] = []
     var delegate:EventChangeDelegate!
+    var report:UIBarButtonItem!
     
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     @IBOutlet weak var photo: PFImageView!
@@ -52,6 +53,10 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     
     @IBOutlet weak var messagesContainer: UIView!
    
+    @IBOutlet weak var editButton: UIButton!
+    
+    @IBOutlet weak var cancelButton: UIButton!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,22 +68,21 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
         title = event.name
         
         if(PFUser.currentUser()?.objectId == event.owner.objectId) {
-            let editdone = UIBarButtonItem(image:UIImage(named: "edit_icon"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("editEvent:"))
-            editdone.tintColor = Color.PrimaryActiveColor
-            self.navigationItem.setRightBarButtonItem(editdone, animated: false)
+            editButton.hidden = false
+            cancelButton.hidden = false
+            let invite = UIBarButtonItem(title: "Invite", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("invite:"))
+            
+            self.navigationItem.setRightBarButtonItem(invite, animated: false)
 //            attend.setImage(UIImage(named: "cancelevent_button"), forState: .Normal)
         } else {
             if let user = PFUser.currentUser() {
                 ParseHelper.countReports(event,user: user, completion: {
                     count in
                     if count == 0 {
-                        let report = UIBarButtonItem(image:UIImage(named: "reporticon"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("reportButtonTapped:"))
-                        report.tintColor = UIColor.redColor()
-                        self.navigationItem.setRightBarButtonItem(report, animated: false)
+                        self.report = UIBarButtonItem(image:UIImage(named: "reporticon"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("reportButtonTapped:"))
+                        self.navigationItem.setRightBarButtonItem(self.report, animated: false)
                     }
                 })
-            } else {
-                
             }
         }
         
@@ -200,23 +204,9 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     }
     
     
+    
+    
     @IBAction func attend(sender: UIButton) {
-        if let user = PFUser.currentUser() {
-            if(user.objectId == event.owner.objectId) {
-                let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
-                blurryAlertViewController.action = BlurryAlertViewController.BUTTON_DELETE
-                blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
-                blurryAlertViewController.messageText = "Sorry, are you sure you want to delete this event?"
-                blurryAlertViewController.hasCancelAction = true
-                blurryAlertViewController.event = event
-                blurryAlertViewController.completion = {
-                    if self.delegate != nil {
-                        self.delegate.eventRemoved(self.event)
-                    }
-                    self.navigationController?.popViewControllerAnimated(false)
-                }
-                self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
-            } else {
                 spinner.startAnimating()
                 event.fetchIfNeededInBackgroundWithBlock({
                     (result, error) in
@@ -226,7 +216,7 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                     requestACL.publicReadAccess = true
                     let request = Request()
                     request.event = self.event
-                    request.attendee = user
+                    request.attendee = PFUser.currentUser()!
                     request.ACL = requestACL
                     request.saveInBackground()
                     
@@ -242,11 +232,6 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                     
                 })
             }
-        } else {
-            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
-            presentViewController(vc, animated: true, completion: nil)
-        }
-    }
     
     @IBAction func chat(sender: AnyObject) {
         if PFUser.currentUser() != nil {
@@ -267,54 +252,55 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
         chatUnderline.hidden = true
         detailsUnderline.hidden = false
         messagesContainer.hidden = true
+        if(PFUser.currentUser()?.objectId == event.owner.objectId) {
+            cancelButton.hidden = false
+            editButton.hidden = false
+        }
     }
     
     @IBAction func switchToChat(sender: AnyObject) {
         chatUnderline.hidden = false
         detailsUnderline.hidden = true
         messagesContainer.hidden = false
+        cancelButton.hidden = true
+        editButton.hidden = false
     }
     
     
+    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle
+    {
+        return UIModalPresentationStyle.None
+    }
     
-    @IBAction func invite(sender: AnyObject) {
-        if (PFUser.currentUser() != nil) {
-            let mailComposeViewController = configuredMailComposeViewController()
-            if MFMailComposeViewController.canSendMail() {
-                self.presentViewController(mailComposeViewController, animated: true, completion: nil)
-            } else {
-                self.showSendMailErrorAlert()
-            }
-        } else {
-            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
-            presentViewController(vc, animated: true, completion: nil)
+    func eventCreated(event:Event) {}
+    func eventChanged(event: Event) {
+        self.event = event
+        update()
+        if self.delegate != nil {
+            delegate.eventChanged(event)
         }
     }
-    
-    func configuredMailComposeViewController() -> MFMailComposeViewController {
-        let userName = PFUser.currentUser()?.objectForKey("name") as! String
-        let emailTitle = "\(userName) shared happening from Friendzi app"
-        let messageBody = "Hi, please check this happening \"\(event.name)\" on \(dateFormatter.stringFromDate(event.startDate)).\n\nhttp://friendzi.io/"
-        
-        
-        let mailComposerVC = MFMailComposeViewController()
-        mailComposerVC.mailComposeDelegate = self
-        
-        mailComposerVC.setSubject(emailTitle)
-        mailComposerVC.setMessageBody(messageBody, isHTML: false)
-        
-        return mailComposerVC
+    func eventRemoved(event:Event) {
+        delegate.eventRemoved(event)
     }
     
-    func showSendMailErrorAlert() {
-        let sendMailErrorAlert = UIAlertView(title: "Could Not Send Email", message: "Your device could not send e-mail.  Please check e-mail configuration and try again.", delegate: self, cancelButtonTitle: "OK")
-        sendMailErrorAlert.show()
+    @IBAction func invite(sender: AnyObject) {
+        let map = self.storyboard!.instantiateViewControllerWithIdentifier("InviteViewController") as! InviteViewController
+  
+        map.modalPresentationStyle = UIModalPresentationStyle.Popover
+        map.preferredContentSize = CGSizeMake(self.view.frame.width, 300)
+        map.event = event
+        
+        let detailPopover: UIPopoverPresentationController = map.popoverPresentationController!
+        detailPopover.delegate = self
+        detailPopover.barButtonItem = sender as? UIBarButtonItem
+        detailPopover.permittedArrowDirections = UIPopoverArrowDirection.Up
+        
+        presentViewController(map,
+            animated: true, completion:nil)
     }
     
-    func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
-        controller.dismissViewControllerAnimated(true, completion: nil)
-    }
-    
+        
     @IBAction func authorProfile(sender: AnyObject) {
         let userProfileViewController = self.storyboard!.instantiateViewControllerWithIdentifier("UserProfileViewController") as! UserProfileViewController
         userProfileViewController.user = event.owner
@@ -328,14 +314,25 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
         
         navigationController?.pushViewController(userProfileViewController, animated: true)
     }
+   
     
-    func eventCreated(event:Event) {
-        self.event = event
-        update()
-        if self.delegate != nil {
-            delegate.eventChanged(event)
+    @IBAction func cancelEvent(sender: AnyObject) {
+        
+        let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
+        blurryAlertViewController.action = BlurryAlertViewController.BUTTON_DELETE
+        blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
+        blurryAlertViewController.messageText = "Sorry, are you sure you want to delete this event?"
+        blurryAlertViewController.hasCancelAction = true
+        blurryAlertViewController.event = event
+        blurryAlertViewController.completion = {
+            if self.delegate != nil {
+                self.delegate.eventRemoved(self.event)
+            }
+            self.navigationController?.popViewControllerAnimated(false)
         }
+        self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
     }
+    
     
     @IBAction func editEvent(sender: AnyObject){
         let vc = self.storyboard!.instantiateViewControllerWithIdentifier("CreateEventViewController") as! CreateEventViewController

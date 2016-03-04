@@ -7,7 +7,7 @@
 //
 
 import Foundation
-class KeyboardAnimationHelper: UIViewController, UITextFieldDelegate {
+class KeyboardAnimationHelper: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     var animateDistance:CGFloat = 0.0
     
     struct MoveKeyboard {
@@ -23,6 +23,14 @@ class KeyboardAnimationHelper: UIViewController, UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
+        textDidEndEditing()
+    }
+    
+    func textViewDidBeginEditing(textView: UITextView) {
+        textDidBeginEditing(textView)
+    }
+    
+    func textViewDidEndEditing(textView: UITextView) {
         textDidEndEditing()
     }
     
@@ -78,5 +86,16 @@ class KeyboardAnimationHelper: UIViewController, UITextFieldDelegate {
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return false
+    }
+    func textViewShouldReturn(textField: UITextView) -> Bool {
+        self.view.resignFirstResponder()
+        return false
+    }
+    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+        if(text == "\n") {
+            textView.resignFirstResponder()
+            return false
+        }
+        return true
     }
 }

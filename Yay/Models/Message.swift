@@ -55,6 +55,6 @@ class Message : PFObject, PFSubclassing, Notification {
     }
     
     func getIcon() -> UIImage {
-        return UIImage(named: "play.png")!
+        return UIImage(named: "chat")!
     }
 }

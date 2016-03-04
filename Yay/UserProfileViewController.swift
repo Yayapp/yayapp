@@ -71,14 +71,16 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
             title = "Profile"
         } else {
             
+            editdone = UIBarButtonItem(image:UIImage(named: "reporticon"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("blockUnblock:"))
+            
+            self.navigationItem.setRightBarButtonItem(editdone, animated: false)
             title = self.user.objectForKey("name") as? String
             ParseHelper.countBlocks(PFUser.currentUser()!, user: user, completion: {
                 count in
                 if count > 0 {
-                    self.blockUnblock.titleLabel?.text = "Unblock user"
+                    self.editdone.tintColor = UIColor.redColor()
                     self.blocked = true
                 }
-                self.blockUnblock.hidden = false
             })
             
         }
@@ -126,6 +128,12 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         }
     }
     
+    func update(nameText:String, aboutText:String, avatarFile:PFFile ) {
+        name.text = nameText
+        setAboutMe(aboutText)
+        avatar.file = avatarFile
+        avatar.loadInBackground()
+    }
     
     func setAboutMe(text:String){
         let font15 = UIFont.boldSystemFontOfSize(15)
@@ -172,7 +180,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         
         if blocked == true {
             ParseHelper.removeBlocks(PFUser.currentUser()!, user: user, completion: {
-                self.blockUnblock.titleLabel?.text = "Block user"
+                self.blockUnblock.tintColor = UIColor.blackColor()
                 self.blocked = false
             })
         } else {
@@ -188,7 +196,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
                 block.saveInBackgroundWithBlock({
                     result, error in
                     if error == nil {
-                        self.blockUnblock.titleLabel?.text = "Unblock user"
+                        self.editdone.tintColor = UIColor.redColor()
                         self.blocked = true
                     } else {
                         MessageToUser.showDefaultErrorMessage("Something went wrong.")

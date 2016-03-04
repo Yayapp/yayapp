@@ -17,9 +17,20 @@ class RecentViewController: UITableViewController {
         super.viewDidLoad()
         
         ParseHelper.getRecentRequests(PFUser.currentUser()!, block: {
-            result, error in
+            result1, error in
             if (error == nil){
-                self.notifications = result!
+                self.notifications = result1!
+                ParseHelper.getRecentMessages({
+                    result2, error in
+                    if (error == nil){
+                        for (_, message) in result2!.enumerate() {
+                            self.notifications.append(message)
+                        }
+                        self.tableView.reloadData()
+                    } else {
+                        MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+                    }
+                })
             } else {
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
@@ -57,7 +68,10 @@ class RecentViewController: UITableViewController {
             
             cell.decline.tag = indexPath.row;
             cell.decline.addTarget(self, action: "decline:", forControlEvents: .TouchUpInside)
+        } else {
+            cell.decline.hidden = true
         }
+        cell.accept.setImage(notification.getIcon(), forState: .Normal)
         return cell
     }
     

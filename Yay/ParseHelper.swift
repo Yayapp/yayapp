@@ -248,6 +248,42 @@ class ParseHelper {
         }
     }
     
+    class func getRecentMessages(block:MessagesResultBlock?) {
+        let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+        
+        let today = NSDate()
+        
+        let weekEndDay = 7
+        
+        let dayComponent = NSDateComponents()
+        dayComponent.day = -weekEndDay
+        
+        let endWeek = calendar!.dateByAddingComponents(dayComponent, toDate: today, options: NSCalendarOptions.MatchFirst)
+        let startNextWeek = calendar!.startOfDayForDate(endWeek!)
+        
+        let query = PFQuery(className:Message.parseClassName())
+        query.orderByAscending("updatedAt")
+        query.whereKey("updatedAt", greaterThan: startNextWeek)
+        query.whereKey("updatedAt", lessThanOrEqualTo: NSDate())
+        query.includeKey("user")
+        query.includeKey("group")
+        query.includeKey("event")
+        
+        query.findObjectsInBackgroundWithBlock {
+            objects, error in
+            
+            if error == nil {
+                if let objects = objects as? [Message] {
+                    block!(objects, error)
+                }
+            } else {
+                // Log details of the failure
+                print("Error: \(error!) \(error!.userInfo)")
+                block!(nil, error)
+            }
+        }
+    }
+    
     class func getMessages(event:Event, block:MessagesResultBlock?) {
         let query = PFQuery(className:Message.parseClassName())
         query.whereKey("event", equalTo:event)
@@ -313,6 +349,20 @@ class ParseHelper {
         let query = PFQuery(className:Report.parseClassName())
         query.whereKey("user", equalTo:user)
         query.whereKey("event", equalTo:event)
+        query.countObjectsInBackgroundWithBlock {
+            count, error in
+            if error == nil {
+                completion(Int(count))
+            } else {
+                completion(0)
+            }
+        }
+    }
+    
+    class func countReports(group: Category, user:PFUser, completion:(Int)->()) {
+        let query = PFQuery(className:Report.parseClassName())
+        query.whereKey("user", equalTo:user)
+        query.whereKey("group", equalTo:group)
         query.countObjectsInBackgroundWithBlock {
             count, error in
             if error == nil {
@@ -428,25 +478,6 @@ class ParseHelper {
             
             if error == nil {
                 if let objects = objects as? [Request] {
-                    block!(objects, error)
-                }
-            } else {
-                // Log details of the failure
-                print("Error: \(error!) \(error!.userInfo)")
-                block!(nil, error)
-            }
-        }
-    }
-    
-    class func getRecentMessages(block:MessagesResultBlock?) {
-        let query = PFQuery(className:Message.parseClassName())
-        query.orderByDescending("createdAt")
-    
-        query.findObjectsInBackgroundWithBlock {
-            objects, error in
-            
-            if error == nil {
-                if let objects = objects as? [Message] {
                     block!(objects, error)
                 }
             } else {

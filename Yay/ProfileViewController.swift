@@ -24,47 +24,7 @@ class ProfileViewController: UITableViewController {
                         MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                     }
                 })
-//        self.navigationController?.setNavigationBarHidden(true, animated: false)
-//        edgesForExtendedLayout = UIRectEdge.None;
-//        ParseHelper.countRequests(PFUser.currentUser()!, completion: {
-//            count in
-//            self.requestsCountLabel.text = "\(count)"
-//            UIApplication.sharedApplication().applicationIconBadgeNumber = count + Prefs.getMessagesCount()
-//        })
-//        messagesCountLabel.text = "\(Prefs.getMessagesCount())"
     }
-
-    
-//    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-//        ParseHelper.getUpcomingPastEvents(PFUser.currentUser()!, upcoming: false, block: {
-//            result, error in
-//            if error == nil {
-//                self.performSegueWithIdentifier("archive", sender: result)
-//            } else {
-//                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-//            }
-//        })
-//        switch (indexPath.row){
-//        case 0 : appDelegate.centerContainer!.closeDrawerAnimated(true, completion: nil)
-//        (appDelegate.centerViewController.viewControllers[0] as! MainRootViewController).showMessages()
-//        case 1 : appDelegate.centerContainer!.closeDrawerAnimated(true, completion: nil)
-//        (appDelegate.centerViewController.viewControllers[0] as! MainRootViewController).showProfile()
-//        case 2 : appDelegate.centerContainer!.closeDrawerAnimated(true, completion: nil)
-//        (appDelegate.centerViewController.viewControllers[0] as! MainRootViewController).showHappenings()
-//        case 3 : appDelegate.centerContainer!.closeDrawerAnimated(true, completion: nil)
-//        (appDelegate.centerViewController.viewControllers[0] as! MainRootViewController).showRequests()
-//        case 4 : appDelegate.centerContainer!.closeDrawerAnimated(true, completion: nil)
-//        (appDelegate.centerViewController.viewControllers[0] as! MainRootViewController).showInvite()
-//        case 5 : appDelegate.centerContainer!.closeDrawerAnimated(true, completion: nil)
-//        (appDelegate.centerViewController.viewControllers[0] as! MainRootViewController).showSettings()
-//        case 6 : appDelegate.centerContainer!.closeDrawerAnimated(true, completion: nil)
-//        (appDelegate.centerViewController.viewControllers[0] as! MainRootViewController).showTerms()
-//        case 7 : appDelegate.centerContainer!.closeDrawerAnimated(true, completion: nil)
-//        (appDelegate.centerViewController.viewControllers[0] as! MainRootViewController).showPrivacy()
-//        default: appDelegate.centerContainer!.closeDrawerAnimated(true, completion: nil)
-//            (appDelegate.centerViewController.viewControllers[0] as! MainRootViewController).showProfile()
-//        }
-//    }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         

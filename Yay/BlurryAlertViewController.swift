@@ -21,6 +21,7 @@ class BlurryAlertViewController: UIViewController {
     var action:String!
     var hasCancelAction:Bool = false
     var event:Event?
+    var group:Category?
     var completion:(()->Void)?
     
     @IBOutlet weak var cancel: UIButton!
@@ -76,7 +77,9 @@ class BlurryAlertViewController: UIViewController {
                     MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                 }
             })
-        } else {
+        } else if (group != nil) {
+        
+        }else {
             ParseHelper.removeUserEvents(PFUser.currentUser()!, block: {
                 result, error in
                 if error == nil {

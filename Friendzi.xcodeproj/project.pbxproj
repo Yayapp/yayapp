@@ -23,6 +23,7 @@
 		992037401C669E9C00051D06 /* CategoryHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920373F1C669E9C00051D06 /* CategoryHeader.swift */; };
 		992037421C68D38500051D06 /* CategoryType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992037411C68D38500051D06 /* CategoryType.swift */; };
 		99253FF61B6ABBF40078B668 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99253FF51B6ABBF40078B668 /* Extensions.swift */; };
+		992B97261C83657D00E8EDDB /* InviteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992B97251C83657D00E8EDDB /* InviteViewController.swift */; };
 		993AC6191BA7293C00B677D6 /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993AC6181BA7293C00B677D6 /* TutorialViewController.swift */; };
 		993D3ED71B8CE1170023B054 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993D3ED61B8CE1170023B054 /* Request.swift */; };
 		993D3ED91B8DCA900023B054 /* RequestsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993D3ED81B8DCA900023B054 /* RequestsTableViewController.swift */; };
@@ -95,6 +96,7 @@
 		9920373F1C669E9C00051D06 /* CategoryHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryHeader.swift; sourceTree = "<group>"; };
 		992037411C68D38500051D06 /* CategoryType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryType.swift; sourceTree = "<group>"; };
 		99253FF51B6ABBF40078B668 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		992B97251C83657D00E8EDDB /* InviteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InviteViewController.swift; sourceTree = "<group>"; };
 		993AC6181BA7293C00B677D6 /* TutorialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
 		993D3ED61B8CE1170023B054 /* Request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
 		993D3ED81B8DCA900023B054 /* RequestsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestsTableViewController.swift; sourceTree = "<group>"; };
@@ -203,6 +205,7 @@
 				99509E891B9618FA003BF7CD /* PhotosTableViewController.swift */,
 				993AC6181BA7293C00B677D6 /* TutorialViewController.swift */,
 				99B0C6311C77B041004D8A99 /* CategoryPickerViewController.swift */,
+				992B97251C83657D00E8EDDB /* InviteViewController.swift */,
 			);
 			name = controllerParts;
 			sourceTree = "<group>";
@@ -469,6 +472,7 @@
 				99B0C63A1C7FB7AA004D8A99 /* RangeViewController.swift in Sources */,
 				99EF69CE1BC418B700DA0073 /* ConversationsTableViewController.swift in Sources */,
 				99EF69CC1BC4061700DA0073 /* Message.swift in Sources */,
+				992B97261C83657D00E8EDDB /* InviteViewController.swift in Sources */,
 				997C23931B67B9960070DDB2 /* CategoryCollectionViewCell.swift in Sources */,
 				99253FF61B6ABBF40078B668 /* Extensions.swift in Sources */,
 				9907A3591BCBEC0C00D98A6F /* Utils.swift in Sources */,
