@@ -5365,8 +5365,8 @@
         <image name="uploadphoto_ico" width="42" height="46"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="Uy6-AU-NUG"/>
         <segue reference="mVD-cZ-gb2"/>
-        <segue reference="obh-Kf-QaJ"/>
         <segue reference="Grk-8x-ER7"/>
         <segue reference="viE-SB-wbV"/>
         <segue reference="Vmc-p7-IaB"/>
