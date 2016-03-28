@@ -23,6 +23,36 @@ class LoginViewController: UIViewController, InstagramDelegate {
     @IBOutlet weak var orLabelBottomToEmailTextField: NSLayoutConstraint!
     @IBOutlet weak var orLabelBottomToEmailButton: NSLayoutConstraint!
 
+    lazy var forgotPasswordAlert: UIAlertController = {
+        var tField: UITextField!
+        let alert = UIAlertController(title: "Reset password", message: nil, preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "Reset", style: UIAlertActionStyle.Default, handler: {
+            (action: UIAlertAction) in
+            if (!tField.text!.isEmpty && tField.text!.isEmail()) {
+                PFUser.requestPasswordResetForEmailInBackground(tField.text!, block: {
+                    result, error in
+                    if(error == nil) {
+                        MessageToUser.showMessage("Reset password", textId: "We've sent you password reset instructions. Please check your email.")
+                    } else {
+                        MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+                    }
+                })
+            } else {
+                MessageToUser.showDefaultErrorMessage("Please enter valid email")
+            }
+        }))
+
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default, handler: nil))
+        alert.addTextFieldWithConfigurationHandler({(textField) in
+            tField = textField
+            tField.placeholder = "Email"
+            tField.delegate = self
+        })
+        (alert.actions[0] as UIAlertAction).enabled = false
+
+        return alert
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -263,35 +293,19 @@ class LoginViewController: UIViewController, InstagramDelegate {
     
     
     @IBAction func forgotPassword(sender: AnyObject) {
-        var tField: UITextField!
-        let alert = UIAlertController(title: "Reset password", message: nil, preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: "Reset", style: UIAlertActionStyle.Default, handler: {
-            (action: UIAlertAction) in
-            if (!tField.text!.isEmpty && tField.text!.isEmail()) {
-                PFUser.requestPasswordResetForEmailInBackground(tField.text!, block: {
-                    result, error in
-                    if(error == nil) {
-                        MessageToUser.showMessage("Reset password", textId: "We've sent you password reset instructions. Please check your email.")
-                    } else {
-                        MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-                    }
-                })
-            } else {
-                MessageToUser.showDefaultErrorMessage("Please enter valid email")
-            }
-        }))
-        
-        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default, handler: nil))
-        alert.addTextFieldWithConfigurationHandler({(textField) in
-            tField = textField
-            tField.placeholder = "Email"
-        })
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.presentViewController(forgotPasswordAlert, animated: true, completion: nil)
     }
-    
+
     @IBAction func close(sender: AnyObject) {
         dismissViewControllerAnimated(true, completion: nil)
     }
-    
+}
+
+extension LoginViewController: UITextFieldDelegate {
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        (forgotPasswordAlert.actions[0] as UIAlertAction).enabled = (!textField.text!.isEmpty && textField.text!.isEmail())
+        
+        return true
+    }
 }
 

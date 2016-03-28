@@ -216,7 +216,7 @@
                                                     <constraint firstAttribute="height" constant="20" id="2xI-Z0-gtp"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                <state key="normal" title="Frogot password"/>
+                                                <state key="normal" title="Forgot password"/>
                                                 <connections>
                                                     <action selector="forgotPassword:" destination="w48-1L-I7x" eventType="touchUpInside" id="XJK-uM-1e0"/>
                                                 </connections>
@@ -358,7 +358,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="F4i-3s-FUX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="784" y="299"/>
+            <point key="canvasLocation" x="784" y="310"/>
         </scene>
         <!--TERMS AND CONDITIONS-->
         <scene sceneID="MUW-PO-qWW">
@@ -5273,12 +5273,12 @@
         <image name="uploadphoto_ico" width="42" height="46"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Grk-8x-ER7"/>
-        <segue reference="Vmc-p7-IaB"/>
-        <segue reference="viE-SB-wbV"/>
-        <segue reference="obh-Kf-QaJ"/>
         <segue reference="3Ly-PZ-TUn"/>
-        <segue reference="NDv-lM-SCZ"/>
+        <segue reference="viE-SB-wbV"/>
+        <segue reference="Vmc-p7-IaB"/>
+        <segue reference="obh-Kf-QaJ"/>
+        <segue reference="Grk-8x-ER7"/>
+        <segue reference="dCM-D0-qCd"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
 </document>
