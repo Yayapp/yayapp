@@ -19,3 +19,4 @@ pod 'GoogleAppIndexing'
 pod 'APTimeZones'
 pod 'JSQMessagesViewController'
 pod "TTGTagCollectionView"
+pod "TPKeyboardAvoiding"

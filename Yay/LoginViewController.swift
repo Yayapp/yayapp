@@ -20,10 +20,16 @@ class LoginViewController: UIViewController, InstagramDelegate {
     @IBOutlet weak var textLabel: UILabel!
     @IBOutlet weak var createEmailAccount: UIButton!
     
+    @IBOutlet weak var orLabelBottomToEmailTextField: NSLayoutConstraint!
+    @IBOutlet weak var orLabelBottomToEmailButton: NSLayoutConstraint!
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         if (isLogin == true) {
+            NSLayoutConstraint.activateConstraints([orLabelBottomToEmailTextField])
+            NSLayoutConstraint.deactivateConstraints([orLabelBottomToEmailButton])
+
             textLabel.text = "Sign in with"
             createEmailAccount.hidden = true
             signIn.hidden = false
@@ -31,6 +37,9 @@ class LoginViewController: UIViewController, InstagramDelegate {
             forgotPassword.hidden = false
             password.hidden = false
         } else {
+            NSLayoutConstraint.activateConstraints([orLabelBottomToEmailButton])
+            NSLayoutConstraint.deactivateConstraints([orLabelBottomToEmailTextField])
+
             textLabel.text = "Join with"
             createEmailAccount.hidden = false
             signIn.hidden = true
@@ -40,6 +49,18 @@ class LoginViewController: UIViewController, InstagramDelegate {
         }
         
         self.navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        if (isLogin == true) {
+            NSLayoutConstraint.activateConstraints([orLabelBottomToEmailTextField])
+            NSLayoutConstraint.deactivateConstraints([orLabelBottomToEmailButton])
+        } else {
+            NSLayoutConstraint.activateConstraints([orLabelBottomToEmailButton])
+            NSLayoutConstraint.deactivateConstraints([orLabelBottomToEmailTextField])
+        }
     }
 
 
@@ -179,12 +200,14 @@ class LoginViewController: UIViewController, InstagramDelegate {
             } else {
                 if(error!.code == 101) {
                     let pfuser = PFUser()
-                    
-                    let imageData :NSData = try! NSData(contentsOfURL: user.profilePictureURL, options: NSDataReadingOptions.DataReadingMappedIfSafe)
-                    let imageFile = PFFile(name: "image.jpg", data: imageData)
+
+                    if let profilePictureURL = user.profilePictureURL,
+                        imageData: NSData = try? NSData(contentsOfURL: profilePictureURL, options: NSDataReadingOptions.DataReadingMappedIfSafe) {
+                        let imageFile = PFFile(name: "image.jpg", data: imageData)
+                        pfuser["avatar"] = imageFile
+                    }
                     
                     self.setupDefaults(pfuser)
-                    pfuser["avatar"] = imageFile
                     pfuser["name"] = user.fullName
                     pfuser["token"] = token
                     pfuser.password = "\(user.username.MD5())"

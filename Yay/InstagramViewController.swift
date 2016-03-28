@@ -26,7 +26,7 @@ class InstagramViewController: UIViewController, UIWebViewDelegate {
         let requestURL = InstagramEngine.sharedEngine().authorizationURLForScope(InstagramKitLoginScope.Relationships)
         
 //        NSURL(string:"https://instagram.com/oauth/authorize/?client_id=aec497e4d81e4b758aa48a94b3c35c00&redirect_uri=http://www.textquickit.com&response_type=token&scope=relationships")
-        let request = NSURLRequest(URL: requestURL!)
+        let request = NSURLRequest(URL: requestURL)
         webView.loadRequest(request)
     }
 
