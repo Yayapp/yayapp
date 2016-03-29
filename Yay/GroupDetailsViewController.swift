@@ -358,7 +358,6 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
         let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
         blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
         blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
-        blurryAlertViewController.hasCancelAction = true
         blurryAlertViewController.messageText = "You are about to flag this group for inappropriate content. Are you sure?"
         blurryAlertViewController.completion = {
             let report = Report()

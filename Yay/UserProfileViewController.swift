@@ -9,8 +9,7 @@
 import UIKit
 
 class UserProfileViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate,   UIPopoverPresentationControllerDelegate {
-    
-   
+
     let picker = UIImagePickerController()
     var user:PFUser!
     var editdone:UIBarButtonItem!
@@ -28,13 +27,10 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
     
     @IBOutlet weak var interestsCollection: TTGTextTagCollectionView!
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         picker.delegate = self
 //        interestsCollection.scrollEnabled = false
-        
-        
         
         tableView.estimatedRowHeight = 100.0
         tableView.rowHeight = UITableViewAutomaticDimension
@@ -70,17 +66,11 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
             tableView.tableFooterView!.hidden = true
             title = "Profile"
         } else {
-            
             title = self.user.objectForKey("name") as? String
-            ParseHelper.countBlocks(PFUser.currentUser()!, user: user, completion: {
-                count in
-                if count > 0 {
-                    self.blockUnblock.titleLabel?.text = "Unblock user"
-                    self.blocked = true
-                }
-                self.blockUnblock.hidden = false
-            })
-            
+            ParseHelper.countBlocks(PFUser.currentUser()!, user: user, completion: { [weak self] count in
+                self?.blocked = count > 0
+                self?.blockUnblock.hidden = false
+                })
         }
         
         
@@ -169,34 +159,51 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
     }
     
     @IBAction func blockUnblock(sender: AnyObject) {
-        
-        if blocked == true {
-            ParseHelper.removeBlocks(PFUser.currentUser()!, user: user, completion: {
-                self.blockUnblock.titleLabel?.text = "Block user"
-                self.blocked = false
-            })
-        } else {
-            let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
-            blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
-            blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
-            blurryAlertViewController.hasCancelAction = true
-            blurryAlertViewController.messageText = "You are about to block this user. Are you sure?"
-            blurryAlertViewController.completion = {
+        guard let currentUser = PFUser.currentUser() else {
+            return
+        }
+
+        let blockUserAlert = UIAlertController(title: NSLocalizedString("Block User", comment: ""),
+                                               message: NSLocalizedString("You are about to block this user. Are you sure?", comment: ""),
+                                               preferredStyle: .Alert)
+
+        blockUserAlert.addAction(UIAlertAction(title: blocked ? NSLocalizedString("Unblock User", comment: "") : NSLocalizedString("Block User", comment: ""),
+            style: .Default,
+            handler: { [unowned self] (_) in
+                if self.blocked {
+                    self.blocked = false
+
+                    ParseHelper.removeBlocks(currentUser, user: self.user, completion: { [weak self] error in
+                        if let _ = self where error != nil {
+                            MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
+                        }})
+                    
+                    return
+                }
+
                 let block = Block()
-                block.owner = PFUser.currentUser()!
+                block.owner = currentUser
                 block.user = self.user
-                block.saveInBackgroundWithBlock({
-                    result, error in
-                    if error == nil {
-                        self.blockUnblock.titleLabel?.text = "Unblock user"
-                        self.blocked = true
-                    } else {
-                        MessageToUser.showDefaultErrorMessage("Something went wrong.")
+                self.blocked = !self.blocked
+                block.saveInBackgroundWithBlock({ [weak self] (_, error) in
+                    if let weakSelf = self where error != nil {
+                        weakSelf.blocked = !weakSelf.blocked
+                        MessageToUser.showDefaultErrorMessage(NSLocalizedString("Something went wrong.", comment: ""))
                     }
                 })
-            }
-            self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
-        }
+            }))
+        blockUserAlert.addAction(UIAlertAction(title: NSLocalizedString("Flag User", comment: ""),
+            style: .Default,
+            handler: { [unowned self] (_) in
+                let report = Report()
+                report.reportedUser = self.user
+                report.user = currentUser
+                report.saveInBackground()
+        }))
+        blockUserAlert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""),
+            style: .Cancel,
+            handler: nil))
+
+        presentViewController(blockUserAlert, animated: true, completion: nil)
     }
-   
 }

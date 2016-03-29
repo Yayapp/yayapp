@@ -357,25 +357,38 @@ class ParseHelper {
         }
     }
     
-    class func removeBlocks(owner:PFUser, user:PFUser, completion:()->()) {
+    class func removeBlocks(owner:PFUser, user:PFUser, completion:(NSError?)->()) {
         
         let query = PFQuery(className:Block.parseClassName())
         query.whereKey("owner", equalTo:owner)
         query.whereKey("user", equalTo:user)
-        query.findObjectsInBackgroundWithBlock {
-            objects, error in
+        query.findObjectsInBackgroundWithBlock { blocks, error in
+            guard let blocks = blocks as? [Block] where error == nil else {
+                completion(error)
+
+                return
+            }
+
+            var blocksCount = blocks.count
             
-            if error == nil {
-                if let objects = objects as? [Block] {
-                    for block in objects {
-                        block.deleteInBackground()
+            for block in blocks {
+                block.deleteInBackgroundWithBlock({ (_, error) in
+                    blocksCount -= 1
+
+                    guard error == nil else {
+                        completion(error)
+
+                        return
                     }
-                }
-                completion()
+
+                    if blocksCount == 0 {
+                        completion(nil)
+                    }
+                })
             }
         }
     }
-        
+
     class func getOwnerRequests(user: PFUser, block:RequestsResultBlock?) {
         
         let query1 = PFQuery(className:Event.parseClassName())

@@ -32,7 +32,6 @@ class AdvancedSettingsTableViewController: UITableViewController {
         blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
         blurryAlertViewController.aboutText = "Sorry, are you sure you want to delete your profile?"
         blurryAlertViewController.messageText = "You'll need another invite to start a new profile again."
-        blurryAlertViewController.hasCancelAction = true
         self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
     }
 

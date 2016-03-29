@@ -50,8 +50,14 @@ extension PFUser {
     func getName() -> String {
         return self.objectForKey("name") as! String
     }
-    func getImage(completion: (result: UIImage!) -> Void) {
-        let file = self.objectForKey("avatar") as! PFFile
+
+    func getImage(completion: (result: UIImage?) -> Void) {
+        guard let file = self.objectForKey("avatar") as? PFFile else {
+            completion(result: nil)
+
+            return
+        }
+
         file.getDataInBackgroundWithBlock {
             result, error in
             var image:UIImage!

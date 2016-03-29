@@ -103,6 +103,27 @@ Parse.Cloud.beforeDelete(Parse.User, function(request, response) {
                                                       });
                          });
 
+Parse.Cloud.beforeSave("Report", function(request, response) {
+    var reportedUser = request.object.get("reportedUser")
+
+    if (reportedUser == undefined) {
+        response.success()
+
+        return
+    }
+
+    var query = new Parse.Query(Parse.Object.extend("Report"))
+    query.equalTo("user", Parse.User.current())
+    query.equalTo("reportedUser", reportedUser)
+    query.count().then(function(count) {
+        if (count > 0) {
+            response.error("Report already exists")
+        } else {
+            response.success()
+        }
+    }, function(error) {response.error(error)})
+})
+
 Parse.Cloud.afterSave("Report", function(request) {
                       Parse.Cloud.useMasterKey();
                       var event = request.object.get('event');

@@ -207,7 +207,6 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                 blurryAlertViewController.action = BlurryAlertViewController.BUTTON_DELETE
                 blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
                 blurryAlertViewController.messageText = "Sorry, are you sure you want to delete this event?"
-                blurryAlertViewController.hasCancelAction = true
                 blurryAlertViewController.event = event
                 blurryAlertViewController.completion = {
                     if self.delegate != nil {
@@ -367,7 +366,6 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
         let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
         blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
         blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
-        blurryAlertViewController.hasCancelAction = true
         blurryAlertViewController.messageText = "You are about to flag this event for inappropriate content. Are you sure?"
         blurryAlertViewController.completion = {
             let report = Report()

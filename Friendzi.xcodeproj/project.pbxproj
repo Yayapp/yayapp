@@ -7,6 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3160BA981CAA693400047691 /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = 3160BA861CAA693400047691 /* main.js */; };
+		3160BA991CAA693400047691 /* moment-timezone-with-data.js in Resources */ = {isa = PBXBuildFile; fileRef = 3160BA871CAA693400047691 /* moment-timezone-with-data.js */; };
+		3160BA9A1CAA693400047691 /* moment.js in Resources */ = {isa = PBXBuildFile; fileRef = 3160BA881CAA693400047691 /* moment.js */; };
+		3160BA9B1CAA693400047691 /* _t2.js in Resources */ = {isa = PBXBuildFile; fileRef = 3160BA8B1CAA693400047691 /* _t2.js */; };
+		3160BA9C1CAA693400047691 /* footer.js in Resources */ = {isa = PBXBuildFile; fileRef = 3160BA8D1CAA693400047691 /* footer.js */; };
+		3160BA9D1CAA693400047691 /* header.js in Resources */ = {isa = PBXBuildFile; fileRef = 3160BA8E1CAA693400047691 /* header.js */; };
+		3160BA9E1CAA693400047691 /* jsrsasign.js in Resources */ = {isa = PBXBuildFile; fileRef = 3160BA8F1CAA693400047691 /* jsrsasign.js */; };
+		3160BA9F1CAA693400047691 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 3160BA901CAA693400047691 /* Makefile */; };
+		3160BAA01CAA693400047691 /* package.json in Resources */ = {isa = PBXBuildFile; fileRef = 3160BA911CAA693400047691 /* package.json */; };
+		3160BAA11CAA693400047691 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 3160BA921CAA693400047691 /* README.md */; };
+		3160BAA21CAA693400047691 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 3160BA931CAA693400047691 /* README.md */; };
+		3160BAA31CAA693400047691 /* global.json in Resources */ = {isa = PBXBuildFile; fileRef = 3160BA951CAA693400047691 /* global.json */; };
+		3160BAA41CAA693400047691 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 3160BA971CAA693400047691 /* index.html */; };
 		867E5F77511EAE0AA07E0F43 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8B15517F27561DB20B85177 /* libPods.a */; };
 		8B1531B71B5F90FB007A2EC7 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1531B61B5F90FB007A2EC7 /* Event.swift */; };
 		8B1531B91B5F9A9E007A2EC7 /* ParseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1531B81B5F9A9E007A2EC7 /* ParseHelper.swift */; };
@@ -78,6 +91,19 @@
 
 /* Begin PBXFileReference section */
 		116D70F35B19AD9546398474 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		3160BA861CAA693400047691 /* main.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = main.js; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.c; };
+		3160BA871CAA693400047691 /* moment-timezone-with-data.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "moment-timezone-with-data.js"; sourceTree = "<group>"; };
+		3160BA881CAA693400047691 /* moment.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = moment.js; sourceTree = "<group>"; };
+		3160BA8B1CAA693400047691 /* _t2.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = _t2.js; sourceTree = "<group>"; };
+		3160BA8D1CAA693400047691 /* footer.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = footer.js; sourceTree = "<group>"; };
+		3160BA8E1CAA693400047691 /* header.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = header.js; sourceTree = "<group>"; };
+		3160BA8F1CAA693400047691 /* jsrsasign.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jsrsasign.js; sourceTree = "<group>"; };
+		3160BA901CAA693400047691 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		3160BA911CAA693400047691 /* package.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = package.json; sourceTree = "<group>"; };
+		3160BA921CAA693400047691 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		3160BA931CAA693400047691 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		3160BA951CAA693400047691 /* global.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = global.json; sourceTree = "<group>"; };
+		3160BA971CAA693400047691 /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		87E5039D1AFE3D9446032CF4 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		8B1531B61B5F90FB007A2EC7 /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		8B1531B81B5F9A9E007A2EC7 /* ParseHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseHelper.swift; sourceTree = "<group>"; };
@@ -163,6 +189,74 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3160BA841CAA693400047691 /* YaYApp */ = {
+			isa = PBXGroup;
+			children = (
+				3160BA851CAA693400047691 /* cloud */,
+				3160BA941CAA693400047691 /* config */,
+				3160BA961CAA693400047691 /* public */,
+			);
+			path = YaYApp;
+			sourceTree = SOURCE_ROOT;
+		};
+		3160BA851CAA693400047691 /* cloud */ = {
+			isa = PBXGroup;
+			children = (
+				3160BA861CAA693400047691 /* main.js */,
+				3160BA871CAA693400047691 /* moment-timezone-with-data.js */,
+				3160BA881CAA693400047691 /* moment.js */,
+				3160BA891CAA693400047691 /* node_modules */,
+				3160BA931CAA693400047691 /* README.md */,
+			);
+			path = cloud;
+			sourceTree = "<group>";
+		};
+		3160BA891CAA693400047691 /* node_modules */ = {
+			isa = PBXGroup;
+			children = (
+				3160BA8A1CAA693400047691 /* jsrsasign */,
+			);
+			path = node_modules;
+			sourceTree = "<group>";
+		};
+		3160BA8A1CAA693400047691 /* jsrsasign */ = {
+			isa = PBXGroup;
+			children = (
+				3160BA8B1CAA693400047691 /* _t2.js */,
+				3160BA8C1CAA693400047691 /* lib */,
+				3160BA901CAA693400047691 /* Makefile */,
+				3160BA911CAA693400047691 /* package.json */,
+				3160BA921CAA693400047691 /* README.md */,
+			);
+			path = jsrsasign;
+			sourceTree = "<group>";
+		};
+		3160BA8C1CAA693400047691 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				3160BA8D1CAA693400047691 /* footer.js */,
+				3160BA8E1CAA693400047691 /* header.js */,
+				3160BA8F1CAA693400047691 /* jsrsasign.js */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		3160BA941CAA693400047691 /* config */ = {
+			isa = PBXGroup;
+			children = (
+				3160BA951CAA693400047691 /* global.json */,
+			);
+			path = config;
+			sourceTree = "<group>";
+		};
+		3160BA961CAA693400047691 /* public */ = {
+			isa = PBXGroup;
+			children = (
+				3160BA971CAA693400047691 /* index.html */,
+			);
+			path = public;
+			sourceTree = "<group>";
+		};
 		7F1CE1198C8FF0D6E40770ED /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -229,6 +323,7 @@
 			isa = PBXGroup;
 			children = (
 				9901A9641B57D55C00947DB8 /* Yay-Bridging-Header.h */,
+				3160BA841CAA693400047691 /* YaYApp */,
 				997C23891B6668000070DDB2 /* views */,
 				8B1531B51B5F90E1007A2EC7 /* Models */,
 				995032911B5662C300D792C5 /* controllers */,
@@ -389,9 +484,19 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3160BAA31CAA693400047691 /* global.json in Resources */,
 				995032761B564B4400D792C5 /* Main.storyboard in Resources */,
+				3160BA9D1CAA693400047691 /* header.js in Resources */,
+				3160BAA41CAA693400047691 /* index.html in Resources */,
 				9950327B1B564B4400D792C5 /* LaunchScreen.xib in Resources */,
+				3160BAA01CAA693400047691 /* package.json in Resources */,
+				3160BA9A1CAA693400047691 /* moment.js in Resources */,
+				3160BA9C1CAA693400047691 /* footer.js in Resources */,
+				3160BA9E1CAA693400047691 /* jsrsasign.js in Resources */,
 				995032781B564B4400D792C5 /* Images.xcassets in Resources */,
+				3160BA9B1CAA693400047691 /* _t2.js in Resources */,
+				3160BA991CAA693400047691 /* moment-timezone-with-data.js in Resources */,
+				3160BA981CAA693400047691 /* main.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -467,6 +572,7 @@
 				99FDE54B1B5A74FF004CE61B /* UserProfileViewController.swift in Sources */,
 				9917D9E41B56B7830081A796 /* ListEventsViewController.swift in Sources */,
 				99B0C62E1C74DDFD004D8A99 /* GroupsViewCell.swift in Sources */,
+				3160BAA11CAA693400047691 /* README.md in Sources */,
 				99EF69D01BC43F7E00DA0073 /* MessagesTableViewController.swift in Sources */,
 				9917D9E61B56BB660081A796 /* EventDetailsViewController.swift in Sources */,
 				997C23881B6667F10070DDB2 /* EventsTableViewCell.swift in Sources */,
@@ -488,8 +594,10 @@
 				997C23931B67B9960070DDB2 /* CategoryCollectionViewCell.swift in Sources */,
 				99253FF61B6ABBF40078B668 /* Extensions.swift in Sources */,
 				9907A3591BCBEC0C00D98A6F /* Utils.swift in Sources */,
+				3160BA9F1CAA693400047691 /* Makefile in Sources */,
 				9907A37B1BCE4BED00D98A6F /* Report.swift in Sources */,
 				995032991B56741700D792C5 /* CreateEmailAccountViewController.swift in Sources */,
+				3160BAA21CAA693400047691 /* README.md in Sources */,
 				9917D9E21B56A94F0081A796 /* MapEventsViewController.swift in Sources */,
 				993D3ED91B8DCA900023B054 /* RequestsTableViewController.swift in Sources */,
 				99A6C9FC1BDBCC4D002060C2 /* Block.swift in Sources */,

@@ -996,39 +996,77 @@
                                 <nil key="highlightedColor"/>
                                 <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             </label>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MDe-5B-2Xu">
-                                <rect key="frame" x="274" y="28" width="30" height="30"/>
+                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jig-q8-Bhw">
+                                <rect key="frame" x="266" y="28" width="46" height="46"/>
+                                <subviews>
+                                    <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MDe-5B-2Xu">
+                                        <rect key="frame" x="4" y="4" width="38" height="38"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="38" id="TOe-C2-qgv"/>
+                                            <constraint firstAttribute="width" secondItem="MDe-5B-2Xu" secondAttribute="height" multiplier="1:1" id="l7C-Co-0F5"/>
+                                            <constraint firstAttribute="height" constant="38" id="v10-lX-1XD"/>
+                                        </constraints>
+                                        <state key="normal" image="closeico">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="l7C-Co-0F5"/>
+                                            </mask>
+                                        </variation>
+                                        <connections>
+                                            <action selector="cancel:" destination="DC7-pa-wPm" eventType="touchUpInside" id="A0T-5i-pYb"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.5" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="30" id="TOe-C2-qgv"/>
-                                    <constraint firstAttribute="width" secondItem="MDe-5B-2Xu" secondAttribute="height" multiplier="1:1" id="l7C-Co-0F5"/>
-                                    <constraint firstAttribute="height" constant="30" id="v10-lX-1XD"/>
+                                    <constraint firstItem="MDe-5B-2Xu" firstAttribute="top" secondItem="Jig-q8-Bhw" secondAttribute="top" constant="4" id="EpE-kx-Bla"/>
+                                    <constraint firstItem="MDe-5B-2Xu" firstAttribute="leading" secondItem="Jig-q8-Bhw" secondAttribute="leading" id="EvV-RA-vVJ"/>
+                                    <constraint firstItem="MDe-5B-2Xu" firstAttribute="top" secondItem="Jig-q8-Bhw" secondAttribute="top" id="ORB-Mf-BND"/>
+                                    <constraint firstAttribute="bottom" secondItem="MDe-5B-2Xu" secondAttribute="bottom" constant="4" id="QK4-Zx-dJl"/>
+                                    <constraint firstAttribute="trailing" secondItem="MDe-5B-2Xu" secondAttribute="trailing" constant="8" id="XUt-oM-cxf"/>
+                                    <constraint firstAttribute="bottom" secondItem="MDe-5B-2Xu" secondAttribute="bottom" id="oJc-oc-CRp"/>
+                                    <constraint firstItem="MDe-5B-2Xu" firstAttribute="leading" secondItem="Jig-q8-Bhw" secondAttribute="leading" constant="4" id="p9O-o1-CaE"/>
+                                    <constraint firstAttribute="trailing" secondItem="MDe-5B-2Xu" secondAttribute="trailing" constant="4" id="qhY-ZV-SWb"/>
                                 </constraints>
-                                <state key="normal" image="closeico">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="cancel:" destination="DC7-pa-wPm" eventType="touchUpInside" id="A0T-5i-pYb"/>
-                                </connections>
-                            </button>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="EvV-RA-vVJ"/>
+                                        <exclude reference="ORB-Mf-BND"/>
+                                        <exclude reference="XUt-oM-cxf"/>
+                                        <exclude reference="oJc-oc-CRp"/>
+                                    </mask>
+                                </variation>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="BUY-du-Aha" firstAttribute="top" secondItem="tJA-iK-Azm" secondAttribute="bottom" constant="8" id="3Od-Z5-9Kc"/>
-                            <constraint firstItem="MDe-5B-2Xu" firstAttribute="top" secondItem="tvy-YV-uvj" secondAttribute="bottom" constant="8" id="Edu-6p-hye"/>
                             <constraint firstItem="tJA-iK-Azm" firstAttribute="leading" secondItem="pYj-3l-hWn" secondAttribute="leadingMargin" id="HnS-Y9-223"/>
+                            <constraint firstAttribute="trailing" secondItem="MDe-5B-2Xu" secondAttribute="trailing" id="Jsn-Ah-IXk"/>
                             <constraint firstItem="tJA-iK-Azm" firstAttribute="trailing" secondItem="pYj-3l-hWn" secondAttribute="trailingMargin" id="Luj-ah-9ei"/>
                             <constraint firstAttribute="centerY" secondItem="dIp-9n-eDa" secondAttribute="centerY" id="QQY-ca-44B"/>
+                            <constraint firstAttribute="trailing" secondItem="Jig-q8-Bhw" secondAttribute="trailing" constant="8" id="RrF-7k-wG3"/>
+                            <constraint firstItem="Jig-q8-Bhw" firstAttribute="top" secondItem="tvy-YV-uvj" secondAttribute="bottom" constant="8" id="c0V-on-Jch"/>
                             <constraint firstAttribute="centerX" secondItem="dIp-9n-eDa" secondAttribute="centerX" id="cmg-EB-MEt"/>
                             <constraint firstItem="BUY-du-Aha" firstAttribute="trailing" secondItem="pYj-3l-hWn" secondAttribute="trailingMargin" id="dk3-hi-lrY"/>
                             <constraint firstItem="BUY-du-Aha" firstAttribute="leading" secondItem="pYj-3l-hWn" secondAttribute="leadingMargin" id="fBd-Zg-dDT"/>
                             <constraint firstItem="dIp-9n-eDa" firstAttribute="top" secondItem="BUY-du-Aha" secondAttribute="bottom" constant="8" id="nE0-GV-geH"/>
-                            <constraint firstAttribute="trailing" secondItem="MDe-5B-2Xu" secondAttribute="trailing" constant="16" id="yNG-oE-yxu"/>
+                            <constraint firstItem="MDe-5B-2Xu" firstAttribute="top" secondItem="tvy-YV-uvj" secondAttribute="bottom" id="rMI-RQ-Mgd"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="Jsn-Ah-IXk"/>
+                                <exclude reference="rMI-RQ-Mgd"/>
+                            </mask>
+                        </variation>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="about" destination="tJA-iK-Azm" id="pNL-sM-ulf"/>
                         <outlet property="cancel" destination="MDe-5B-2Xu" id="bP7-oq-xyB"/>
+                        <outlet property="cancelButtonPlaceholderView" destination="Jig-q8-Bhw" id="SF7-mM-QOZ"/>
                         <outlet property="centerButton" destination="dIp-9n-eDa" id="9of-rf-dLa"/>
                         <outlet property="message" destination="BUY-du-Aha" id="IhG-JS-d62"/>
                     </connections>
@@ -2866,7 +2904,7 @@
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Event Name" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="C7x-Rc-Jfd">
                                 <rect key="frame" x="0.0" y="168" width="320" height="30"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="tintColor" red="0.48627450979999998" green="0.49803921569999998" blue="0.50196078430000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="EAp-ao-V6k"/>
                                 </constraints>
@@ -4022,7 +4060,7 @@
                                 <button hidden="YES" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="hWg-du-lSk">
                                     <rect key="frame" x="60" y="7" width="200" height="33"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                    <state key="normal" title="Block user">
+                                    <state key="normal" title="Report User">
                                         <color key="titleColor" red="0.01176470588" green="0.46274509800000002" blue="0.44705882349999998" alpha="1" colorSpace="calibratedRGB"/>
                                     </state>
                                     <connections>
@@ -5286,12 +5324,12 @@
         <image name="uploadphoto_ico" width="42" height="46"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Grk-8x-ER7"/>
-        <segue reference="xM7-AU-ldA"/>
         <segue reference="obh-Kf-QaJ"/>
         <segue reference="viE-SB-wbV"/>
         <segue reference="3Ly-PZ-TUn"/>
-        <segue reference="NDv-lM-SCZ"/>
+        <segue reference="G5O-Y9-BTI"/>
+        <segue reference="xM7-AU-ldA"/>
+        <segue reference="dCM-D0-qCd"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
 </document>

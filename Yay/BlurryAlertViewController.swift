@@ -19,11 +19,11 @@ class BlurryAlertViewController: UIViewController {
     var aboutText:String! = ""
     var messageText:String! = ""
     var action:String!
-    var hasCancelAction:Bool = false
     var event:Event?
     var completion:(()->Void)?
     
     @IBOutlet weak var cancel: UIButton!
+    @IBOutlet weak var cancelButtonPlaceholderView: UIView!
     @IBOutlet weak var about: UILabel!
     
     @IBOutlet weak var message: UILabel!
@@ -33,11 +33,11 @@ class BlurryAlertViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        cancelButtonPlaceholderView.layer.cornerRadius = cancelButtonPlaceholderView.bounds.width / 2
+
         about.text = aboutText
         message.text = messageText
-        
-        cancel.hidden = !hasCancelAction
-        
+                
         centerButton.setImage(UIImage(named: action), forState: .Normal)
         
         centerButton.addTarget(self, action: Selector("\(action):"), forControlEvents: UIControlEvents.TouchUpInside)
