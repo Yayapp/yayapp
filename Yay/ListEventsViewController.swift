@@ -36,7 +36,7 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
             let currentPFLocation = PFUser.currentUser()!.objectForKey("location") as! PFGeoPoint
             currentLocation = CLLocation(latitude: currentPFLocation.latitude, longitude: currentPFLocation.longitude)
         
-        
+        events.registerNib(EventsTableViewCell.nib, forCellReuseIdentifier: EventsTableViewCell.reuseIdentifier)
         events.delegate = self
         events.dataSource = self
         
@@ -50,14 +50,29 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
         eventsData = eventsList
         events.reloadData()
     }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return eventsData.count
     }
-    
+
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+
+    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 8
+    }
+
+    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = UIView()
+        header.backgroundColor = UIColor.clearColor()
+
+        return header
+    }
+
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let cell = events.dequeueReusableCellWithIdentifier("Cell") as! EventsTableViewCell
+        let cell = events.dequeueReusableCellWithIdentifier(EventsTableViewCell.reuseIdentifier) as! EventsTableViewCell
         let event:Event! = eventsData[indexPath.row]
         let cllocation = CLLocation(latitude: event.location.latitude, longitude: event.location.longitude)
         let distanceBetween: CLLocationDistance = cllocation.distanceFromLocation(currentLocation!)
@@ -67,13 +82,12 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
         cell.title.text = event.name
         
         cllocation.getLocationString(cell.location, button: nil, timezoneCompletion: nil)
-        
+
         cell.date.text = dateFormatter.stringFromDate(event.startDate)
         cell.howFar.text = "\(distanceStr)km"
         
         cell.picture.file = event.photo
         cell.picture.loadInBackground()
-        
         
         event.owner.fetchIfNeededInBackgroundWithBlock({
             result, error in
@@ -100,7 +114,7 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
         
         for (index, attendee) in attendees.enumerate() {
             let attendeeButton = attendeeButtons[index]
-            
+
             attendeeButton.addTarget(self, action: "attendeeProfile:", forControlEvents: .TouchUpInside)
             attendeeButton.tag = indexPath.row
             attendeeButton.titleLabel?.tag = index
@@ -134,18 +148,14 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
         if attendeeButtons.count > attendees.count && event.owner.objectId != PFUser.currentUser()?.objectId && attendees.count < (event.limit-1){
             let attendeeButton = attendeeButtons[attendees.count]
             attendeeButton.addTarget(self, action: "join:", forControlEvents: .TouchUpInside)
-            attendeeButton.setTitle("JOIN", forState: .Normal)
+            attendeeButton.setTitle("Join", forState: .Normal)
             attendeeButton.hidden = false
             attendeeButton.tag = indexPath.row
         }
         
         return cell
     }
-    
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return tableView.frame.height/2
-    }
-    
+
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if(delegate != nil) {
             delegate!.madeEventChoice(eventsData[indexPath.row])

@@ -76,7 +76,6 @@ class ChooseEventPictureViewController: UIViewController, UITableViewDataSource,
     @IBAction func library(sender: AnyObject) {
         picker.allowsEditing = true //2
         picker.sourceType = .PhotoLibrary //3
-        picker.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
         presentViewController(picker, animated: true, completion: nil)
     }
     

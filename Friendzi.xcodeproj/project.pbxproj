@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3112B11F1CAABD7900AE064F /* EventsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3112B11D1CAABD7900AE064F /* EventsTableViewCell.swift */; };
+		3112B1201CAABD7900AE064F /* EventsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3112B11E1CAABD7900AE064F /* EventsTableViewCell.xib */; };
 		3160BA981CAA693400047691 /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = 3160BA861CAA693400047691 /* main.js */; };
 		3160BA991CAA693400047691 /* moment-timezone-with-data.js in Resources */ = {isa = PBXBuildFile; fileRef = 3160BA871CAA693400047691 /* moment-timezone-with-data.js */; };
 		3160BA9A1CAA693400047691 /* moment.js in Resources */ = {isa = PBXBuildFile; fileRef = 3160BA881CAA693400047691 /* moment.js */; };
@@ -59,7 +61,6 @@
 		995A57F41C6CFFA200680CB6 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995A57F31C6CFFA200680CB6 /* Notification.swift */; };
 		995A57F61C6E6A4500680CB6 /* GroupDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995A57F51C6E6A4500680CB6 /* GroupDetailsViewController.swift */; };
 		9967D8331B7CFD10003C3CE1 /* BlurryAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9967D8321B7CFD10003C3CE1 /* BlurryAlertViewController.swift */; };
-		997C23881B6667F10070DDB2 /* EventsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997C23871B6667F10070DDB2 /* EventsTableViewCell.swift */; };
 		997C238B1B668CFB0070DDB2 /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997C238A1B668CFB0070DDB2 /* EventsViewController.swift */; };
 		997C238D1B67889B0070DDB2 /* MessageToUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997C238C1B67889B0070DDB2 /* MessageToUser.swift */; };
 		997C238F1B6791AE0070DDB2 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997C238E1B6791AE0070DDB2 /* Category.swift */; };
@@ -91,6 +92,8 @@
 
 /* Begin PBXFileReference section */
 		116D70F35B19AD9546398474 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		3112B11D1CAABD7900AE064F /* EventsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsTableViewCell.swift; sourceTree = "<group>"; };
+		3112B11E1CAABD7900AE064F /* EventsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventsTableViewCell.xib; sourceTree = "<group>"; };
 		3160BA861CAA693400047691 /* main.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = main.js; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.c; };
 		3160BA871CAA693400047691 /* moment-timezone-with-data.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "moment-timezone-with-data.js"; sourceTree = "<group>"; };
 		3160BA881CAA693400047691 /* moment.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = moment.js; sourceTree = "<group>"; };
@@ -146,7 +149,6 @@
 		995A57F31C6CFFA200680CB6 /* Notification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		995A57F51C6E6A4500680CB6 /* GroupDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupDetailsViewController.swift; sourceTree = "<group>"; };
 		9967D8321B7CFD10003C3CE1 /* BlurryAlertViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlurryAlertViewController.swift; sourceTree = "<group>"; };
-		997C23871B6667F10070DDB2 /* EventsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsTableViewCell.swift; sourceTree = "<group>"; };
 		997C238A1B668CFB0070DDB2 /* EventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
 		997C238C1B67889B0070DDB2 /* MessageToUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageToUser.swift; sourceTree = "<group>"; };
 		997C238E1B6791AE0070DDB2 /* Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
@@ -189,6 +191,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3112B1191CAABD3F00AE064F /* View */ = {
+			isa = PBXGroup;
+			children = (
+				3112B11A1CAABD3F00AE064F /* EventsCell */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		3112B11A1CAABD3F00AE064F /* EventsCell */ = {
+			isa = PBXGroup;
+			children = (
+				3112B11D1CAABD7900AE064F /* EventsTableViewCell.swift */,
+				3112B11E1CAABD7900AE064F /* EventsTableViewCell.xib */,
+			);
+			path = EventsCell;
+			sourceTree = "<group>";
+		};
 		3160BA841CAA693400047691 /* YaYApp */ = {
 			isa = PBXGroup;
 			children = (
@@ -324,6 +343,7 @@
 			children = (
 				9901A9641B57D55C00947DB8 /* Yay-Bridging-Header.h */,
 				3160BA841CAA693400047691 /* YaYApp */,
+				3112B1191CAABD3F00AE064F /* View */,
 				997C23891B6668000070DDB2 /* views */,
 				8B1531B51B5F90E1007A2EC7 /* Models */,
 				995032911B5662C300D792C5 /* controllers */,
@@ -397,7 +417,6 @@
 		997C23891B6668000070DDB2 /* views */ = {
 			isa = PBXGroup;
 			children = (
-				997C23871B6667F10070DDB2 /* EventsTableViewCell.swift */,
 				997C23921B67B9960070DDB2 /* CategoryCollectionViewCell.swift */,
 				997C23981B67F6250070DDB2 /* EventPhotoTableViewCell.swift */,
 				995363481B693F4B00350133 /* CustomPointAnnotation.swift */,
@@ -486,6 +505,7 @@
 			files = (
 				3160BAA31CAA693400047691 /* global.json in Resources */,
 				995032761B564B4400D792C5 /* Main.storyboard in Resources */,
+				3112B1201CAABD7900AE064F /* EventsTableViewCell.xib in Resources */,
 				3160BA9D1CAA693400047691 /* header.js in Resources */,
 				3160BAA41CAA693400047691 /* index.html in Resources */,
 				9950327B1B564B4400D792C5 /* LaunchScreen.xib in Resources */,
@@ -565,6 +585,7 @@
 				99FDE5451B58E972004CE61B /* ChooseDateTimeViewController.swift in Sources */,
 				993D3EDB1B8DD2FF0023B054 /* RequestTableViewCell.swift in Sources */,
 				993AC6191BA7293C00B677D6 /* TutorialViewController.swift in Sources */,
+				3112B11F1CAABD7900AE064F /* EventsTableViewCell.swift in Sources */,
 				993D3ED71B8CE1170023B054 /* Request.swift in Sources */,
 				992037401C669E9C00051D06 /* CategoryHeader.swift in Sources */,
 				990CA7251B8206C000591F33 /* InstructionViewController.swift in Sources */,
@@ -575,7 +596,6 @@
 				3160BAA11CAA693400047691 /* README.md in Sources */,
 				99EF69D01BC43F7E00DA0073 /* MessagesTableViewController.swift in Sources */,
 				9917D9E61B56BB660081A796 /* EventDetailsViewController.swift in Sources */,
-				997C23881B6667F10070DDB2 /* EventsTableViewCell.swift in Sources */,
 				9967D8331B7CFD10003C3CE1 /* BlurryAlertViewController.swift in Sources */,
 				992037421C68D38500051D06 /* CategoryType.swift in Sources */,
 				9917D9DA1B567E520081A796 /* MainRootViewController.swift in Sources */,
