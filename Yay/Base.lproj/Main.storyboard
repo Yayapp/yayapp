@@ -119,7 +119,7 @@
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="instagramLogin:" destination="w48-1L-I7x" eventType="touchUpInside" id="yCp-r4-5qj"/>
+                                                    <action selector="twitterLogin:" destination="w48-1L-I7x" eventType="touchUpInside" id="FBB-SE-3Xf"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="khS-42-hi1">
@@ -132,7 +132,7 @@
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="twitterLogin:" destination="w48-1L-I7x" eventType="touchUpInside" id="b5n-iu-hP5"/>
+                                                    <action selector="instagramLogin:" destination="w48-1L-I7x" eventType="touchUpInside" id="umP-1E-KFj"/>
                                                 </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="or" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iKa-Bz-LIJ">
@@ -1058,7 +1058,7 @@
                                 <items>
                                     <navigationItem id="n9g-7k-fSq">
                                         <barButtonItem key="rightBarButtonItem" image="closeico" id="wHR-Sd-lpN">
-                                            <color key="tintColor" red="0.99215686270000003" green="0.72549019609999998" blue="0.14901960780000001" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                             <connections>
                                                 <action selector="close:" destination="PCO-f2-J8E" id="5Yz-kF-hxL"/>
                                             </connections>
@@ -1116,7 +1116,10 @@
                                                 </constraints>
                                                 <color key="textColor" red="0.48627450979999998" green="0.49803921569999998" blue="0.50196078430000002" alpha="1" colorSpace="calibratedRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                                                <textInputTraits key="textInputTraits" returnKeyType="next"/>
+                                                <connections>
+                                                    <outlet property="delegate" destination="yIt-h0-NIl" id="eHU-L7-0fu"/>
+                                                </connections>
                                             </textField>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="rDW-gb-V2q">
                                                 <rect key="frame" x="0.0" y="245" width="320" height="35"/>
@@ -1126,7 +1129,10 @@
                                                 </constraints>
                                                 <color key="textColor" red="0.48627450979999998" green="0.49803921569999998" blue="0.50196078430000002" alpha="1" colorSpace="calibratedRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="done"/>
+                                                <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="next"/>
+                                                <connections>
+                                                    <outlet property="delegate" destination="yIt-h0-NIl" id="NBJ-0q-C7E"/>
+                                                </connections>
                                             </textField>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hB6-if-RUh">
                                                 <rect key="frame" x="0.0" y="310" width="320" height="35"/>
@@ -1136,7 +1142,10 @@
                                                 </constraints>
                                                 <color key="textColor" red="0.48627450979999998" green="0.49803921569999998" blue="0.50196078430000002" alpha="1" colorSpace="calibratedRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                <textInputTraits key="textInputTraits" returnKeyType="done" secureTextEntry="YES"/>
+                                                <textInputTraits key="textInputTraits" returnKeyType="next" secureTextEntry="YES"/>
+                                                <connections>
+                                                    <outlet property="delegate" destination="yIt-h0-NIl" id="JlL-z6-avN"/>
+                                                </connections>
                                             </textField>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Re-type Password" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="4Gf-0d-1RP">
                                                 <rect key="frame" x="0.0" y="375" width="320" height="35"/>
@@ -1147,6 +1156,9 @@
                                                 <color key="textColor" red="0.48627450979999998" green="0.49803921569999998" blue="0.50196078430000002" alpha="1" colorSpace="calibratedRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                 <textInputTraits key="textInputTraits" returnKeyType="done" secureTextEntry="YES"/>
+                                                <connections>
+                                                    <outlet property="delegate" destination="yIt-h0-NIl" id="ibg-yl-YZV"/>
+                                                </connections>
                                             </textField>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qV4-gQ-cB2">
                                                 <rect key="frame" x="282" y="20" width="30" height="30"/>
@@ -1251,6 +1263,7 @@
                     <connections>
                         <outlet property="createAccount" destination="C1Q-GU-d7I" id="hkd-XC-q3L"/>
                         <outlet property="email" destination="rDW-gb-V2q" id="Kjv-vk-BrK"/>
+                        <outlet property="keyboardAvoidingScrollView" destination="ye1-pA-723" id="OsO-HC-MfV"/>
                         <outlet property="name" destination="9Kd-EG-wLh" id="5gj-xT-wFm"/>
                         <outlet property="password1" destination="hB6-if-RUh" id="0oi-q5-9Wv"/>
                         <outlet property="password2" destination="4Gf-0d-1RP" id="LNL-Rb-hKe"/>
@@ -1274,21 +1287,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="faz-uc-9Q5">
-                                <rect key="frame" x="16" y="28" width="288" height="138"/>
-                                <color key="backgroundColor" red="0.35294117650000001" green="0.74901960779999999" blue="0.3294117647" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="faz-uc-9Q5" secondAttribute="height" multiplier="48:23" id="Jge-nj-pXc"/>
-                                </constraints>
-                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="5"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pah-Md-ht3">
                                 <rect key="frame" x="204" y="174" width="60" height="60"/>
                                 <constraints>
@@ -1313,6 +1311,21 @@
                                     <action selector="ok:" destination="d0V-JO-o0Z" eventType="touchUpInside" id="UhJ-i7-HPf"/>
                                 </connections>
                             </button>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="faz-uc-9Q5">
+                                <rect key="frame" x="16" y="28" width="288" height="138"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="faz-uc-9Q5" secondAttribute="height" multiplier="48:23" id="Jge-nj-pXc"/>
+                                </constraints>
+                                <color key="textColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </textView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -5273,12 +5286,12 @@
         <image name="uploadphoto_ico" width="42" height="46"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="3Ly-PZ-TUn"/>
-        <segue reference="viE-SB-wbV"/>
-        <segue reference="Vmc-p7-IaB"/>
-        <segue reference="obh-Kf-QaJ"/>
         <segue reference="Grk-8x-ER7"/>
-        <segue reference="dCM-D0-qCd"/>
+        <segue reference="xM7-AU-ldA"/>
+        <segue reference="obh-Kf-QaJ"/>
+        <segue reference="viE-SB-wbV"/>
+        <segue reference="3Ly-PZ-TUn"/>
+        <segue reference="NDv-lM-SCZ"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
 </document>

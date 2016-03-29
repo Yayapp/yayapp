@@ -246,7 +246,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
         } else if descriptionText.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).isEmpty {
             MessageToUser.showDefaultErrorMessage("Please enter description")
         } else if chosenCategories.count == 0 {
-            MessageToUser.showDefaultErrorMessage("Please choose category")
+            MessageToUser.showDefaultErrorMessage("OOPS, Please Share event with a Group")
         } else if chosenPhoto == nil {
             MessageToUser.showDefaultErrorMessage("Please choose photo")
         } else {
