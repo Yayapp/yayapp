@@ -25,6 +25,15 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
     @IBOutlet weak var categories: UICollectionView!
     
     @IBOutlet weak var filterContainer: UIImageView!
+
+    lazy var searchController: UISearchController = {
+        let searchController = UISearchController(searchResultsController: nil)
+        searchController.searchBar.delegate = self
+
+        return searchController
+    }()
+    var searchControllerText: String?
+
     var categoriesData:[Category]! = []
     var privateCategoriesData:[Category]! = []
     var publicCategoriesData:[Category]! = []
@@ -192,16 +201,12 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
     }
     
     @IBAction func searchAction(sender: AnyObject) {
-        
-        let searchController = UISearchController(searchResultsController: nil)
-        searchController.searchBar.delegate = self
+        searchController.searchBar.text = searchControllerText
         presentViewController(searchController, animated: true, completion: nil)
-        
     }
 
-    
-    func searchBar(searchBar: UISearchBar,
-        textDidChange searchText: String) {
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        searchControllerText = searchText
         search(searchText)
     }
     

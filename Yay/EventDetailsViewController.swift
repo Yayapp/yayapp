@@ -51,7 +51,6 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     @IBOutlet weak var chatUnderline: UIView!
     
     @IBOutlet weak var messagesContainer: UIView!
-   
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,107 +83,115 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
         
         dateFormatter.dateFormat = "EEE dd MMM 'at' H:mm"
         
-        event.fetchInBackgroundWithBlock({
-            result, error in
-            
-            if error == nil {
-                self.attendees = self.event.attendees.filter({$0.objectId != self.event.owner.objectId})
-                
-                for var index = 0; index < (self.event.limit-1); ++index {
-                    self.attendeeButtons[index].setImage(UIImage(named: "upload_pic"), forState: .Normal)
+        event.fetchInBackgroundWithBlock({ [weak self] fetchedEvent, error in
+            guard let `self` = self,
+                fetchedEvent = fetchedEvent as? Event
+                where error == nil else {
+                    MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
+
+                    return
+            }
+
+            self.event = fetchedEvent
+            self.attendees = self.event.attendees.filter({$0.objectId != self.event.owner.objectId})
+
+            for var index = 0; index < (self.event.limit-1); ++index {
+                self.attendeeButtons[index].setImage(UIImage(named: "upload_pic"), forState: .Normal)
+            }
+            let currentPFLocation = PFUser.currentUser()!.objectForKey("location") as! PFGeoPoint
+            self.currentLocation = CLLocation(latitude: currentPFLocation.latitude, longitude: currentPFLocation.longitude)
+
+            self.event.owner.fetchIfNeededInBackgroundWithBlock({
+                result, error in
+                if error == nil {
+                    if let avatar = self.event.owner["avatar"] as? PFFile {
+
+                        avatar.getDataInBackgroundWithBlock({
+                            (data:NSData?, error:NSError?) in
+                            if(error == nil) {
+                                let image = UIImage(data:data!)
+                                self.author.setImage(image, forState: .Normal)
+                                self.author.layer.cornerRadius = self.author.frame.width/2
+                            } else {
+                                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+                            }
+                        })
+
+                    }
+                } else {
+                    MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                 }
-                    let currentPFLocation = PFUser.currentUser()!.objectForKey("location") as! PFGeoPoint
-                    self.currentLocation = CLLocation(latitude: currentPFLocation.latitude, longitude: currentPFLocation.longitude)
-                    
-                
-                
-                self.event.owner.fetchIfNeededInBackgroundWithBlock({
+            })
+
+            for (index, attendee) in self.attendees.enumerate() {
+                let attendeeButton = self.attendeeButtons[index]
+
+                attendeeButton.addTarget(self, action: "attendeeProfile:", forControlEvents: .TouchUpInside)
+                attendeeButton.tag = index
+
+                attendee.fetchIfNeededInBackgroundWithBlock({
                     result, error in
                     if error == nil {
-                        if let avatar = self.event.owner["avatar"] as? PFFile {
-                            
-                                avatar.getDataInBackgroundWithBlock({
-                                    (data:NSData?, error:NSError?) in
-                                    if(error == nil) {
-                                        let image = UIImage(data:data!)
-                                        self.author.setImage(image, forState: .Normal)
-                                        self.author.layer.cornerRadius = self.author.frame.width/2
-                                    } else {
-                                        MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-                                    }
-                                })
-                            
+                        if let attendeeAvatar = attendee["avatar"] as? PFFile {
+
+                            attendeeAvatar.getDataInBackgroundWithBlock({
+                                (data:NSData?, error:NSError?) in
+                                if(error == nil) {
+                                    let image = UIImage(data:data!)
+                                    attendeeButton.setImage(image, forState: .Normal)
+                                } else {
+                                    MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+                                }
+                            })
+                        } else {
+                            attendeeButton.setImage(UIImage(named: "upload_pic"), forState: .Normal)
+                            MessageToUser.showDefaultErrorMessage("Some user has no avatar.")
                         }
                     } else {
                         MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                     }
                 })
-                
-                for (index, attendee) in self.attendees.enumerate() {
-                    let attendeeButton = self.attendeeButtons[index]
-                    
-                    attendeeButton.addTarget(self, action: "attendeeProfile:", forControlEvents: .TouchUpInside)
-                    attendeeButton.tag = index
-                    
-                    attendee.fetchIfNeededInBackgroundWithBlock({
+            }
+
+            let attendedThisEvent = !(self.event.attendees.filter({$0.objectId == PFUser.currentUser()?.objectId}).count == 0)
+
+            if(PFUser.currentUser()?.objectId != self.event.owner.objectId) {
+
+                if !attendedThisEvent && self.event.limit>self.event.attendees.count {
+
+                    self.chatButton.enabled = false
+
+                    ParseHelper.getUserRequests(self.event, user: PFUser.currentUser()!, block: {
                         result, error in
-                        if error == nil {
-                            if let attendeeAvatar = attendee["avatar"] as? PFFile {
-                                
-                                    attendeeAvatar.getDataInBackgroundWithBlock({
-                                        (data:NSData?, error:NSError?) in
-                                        if(error == nil) {
-                                            let image = UIImage(data:data!)
-                                            attendeeButton.setImage(image, forState: .Normal)
-                                        } else {
-                                            MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-                                        }
-                                    })
-                            } else {
-                                attendeeButton.setImage(UIImage(named: "upload_pic"), forState: .Normal)
-                                MessageToUser.showDefaultErrorMessage("Some user has no avatar.")
+                        if (error == nil) {
+                            if (result == nil || result!.isEmpty){
+                                let attendeeButton = self.attendeeButtons[self.attendees.count]
+                                attendeeButton.addTarget(self, action: "attend:", forControlEvents: .TouchUpInside)
+                                attendeeButton.setTitle("JOIN", forState: .Normal)
+                                attendeeButton.hidden = false
                             }
                         } else {
                             MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                         }
                     })
-                }
-                
-                let attendedThisEvent = !(self.event.attendees.filter({$0.objectId == PFUser.currentUser()?.objectId}).count == 0)
-                
-                if(PFUser.currentUser()?.objectId != self.event.owner.objectId) {
-                    
-                    if !attendedThisEvent && self.event.limit>self.event.attendees.count {
-                        
+                } else {
+                    if !attendedThisEvent {
                         self.chatButton.enabled = false
-                        
-                        ParseHelper.getUserRequests(self.event, user: PFUser.currentUser()!, block: {
-                            result, error in
-                            if (error == nil) {
-                                if (result == nil || result!.isEmpty){
-                                    let attendeeButton = self.attendeeButtons[self.attendees.count]
-                                    attendeeButton.addTarget(self, action: "attend:", forControlEvents: .TouchUpInside)
-                                    attendeeButton.setTitle("JOIN", forState: .Normal)
-                                    attendeeButton.hidden = false
-                                }
-                            } else {
-                                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-                            }
-                        })
-                    } else {
-                        if !attendedThisEvent {
-                            self.chatButton.enabled = false
-                        }
                     }
                 }
-                self.update()
-            } else {
-                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
-        })
+            self.update()
+            })
     }
-    
-    
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        for button in [author, attended1, attended2, attended3, attended4] {
+            button.layer.cornerRadius = button.bounds.width / 2
+        }
+    }
+
     func update() {
         let distanceBetween: CLLocationDistance = CLLocation(latitude: self.event.location.latitude, longitude: self.event.location.longitude).distanceFromLocation(self.currentLocation)
         let distanceStr = String(format: "%.2f", distanceBetween/1000)

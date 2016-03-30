@@ -73,7 +73,7 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
             guard let `self` = self,
                 fetchedGroup = fetchedGroup as? Category
                 where error == nil else {
-                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+                MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
 
                 return
             }
