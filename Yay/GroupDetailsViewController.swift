@@ -68,76 +68,77 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
             self.navigationItem.setRightBarButtonItem(editdone, animated: false)
             //            attend.setImage(UIImage(named: "cancelevent_button"), forState: .Normal)
         }
-        
-        
-        group.fetchInBackgroundWithBlock({
-            result, error in
-            
-            if error == nil {
-                self.attendees = self.group.attendees.filter({$0.objectId != self.group.owner?.objectId})
-                
-                let currentPFLocation = PFUser.currentUser()!.objectForKey("location") as! PFGeoPoint
-                self.currentLocation = CLLocation(latitude: currentPFLocation.latitude, longitude: currentPFLocation.longitude)
-                
-                
-                
-                self.group.owner?.fetchIfNeededInBackgroundWithBlock({
-                    result, error in
-                    if error == nil {
-                        if let avatar = self.group.owner?["avatar"] as? PFFile {
-                            
-                            avatar.getDataInBackgroundWithBlock({
-                                (data:NSData?, error:NSError?) in
-                                if(error == nil) {
-                                    let image = UIImage(data:data!)
-                                    self.author.setImage(image, forState: .Normal)
-                                } else {
-                                    MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-                                }
-                            })
-                        } else {
-                            self.author.setImage(UIImage(named: "upload_pic"), forState: .Normal)
-                        }
-                    } else {
-                        MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-                    }
-                })
-                
-                
-                let attendedThisEvent = !(self.group.attendees.filter({$0.objectId == PFUser.currentUser()?.objectId}).count == 0)
-                
-                if(PFUser.currentUser()?.objectId != self.group.owner?.objectId) {
-                    
-                    if !attendedThisEvent {
-                        
-                        self.chatButton.enabled = false
-                        
-                        ParseHelper.getUserRequests(self.group, user: PFUser.currentUser()!, block: {
-                            result, error in
-                            if (error == nil) {
-                                if (result == nil || result!.isEmpty){
-                                    self.attendButton.hidden = false
-                                } else {
-                                    self.attendButton.hidden = true
-                                }
+
+        group.fetchInBackgroundWithBlock({ [weak self] fetchedGroup, error in
+            guard let `self` = self,
+                fetchedGroup = fetchedGroup as? Category
+                where error == nil else {
+                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+
+                return
+            }
+
+            self.group = fetchedGroup
+
+            self.location.hidden = self.group.location == nil
+
+            self.attendees = self.group.attendees.filter({$0.objectId != self.group.owner?.objectId})
+
+            let currentPFLocation = PFUser.currentUser()!.objectForKey("location") as! PFGeoPoint
+            self.currentLocation = CLLocation(latitude: currentPFLocation.latitude, longitude: currentPFLocation.longitude)
+
+            self.group.owner?.fetchIfNeededInBackgroundWithBlock({
+                result, error in
+                if error == nil {
+                    if let avatar = self.group.owner?["avatar"] as? PFFile {
+
+                        avatar.getDataInBackgroundWithBlock({
+                            (data:NSData?, error:NSError?) in
+                            if(error == nil) {
+                                let image = UIImage(data:data!)
+                                self.author.setImage(image, forState: .Normal)
                             } else {
                                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                             }
                         })
                     } else {
-                        self.descr.hidden = true
-                        self.attendButton.hidden = true
+                        self.author.setImage(UIImage(named: "upload_pic"), forState: .Normal)
                     }
+                } else {
+                    MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                 }
-                self.update()
-            } else {
-                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+            })
+
+            let attendedThisEvent = !(self.group.attendees.filter({$0.objectId == PFUser.currentUser()?.objectId}).count == 0)
+
+            if(PFUser.currentUser()?.objectId != self.group.owner?.objectId) {
+
+                if !attendedThisEvent {
+
+                    self.chatButton.enabled = false
+
+                    ParseHelper.getUserRequests(self.group, user: PFUser.currentUser()!, block: {
+                        result, error in
+                        if (error == nil) {
+                            if (result == nil || result!.isEmpty){
+                                self.attendButton.hidden = false
+                            } else {
+                                self.attendButton.hidden = true
+                            }
+                        } else {
+                            MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+                        }
+                    })
+                } else {
+                    self.descr.hidden = true
+                    self.attendButton.hidden = true
+                }
             }
+            self.update()
         })
         switchToDetails(true)
     }
-    
-    
+
     func update() {
         if let locationPF = self.group.location {
             let distanceBetween: CLLocationDistance = CLLocation(latitude: locationPF.latitude, longitude: locationPF.longitude).distanceFromLocation(self.currentLocation)
@@ -157,7 +158,6 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
         }
     }
 
-    
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -165,7 +165,6 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return group.attendees.count
     }
-    
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! GroupsViewCell
