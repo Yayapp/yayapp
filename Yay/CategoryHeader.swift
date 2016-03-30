@@ -10,6 +10,13 @@ import Foundation
 import UIKit
 
 class CategoryHeader: UICollectionReusableView {
+    static let reuseIdentifier = "CategoryHeader"
     
     @IBOutlet weak var name: UILabel!
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        name.text = nil
+    }
 }

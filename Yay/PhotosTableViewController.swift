@@ -44,8 +44,10 @@ class PhotosTableViewController: PFQueryTableViewController {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! EventPhotoTableViewCell
 
-        cell.photo.file = eventPhoto.photo
-        cell.photo.loadInBackground()
+        if let photoURLString = eventPhoto.photo.url,
+            photoURL = NSURL(string: photoURLString) {
+            cell.photo.sd_setImageWithURL(photoURL)
+        }
         
         return cell
     }

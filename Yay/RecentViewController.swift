@@ -41,8 +41,11 @@ class RecentViewController: UITableViewController {
         
         cell.name.text = notification.getTitle()
         cell.eventName.text = notification.getText()
-        cell.avatar.file = notification.getPhoto()
-        cell.avatar.loadInBackground()
+
+        if let photoURLString = notification.getPhoto().url,
+            photoURL = NSURL(string: photoURLString) {
+            cell.avatar.sd_setImageWithURL(photoURL)
+        }
         
         cell.avatar.layer.borderColor = Color.PrimaryActiveColor.CGColor
         if (notification.isDecidable() || notification.isKindOfClass(Message)){

@@ -86,9 +86,11 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
         cell.date.text = dateFormatter.stringFromDate(event.startDate)
         cell.howFar.text = "\(distanceStr)km"
         
-        cell.picture.file = event.photo
-        cell.picture.loadInBackground()
-        
+        if let photoURLString = event.photo.url,
+            photoURL = NSURL(string: photoURLString) {
+            cell.picture.sd_setImageWithURL(photoURL)
+        }
+
         event.owner.fetchIfNeededInBackgroundWithBlock({
             result, error in
             if error == nil {

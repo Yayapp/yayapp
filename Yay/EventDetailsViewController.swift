@@ -23,7 +23,7 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     var delegate:EventChangeDelegate!
     
     @IBOutlet weak var spinner: UIActivityIndicatorView!
-    @IBOutlet weak var photo: PFImageView!
+    @IBOutlet weak var photo: UIImageView!
     @IBOutlet weak var name: UILabel!
     
     @IBOutlet weak var location: UIButton!
@@ -191,8 +191,11 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
         self.title  = self.event.name
         self.name.text = self.event.name
         self.descr.text = self.event.summary
-        self.photo.file = self.event.photo
-        self.photo.loadInBackground()
+
+        if let photoURLString = event.photo.url,
+            photoURL = NSURL(string: photoURLString) {
+            photo.sd_setImageWithURL(photoURL)
+        }
         
         self.date.text = self.dateFormatter.stringFromDate(self.event.startDate)
         self.distance.text = "\(distanceStr)km"

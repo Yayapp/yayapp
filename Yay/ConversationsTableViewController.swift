@@ -50,8 +50,12 @@ class ConversationsTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! EventPhotoTableViewCell
         cell.name.text = events[indexPath.row].name
-        cell.photo.file = events[indexPath.row].photo
-        cell.photo.loadInBackground()
+
+        if let photoURLString = events[indexPath.row].photo.url,
+            photoURL = NSURL(string: photoURLString) {
+            cell.photo.sd_setImageWithURL(photoURL)
+        }
+
         return cell
     }
     

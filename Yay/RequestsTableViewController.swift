@@ -62,8 +62,12 @@ class RequestsTableViewController: UITableViewController {
             result, error in
             if error == nil {
                 cell.name.text = request.attendee.objectForKey("name") as! String!
-                cell.avatar.file = request.attendee.objectForKey("avatar") as! PFFile!
-                cell.avatar.loadInBackground()
+
+                if let avatarFile = request.attendee.objectForKey("avatar") as? PFFile,
+                    photoURLString = avatarFile.url,
+                    photoURL = NSURL(string: photoURLString) {
+                    cell.avatar.sd_setImageWithURL(photoURL)
+                }
             } else {
                 cell.name.text = ""
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)

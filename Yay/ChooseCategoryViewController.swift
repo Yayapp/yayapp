@@ -29,24 +29,12 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
     var privateCategoriesData:[Category]! = []
     var publicCategoriesData:[Category]! = []
     var selectedCategoriesData:[Category]! = []
-    var selectedCategoryType: CategoryType = CategoryType.All
+    var selectedCategoryType: CategoryType = .All
     var isEventCreation:Bool = false
-    var bottomConstraint:NSLayoutConstraint!
-    var topConstraint:NSLayoutConstraint!
-    
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        bottomConstraint = NSLayoutConstraint (item: categories,
-            attribute: NSLayoutAttribute.Bottom,
-            relatedBy: NSLayoutRelation.Equal,
-            toItem: view,
-            attribute: NSLayoutAttribute.Bottom,
-            multiplier: 1,
-            constant: -20)
-        
+
         categories.delegate = self
         categories.dataSource = self
         
@@ -95,66 +83,46 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
     }
 
     internal func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
-        
-        switch kind {
-            //2
-        case UICollectionElementKindSectionHeader:
-            //3
-            let headerView =
-            collectionView.dequeueReusableSupplementaryViewOfKind(kind,
-                withReuseIdentifier: "CategoryHeader",
-                forIndexPath: indexPath)
-                as! CategoryHeader
-            if selectedCategoryType == CategoryType.All{
-                if(indexPath.section == 0) {
-                    headerView.name.text = "Public Groups"
-                } else {
-                    headerView.name.text = "Private Groups"
-                }
-            } else {
-                headerView.name.text = ""
-            }
-            return headerView
-        default:
-            //4
-            assert(false, "Unexpected element kind")
+        let header = collectionView.dequeueReusableSupplementaryViewOfKind(kind,
+                                                                           withReuseIdentifier: CategoryHeader.reuseIdentifier,
+                                                                           forIndexPath: indexPath)
+        guard let categoryHeader = header as? CategoryHeader else {
+            return header
         }
-        return CategoryHeader()
+
+        if selectedCategoryType == .All {
+            categoryHeader.name.text = indexPath.section == 0 ? NSLocalizedString("Public Groups", comment: "") : NSLocalizedString("Private Groups", comment: "")
+        }
+
+        return categoryHeader
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! CategoryCollectionViewCell
     
         var category:Category
-        
+
         switch (selectedCategoryType) {
-        case .Private: category = privateCategoriesData[indexPath.row]
-        case .Public: category = publicCategoriesData[indexPath.row]
-        default: if(indexPath.section == 0) {
-                    category = publicCategoriesData[indexPath.row]
-                } else {
-                    category = privateCategoriesData[indexPath.row]
-                }
+        case .Private:
+            category = privateCategoriesData[indexPath.row]
+        case .Public:
+            category = publicCategoriesData[indexPath.row]
+        default:
+            if(indexPath.section == 0) {
+                category = publicCategoriesData[indexPath.row]
+            } else {
+                category = privateCategoriesData[indexPath.row]
+            }
         }
+
         cell.name.text = category.name
-        category.photo.getDataInBackgroundWithBlock({
-                (data:NSData?, error:NSError?) in
-                if(error == nil) {
-                    let image = UIImage(data:data!)
-                    
-                    cell.photo.image = image!
-                    cell.photo.layer.cornerRadius = CGRectGetWidth(cell.photo.frame)/2.0
-                    cell.photo.layer.masksToBounds = true
-                } else {
-                    MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-                }
-            })
-//        }
-        if (self.selectedCategoriesData.contains(category)) {
-            cell.switched.on = true
-        } else {
-            cell.switched.on = false
+        if let photoURLString = category.photo.url,
+            photoURL = NSURL(string: photoURLString) {
+            cell.photo.sd_setImageWithURL(photoURL)
         }
+
+        cell.switched.on = self.selectedCategoriesData.contains(category)
+
         cell.switched.tag = indexPath.row;
         cell.switched.addTarget(self, action: "switched:", forControlEvents: .TouchUpInside)
         
@@ -175,10 +143,6 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         }
         performSegueWithIdentifier("details", sender: category)
     }
-    
-//    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-//        return CGSize(width: (categories.bounds.size.width/3 - 10), height: (categories.bounds.size.width/2));
-//    }
     
     @IBAction func allAction(sender: AnyObject) {
         allUnderline.hidden = false

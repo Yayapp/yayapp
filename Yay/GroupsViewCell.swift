@@ -8,6 +8,5 @@
 
 import Foundation
 class GroupsViewCell: UICollectionViewCell {
-    
-    @IBOutlet weak var image: PFImageView!
+    @IBOutlet weak var image: UIImageView!
 }

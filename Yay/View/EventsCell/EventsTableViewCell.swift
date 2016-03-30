@@ -12,7 +12,7 @@ class EventsTableViewCell: UITableViewCell {
     static let reuseIdentifier = "eventsTableViewCell"
     static let nib = UINib(nibName: "EventsTableViewCell", bundle: nil)
 
-    @IBOutlet weak var picture: PFImageView!
+    @IBOutlet weak var picture: UIImageView!
     @IBOutlet weak var title: UILabel!
     @IBOutlet weak var location: UILabel!
     @IBOutlet weak var date: UILabel!

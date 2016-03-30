@@ -18,7 +18,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
     
     @IBOutlet weak var name: UILabel!
     
-    @IBOutlet weak var avatar: PFImageView!
+    @IBOutlet weak var avatar: UIImageView!
     @IBOutlet weak var eventsCount: UILabel!
     
     @IBOutlet weak var about: UILabel!
@@ -102,21 +102,20 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
 //                self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 1, inSection: 0)], withRowAnimation: UITableViewRowAnimation.None)
             }
         })
-       
-        
-        
-        let avatarfile = user.objectForKey("avatar") as? PFFile
-        if(avatarfile != nil) {
-            avatar.file = avatarfile
-            avatar.loadInBackground()
+
+        if let avatarFile = user.objectForKey("avatar") as? PFFile,
+            photoURLString = avatarFile.url,
+            photoURL = NSURL(string: photoURLString) {
             avatar.layer.borderColor = UIColor.whiteColor().CGColor
+            avatar.sd_setImageWithURL(photoURL)
         }
+
+
         if user["about"] != nil {
             setAboutMe((user["about"]! as! String))
         }
     }
-    
-    
+
     func setAboutMe(text:String){
         let font15 = UIFont.boldSystemFontOfSize(15)
         let font11 = UIFont.systemFontOfSize(15)

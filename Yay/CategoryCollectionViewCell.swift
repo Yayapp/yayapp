@@ -9,9 +9,22 @@
 import UIKit
 
 class CategoryCollectionViewCell: UICollectionViewCell {
-    
     @IBOutlet weak var name: UILabel!
-    @IBOutlet weak var photo: PFImageView!
+    @IBOutlet weak var photo: UIImageView!
     @IBOutlet weak var switched: UISwitch!
-    
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+
+        layer.shouldRasterize = true
+        layer.rasterizationScale = UIScreen.mainScreen().scale
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        name.text = nil
+        photo.image = nil
+        switched.on = false
+    }
 }

@@ -14,7 +14,7 @@ class PicturePickerViewController: UIViewController, UIImagePickerControllerDele
     let picker = UIImagePickerController()
     
     @IBOutlet weak var uploadPhoto: UIButton!
-    @IBOutlet weak var avatar: PFImageView!
+    @IBOutlet weak var avatar: UIImageView!
     @IBOutlet weak var maleButton: UIButton!
     @IBOutlet weak var femaleButton: UIButton!
     @IBOutlet weak var genderImage: UIImageView!

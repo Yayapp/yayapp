@@ -23,18 +23,22 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
 
     @IBOutlet weak var name: UITextField!
     
-    @IBOutlet weak var avatar: PFImageView!
+    @IBOutlet weak var avatar: UIImageView!
     
     @IBOutlet weak var about: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        guard let currentUser = PFUser.currentUser() else {
+            return
+        }
+
         picker.delegate = self
         
-        
-        name.text = PFUser.currentUser()!.objectForKey("name") as? String
+        name.text = currentUser.objectForKey("name") as? String
       
-        gender = PFUser.currentUser()!.objectForKey("gender") as! Int
+        gender = currentUser.objectForKey("gender") as! Int
         
         if gender == 0 {
             femaleAction(true)
@@ -42,14 +46,14 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
             maleAction(true)
         }
         
-        let avatarfile = PFUser.currentUser()!.objectForKey("avatar") as? PFFile
-        if(avatarfile != nil) {
-            avatar.file = avatarfile
-            avatar.loadInBackground()
+        if let avatarFile = PFUser.currentUser()?.objectForKey("avatar") as? PFFile,
+            photoURLString = avatarFile.url,
+            photoURL = NSURL(string: photoURLString) {
             avatar.layer.borderColor = UIColor.whiteColor().CGColor
+            avatar.sd_setImageWithURL(photoURL)
         }
-        about.text = PFUser.currentUser()!.objectForKey("about") as? String
-        
+
+        about.text = currentUser.objectForKey("about") as? String
     }
     
    

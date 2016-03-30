@@ -26,7 +26,7 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
     
     @IBOutlet weak var attendeesButtons: UICollectionView!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
-    @IBOutlet weak var photo: PFImageView!
+    @IBOutlet weak var photo: UIImageView!
     @IBOutlet weak var name: UILabel!
     
     @IBOutlet weak var location: UIButton!
@@ -150,12 +150,13 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
         self.title  = self.group.name
         self.name.text = self.group.name
 
-        if let photoFile = group.owner?.objectForKey("avatar") as? PFFile {
-            photo.file = photoFile
-            photo.loadInBackground()
+        if let photoFile = group.owner?.objectForKey("avatar") as? PFFile,
+            photoURLString = photoFile.url,
+            photoURL = NSURL(string: photoURLString) {
+            photo.sd_setImageWithURL(photoURL)
         }
     }
-    
+
     
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1
@@ -171,18 +172,21 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
         
         group.attendees[indexPath.row].fetchIfNeededInBackgroundWithBlock({
             result, error in
-            if error == nil {
-                if let attendeeAvatar = self.group.attendees[indexPath.row]["avatar"] as? PFFile {
-                    cell.image.file = attendeeAvatar
-                    cell.image.loadInBackground()
-                } else {
-                    cell.image.image = UIImage(named: "upload_pic")
-                }
-            } else {
+            guard error == nil else {
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+
+                return
+            }
+
+            if let attendeeAvatar = self.group.attendees[indexPath.row]["avatar"] as? PFFile,
+                photoURLString = attendeeAvatar.url,
+                photoURL = NSURL(string: photoURLString) {
+                cell.image.sd_setImageWithURL(photoURL)
+            } else {
+                cell.image.image = UIImage(named: "upload_pic")
             }
         })
-        
+
         return cell
     }
     

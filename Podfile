@@ -20,3 +20,4 @@ pod 'APTimeZones'
 pod 'JSQMessagesViewController'
 pod "TTGTagCollectionView"
 pod "TPKeyboardAvoiding"
+pod "SDWebImage"

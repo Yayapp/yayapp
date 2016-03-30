@@ -199,7 +199,7 @@
                                                     <constraint firstAttribute="height" constant="35" id="Zzm-jB-iAD"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <textInputTraits key="textInputTraits"/>
+                                                <textInputTraits key="textInputTraits" keyboardType="emailAddress"/>
                                             </textField>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="rPM-FH-WhT">
                                                 <rect key="frame" x="0.0" y="362" width="320" height="35"/>
@@ -208,7 +208,7 @@
                                                     <constraint firstAttribute="height" constant="35" id="GA3-Kp-5cF"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <textInputTraits key="textInputTraits"/>
+                                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                             </textField>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xjX-k9-knS">
                                                 <rect key="frame" x="16" y="405" width="288" height="20"/>
@@ -617,7 +617,7 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="jjt-MZ-pU7" customClass="PFImageView">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="jjt-MZ-pU7">
                                                     <rect key="frame" x="15" y="0.0" width="70" height="70"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" secondItem="jjt-MZ-pU7" secondAttribute="height" multiplier="1:1" id="UWi-1V-cxs"/>
@@ -908,7 +908,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="138.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Xf8-rf-EfK" customClass="PFImageView">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Xf8-rf-EfK">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="138"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DxX-o3-mPA">
@@ -1556,7 +1556,7 @@
                                     <constraint firstAttribute="height" constant="100" id="IWf-0L-Zn2"/>
                                 </constraints>
                             </view>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="w3n-sU-9YJ" customClass="PFImageView">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="w3n-sU-9YJ">
                                 <rect key="frame" x="85" y="77" width="150" height="150"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -2010,7 +2010,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="59.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pm1-vD-6N1" customClass="PFImageView">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pm1-vD-6N1">
                                             <rect key="frame" x="8" y="8" width="43" height="43"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="43" id="QBz-3A-WIY"/>
@@ -2612,7 +2612,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="137.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="zCh-JK-73r" customClass="PFImageView">
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="zCh-JK-73r">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="137"/>
                                         </imageView>
                                     </subviews>
@@ -3090,7 +3090,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ouD-nU-Dfg" customClass="PFImageView">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ouD-nU-Dfg">
                                 <rect key="frame" x="0.0" y="44" width="320" height="182"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="ouD-nU-Dfg" secondAttribute="height" multiplier="160:91" id="lYR-LV-Rmy"/>
@@ -3765,7 +3765,7 @@
                                         <constraint firstAttribute="height" constant="100" id="5Sr-Ar-qdF"/>
                                     </constraints>
                                 </view>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hG3-mO-OaJ" customClass="PFImageView">
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hG3-mO-OaJ">
                                     <rect key="frame" x="85" y="25" width="150" height="150"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="150" id="jiU-cw-o6A"/>
@@ -4124,7 +4124,7 @@
                                             <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="XHM-gE-ntE" customClass="PFImageView">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="XHM-gE-ntE">
                                             <rect key="frame" x="8" y="11" width="50" height="50"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="50" id="GYr-Ux-ahp"/>
@@ -4208,7 +4208,7 @@
                                     <constraint firstAttribute="height" constant="100" id="GhH-My-aFL"/>
                                 </constraints>
                             </view>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="R6I-v7-C5a" customClass="PFImageView">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="R6I-v7-C5a">
                                 <rect key="frame" x="85" y="89" width="150" height="150"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="150" id="Cz6-Ui-8Fu"/>
@@ -4499,7 +4499,7 @@
                                             <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="yhw-Xs-rUy" customClass="PFImageView">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="yhw-Xs-rUy">
                                             <rect key="frame" x="8" y="11" width="50" height="50"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="50" id="6pf-hn-uJn"/>
@@ -4755,7 +4755,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="zkS-NI-rhs" customClass="PFImageView">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="zkS-NI-rhs">
                                 <rect key="frame" x="0.0" y="64" width="320" height="182"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="zkS-NI-rhs" secondAttribute="height" multiplier="160:91" id="xww-PI-smv"/>
@@ -4957,7 +4957,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="65" height="45"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="DuA-6f-DYB" customClass="PFImageView">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="DuA-6f-DYB">
                                                     <rect key="frame" x="0.0" y="0.0" width="45" height="45"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="color" keyPath="layer.borderUIColor">
@@ -5097,11 +5097,11 @@
         <image name="uploadphoto_ico" width="42" height="46"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="obh-Kf-QaJ"/>
-        <segue reference="viE-SB-wbV"/>
-        <segue reference="3Ly-PZ-TUn"/>
-        <segue reference="G5O-Y9-BTI"/>
         <segue reference="xM7-AU-ldA"/>
+        <segue reference="viE-SB-wbV"/>
+        <segue reference="obh-Kf-QaJ"/>
+        <segue reference="Grk-8x-ER7"/>
+        <segue reference="3Ly-PZ-TUn"/>
         <segue reference="dCM-D0-qCd"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>

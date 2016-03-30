@@ -48,10 +48,11 @@ class ChooseEventPictureViewController: UIViewController, UITableViewDataSource,
         let category:Category! = categories[indexPath.row]
         
         cell.name.text = category.name
-        
-            cell.photo.file = category.photo
-            cell.photo.loadInBackground()
-        
+
+        if let photoURLString = category.photo.url,
+            photoURL = NSURL(string: photoURLString) {
+            cell.photo.sd_setImageWithURL(photoURL)
+        }
         
         return cell
     }
