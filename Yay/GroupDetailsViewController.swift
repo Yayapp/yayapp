@@ -149,10 +149,11 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
         }
         self.title  = self.group.name
         self.name.text = self.group.name
-        self.photo.file = self.group.photo
-        self.photo.loadInBackground()
-        
-        
+
+        if let photoFile = group.owner?.objectForKey("avatar") as? PFFile {
+            photo.file = photoFile
+            photo.loadInBackground()
+        }
     }
     
     
