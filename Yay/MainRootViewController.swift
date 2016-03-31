@@ -84,7 +84,7 @@ class MainRootViewController: UIViewController, MFMailComposeViewControllerDeleg
                 }
             })
         } else {
-            ParseHelper.getThisWeekEvents(PFUser.currentUser(), categories: chosenCategories, block: {
+            ParseHelper.getLaterEvents(PFUser.currentUser(), categories: chosenCategories, block: {
                 (eventsList:[Event]?, error:NSError?) in
                 if(error == nil) {
                     vc.reloadAll(eventsList!)

@@ -22,6 +22,7 @@
 		3160BAA21CAA693400047691 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 3160BA931CAA693400047691 /* README.md */; };
 		3160BAA31CAA693400047691 /* global.json in Resources */ = {isa = PBXBuildFile; fileRef = 3160BA951CAA693400047691 /* global.json */; };
 		3160BAA41CAA693400047691 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 3160BA971CAA693400047691 /* index.html */; };
+		31D94CBF1CAD02FF0099A891 /* NSDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D94CBE1CAD02FF0099A891 /* NSDate.swift */; };
 		867E5F77511EAE0AA07E0F43 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8B15517F27561DB20B85177 /* libPods.a */; };
 		8B1531B71B5F90FB007A2EC7 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1531B61B5F90FB007A2EC7 /* Event.swift */; };
 		8B1531B91B5F9A9E007A2EC7 /* ParseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1531B81B5F9A9E007A2EC7 /* ParseHelper.swift */; };
@@ -107,6 +108,7 @@
 		3160BA931CAA693400047691 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		3160BA951CAA693400047691 /* global.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = global.json; sourceTree = "<group>"; };
 		3160BA971CAA693400047691 /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
+		31D94CBE1CAD02FF0099A891 /* NSDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDate.swift; sourceTree = "<group>"; };
 		87E5039D1AFE3D9446032CF4 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		8B1531B61B5F90FB007A2EC7 /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		8B1531B81B5F9A9E007A2EC7 /* ParseHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseHelper.swift; sourceTree = "<group>"; };
@@ -276,6 +278,14 @@
 			path = public;
 			sourceTree = "<group>";
 		};
+		31D94CBD1CAD02D00099A891 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				31D94CBE1CAD02FF0099A891 /* NSDate.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
 		7F1CE1198C8FF0D6E40770ED /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -348,6 +358,7 @@
 				8B1531B51B5F90E1007A2EC7 /* Models */,
 				995032911B5662C300D792C5 /* controllers */,
 				990CA7211B82022600591F33 /* controllerParts */,
+				31D94CBD1CAD02D00099A891 /* Extension */,
 				995032901B56595F00D792C5 /* util */,
 				995032701B564B4400D792C5 /* AppDelegate.swift */,
 				995032741B564B4400D792C5 /* Main.storyboard */,
@@ -616,6 +627,7 @@
 				9907A3591BCBEC0C00D98A6F /* Utils.swift in Sources */,
 				3160BA9F1CAA693400047691 /* Makefile in Sources */,
 				9907A37B1BCE4BED00D98A6F /* Report.swift in Sources */,
+				31D94CBF1CAD02FF0099A891 /* NSDate.swift in Sources */,
 				995032991B56741700D792C5 /* CreateEmailAccountViewController.swift in Sources */,
 				3160BAA21CAA693400047691 /* README.md in Sources */,
 				9917D9E21B56A94F0081A796 /* MapEventsViewController.swift in Sources */,

@@ -16,63 +16,79 @@ typealias EventPhotosResultBlock = ([EventPhoto]?, NSError?) -> ()
 typealias BoolResultBlock = (Bool?, NSError?) -> ()
 
 class ParseHelper {
-	
-    class func getTodayEvents(user:PFUser?, categories:[Category], block:EventsResultBlock?) {
+    static let gregorianUTCCalendar: NSCalendar? = {
+        guard let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian),
+            timeZoneUTC = NSTimeZone(abbreviation: "UTC") else {
+                return nil
+        }
 
-        let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
-        calendar!.timeZone = NSTimeZone.localTimeZone()
-        
+        calendar.timeZone = timeZoneUTC
+
+        return calendar
+    }()
+
+    class func getTodayEvents(user:PFUser?, categories:[Category], block:EventsResultBlock?) {
         let today = NSDate()
-        
-        let endToday = calendar!.startOfDayForDate(today)
-        
-        let dayComponent = NSDateComponents()
-        dayComponent.day = 1
-        let startTomorrow = calendar!.dateByAddingComponents(dayComponent, toDate: endToday, options: NSCalendarOptions.MatchFirst)
-        
-        queryHomeEvents(today, endDate: startTomorrow!, user: user, categories: categories, block: block)
+
+        guard let calendar = ParseHelper.gregorianUTCCalendar,
+        endOfToday = today.endOfDay(calendar) else {
+            block?(nil, nil)
+
+            return
+        }
+
+        queryHomeEvents(today.startOfDay(calendar),
+                        endDate: endOfToday,
+                        user: user,
+                        categories: categories,
+                        block: block)
 	}
     
     class func getTomorrowEvents(user:PFUser?, categories:[Category], block:EventsResultBlock?) {
-        
-        let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
-        
         let today = NSDate()
-        
-        let endToday = calendar!.startOfDayForDate(today)
-        
-        let dayComponent = NSDateComponents()
-        dayComponent.day = 1
-        let startTomorrow = calendar!.dateByAddingComponents(dayComponent, toDate: endToday, options: NSCalendarOptions.MatchFirst)
-        dayComponent.day = 2
-        let startDayAfterTomorrow = calendar!.dateByAddingComponents(dayComponent, toDate: endToday, options: NSCalendarOptions.MatchFirst)
-        
-        queryHomeEvents(startTomorrow!, endDate: startDayAfterTomorrow!, user: user, categories: categories, block: block)
-    }
-    
-    class func getThisWeekEvents(user:PFUser?, categories:[Category], block:EventsResultBlock?) {
-        
-        let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
-        
-        let today = NSDate()
-        
-        let weekEndDay = 7
-        
-        let dayComponent = NSDateComponents()
-        dayComponent.day = weekEndDay
-        
-        let endWeek = calendar!.dateByAddingComponents(dayComponent, toDate: today, options: NSCalendarOptions.MatchFirst)
-        let startNextWeek = calendar!.startOfDayForDate(endWeek!)
 
-        queryHomeEvents(today, endDate: startNextWeek, user: user, categories: categories, block: block)
+        guard let calendar = ParseHelper.gregorianUTCCalendar,
+            tomorrow = today.tomorrowDay(calendar),
+            endOfTomorrow = tomorrow.endOfDay(calendar) else {
+                block?(nil, nil)
+
+                return
+        }
+
+        queryHomeEvents(tomorrow.startOfDay(calendar),
+                        endDate: endOfTomorrow,
+                        user: user,
+                        categories: categories,
+                        block: block)
     }
     
-    class func queryHomeEvents(startDate:NSDate, endDate:NSDate, user:PFUser!, categories:[Category], block:EventsResultBlock?) {
+    class func getLaterEvents(user:PFUser?, categories:[Category], block:EventsResultBlock?) {
+        let today = NSDate()
+
+        guard let calendar = ParseHelper.gregorianUTCCalendar,
+            tomorrow = today.tomorrowDay(calendar),
+            endOfTomorrow = tomorrow.endOfDay(calendar) else {
+                block?(nil, nil)
+
+                return
+        }
+
+        queryHomeEvents(endOfTomorrow,
+                        endDate: nil,
+                        user: user,
+                        categories: categories,
+                        block: block)
+    }
+    
+    class func queryHomeEvents(startDate:NSDate, endDate:NSDate?, user:PFUser!, categories:[Category], block:EventsResultBlock?) {
         
         let query = PFQuery(className:Event.parseClassName())
-        query.whereKey("startDate", greaterThan: NSDate())
-        query.whereKey("startDate", lessThanOrEqualTo: endDate)
-        
+        query.whereKey("startDate", greaterThanOrEqualTo: startDate)
+
+        if let endDate = endDate {
+            query.whereKey("startDate", lessThanOrEqualTo: endDate)
+        }
+
         query.orderByDescending("startDate")
         
             let query1 = PFQuery(className:Block.parseClassName())
@@ -82,11 +98,11 @@ class ParseHelper {
             if let distance = user.objectForKey("distance") as? Double {
                 query.whereKey("location", nearGeoPoint: location!, withinKilometers: distance)
             }
-        
+
         if (!categories.isEmpty) {
             query.whereKey("categories", containedIn: categories)
         }
-        
+
         queryEvent(query, block: block)
     }
     
@@ -562,5 +578,4 @@ class ParseHelper {
             
         })
     }
-
 }
