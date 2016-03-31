@@ -25,23 +25,32 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        dateFormatter.dateFormat = "EEE dd MMM '@' H:mm"
-        
-    
-        
-        if currentTitle != nil {
-            title = currentTitle!
+
+        guard let currentUser = PFUser.currentUser()
+            where currentUser.objectForKey("avatar") != nil && currentUser.objectForKey("gender") != nil && currentUser.objectForKey("about") != nil else {
+                if let completeProfileVC = storyboard?.instantiateViewControllerWithIdentifier(CompleteProfileViewController.storyboardID) as? CompleteProfileViewController {
+                    completeProfileVC.dismissButtonHidden = false
+                    presentViewController(completeProfileVC, animated: false, completion: nil)
+                }
+
+                return
         }
-        
-            let currentPFLocation = PFUser.currentUser()!.objectForKey("location") as! PFGeoPoint
-            currentLocation = CLLocation(latitude: currentPFLocation.latitude, longitude: currentPFLocation.longitude)
-        
+
+        dateFormatter.dateFormat = "EEE dd MMM '@' H:mm"
+        title = currentTitle
+
+        guard let currentPFLocation = currentUser.objectForKey("location") as? PFGeoPoint else {
+            return
+        }
+
+        currentLocation = CLLocation(latitude: currentPFLocation.latitude, longitude: currentPFLocation.longitude)
+
         events.registerNib(EventsTableViewCell.nib, forCellReuseIdentifier: EventsTableViewCell.reuseIdentifier)
         events.delegate = self
         events.dataSource = self
         
-        if (eventsFirst != nil) {
-            reloadAll(eventsFirst!)
+        if let events = eventsFirst {
+            reloadAll(events)
         }
     }
    

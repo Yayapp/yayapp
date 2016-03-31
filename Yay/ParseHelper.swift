@@ -92,11 +92,12 @@ class ParseHelper {
         query.orderByDescending("startDate")
         
             let query1 = PFQuery(className:Block.parseClassName())
-            query1.whereKey("user", equalTo:user!)
+            query1.whereKey("user", equalTo:user)
             query.whereKey("owner", doesNotMatchKey: "owner", inQuery: query1)
-            let location:PFGeoPoint? = user!.objectForKey("location") as? PFGeoPoint
-            if let distance = user.objectForKey("distance") as? Double {
-                query.whereKey("location", nearGeoPoint: location!, withinKilometers: distance)
+            let location:PFGeoPoint? = user.objectForKey("location") as? PFGeoPoint
+            if let distance = user.objectForKey("distance") as? Double,
+                location = location {
+                query.whereKey("location", nearGeoPoint: location, withinKilometers: distance)
             }
 
         if (!categories.isEmpty) {

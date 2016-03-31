@@ -82,8 +82,8 @@ class ProfileViewController: UITableViewController {
                 let startViewController = self.storyboard!.instantiateViewControllerWithIdentifier("StartViewController") as! StartViewController
                 self.navigationController!.popToRootViewControllerAnimated(false)
                 self.appDelegate.window!.rootViewController = startViewController
+                self.tabBarController?.selectedIndex = 0
                 self.appDelegate.window!.makeKeyAndVisible()
-                
             }
         })
     }

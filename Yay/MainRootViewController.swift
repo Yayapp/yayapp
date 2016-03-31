@@ -46,14 +46,9 @@ class MainRootViewController: UIViewController, MFMailComposeViewControllerDeleg
 
     
     override func viewDidAppear(animated: Bool) {
-        
         if Prefs.getPref(Prefs.tut) == false {
             Prefs.setPref(Prefs.tut)
-     
-            
         }
-        
-        
     }
     
 

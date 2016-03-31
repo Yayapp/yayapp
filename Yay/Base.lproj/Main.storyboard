@@ -199,7 +199,7 @@
                                                     <constraint firstAttribute="height" constant="35" id="Zzm-jB-iAD"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <textInputTraits key="textInputTraits" keyboardType="emailAddress"/>
+                                                <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="emailAddress"/>
                                             </textField>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="rPM-FH-WhT">
                                                 <rect key="frame" x="0.0" y="362" width="320" height="35"/>
@@ -1154,7 +1154,7 @@
                                                 </constraints>
                                                 <color key="textColor" red="0.48627450979999998" green="0.49803921569999998" blue="0.50196078430000002" alpha="1" colorSpace="calibratedRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                <textInputTraits key="textInputTraits" returnKeyType="next"/>
+                                                <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="next"/>
                                                 <connections>
                                                     <outlet property="delegate" destination="yIt-h0-NIl" id="eHU-L7-0fu"/>
                                                 </connections>
@@ -1167,7 +1167,7 @@
                                                 </constraints>
                                                 <color key="textColor" red="0.48627450979999998" green="0.49803921569999998" blue="0.50196078430000002" alpha="1" colorSpace="calibratedRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="next"/>
+                                                <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="emailAddress" returnKeyType="next"/>
                                                 <connections>
                                                     <outlet property="delegate" destination="yIt-h0-NIl" id="NBJ-0q-C7E"/>
                                                 </connections>
@@ -1537,10 +1537,10 @@
             </objects>
             <point key="canvasLocation" x="1139" y="299"/>
         </scene>
-        <!--Picture Picker View Controller-->
+        <!--Complete Profile View Controller-->
         <scene sceneID="6dJ-m5-rSv">
             <objects>
-                <viewController storyboardIdentifier="PicturePickerViewController" id="D2h-ES-ZUb" customClass="PicturePickerViewController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="completeProfileViewController" id="D2h-ES-ZUb" customClass="CompleteProfileViewController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Zlt-6s-7jt"/>
                         <viewControllerLayoutGuide type="bottom" id="Q9j-nf-jGd"/>
@@ -1676,6 +1676,13 @@
                                     <segue destination="zSP-ZQ-F6n" kind="show" identifier="proceed" id="Whz-e9-xMk"/>
                                 </connections>
                             </button>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fE0-X2-xdG">
+                                <rect key="frame" x="16" y="16" width="34" height="30"/>
+                                <state key="normal" title="Back"/>
+                                <connections>
+                                    <action selector="dismissButtonPressed:" destination="D2h-ES-ZUb" eventType="touchUpInside" id="IWW-sW-a6k"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -1683,6 +1690,7 @@
                             <constraint firstItem="6aC-sd-zRi" firstAttribute="leading" secondItem="iHV-5b-Rgg" secondAttribute="leading" id="3Vx-GO-Mw7"/>
                             <constraint firstAttribute="trailing" secondItem="geh-Rp-miy" secondAttribute="trailing" id="3fe-Wo-WX0"/>
                             <constraint firstAttribute="centerX" secondItem="w3n-sU-9YJ" secondAttribute="centerX" id="6oP-my-J0k"/>
+                            <constraint firstItem="fE0-X2-xdG" firstAttribute="leading" secondItem="iHV-5b-Rgg" secondAttribute="leading" constant="16" id="7f9-3T-Go1"/>
                             <constraint firstItem="qVt-kb-a0R" firstAttribute="top" secondItem="Ddf-HX-WCf" secondAttribute="bottom" constant="30" id="8Q1-ec-b9O"/>
                             <constraint firstItem="WgZ-0L-5gG" firstAttribute="leading" secondItem="iHV-5b-Rgg" secondAttribute="leadingMargin" id="BML-B8-t2P"/>
                             <constraint firstItem="Q9j-nf-jGd" firstAttribute="top" secondItem="qVt-kb-a0R" secondAttribute="bottom" id="BgN-rW-5eH"/>
@@ -1712,6 +1720,7 @@
                             <constraint firstItem="UwV-nF-Z5F" firstAttribute="top" secondItem="geh-Rp-miy" secondAttribute="bottom" id="q9o-zT-hTS"/>
                             <constraint firstItem="qVt-kb-a0R" firstAttribute="leading" secondItem="iHV-5b-Rgg" secondAttribute="leading" id="reF-SS-mcV"/>
                             <constraint firstItem="WgZ-0L-5gG" firstAttribute="trailing" secondItem="iHV-5b-Rgg" secondAttribute="trailingMargin" id="u3q-Ym-jZe"/>
+                            <constraint firstItem="fE0-X2-xdG" firstAttribute="top" secondItem="Zlt-6s-7jt" secondAttribute="bottom" constant="16" id="wMU-fX-Har"/>
                             <constraint firstAttribute="trailing" secondItem="Ddf-HX-WCf" secondAttribute="trailing" id="wr0-En-e5U"/>
                             <constraint firstItem="WgZ-0L-5gG" firstAttribute="centerY" secondItem="iHV-5b-Rgg" secondAttribute="centerY" id="zNa-LP-cDq"/>
                         </constraints>
@@ -1720,6 +1729,7 @@
                     <connections>
                         <outlet property="avatar" destination="w3n-sU-9YJ" id="WTX-X0-SxC"/>
                         <outlet property="bioField" destination="Ddf-HX-WCf" id="1zO-4y-vCl"/>
+                        <outlet property="dismissButton" destination="fE0-X2-xdG" id="CNT-Vg-js3"/>
                         <outlet property="femaleButton" destination="bJ8-9D-gaV" id="x2X-XS-klR"/>
                         <outlet property="genderImage" destination="1bs-CD-Foe" id="dVc-F2-Edt"/>
                         <outlet property="maleButton" destination="6aC-sd-zRi" id="S4c-A5-dTD"/>

@@ -55,7 +55,7 @@
 		995032971B5671B900D792C5 /* ChooseLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032961B5671B900D792C5 /* ChooseLocationViewController.swift */; };
 		995032991B56741700D792C5 /* CreateEmailAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995032981B56741700D792C5 /* CreateEmailAccountViewController.swift */; };
 		99509E8A1B9618FA003BF7CD /* PhotosTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99509E891B9618FA003BF7CD /* PhotosTableViewController.swift */; };
-		99509E901B99CEDC003BF7CD /* PicturePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99509E8F1B99CEDC003BF7CD /* PicturePickerViewController.swift */; };
+		99509E901B99CEDC003BF7CD /* CompleteProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99509E8F1B99CEDC003BF7CD /* CompleteProfileViewController.swift */; };
 		995363491B693F4B00350133 /* CustomPointAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995363481B693F4B00350133 /* CustomPointAnnotation.swift */; };
 		995A57F01C6BC96000680CB6 /* NotificationsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995A57EF1C6BC96000680CB6 /* NotificationsController.swift */; };
 		995A57F21C6BD01200680CB6 /* RecentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995A57F11C6BD01200680CB6 /* RecentViewController.swift */; };
@@ -144,7 +144,7 @@
 		995032961B5671B900D792C5 /* ChooseLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseLocationViewController.swift; sourceTree = "<group>"; };
 		995032981B56741700D792C5 /* CreateEmailAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateEmailAccountViewController.swift; sourceTree = "<group>"; };
 		99509E891B9618FA003BF7CD /* PhotosTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosTableViewController.swift; sourceTree = "<group>"; };
-		99509E8F1B99CEDC003BF7CD /* PicturePickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PicturePickerViewController.swift; sourceTree = "<group>"; };
+		99509E8F1B99CEDC003BF7CD /* CompleteProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompleteProfileViewController.swift; sourceTree = "<group>"; };
 		995363481B693F4B00350133 /* CustomPointAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomPointAnnotation.swift; sourceTree = "<group>"; };
 		995A57EF1C6BC96000680CB6 /* NotificationsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationsController.swift; sourceTree = "<group>"; };
 		995A57F11C6BD01200680CB6 /* RecentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecentViewController.swift; sourceTree = "<group>"; };
@@ -411,7 +411,7 @@
 				99FDE5421B580E7D004CE61B /* CreateEventViewController.swift */,
 				99FDE54A1B5A74FF004CE61B /* UserProfileViewController.swift */,
 				993D3ED81B8DCA900023B054 /* RequestsTableViewController.swift */,
-				99509E8F1B99CEDC003BF7CD /* PicturePickerViewController.swift */,
+				99509E8F1B99CEDC003BF7CD /* CompleteProfileViewController.swift */,
 				99EF69CD1BC418B700DA0073 /* ConversationsTableViewController.swift */,
 				99EF69CF1BC43F7E00DA0073 /* MessagesTableViewController.swift */,
 				995A57EF1C6BC96000680CB6 /* NotificationsController.swift */,
@@ -636,7 +636,7 @@
 				997C23911B67B42D0070DDB2 /* ChooseCategoryViewController.swift in Sources */,
 				995A57F01C6BC96000680CB6 /* NotificationsController.swift in Sources */,
 				9907A35B1BCBECF500D98A6F /* KeyboardAnimationHelper.swift in Sources */,
-				99509E901B99CEDC003BF7CD /* PicturePickerViewController.swift in Sources */,
+				99509E901B99CEDC003BF7CD /* CompleteProfileViewController.swift in Sources */,
 				995A57F21C6BD01200680CB6 /* RecentViewController.swift in Sources */,
 				99B0C6321C77B041004D8A99 /* CategoryPickerViewController.swift in Sources */,
 				99FDE5411B57EB84004CE61B /* SettingsTableViewController.swift in Sources */,

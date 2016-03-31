@@ -1,5 +1,5 @@
 //
-//  PicturePickerViewController.swift
+//  CompleteProfileViewController.swift
 //  Friendzi
 //
 //  Created by Nerses Zakoyan on 04.09.15.
@@ -8,11 +8,14 @@
 
 import UIKit
 
-class PicturePickerViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate {
-    
+class CompleteProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate {
+    static let storyboardID = "completeProfileViewController"
+
+    var dismissButtonHidden = true
     
     let picker = UIImagePickerController()
     
+    @IBOutlet weak var dismissButton: UIButton!
     @IBOutlet weak var uploadPhoto: UIButton!
     @IBOutlet weak var avatar: UIImageView!
     @IBOutlet weak var maleButton: UIButton!
@@ -28,9 +31,27 @@ class PicturePickerViewController: UIViewController, UIImagePickerControllerDele
         super.viewDidLoad()
         picker.delegate = self
         nameLabel.text = PFUser.currentUser()!.objectForKey("name") as! String
-        
+
+        dismissButton.hidden = dismissButtonHidden
     }
 
+    @IBAction func dismissButtonPressed(sender: AnyObject) {
+        SVProgressHUD.showWithMaskType(.Gradient)
+        PFUser.logOutInBackgroundWithBlock({ error in
+            SVProgressHUD.dismiss()
+            guard error == nil else {
+                MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
+                return
+            }
+
+            let startViewController = self.storyboard!.instantiateViewControllerWithIdentifier("StartViewController") as! StartViewController
+
+            if let window = UIApplication.sharedApplication().delegate?.window {
+                window!.rootViewController = startViewController
+                window!.makeKeyAndVisible()
+            }
+        })
+    }
 
     @IBAction func uploadPhoto(sender: AnyObject) {
         let alert = UIAlertController(title: "Choose Option", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
