@@ -82,7 +82,7 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell = events.dequeueReusableCellWithIdentifier(EventsTableViewCell.reuseIdentifier) as! EventsTableViewCell
-        let event:Event! = eventsData[indexPath.row]
+        let event:Event! = eventsData[indexPath.section]
         let cllocation = CLLocation(latitude: event.location.latitude, longitude: event.location.longitude)
         let distanceBetween: CLLocationDistance = cllocation.distanceFromLocation(currentLocation!)
         let distanceStr = String(format: "%.2f", distanceBetween/1000)

@@ -129,19 +129,27 @@ class ParseHelper {
         queryEvent(query, block: block)
     }
 
-    class func getUpcomingPastEvents(user: PFUser, upcoming:Bool?, block:EventsResultBlock?) {
-        
+    class func getUpcomingPastEvents(user: PFUser, upcoming:Bool, block:EventsResultBlock?) {
         let today = NSDate()
-        let query = PFQuery(className:Event.parseClassName())
-        query.whereKey("attendees", equalTo:user)
-        query.orderByDescending("startDate")
-        if(upcoming != nil) {
-            if (upcoming == true) {
-                query.whereKey("startDate", greaterThanOrEqualTo: today)
-            } else {
-                query.whereKey("startDate", lessThan: today)
-            }
+
+        guard let calendar = ParseHelper.gregorianUTCCalendar else {
+            block?(nil, nil)
+
+            return
         }
+
+        let startOfToday = today.startOfDay(calendar)
+
+        let query = PFQuery(className:Event.parseClassName())
+        query.whereKey("attendees", equalTo: user)
+        query.orderByDescending("startDate")
+
+        if upcoming {
+            query.whereKey("startDate", greaterThanOrEqualTo: startOfToday)
+        } else {
+            query.whereKey("startDate", lessThan: startOfToday)
+        }
+
         queryEvent(query, block: block)
     }
     

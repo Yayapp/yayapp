@@ -74,7 +74,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         }
         
         
-        ParseHelper.getUpcomingPastEvents(user, upcoming: nil, block: {
+        ParseHelper.getUpcomingPastEvents(user, upcoming: false, block: {
             result, error in
             if error == nil {
                 let rank = Rank.getRank(result!.count)
