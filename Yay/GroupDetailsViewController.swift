@@ -54,7 +54,8 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+        attendeesButtons.registerNib(GroupsViewCell.nib, forCellWithReuseIdentifier: GroupsViewCell.reuseIdentifier)
         attendeesButtons.delegate = self
         attendeesButtons.dataSource = self
         
@@ -167,7 +168,9 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! GroupsViewCell
+        guard let cell = collectionView.dequeueReusableCellWithReuseIdentifier(GroupsViewCell.reuseIdentifier, forIndexPath: indexPath) as? GroupsViewCell else {
+            return UICollectionViewCell()
+        }
         
         group.attendees[indexPath.row].fetchIfNeededInBackgroundWithBlock({
             result, error in

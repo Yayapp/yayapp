@@ -534,7 +534,9 @@ class ParseHelper {
         query2.whereKeyExists("accepted")
         
         let queryFinal = PFQuery.orQueryWithSubqueries([queryEventGroup, query2])
-        
+        queryFinal.includeKey("attendee")
+        queryFinal.includeKey("event")
+
         queryFinal.findObjectsInBackgroundWithBlock {
             objects, error in
             

@@ -7,6 +7,10 @@
 //
 
 import Foundation
+
 class GroupsViewCell: UICollectionViewCell {
+    static let reuseIdentifier = "groupsViewCell"
+    static let nib = UINib(nibName: "GroupsViewCell", bundle: nil)
+
     @IBOutlet weak var image: UIImageView!
 }

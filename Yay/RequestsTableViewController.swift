@@ -18,6 +18,8 @@ class RequestsTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        tableView.registerNib(RequestTableViewCell.nib, forCellReuseIdentifier: RequestTableViewCell.reuseIdentifier)
         
         ParseHelper.getOwnerRequests(PFUser.currentUser()!, block: {
             result, error in
@@ -44,8 +46,10 @@ class RequestsTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell") as! RequestTableViewCell
+        guard let cell = tableView.dequeueReusableCellWithIdentifier(RequestTableViewCell.reuseIdentifier) as? RequestTableViewCell else {
+            return UITableViewCell()
+        }
+
         let request:Request! = requests[indexPath.row]
         
         request.event!.fetchIfNeededInBackgroundWithBlock({

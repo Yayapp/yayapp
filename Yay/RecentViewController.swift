@@ -15,17 +15,29 @@ class RecentViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        tableView.registerNib(RequestTableViewCell.nib, forCellReuseIdentifier: RequestTableViewCell.reuseIdentifier)
+
+        guard let currentUser = PFUser.currentUser() else {
+            return
+        }
         
-        ParseHelper.getRecentRequests(PFUser.currentUser()!, block: {
-            result, error in
-            if (error == nil){
-                self.notifications = result!
-            } else {
+        ParseHelper.getRecentRequests(currentUser, block: { [weak self] result, error in
+            guard error == nil else {
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+
+                return
             }
+
+            guard let result = result else {
+                return
+            }
+
+            self?.notifications = result.map({$0 as Notification})
+            self?.tableView.reloadData()
         })
     }
-    
+
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -35,8 +47,10 @@ class RecentViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell") as! RequestTableViewCell
+        guard let cell = tableView.dequeueReusableCellWithIdentifier(RequestTableViewCell.reuseIdentifier) as? RequestTableViewCell else {
+            return UITableViewCell()
+        }
+
         let notification:Notification! = notifications[indexPath.row]
         
         cell.name.text = notification.getTitle()

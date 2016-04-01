@@ -20,6 +20,8 @@ class PhotosTableViewController: PFQueryTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        tableView.registerNib(EventPhotoTableViewCell.flatNib, forCellReuseIdentifier: EventPhotoTableViewCell.flatReuseIdentifier)
     }
     
     
@@ -39,14 +41,15 @@ class PhotosTableViewController: PFQueryTableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath, object: PFObject!) -> PFTableViewCell {
-        
+        guard let cell = tableView.dequeueReusableCellWithIdentifier(EventPhotoTableViewCell.flatReuseIdentifier, forIndexPath: indexPath) as? EventPhotoTableViewCell else {
+            return PFTableViewCell()
+        }
+
         let eventPhoto = object as! EventPhoto
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! EventPhotoTableViewCell
-
         if let photoURLString = eventPhoto.photo.url,
             photoURL = NSURL(string: photoURLString) {
-            cell.photo.sd_setImageWithURL(photoURL)
+            cell.photo?.sd_setImageWithURL(photoURL)
         }
         
         return cell

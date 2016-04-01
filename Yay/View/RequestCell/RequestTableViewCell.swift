@@ -9,6 +9,9 @@
 import UIKit
 
 class RequestTableViewCell: UITableViewCell {
+    static let reuseIdentifier = "requestTableViewCell"
+    static let nib = UINib(nibName: "RequestTableViewCell", bundle: nil)
+
     @IBOutlet weak var avatar: UIImageView!
     @IBOutlet weak var eventName: UILabel!
     @IBOutlet weak var name: UILabel!

@@ -17,6 +17,8 @@ class ConversationsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        tableView.registerNib(EventPhotoTableViewCell.nib, forCellReuseIdentifier: EventPhotoTableViewCell.reuseIdentifier)
+
         ParseHelper.getConversations(PFUser.currentUser()!, block: {
             result, error in
             if error == nil {
@@ -35,25 +37,24 @@ class ConversationsTableViewController: UITableViewController {
     }
 
     // MARK: - Table view data source
-
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return events.count
     }
-
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! EventPhotoTableViewCell
-        cell.name.text = events[indexPath.row].name
+        guard let cell = tableView.dequeueReusableCellWithIdentifier(EventPhotoTableViewCell.reuseIdentifier, forIndexPath: indexPath) as? EventPhotoTableViewCell else {
+            return UITableViewCell()
+        }
+
+        cell.name?.text = events[indexPath.row].name
 
         if let photoURLString = events[indexPath.row].photo.url,
             photoURL = NSURL(string: photoURLString) {
-            cell.photo.sd_setImageWithURL(photoURL)
+            cell.photo?.sd_setImageWithURL(photoURL)
         }
 
         return cell

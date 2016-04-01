@@ -22,7 +22,9 @@ class ChooseEventPictureViewController: UIViewController, UITableViewDataSource,
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         picker.delegate = self
+        photos.registerNib(EventPhotoTableViewCell.flatNib, forCellReuseIdentifier: EventPhotoTableViewCell.flatReuseIdentifier)
         photos.delegate = self
         photos.dataSource = self
         
@@ -44,14 +46,17 @@ class ChooseEventPictureViewController: UIViewController, UITableViewDataSource,
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let cell = photos.dequeueReusableCellWithIdentifier("Cell") as! EventPhotoTableViewCell
+        guard let cell = photos.dequeueReusableCellWithIdentifier(EventPhotoTableViewCell.flatReuseIdentifier, forIndexPath: indexPath) as? EventPhotoTableViewCell else {
+            return UITableViewCell()
+        }
+
         let category:Category! = categories[indexPath.row]
         
-        cell.name.text = category.name
+        cell.name?.text = category.name
 
         if let photoURLString = category.photo.url,
             photoURL = NSURL(string: photoURLString) {
-            cell.photo.sd_setImageWithURL(photoURL)
+            cell.photo?.sd_setImageWithURL(photoURL)
         }
         
         return cell

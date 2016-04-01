@@ -169,7 +169,7 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if(delegate != nil) {
-            delegate!.madeEventChoice(eventsData[indexPath.row])
+            delegate!.madeEventChoice(eventsData[indexPath.section])
         } else {
             performSegueWithIdentifier("event_details", sender: indexPath)
         }
