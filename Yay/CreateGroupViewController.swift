@@ -93,7 +93,7 @@ class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate
     }
 
     @IBAction func addLocationButtonPressed(sender: AnyObject) {
-        guard let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(ChooseLocationViewController.storyboardID) as? ChooseLocationViewController else {
+        guard let vc = UIStoryboard.main()?.instantiateViewControllerWithIdentifier(ChooseLocationViewController.storyboardID) as? ChooseLocationViewController else {
             return
         }
 
@@ -103,7 +103,7 @@ class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate
     }
     
     @IBAction func openPhotoPicker(sender: AnyObject) {
-        guard let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ChooseEventPictureViewController") as? ChooseEventPictureViewController else {
+        guard let vc = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("ChooseEventPictureViewController") as? ChooseEventPictureViewController else {
             return
         }
 
@@ -150,7 +150,7 @@ class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate
     }
     
     @IBAction func openAboutMeEditor(sender: AnyObject) {
-        guard let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("WriteAboutViewController") as? WriteAboutViewController else {
+        guard let vc = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("WriteAboutViewController") as? WriteAboutViewController else {
             return
         }
         

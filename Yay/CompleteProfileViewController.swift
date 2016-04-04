@@ -44,7 +44,9 @@ class CompleteProfileViewController: UIViewController, UIImagePickerControllerDe
                 return
             }
 
-            let startViewController = self.storyboard!.instantiateViewControllerWithIdentifier("StartViewController") as! StartViewController
+            guard let startViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("StartViewController") as? StartViewController else {
+                return
+            }
 
             if let window = UIApplication.sharedApplication().delegate?.window {
                 window!.rootViewController = startViewController

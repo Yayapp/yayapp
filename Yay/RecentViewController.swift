@@ -83,16 +83,25 @@ class RecentViewController: UITableViewController {
         if (notification.isSelectable()){
             if notification.isKindOfClass(Request){
                 if (notification as! Request).event != nil {
-                    let vc = self.storyboard!.instantiateViewControllerWithIdentifier("EventDetailsViewController") as! EventDetailsViewController
+                    guard let vc = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("EventDetailsViewController") as? EventDetailsViewController else {
+                        return
+                    }
+
                     vc.event = (notification as! Request).event
                     navigationController?.pushViewController(vc, animated: true)
                 } else {
-                    let vc = self.storyboard!.instantiateViewControllerWithIdentifier("GroupDetailsViewController") as! GroupDetailsViewController
+                    guard let vc = UIStoryboard.groupsTab()?.instantiateViewControllerWithIdentifier("GroupDetailsViewController") as? GroupDetailsViewController else {
+                        return
+                    }
+                    
                     vc.group = (notification as! Request).group
                     navigationController?.pushViewController(vc, animated: true)
                 }
             } else {
-                let vc = self.storyboard!.instantiateViewControllerWithIdentifier("MessagesTableViewController") as! MessagesTableViewController
+                guard let vc = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("MessagesTableViewController") as? MessagesTableViewController else {
+                    return
+                }
+
                 vc.event = (notification as! Message).event
                 navigationController?.pushViewController(vc, animated: true)
             }
@@ -103,7 +112,9 @@ class RecentViewController: UITableViewController {
     
     @IBAction func goToProfile(sender: AnyObject) {
         
-        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("UserProfileViewController") as! UserProfileViewController
+        guard let vc = UIStoryboard.profileTab()?.instantiateViewControllerWithIdentifier("UserProfileViewController") as? UserProfileViewController else {
+            return
+        }
         
         if(notifications[sender.tag].isKindOfClass(Message)){
             let notification = notifications[sender.tag] as! Message

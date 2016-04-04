@@ -58,11 +58,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Flurry.setDebugLogEnabled(true)
         Flurry.setCrashReportingEnabled(true)
         
-        
-        if (PFUser.currentUser() != nil) {
-                window!.rootViewController = mainNavigation
-                window!.makeKeyAndVisible()
+        if ParseHelper.sharedInstance.currentUser != nil {
+            window!.rootViewController = mainNavigation
+            window!.makeKeyAndVisible()
         }
+        
         return true
     }
     

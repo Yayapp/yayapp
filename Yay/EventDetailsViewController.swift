@@ -213,7 +213,10 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     @IBAction func attend(sender: UIButton) {
         if let user = PFUser.currentUser() {
             if(user.objectId == event.owner.objectId) {
-                let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
+                guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as? BlurryAlertViewController else {
+                    return
+                }
+
                 blurryAlertViewController.action = BlurryAlertViewController.BUTTON_DELETE
                 blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
                 blurryAlertViewController.messageText = "Sorry, are you sure you want to delete this event?"
@@ -242,7 +245,10 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                     self.spinner.stopAnimating()
                     sender.hidden = true
                     
-                    let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
+                    guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as? BlurryAlertViewController else {
+                        return
+                    }
+
                     blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
                     blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
                     blurryAlertViewController.aboutText = "Your request has been sent."
@@ -252,7 +258,10 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                 })
             }
         } else {
-            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
+            guard let vc = UIStoryboard.auth()?.instantiateViewControllerWithIdentifier("LoginViewController") as? LoginViewController else {
+                return
+            }
+
             presentViewController(vc, animated: true, completion: nil)
         }
     }
@@ -260,14 +269,20 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     @IBAction func chat(sender: AnyObject) {
         if PFUser.currentUser() != nil {
             if (attendees.count>0) {
-                let controller: MessagesTableViewController = self.storyboard!.instantiateViewControllerWithIdentifier("MessagesTableViewController") as! MessagesTableViewController
+                guard let controller: MessagesTableViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("MessagesTableViewController") as? MessagesTableViewController else {
+                    return
+                }
+
                 controller.event = event
                 self.navigationController!.pushViewController(controller, animated: true)
             } else {
                 MessageToUser.showDefaultErrorMessage("There are no attendees yet.")
             }
         } else {
-            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
+            guard let vc = UIStoryboard.auth()?.instantiateViewControllerWithIdentifier("LoginViewController") as? LoginViewController else {
+                return
+            }
+
             presentViewController(vc, animated: true, completion: nil)
         }
     }
@@ -295,7 +310,10 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                 self.showSendMailErrorAlert()
             }
         } else {
-            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
+            guard let vc = UIStoryboard.auth()?.instantiateViewControllerWithIdentifier("LoginViewController") as? LoginViewController else {
+                return
+            }
+
             presentViewController(vc, animated: true, completion: nil)
         }
     }
@@ -325,14 +343,20 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     }
     
     @IBAction func authorProfile(sender: AnyObject) {
-        let userProfileViewController = self.storyboard!.instantiateViewControllerWithIdentifier("UserProfileViewController") as! UserProfileViewController
+        guard let userProfileViewController = UIStoryboard.profileTab()?.instantiateViewControllerWithIdentifier("UserProfileViewController") as? UserProfileViewController else {
+            return
+        }
+
         userProfileViewController.user = event.owner
         
         navigationController?.pushViewController(userProfileViewController, animated: true)
     }
     
     @IBAction func attendeeProfile(sender: AnyObject) {
-        let userProfileViewController = self.storyboard!.instantiateViewControllerWithIdentifier("UserProfileViewController") as! UserProfileViewController
+        guard let userProfileViewController = UIStoryboard.profileTab()?.instantiateViewControllerWithIdentifier("UserProfileViewController") as? UserProfileViewController else {
+            return
+        }
+
         userProfileViewController.user = attendees[sender.tag]
         
         navigationController?.pushViewController(userProfileViewController, animated: true)
@@ -347,7 +371,10 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     }
     
     @IBAction func editEvent(sender: AnyObject){
-        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("CreateEventViewController") as! CreateEventViewController
+        guard let vc = UIStoryboard.createEventTab()?.instantiateViewControllerWithIdentifier("CreateEventViewController") as? CreateEventViewController else {
+            return
+        }
+
         vc.event = event
         vc.delegate = self
         navigationController?.pushViewController(vc, animated: true)
@@ -373,7 +400,10 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     }
     
     @IBAction func reportButtonTapped(sender: AnyObject) {
-        let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
+        guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as? BlurryAlertViewController else {
+            return
+        }
+        
         blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
         blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
         blurryAlertViewController.messageText = "You are about to flag this event for inappropriate content. Are you sure?"

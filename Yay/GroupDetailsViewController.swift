@@ -55,14 +55,14 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if let messagesVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(MessagesTableViewController.storyboardID) as? MessagesTableViewController {
+        if let messagesVC = UIStoryboard.main()?.instantiateViewControllerWithIdentifier(MessagesTableViewController.storyboardID) as? MessagesTableViewController {
             messagesVC.group = group
             addChildViewController(messagesVC)
             messagesVC.didMoveToParentViewController(self)
             messagesContainer.addSubview(messagesVC.view)
         }
 
-        if let eventsListVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(ListEventsViewController.storyboardID) as? ListEventsViewController {
+        if let eventsListVC = UIStoryboard.main()?.instantiateViewControllerWithIdentifier(ListEventsViewController.storyboardID) as? ListEventsViewController {
             eventsListVC.eventsData = []
             ParseHelper.queryEventsForCategories(PFUser.currentUser(), categories: selectedCategoriesData, block: {
                 result, error in
@@ -216,7 +216,13 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        performSegueWithIdentifier("profile", sender: group.attendees[indexPath.row])
+        guard let profileVC = UIStoryboard.profileTab()?.instantiateViewControllerWithIdentifier("UserProfileViewController") as? UserProfileViewController else {
+            return
+        }
+
+        profileVC.user = group.attendees[indexPath.row]
+
+        navigationController?.pushViewController(profileVC, animated: true)
     }
     
     @IBAction func attend(sender: UIButton) {
@@ -252,7 +258,10 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
                 self.spinner.stopAnimating()
                 sender.hidden = true
                 
-                let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
+                guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as?BlurryAlertViewController else {
+                    return
+                }
+
                 blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
                 blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
                 blurryAlertViewController.aboutText = "Your request has been sent."
@@ -262,7 +271,10 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
             })
             //            }
         } else {
-            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
+            guard let vc = UIStoryboard.auth()?.instantiateViewControllerWithIdentifier("LoginViewController") as? LoginViewController else {
+                return
+            }
+
             presentViewController(vc, animated: true, completion: nil)
         }
     }
@@ -270,14 +282,20 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
     @IBAction func chat(sender: AnyObject) {
         if PFUser.currentUser() != nil {
             if (attendees.count>0) {
-                let controller: MessagesTableViewController = self.storyboard!.instantiateViewControllerWithIdentifier("MessagesTableViewController") as! MessagesTableViewController
+                guard let controller: MessagesTableViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("MessagesTableViewController") as? MessagesTableViewController else {
+                    return
+                }
+
                 controller.group = group
                 self.navigationController!.pushViewController(controller, animated: true)
             } else {
                 MessageToUser.showDefaultErrorMessage("There are no attendees yet.")
             }
         } else {
-            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
+            guard let vc = UIStoryboard.auth()?.instantiateViewControllerWithIdentifier("LoginViewController") as? LoginViewController else {
+                return
+            }
+
             presentViewController(vc, animated: true, completion: nil)
         }
     }
@@ -307,7 +325,10 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
                 self.showSendMailErrorAlert()
             }
         } else {
-            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
+            guard let vc = UIStoryboard.auth()?.instantiateViewControllerWithIdentifier("LoginViewController") as? LoginViewController else {
+                return
+            }
+
             presentViewController(vc, animated: true, completion: nil)
         }
     }
@@ -337,14 +358,20 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
     }
     
     @IBAction func authorProfile(sender: AnyObject) {
-        let userProfileViewController = self.storyboard!.instantiateViewControllerWithIdentifier("UserProfileViewController") as! UserProfileViewController
+        guard let userProfileViewController = UIStoryboard.profileTab()?.instantiateViewControllerWithIdentifier("UserProfileViewController") as? UserProfileViewController else {
+            return
+        }
+
         userProfileViewController.user = group.owner
         
         navigationController?.pushViewController(userProfileViewController, animated: true)
     }
     
     @IBAction func attendeeProfile(sender: AnyObject) {
-        let userProfileViewController = self.storyboard!.instantiateViewControllerWithIdentifier("UserProfileViewController") as! UserProfileViewController
+        guard let userProfileViewController = UIStoryboard.profileTab()?.instantiateViewControllerWithIdentifier("UserProfileViewController") as? UserProfileViewController else {
+            return
+        }
+
         userProfileViewController.user = attendees[sender.tag]
         
         navigationController?.pushViewController(userProfileViewController, animated: true)
@@ -359,7 +386,10 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
     }
     
     @IBAction func editEvent(sender: AnyObject){
-        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("CreateGroupViewController") as! CreateGroupViewController
+        guard let vc = UIStoryboard.groupsTab()?.instantiateViewControllerWithIdentifier("CreateGroupViewController") as? CreateGroupViewController else {
+            return
+        }
+
         vc.group = group
         vc.delegate = self
         navigationController?.pushViewController(vc, animated: true)
@@ -385,7 +415,10 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
     }
     
     @IBAction func reportButtonTapped(sender: AnyObject) {
-        let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
+        guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as? BlurryAlertViewController else {
+            return
+        }
+        
         blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
         blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
         blurryAlertViewController.messageText = "You are about to flag this group for inappropriate content. Are you sure?"
@@ -404,12 +437,5 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
             })
         }
         self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
-    }
-
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "profile" {
-            let vc = (segue.destinationViewController as! UserProfileViewController)
-            vc.user = sender as! PFUser
-        }
     }
 }

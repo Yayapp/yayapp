@@ -70,7 +70,10 @@ class ProfileViewController: UITableViewController {
         PFUser.logOutInBackgroundWithBlock({
             error in
             if error == nil {
-                let startViewController = self.storyboard!.instantiateViewControllerWithIdentifier("StartViewController") as! StartViewController
+                guard let startViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("StartViewController") as? StartViewController else {
+                    return
+                }
+
                 self.navigationController!.popToRootViewControllerAnimated(false)
                 self.appDelegate.window!.rootViewController = startViewController
                 self.tabBarController?.selectedIndex = 0
@@ -82,7 +85,7 @@ class ProfileViewController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
 
-        if let eventsListVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ListEventsViewController") as? ListEventsViewController,
+        if let eventsListVC = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("ListEventsViewController") as? ListEventsViewController,
             eventsData = eventsData
             where indexPath.row == 1 {
             eventsListVC.eventsData = eventsData

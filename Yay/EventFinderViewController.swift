@@ -29,7 +29,10 @@ class EventFinderViewController: UIViewController, UIAlertViewDelegate, ChooseLo
     }
     
     @IBAction func openLocationPicker(sender: AnyObject) {
-        let map = self.storyboard!.instantiateViewControllerWithIdentifier("ChooseLocationViewController") as! ChooseLocationViewController
+        guard let map = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("ChooseLocationViewController") as? ChooseLocationViewController else {
+            return
+        }
+
         map.delegate = self
         map.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
         map.setEditing (true,animated: true)

@@ -202,7 +202,10 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
                 
                 sender.hidden = true
                 
-                let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
+                guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as? BlurryAlertViewController else {
+                    return
+                }
+
                 blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
                 blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
                 blurryAlertViewController.aboutText = "Your request has been sent."
@@ -210,14 +213,20 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
                 self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
             })
         } else {
-            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
+            guard let vc = UIStoryboard.auth()?.instantiateViewControllerWithIdentifier("LoginViewController") as? LoginViewController else {
+                return
+            }
+
             presentViewController(vc, animated: true, completion: nil)
         }
     }
     
     @IBAction func authorProfile(sender: AnyObject) {
         let event:Event! = eventsData[sender.tag]
-        let userProfileViewController = self.storyboard!.instantiateViewControllerWithIdentifier("UserProfileViewController") as! UserProfileViewController
+        guard let userProfileViewController = UIStoryboard.profileTab()?.instantiateViewControllerWithIdentifier("UserProfileViewController") as? UserProfileViewController else {
+            return
+        }
+
         userProfileViewController.user = event.owner
         
         navigationController?.pushViewController(userProfileViewController, animated: true)
@@ -225,7 +234,10 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
     
     @IBAction func attendeeProfile(sender: UIButton) {
         let event:Event! = eventsData[sender.tag]
-        let userProfileViewController = self.storyboard!.instantiateViewControllerWithIdentifier("UserProfileViewController") as! UserProfileViewController
+        guard let userProfileViewController = UIStoryboard.profileTab()?.instantiateViewControllerWithIdentifier("UserProfileViewController") as? UserProfileViewController else {
+            return
+        }
+
         userProfileViewController.user = event.attendees[(sender.titleLabel?.tag)!]
         
         navigationController?.pushViewController(userProfileViewController, animated: true)

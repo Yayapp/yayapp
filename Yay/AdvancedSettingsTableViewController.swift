@@ -27,7 +27,10 @@ class AdvancedSettingsTableViewController: UITableViewController {
 
 
     @IBAction func deleteProfile(){
-        let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
+        guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as? BlurryAlertViewController else {
+            return
+        }
+
         blurryAlertViewController.action = BlurryAlertViewController.BUTTON_DELETE
         blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
         blurryAlertViewController.aboutText = "Sorry, are you sure you want to delete your profile?"

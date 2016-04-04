@@ -57,7 +57,10 @@ class NotificationsController: UIViewController {
     }
     
     @IBAction func recentAction(sender: AnyObject) {
-        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("RecentViewController") as! RecentViewController
+        guard let vc = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("RecentViewController") as? RecentViewController else {
+            return
+        }
+
         updateActiveViewController(vc)
         recentUnderline.hidden = false
         chatUnderline.hidden = true
@@ -68,7 +71,10 @@ class NotificationsController: UIViewController {
     }
     
     @IBAction func chatAction(sender: AnyObject) {
-        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ConversationsTableViewController") as! ConversationsTableViewController
+        guard let vc = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("ConversationsTableViewController") as? ConversationsTableViewController else {
+            return
+        }
+
         updateActiveViewController(vc)
         recentUnderline.hidden = true
         chatUnderline.hidden = false
@@ -79,7 +85,10 @@ class NotificationsController: UIViewController {
     }
     
     @IBAction func requestsAction(sender: AnyObject) {
-        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("RequestsTableViewController") as! RequestsTableViewController
+        guard let vc = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("RequestsTableViewController") as? RequestsTableViewController else {
+            return
+        }
+
         updateActiveViewController(vc)
         recentUnderline.hidden = true
         chatUnderline.hidden = true

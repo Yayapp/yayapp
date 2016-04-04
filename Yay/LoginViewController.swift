@@ -216,7 +216,10 @@ class LoginViewController: UIViewController, InstagramDelegate {
     }
 //
     @IBAction func instagramLogin(sender: AnyObject) {
-        let instagramView = self.storyboard!.instantiateViewControllerWithIdentifier("InstagramViewController") as! InstagramViewController
+        guard let instagramView = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("InstagramViewController") as? InstagramViewController else {
+            return
+        }
+
         instagramView.delegate = self
         presentViewController(instagramView, animated: true, completion: nil)
     }
@@ -262,7 +265,10 @@ class LoginViewController: UIViewController, InstagramDelegate {
     }
     
     @IBAction func loginEmail(sender: AnyObject) {
-        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("CreateEmailAccountViewController") as! CreateEmailAccountViewController
+        guard let vc = UIStoryboard.auth()?.instantiateViewControllerWithIdentifier("CreateEmailAccountViewController") as? CreateEmailAccountViewController else {
+            return
+        }
+
         vc.isLogin = isLogin
         presentViewController(vc, animated: true, completion: nil)
     }

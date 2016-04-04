@@ -34,6 +34,10 @@
 		3160BAA21CAA693400047691 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 3160BA931CAA693400047691 /* README.md */; };
 		3160BAA31CAA693400047691 /* global.json in Resources */ = {isa = PBXBuildFile; fileRef = 3160BA951CAA693400047691 /* global.json */; };
 		3160BAA41CAA693400047691 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 3160BA971CAA693400047691 /* index.html */; };
+		31CEAC9E1CB28C6800A51F8E /* UIStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31CEAC9D1CB28C6800A51F8E /* UIStoryboard.swift */; };
+		31CEACA01CB28D9B00A51F8E /* Auth.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 31CEAC9F1CB28D9B00A51F8E /* Auth.storyboard */; };
+		31CEACA31CB2AA1700A51F8E /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31CEACA21CB2AA1700A51F8E /* User.swift */; };
+		31CEACA51CB2B58400A51F8E /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31CEACA41CB2B58400A51F8E /* File.swift */; };
 		31D94CBF1CAD02FF0099A891 /* NSDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D94CBE1CAD02FF0099A891 /* NSDate.swift */; };
 		31DF59871CAE72D100621F54 /* EventPhotoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DF59861CAE72D100621F54 /* EventPhotoTableViewCell.swift */; };
 		31DF598A1CAE73E300621F54 /* EventPhotoFlatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 31DF59881CAE73E300621F54 /* EventPhotoFlatTableViewCell.xib */; };
@@ -117,7 +121,7 @@
 		315EE7691CAEB44000BD52CF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/GroupsTab.storyboard; sourceTree = "<group>"; };
 		315EE76C1CAEC77000BD52CF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/EventsTab.storyboard; sourceTree = "<group>"; };
 		315EE76F1CAECC8500BD52CF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/NotificationsTab.storyboard; sourceTree = "<group>"; };
-		315EE7711CAECE0000BD52CF /* ProfileTab.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ProfileTab.storyboard; sourceTree = "<group>"; };
+		315EE7711CAECE0000BD52CF /* ProfileTab.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = ProfileTab.storyboard; path = ../../ProfileTab.storyboard; sourceTree = "<group>"; };
 		3160BA861CAA693400047691 /* main.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = main.js; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.c; };
 		3160BA871CAA693400047691 /* moment-timezone-with-data.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "moment-timezone-with-data.js"; sourceTree = "<group>"; };
 		3160BA881CAA693400047691 /* moment.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = moment.js; sourceTree = "<group>"; };
@@ -131,6 +135,10 @@
 		3160BA931CAA693400047691 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		3160BA951CAA693400047691 /* global.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = global.json; sourceTree = "<group>"; };
 		3160BA971CAA693400047691 /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
+		31CEAC9D1CB28C6800A51F8E /* UIStoryboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIStoryboard.swift; sourceTree = "<group>"; };
+		31CEAC9F1CB28D9B00A51F8E /* Auth.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Auth.storyboard; path = ../../Base.lproj/Auth.storyboard; sourceTree = "<group>"; };
+		31CEACA21CB2AA1700A51F8E /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		31CEACA41CB2B58400A51F8E /* File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		31D94CBE1CAD02FF0099A891 /* NSDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDate.swift; sourceTree = "<group>"; };
 		31DF59861CAE72D100621F54 /* EventPhotoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventPhotoTableViewCell.swift; sourceTree = "<group>"; };
 		31DF59881CAE73E300621F54 /* EventPhotoFlatTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventPhotoFlatTableViewCell.xib; sourceTree = "<group>"; };
@@ -218,6 +226,7 @@
 		3112B1191CAABD3F00AE064F /* View */ = {
 			isa = PBXGroup;
 			children = (
+				31CEACA11CB2A56900A51F8E /* Storyboards */,
 				31DF59851CAE72D100621F54 /* EventPhotoCell */,
 				3112B11A1CAABD3F00AE064F /* EventsCell */,
 				315EE74A1CAE8AFC00BD52CF /* GroupsCollectionCell */,
@@ -331,9 +340,24 @@
 			path = public;
 			sourceTree = "<group>";
 		};
+		31CEACA11CB2A56900A51F8E /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				31CEAC9F1CB28D9B00A51F8E /* Auth.storyboard */,
+				995032741B564B4400D792C5 /* Main.storyboard */,
+				315EE76B1CAEC77000BD52CF /* EventsTab.storyboard */,
+				315EE7681CAEB44000BD52CF /* GroupsTab.storyboard */,
+				315EE7631CAEAB1100BD52CF /* CreateEventTab.storyboard */,
+				315EE76E1CAECC8500BD52CF /* NotificationsTab.storyboard */,
+				315EE7711CAECE0000BD52CF /* ProfileTab.storyboard */,
+			);
+			path = Storyboards;
+			sourceTree = "<group>";
+		};
 		31D94CBD1CAD02D00099A891 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				31CEAC9D1CB28C6800A51F8E /* UIStoryboard.swift */,
 				31D94CBE1CAD02FF0099A891 /* NSDate.swift */,
 			);
 			path = Extension;
@@ -371,6 +395,8 @@
 				99A6C9FB1BDBCC4D002060C2 /* Block.swift */,
 				995A57F31C6CFFA200680CB6 /* Notification.swift */,
 				99B0C6351C7F9768004D8A99 /* TextField.swift */,
+				31CEACA21CB2AA1700A51F8E /* User.swift */,
+				31CEACA41CB2B58400A51F8E /* File.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -425,12 +451,6 @@
 				31D94CBD1CAD02D00099A891 /* Extension */,
 				995032901B56595F00D792C5 /* util */,
 				995032701B564B4400D792C5 /* AppDelegate.swift */,
-				995032741B564B4400D792C5 /* Main.storyboard */,
-				315EE7711CAECE0000BD52CF /* ProfileTab.storyboard */,
-				315EE76E1CAECC8500BD52CF /* NotificationsTab.storyboard */,
-				315EE76B1CAEC77000BD52CF /* EventsTab.storyboard */,
-				315EE7681CAEB44000BD52CF /* GroupsTab.storyboard */,
-				315EE7631CAEAB1100BD52CF /* CreateEventTab.storyboard */,
 				995032771B564B4400D792C5 /* Images.xcassets */,
 				995032791B564B4400D792C5 /* LaunchScreen.xib */,
 				9950326E1B564B4400D792C5 /* Supporting Files */,
@@ -573,6 +593,7 @@
 			files = (
 				3160BAA31CAA693400047691 /* global.json in Resources */,
 				995032761B564B4400D792C5 /* Main.storyboard in Resources */,
+				31CEACA01CB28D9B00A51F8E /* Auth.storyboard in Resources */,
 				315EE76A1CAEB44000BD52CF /* GroupsTab.storyboard in Resources */,
 				31DF598A1CAE73E300621F54 /* EventPhotoFlatTableViewCell.xib in Resources */,
 				3112B1201CAABD7900AE064F /* EventsTableViewCell.xib in Resources */,
@@ -656,6 +677,7 @@
 				99509E8A1B9618FA003BF7CD /* PhotosTableViewController.swift in Sources */,
 				99EC40F81B5D90630093E484 /* Prefs.swift in Sources */,
 				99EC40FC1B5FFB4A0093E484 /* InstagramViewController.swift in Sources */,
+				31CEAC9E1CB28C6800A51F8E /* UIStoryboard.swift in Sources */,
 				99B0C6361C7F9768004D8A99 /* TextField.swift in Sources */,
 				997C238B1B668CFB0070DDB2 /* EventsViewController.swift in Sources */,
 				99B0C6381C7FB2F6004D8A99 /* AdvancedSettingsTableViewController.swift in Sources */,
@@ -687,6 +709,7 @@
 				995032931B56632700D792C5 /* StartViewController.swift in Sources */,
 				99B0C63A1C7FB7AA004D8A99 /* RangeViewController.swift in Sources */,
 				99EF69CE1BC418B700DA0073 /* ConversationsTableViewController.swift in Sources */,
+				31CEACA51CB2B58400A51F8E /* File.swift in Sources */,
 				31DF59871CAE72D100621F54 /* EventPhotoTableViewCell.swift in Sources */,
 				99EF69CC1BC4061700DA0073 /* Message.swift in Sources */,
 				99253FF61B6ABBF40078B668 /* Extensions.swift in Sources */,
@@ -700,6 +723,7 @@
 				9917D9E21B56A94F0081A796 /* MapEventsViewController.swift in Sources */,
 				993D3ED91B8DCA900023B054 /* RequestsTableViewController.swift in Sources */,
 				99A6C9FC1BDBCC4D002060C2 /* Block.swift in Sources */,
+				31CEACA31CB2AA1700A51F8E /* User.swift in Sources */,
 				997C23911B67B42D0070DDB2 /* ChooseCategoryViewController.swift in Sources */,
 				995A57F01C6BC96000680CB6 /* NotificationsController.swift in Sources */,
 				9907A35B1BCBECF500D98A6F /* KeyboardAnimationHelper.swift in Sources */,
@@ -733,6 +757,7 @@
 				315EE7641CAEAB1100BD52CF /* Base */,
 			);
 			name = CreateEventTab.storyboard;
+			path = ../..;
 			sourceTree = "<group>";
 		};
 		315EE7681CAEB44000BD52CF /* GroupsTab.storyboard */ = {
@@ -741,6 +766,7 @@
 				315EE7691CAEB44000BD52CF /* Base */,
 			);
 			name = GroupsTab.storyboard;
+			path = ../..;
 			sourceTree = "<group>";
 		};
 		315EE76B1CAEC77000BD52CF /* EventsTab.storyboard */ = {
@@ -749,6 +775,7 @@
 				315EE76C1CAEC77000BD52CF /* Base */,
 			);
 			name = EventsTab.storyboard;
+			path = ../..;
 			sourceTree = "<group>";
 		};
 		315EE76E1CAECC8500BD52CF /* NotificationsTab.storyboard */ = {
@@ -757,6 +784,7 @@
 				315EE76F1CAECC8500BD52CF /* Base */,
 			);
 			name = NotificationsTab.storyboard;
+			path = ../..;
 			sourceTree = "<group>";
 		};
 		995032741B564B4400D792C5 /* Main.storyboard */ = {
@@ -765,6 +793,7 @@
 				995032751B564B4400D792C5 /* Base */,
 			);
 			name = Main.storyboard;
+			path = ../..;
 			sourceTree = "<group>";
 		};
 		995032791B564B4400D792C5 /* LaunchScreen.xib */ = {

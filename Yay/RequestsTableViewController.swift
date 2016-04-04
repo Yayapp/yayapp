@@ -89,7 +89,10 @@ class RequestsTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let request:Request! = requests[indexPath.row]
-        let userProfileViewController = self.storyboard!.instantiateViewControllerWithIdentifier("UserProfileViewController") as! UserProfileViewController
+        guard let userProfileViewController = UIStoryboard.profileTab()?.instantiateViewControllerWithIdentifier("UserProfileViewController") as? UserProfileViewController else {
+            return
+        }
+        
         userProfileViewController.user = request.attendee
         
         navigationController?.pushViewController(userProfileViewController, animated: true)

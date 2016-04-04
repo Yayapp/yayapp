@@ -18,13 +18,19 @@ class StartViewController: UIViewController {
  
     
     @IBAction func login(sender: AnyObject) {
-        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
+        guard let vc = UIStoryboard.auth()?.instantiateViewControllerWithIdentifier("LoginViewController") as? LoginViewController else {
+            return
+        }
+
         vc.isLogin = true
         presentViewController(vc, animated: true, completion: nil)
     }
     
     @IBAction func signup(sender: AnyObject) {
-        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
+        guard let vc = UIStoryboard.auth()?.instantiateViewControllerWithIdentifier("LoginViewController") as? LoginViewController else {
+            return
+        }
+
         presentViewController(vc, animated: true, completion: nil)
     }
    

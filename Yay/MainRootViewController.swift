@@ -96,11 +96,17 @@ class MainRootViewController: UIViewController, MFMailComposeViewControllerDeleg
     
     @IBAction func createEvent(sender: AnyObject) {
         if PFUser.currentUser() != nil {
-            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("CreateEventViewController") as! CreateEventViewController
+            guard let vc = UIStoryboard.createEventTab()?.instantiateViewControllerWithIdentifier("CreateEventViewController") as? CreateEventViewController else {
+                return
+            }
+
             vc.delegate = self
             navigationController?.pushViewController(vc, animated: true)
         } else {
-            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("LoginViewController") as! LoginViewController
+            guard let vc = UIStoryboard.auth()?.instantiateViewControllerWithIdentifier("LoginViewController") as? LoginViewController else {
+                return
+            }
+
             presentViewController(vc, animated: true, completion: nil)
         }
     }
@@ -152,12 +158,18 @@ class MainRootViewController: UIViewController, MFMailComposeViewControllerDeleg
   
     
     func showMessages() {
-        let controller: ConversationsTableViewController = self.storyboard!.instantiateViewControllerWithIdentifier("ConversationsTableViewController") as! ConversationsTableViewController
+        guard let controller: ConversationsTableViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("ConversationsTableViewController") as? ConversationsTableViewController else {
+            return
+        }
+        
         navigationController?.pushViewController(controller, animated: true)
     }
     
     func showProfile(){
-        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("UserProfileViewController") as! UserProfileViewController
+        guard let vc = UIStoryboard.profileTab()?.instantiateViewControllerWithIdentifier("UserProfileViewController") as? UserProfileViewController else {
+            return
+        }
+
         vc.user = PFUser.currentUser()
         navigationController?.pushViewController(vc, animated: true)
     }
@@ -200,17 +212,23 @@ class MainRootViewController: UIViewController, MFMailComposeViewControllerDeleg
 //    }
     
     func showTerms(){
-        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("TermsController") as! TermsController
+        guard let vc = UIStoryboard.profileTab()?.instantiateViewControllerWithIdentifier("TermsController") as? TermsController else {
+            return
+        }
+
         presentViewController(vc, animated: true, completion: nil)
     }
     
     func showPrivacy(){
-        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("PrivacyPolicyController") as! PrivacyPolicyController
+        guard let vc = UIStoryboard.profileTab()?.instantiateViewControllerWithIdentifier("PrivacyPolicyController") as? PrivacyPolicyController else {
+            return
+        }
+        
         presentViewController(vc, animated: true, completion: nil)
     }
 
     func madeEventChoice(event: Event) {
-        guard let eventDetailsVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("EventDetailsViewController") as? EventDetailsViewController else {
+        guard let eventDetailsVC = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("EventDetailsViewController") as? EventDetailsViewController else {
             return
         }
 

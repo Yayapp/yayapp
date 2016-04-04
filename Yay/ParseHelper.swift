@@ -16,6 +16,8 @@ typealias EventPhotosResultBlock = ([EventPhoto]?, NSError?) -> ()
 typealias BoolResultBlock = (Bool?, NSError?) -> ()
 
 class ParseHelper {
+    static let sharedInstance = ParseHelper()
+
     static let gregorianUTCCalendar: NSCalendar? = {
         guard let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian),
             timeZoneUTC = NSTimeZone(abbreviation: "UTC") else {
@@ -26,6 +28,8 @@ class ParseHelper {
 
         return calendar
     }()
+
+    let currentUser = User(parseUser: PFUser.currentUser())
 
     class func getTodayEvents(user:PFUser?, categories:[Category], block:EventsResultBlock?) {
         let today = NSDate()

@@ -112,7 +112,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
     }
     
     @IBAction func openDateTimePicker(sender: AnyObject) {
-        guard let map = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ChooseDateTimeViewController") as? ChooseDateTimeViewController else {
+        guard let map = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("ChooseDateTimeViewController") as? ChooseDateTimeViewController else {
             return
         }
 
@@ -131,7 +131,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
     }
     
     @IBAction func openPhotoPicker(sender: AnyObject) {
-        guard let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ChooseEventPictureViewController") as? ChooseEventPictureViewController else {
+        guard let vc = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("ChooseEventPictureViewController") as? ChooseEventPictureViewController else {
             return
         }
 
@@ -140,7 +140,10 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
     }
     
     @IBAction func openCategoryPicker(sender: AnyObject) {
-        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("CategoryPickerViewController") as! CategoryPickerViewController
+        guard let vc = UIStoryboard.createEventTab()?.instantiateViewControllerWithIdentifier("CategoryPickerViewController") as? CategoryPickerViewController else {
+            return
+        }
+
         vc.categoryDelegate = self
         vc.selectedCategoriesData = chosenCategories
         
@@ -227,7 +230,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
     }
     
     @IBAction func addLocationButtonPressed(sender: AnyObject) {
-        guard let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(ChooseLocationViewController.storyboardID) as? ChooseLocationViewController else {
+        guard let vc = UIStoryboard.main()?.instantiateViewControllerWithIdentifier(ChooseLocationViewController.storyboardID) as? ChooseLocationViewController else {
             return
         }
 
@@ -237,7 +240,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
     }
 
     @IBAction func openAboutMeEditor(sender: AnyObject) {
-        guard let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("WriteAboutViewController") as? WriteAboutViewController else {
+        guard let vc = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("WriteAboutViewController") as? WriteAboutViewController else {
             return
         }
 
@@ -302,7 +305,10 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
                         
                         let root = self.tabBarController?.viewControllers![2] as! UINavigationController
                         root.popViewControllerAnimated(false)
-                        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("CreateEventViewController") as! CreateEventViewController
+                        guard let vc = UIStoryboard.createEventTab()?.instantiateViewControllerWithIdentifier("CreateEventViewController") as? CreateEventViewController else {
+                            return
+                        }
+
                         root.pushViewController(vc, animated: false)
                         self.spinner.stopAnimating()
                         self.tabBarController?.selectedIndex = 0

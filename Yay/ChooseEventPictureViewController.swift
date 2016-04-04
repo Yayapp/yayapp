@@ -61,9 +61,12 @@ class ChooseEventPictureViewController: UIViewController, UITableViewDataSource,
         
         return cell
     }
-    
+
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("PhotosTableViewController") as! PhotosTableViewController
+        guard let vc = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("PhotosTableViewController") as? PhotosTableViewController else {
+            return
+        }
+
         vc.delegate = self
         let category = categories[indexPath.row]
         vc.category = category
