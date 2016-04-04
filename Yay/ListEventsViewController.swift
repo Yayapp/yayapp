@@ -13,7 +13,8 @@ protocol ListEventsDelegate : NSObjectProtocol {
 }
 
 class ListEventsViewController: EventsViewController, UITableViewDataSource, UITableViewDelegate {
-
+    static let storyboardID = "ListEventsViewController"
+    
     var eventsFirst:[Event]?
     var currentTitle:String?
     let dateFormatter = NSDateFormatter()

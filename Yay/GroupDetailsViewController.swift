@@ -55,6 +55,29 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        if let messagesVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(MessagesTableViewController.storyboardID) as? MessagesTableViewController {
+            messagesVC.group = group
+            addChildViewController(messagesVC)
+            messagesVC.didMoveToParentViewController(self)
+            messagesContainer.addSubview(messagesVC.view)
+        }
+
+        if let eventsListVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(ListEventsViewController.storyboardID) as? ListEventsViewController {
+            eventsListVC.eventsData = []
+            ParseHelper.queryEventsForCategories(PFUser.currentUser(), categories: selectedCategoriesData, block: {
+                result, error in
+                if error == nil {
+                    eventsListVC.reloadAll(result!)
+                } else {
+                    MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+                }
+            })
+
+            addChildViewController(eventsListVC)
+            eventsListVC.didMoveToParentViewController(self)
+            eventsContainer.addSubview(eventsListVC.view)
+        }
+
         attendeesButtons.registerNib(GroupsViewCell.nib, forCellWithReuseIdentifier: GroupsViewCell.reuseIdentifier)
         attendeesButtons.delegate = self
         attendeesButtons.dataSource = self
@@ -382,27 +405,11 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
         }
         self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
     }
-    
+
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-        if(segue.identifier == "chat") {
-            let vc = (segue.destinationViewController as! MessagesTableViewController)
-            vc.group = group
-        } else if(segue.identifier == "events") {
-            let vc = (segue.destinationViewController as! ListEventsViewController)
-            vc.eventsData = []
-            ParseHelper.queryEventsForCategories(PFUser.currentUser(), categories: selectedCategoriesData, block: {
-                result, error in
-                if error == nil {
-                    vc.reloadAll(result!)
-                } else {
-                    MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-                }
-            })
-        } else if(segue.identifier == "profile") {
+        if segue.identifier == "profile" {
             let vc = (segue.destinationViewController as! UserProfileViewController)
             vc.user = sender as! PFUser
         }
     }
-    
 }

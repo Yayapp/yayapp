@@ -15,6 +15,12 @@
 		315EE74E1CAE8BE900BD52CF /* GroupsViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 315EE74D1CAE8BE900BD52CF /* GroupsViewCell.xib */; };
 		315EE7511CAE8E7B00BD52CF /* RequestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EE7501CAE8E7B00BD52CF /* RequestTableViewCell.swift */; };
 		315EE7531CAE8EA700BD52CF /* RequestTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 315EE7521CAE8EA700BD52CF /* RequestTableViewCell.xib */; };
+		315EE7651CAEAB1100BD52CF /* CreateEventTab.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 315EE7631CAEAB1100BD52CF /* CreateEventTab.storyboard */; };
+		315EE7671CAEABD200BD52CF /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EE7661CAEABD200BD52CF /* TabBarController.swift */; };
+		315EE76A1CAEB44000BD52CF /* GroupsTab.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 315EE7681CAEB44000BD52CF /* GroupsTab.storyboard */; };
+		315EE76D1CAEC77000BD52CF /* EventsTab.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 315EE76B1CAEC77000BD52CF /* EventsTab.storyboard */; };
+		315EE7701CAECC8500BD52CF /* NotificationsTab.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 315EE76E1CAECC8500BD52CF /* NotificationsTab.storyboard */; };
+		315EE7721CAECE0000BD52CF /* ProfileTab.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 315EE7711CAECE0000BD52CF /* ProfileTab.storyboard */; };
 		3160BA981CAA693400047691 /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = 3160BA861CAA693400047691 /* main.js */; };
 		3160BA991CAA693400047691 /* moment-timezone-with-data.js in Resources */ = {isa = PBXBuildFile; fileRef = 3160BA871CAA693400047691 /* moment-timezone-with-data.js */; };
 		3160BA9A1CAA693400047691 /* moment.js in Resources */ = {isa = PBXBuildFile; fileRef = 3160BA881CAA693400047691 /* moment.js */; };
@@ -106,6 +112,12 @@
 		315EE74D1CAE8BE900BD52CF /* GroupsViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GroupsViewCell.xib; sourceTree = "<group>"; };
 		315EE7501CAE8E7B00BD52CF /* RequestTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestTableViewCell.swift; sourceTree = "<group>"; };
 		315EE7521CAE8EA700BD52CF /* RequestTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RequestTableViewCell.xib; sourceTree = "<group>"; };
+		315EE7641CAEAB1100BD52CF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CreateEventTab.storyboard; sourceTree = "<group>"; };
+		315EE7661CAEABD200BD52CF /* TabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		315EE7691CAEB44000BD52CF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/GroupsTab.storyboard; sourceTree = "<group>"; };
+		315EE76C1CAEC77000BD52CF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/EventsTab.storyboard; sourceTree = "<group>"; };
+		315EE76F1CAECC8500BD52CF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/NotificationsTab.storyboard; sourceTree = "<group>"; };
+		315EE7711CAECE0000BD52CF /* ProfileTab.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ProfileTab.storyboard; sourceTree = "<group>"; };
 		3160BA861CAA693400047691 /* main.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = main.js; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.c; };
 		3160BA871CAA693400047691 /* moment-timezone-with-data.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "moment-timezone-with-data.js"; sourceTree = "<group>"; };
 		3160BA881CAA693400047691 /* moment.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = moment.js; sourceTree = "<group>"; };
@@ -414,6 +426,11 @@
 				995032901B56595F00D792C5 /* util */,
 				995032701B564B4400D792C5 /* AppDelegate.swift */,
 				995032741B564B4400D792C5 /* Main.storyboard */,
+				315EE7711CAECE0000BD52CF /* ProfileTab.storyboard */,
+				315EE76E1CAECC8500BD52CF /* NotificationsTab.storyboard */,
+				315EE76B1CAEC77000BD52CF /* EventsTab.storyboard */,
+				315EE7681CAEB44000BD52CF /* GroupsTab.storyboard */,
+				315EE7631CAEAB1100BD52CF /* CreateEventTab.storyboard */,
 				995032771B564B4400D792C5 /* Images.xcassets */,
 				995032791B564B4400D792C5 /* LaunchScreen.xib */,
 				9950326E1B564B4400D792C5 /* Supporting Files */,
@@ -473,6 +490,7 @@
 				99B0C6371C7FB2F6004D8A99 /* AdvancedSettingsTableViewController.swift */,
 				99B0C6391C7FB7AA004D8A99 /* RangeViewController.swift */,
 				99B0C63B1C8084D2004D8A99 /* CreateGroupViewController.swift */,
+				315EE7661CAEABD200BD52CF /* TabBarController.swift */,
 			);
 			name = controllers;
 			sourceTree = "<group>";
@@ -555,13 +573,17 @@
 			files = (
 				3160BAA31CAA693400047691 /* global.json in Resources */,
 				995032761B564B4400D792C5 /* Main.storyboard in Resources */,
+				315EE76A1CAEB44000BD52CF /* GroupsTab.storyboard in Resources */,
 				31DF598A1CAE73E300621F54 /* EventPhotoFlatTableViewCell.xib in Resources */,
 				3112B1201CAABD7900AE064F /* EventsTableViewCell.xib in Resources */,
 				3160BA9D1CAA693400047691 /* header.js in Resources */,
 				3160BAA41CAA693400047691 /* index.html in Resources */,
+				315EE76D1CAEC77000BD52CF /* EventsTab.storyboard in Resources */,
 				9950327B1B564B4400D792C5 /* LaunchScreen.xib in Resources */,
 				3160BAA01CAA693400047691 /* package.json in Resources */,
+				315EE7701CAECC8500BD52CF /* NotificationsTab.storyboard in Resources */,
 				315EE74E1CAE8BE900BD52CF /* GroupsViewCell.xib in Resources */,
+				315EE7721CAECE0000BD52CF /* ProfileTab.storyboard in Resources */,
 				3160BA9A1CAA693400047691 /* moment.js in Resources */,
 				3160BA9C1CAA693400047691 /* footer.js in Resources */,
 				3160BA9E1CAA693400047691 /* jsrsasign.js in Resources */,
@@ -572,6 +594,7 @@
 				315EE7531CAE8EA700BD52CF /* RequestTableViewCell.xib in Resources */,
 				3160BA991CAA693400047691 /* moment-timezone-with-data.js in Resources */,
 				3160BA981CAA693400047691 /* main.js in Resources */,
+				315EE7651CAEAB1100BD52CF /* CreateEventTab.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -687,6 +710,7 @@
 				99B0C63C1C8084D2004D8A99 /* CreateGroupViewController.swift in Sources */,
 				995032971B5671B900D792C5 /* ChooseLocationViewController.swift in Sources */,
 				995032951B566F3400D792C5 /* EventFinderViewController.swift in Sources */,
+				315EE7671CAEABD200BD52CF /* TabBarController.swift in Sources */,
 				99C7B8CF1B7D1D370045D44D /* Rank.swift in Sources */,
 				997C238D1B67889B0070DDB2 /* MessageToUser.swift in Sources */,
 				995A57F41C6CFFA200680CB6 /* Notification.swift in Sources */,
@@ -703,6 +727,38 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		315EE7631CAEAB1100BD52CF /* CreateEventTab.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				315EE7641CAEAB1100BD52CF /* Base */,
+			);
+			name = CreateEventTab.storyboard;
+			sourceTree = "<group>";
+		};
+		315EE7681CAEB44000BD52CF /* GroupsTab.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				315EE7691CAEB44000BD52CF /* Base */,
+			);
+			name = GroupsTab.storyboard;
+			sourceTree = "<group>";
+		};
+		315EE76B1CAEC77000BD52CF /* EventsTab.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				315EE76C1CAEC77000BD52CF /* Base */,
+			);
+			name = EventsTab.storyboard;
+			sourceTree = "<group>";
+		};
+		315EE76E1CAECC8500BD52CF /* NotificationsTab.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				315EE76F1CAECC8500BD52CF /* Base */,
+			);
+			name = NotificationsTab.storyboard;
+			sourceTree = "<group>";
+		};
 		995032741B564B4400D792C5 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

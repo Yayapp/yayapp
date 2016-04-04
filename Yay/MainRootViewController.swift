@@ -53,12 +53,14 @@ class MainRootViewController: UIViewController, MFMailComposeViewControllerDeleg
     
 
     func segmentChanged() {
-        var vc:EventsViewController
-        if (isMapView) {
-            vc = self.storyboard!.instantiateViewControllerWithIdentifier("MapEventsViewController") as! MapEventsViewController
-        } else {
-            vc = self.storyboard!.instantiateViewControllerWithIdentifier("ListEventsViewController") as! ListEventsViewController
+        let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let mapEventsVC = mainStoryboard.instantiateViewControllerWithIdentifier("MapEventsViewController") as? MapEventsViewController,
+            listEventsVC = mainStoryboard.instantiateViewControllerWithIdentifier("ListEventsViewController") as? ListEventsViewController else {
+                return
         }
+
+        let vc = isMapView ? mapEventsVC : listEventsVC
+
         vc.delegate = self
         if(selectedSegment == 0) {
             ParseHelper.getTodayEvents(PFUser.currentUser(), categories: chosenCategories, block: {
@@ -206,10 +208,17 @@ class MainRootViewController: UIViewController, MFMailComposeViewControllerDeleg
         let vc = self.storyboard!.instantiateViewControllerWithIdentifier("PrivacyPolicyController") as! PrivacyPolicyController
         presentViewController(vc, animated: true, completion: nil)
     }
+
     func madeEventChoice(event: Event) {
-        performSegueWithIdentifier("event_details", sender: event)
+        guard let eventDetailsVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("EventDetailsViewController") as? EventDetailsViewController else {
+            return
+        }
+
+        eventDetailsVC.event = event
+        eventDetailsVC.delegate = currentVC
+
+        navigationController?.pushViewController(eventDetailsVC, animated: true)
     }
-    
         
     func madeCategoryChoice(categories: [Category]) {
         chosenCategories = categories
@@ -250,16 +259,4 @@ class MainRootViewController: UIViewController, MFMailComposeViewControllerDeleg
         }
         segmentChanged()
     }
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-        if(segue.identifier == "event_details") {
-            if let event = sender as? Event {
-                let vc = (segue.destinationViewController as! EventDetailsViewController)
-                vc.event = event
-                vc.delegate = currentVC
-            }
-        }
-    }
-
 }

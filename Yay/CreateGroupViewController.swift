@@ -91,9 +91,22 @@ class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate
         isPrivate = true
         location.hidden = false
     }
+
+    @IBAction func addLocationButtonPressed(sender: AnyObject) {
+        guard let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(ChooseLocationViewController.storyboardID) as? ChooseLocationViewController else {
+            return
+        }
+
+        vc.delegate = self
+
+        presentViewController(vc, animated: true, completion: nil)
+    }
     
     @IBAction func openPhotoPicker(sender: AnyObject) {
-        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ChooseEventPictureViewController") as! ChooseEventPictureViewController
+        guard let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ChooseEventPictureViewController") as? ChooseEventPictureViewController else {
+            return
+        }
+
         vc.delegate = self
         navigationController?.pushViewController(vc, animated: true)
     }
@@ -137,7 +150,10 @@ class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate
     }
     
     @IBAction func openAboutMeEditor(sender: AnyObject) {
-        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("WriteAboutViewController") as! WriteAboutViewController
+        guard let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("WriteAboutViewController") as? WriteAboutViewController else {
+            return
+        }
+        
         vc.delegate = self
         vc.textAbout = descriptionText
         vc.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
@@ -195,14 +211,6 @@ class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate
                     self.createButton.enabled = false
                 }
             })
-        }
-    }
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-        if(segue.identifier == "location") {
-            let vc = (segue.destinationViewController as! ChooseLocationViewController)
-            vc.delegate = self
         }
     }
 }

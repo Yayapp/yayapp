@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <scenes>
+        <!--Notifications-->
+        <scene sceneID="pYq-oP-MBo">
+            <objects>
+                <navigationController storyboardIdentifier="notificationsNavigationController" title="Notifications" id="5Zs-fo-l01" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Notifications" image="notifications" selectedImage="notifications-selected" id="Keo-eS-zqN">
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="color" keyPath="tintColor">
+                                <color key="value" red="0.3529411764705882" green="0.74901960784313726" blue="0.32941176470588235" alpha="1" colorSpace="calibratedRGB"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </tabBarItem>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics">
+                        <color key="tintColor" red="0.35294117650000001" green="0.74901960779999999" blue="0.3294117647" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="barTintColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                    </simulatedTabBarMetrics>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="3Gd-CW-gAA">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="pTT-Up-it6" kind="relationship" relationship="rootViewController" id="7a5-cR-Q23"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qHy-Dh-veA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1702" y="-2177"/>
+        </scene>
+        <!--Notifications-->
+        <scene sceneID="vsq-DI-XDx">
+            <objects>
+                <viewController storyboardIdentifier="NotificationsController" title="Notifications" id="pTT-Up-it6" customClass="NotificationsController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="7y6-i7-iHc"/>
+                        <viewControllerLayoutGuide type="bottom" id="zxi-rw-fca"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="cfw-td-vqt">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2an-lg-L2t">
+                                <rect key="frame" x="0.0" y="108" width="320" height="323"/>
+                            </containerView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="p3q-kA-V0k">
+                                <rect key="frame" x="0.0" y="64" width="320" height="44"/>
+                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="rxr-rS-Wgs"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4eY-hv-PhZ">
+                                <rect key="frame" x="0.0" y="64" width="101.5" height="44"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" title="Recent">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="recentAction:" destination="pTT-Up-it6" eventType="touchUpInside" id="lHh-jV-PlQ"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T1k-Dr-tZv">
+                                <rect key="frame" x="218.5" y="64" width="101.5" height="44"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" title="Requests">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="requestsAction:" destination="pTT-Up-it6" eventType="touchUpInside" id="hug-Us-pvZ"/>
+                                </connections>
+                            </button>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xvf-SX-QGF">
+                                <rect key="frame" x="218.5" y="103" width="101.5" height="5"/>
+                                <color key="backgroundColor" red="0.35294117650000001" green="0.74901960779999999" blue="0.3294117647" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="5" id="OXT-Ha-d2b"/>
+                                </constraints>
+                            </view>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2El-zZ-j2P">
+                                <rect key="frame" x="0.0" y="103" width="101.5" height="5"/>
+                                <color key="backgroundColor" red="0.35294117650000001" green="0.74901960779999999" blue="0.3294117647" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="5" id="kbJ-kD-kJN"/>
+                                </constraints>
+                            </view>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ga8-PN-hiC">
+                                <rect key="frame" x="109.5" y="103" width="101" height="5"/>
+                                <color key="backgroundColor" red="0.35294117650000001" green="0.74901960779999999" blue="0.3294117647" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="5" id="I7o-Ph-E8N"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jaq-4c-Yle">
+                                <rect key="frame" x="109.5" y="64" width="101" height="44"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" title="Chat">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="chatAction:" destination="pTT-Up-it6" eventType="touchUpInside" id="8QT-Ls-mq5"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="2El-zZ-j2P" firstAttribute="bottom" secondItem="4eY-hv-PhZ" secondAttribute="bottom" id="25Q-Wn-rxT"/>
+                            <constraint firstItem="jaq-4c-Yle" firstAttribute="leading" secondItem="ga8-PN-hiC" secondAttribute="leading" id="4Cr-Mz-dWd"/>
+                            <constraint firstAttribute="trailing" secondItem="p3q-kA-V0k" secondAttribute="trailing" id="4GX-tm-ag7"/>
+                            <constraint firstItem="xvf-SX-QGF" firstAttribute="bottom" secondItem="T1k-Dr-tZv" secondAttribute="bottom" id="5RM-HM-IwC"/>
+                            <constraint firstItem="4eY-hv-PhZ" firstAttribute="width" secondItem="jaq-4c-Yle" secondAttribute="width" id="6ZX-uB-eTs"/>
+                            <constraint firstItem="jaq-4c-Yle" firstAttribute="trailing" secondItem="ga8-PN-hiC" secondAttribute="trailing" id="7c2-Mh-E0K"/>
+                            <constraint firstItem="zxi-rw-fca" firstAttribute="top" secondItem="2an-lg-L2t" secondAttribute="bottom" id="9Go-jv-pqO"/>
+                            <constraint firstItem="ga8-PN-hiC" firstAttribute="bottom" secondItem="jaq-4c-Yle" secondAttribute="bottom" id="D2v-qS-kev"/>
+                            <constraint firstItem="T1k-Dr-tZv" firstAttribute="leading" secondItem="jaq-4c-Yle" secondAttribute="trailing" constant="8" id="DhO-Se-8Rf"/>
+                            <constraint firstItem="4eY-hv-PhZ" firstAttribute="leading" secondItem="2El-zZ-j2P" secondAttribute="leading" id="GyH-xw-Aqz"/>
+                            <constraint firstItem="jaq-4c-Yle" firstAttribute="width" secondItem="T1k-Dr-tZv" secondAttribute="width" id="I6S-0h-SBF"/>
+                            <constraint firstItem="2an-lg-L2t" firstAttribute="top" secondItem="p3q-kA-V0k" secondAttribute="bottom" id="IRa-gg-4jA"/>
+                            <constraint firstItem="p3q-kA-V0k" firstAttribute="leading" secondItem="4eY-hv-PhZ" secondAttribute="leading" id="KU0-NW-7n8"/>
+                            <constraint firstItem="T1k-Dr-tZv" firstAttribute="bottom" secondItem="p3q-kA-V0k" secondAttribute="bottom" id="RXE-mH-loP"/>
+                            <constraint firstItem="p3q-kA-V0k" firstAttribute="bottom" secondItem="4eY-hv-PhZ" secondAttribute="bottom" id="Rhr-ps-dI3"/>
+                            <constraint firstItem="p3q-kA-V0k" firstAttribute="top" secondItem="7y6-i7-iHc" secondAttribute="bottom" id="XTZ-fw-YGM"/>
+                            <constraint firstItem="p3q-kA-V0k" firstAttribute="leading" secondItem="cfw-td-vqt" secondAttribute="leading" id="XXB-QU-Gha"/>
+                            <constraint firstItem="jaq-4c-Yle" firstAttribute="leading" secondItem="4eY-hv-PhZ" secondAttribute="trailing" constant="8" id="ZAx-9u-SLr"/>
+                            <constraint firstItem="4eY-hv-PhZ" firstAttribute="trailing" secondItem="2El-zZ-j2P" secondAttribute="trailing" id="afk-s7-Wv3"/>
+                            <constraint firstItem="T1k-Dr-tZv" firstAttribute="trailing" secondItem="xvf-SX-QGF" secondAttribute="trailing" id="bwZ-b7-8Ge"/>
+                            <constraint firstItem="T1k-Dr-tZv" firstAttribute="top" secondItem="p3q-kA-V0k" secondAttribute="top" id="ciW-Wf-dld"/>
+                            <constraint firstAttribute="trailing" secondItem="2an-lg-L2t" secondAttribute="trailing" id="cpP-5G-Dne"/>
+                            <constraint firstItem="T1k-Dr-tZv" firstAttribute="leading" secondItem="xvf-SX-QGF" secondAttribute="leading" id="dhh-ZX-H3i"/>
+                            <constraint firstItem="jaq-4c-Yle" firstAttribute="bottom" secondItem="p3q-kA-V0k" secondAttribute="bottom" id="m17-Kp-grW"/>
+                            <constraint firstItem="jaq-4c-Yle" firstAttribute="top" secondItem="p3q-kA-V0k" secondAttribute="top" id="nRs-uy-gNa"/>
+                            <constraint firstItem="4eY-hv-PhZ" firstAttribute="top" secondItem="p3q-kA-V0k" secondAttribute="top" id="pzv-EC-7CE"/>
+                            <constraint firstItem="T1k-Dr-tZv" firstAttribute="trailing" secondItem="p3q-kA-V0k" secondAttribute="trailing" id="wAW-qB-Fj1"/>
+                            <constraint firstItem="2an-lg-L2t" firstAttribute="leading" secondItem="cfw-td-vqt" secondAttribute="leading" id="zPl-Vx-6xo"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Notifications" id="Zeq-q1-XmB"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics">
+                        <color key="tintColor" red="0.35294117650000001" green="0.74901960779999999" blue="0.3294117647" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="barTintColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                    </simulatedTabBarMetrics>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
+                    <connections>
+                        <outlet property="chatButton" destination="jaq-4c-Yle" id="lpK-gg-Abx"/>
+                        <outlet property="chatUnderline" destination="ga8-PN-hiC" id="OkE-0o-rZ8"/>
+                        <outlet property="container" destination="2an-lg-L2t" id="7H5-eY-nTr"/>
+                        <outlet property="recentButton" destination="4eY-hv-PhZ" id="HEn-fN-y4r"/>
+                        <outlet property="recentUnderline" destination="2El-zZ-j2P" id="UKB-ao-SGl"/>
+                        <outlet property="requestsButton" destination="T1k-Dr-tZv" id="KI3-N2-cTC"/>
+                        <outlet property="requestsUnderline" destination="xvf-SX-QGF" id="3a6-ix-6dk"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fdJ-w6-7fI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2134" y="-2177"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="notifications" width="25" height="24"/>
+        <image name="notifications-selected" width="25" height="24"/>
+    </resources>
+    <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+</document>

@@ -248,6 +248,9 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
             let vc = (segue.destinationViewController as! GroupDetailsViewController)
             vc.group = sender as! Category
             vc.selectedCategoriesData = selectedCategoriesData
+        } else if let vc = segue.destinationViewController as? CreateGroupViewController
+            where segue.identifier == "create" {
+            vc.delegate = self
         }
     }
 }

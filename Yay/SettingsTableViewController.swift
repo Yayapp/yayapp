@@ -42,5 +42,4 @@ class SettingsTableViewController: UITableViewController {
         PFUser.currentUser()?.setObject(newMessage.on, forKey: "newMessage")
         PFUser.currentUser()?.saveInBackground()
     }
-    
  }

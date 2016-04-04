@@ -65,15 +65,6 @@ class ProfileViewController: UITableViewController {
 //            (appDelegate.centerViewController.viewControllers[0] as! MainRootViewController).showProfile()
 //        }
 //    }
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-        if(segue.identifier == "archive") {
-            let vc = (segue.destinationViewController as! ListEventsViewController)
-            vc.eventsData = eventsData!
-            vc.title = "Past Events"
-        }
-    }
 
     @IBAction func logout(sender: AnyObject) {
         PFUser.logOutInBackgroundWithBlock({
@@ -88,4 +79,16 @@ class ProfileViewController: UITableViewController {
         })
     }
 
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+
+        if let eventsListVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ListEventsViewController") as? ListEventsViewController,
+            eventsData = eventsData
+            where indexPath.row == 1 {
+            eventsListVC.eventsData = eventsData
+            eventsListVC.title = "Past Events"
+
+            navigationController?.pushViewController(eventsListVC, animated: true)
+        }
+    }
 }

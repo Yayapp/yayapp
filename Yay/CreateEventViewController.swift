@@ -17,7 +17,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     var calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
-    
+
     var event:Event?
     
     let dateFormatter = NSDateFormatter()
@@ -112,7 +112,10 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
     }
     
     @IBAction func openDateTimePicker(sender: AnyObject) {
-        let map = self.storyboard!.instantiateViewControllerWithIdentifier("ChooseDateTimeViewController") as! ChooseDateTimeViewController
+        guard let map = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ChooseDateTimeViewController") as? ChooseDateTimeViewController else {
+            return
+        }
+
         map.delegate = self
         map.modalPresentationStyle = UIModalPresentationStyle.Popover
 
@@ -128,7 +131,10 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
     }
     
     @IBAction func openPhotoPicker(sender: AnyObject) {
-        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("ChooseEventPictureViewController") as! ChooseEventPictureViewController
+        guard let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ChooseEventPictureViewController") as? ChooseEventPictureViewController else {
+            return
+        }
+
         vc.delegate = self
         navigationController?.pushViewController(vc, animated: true)
     }
@@ -220,8 +226,21 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
         
     }
     
+    @IBAction func addLocationButtonPressed(sender: AnyObject) {
+        guard let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(ChooseLocationViewController.storyboardID) as? ChooseLocationViewController else {
+            return
+        }
+
+        vc.delegate = self
+
+        presentViewController(vc, animated: true, completion: nil)
+    }
+
     @IBAction func openAboutMeEditor(sender: AnyObject) {
-        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("WriteAboutViewController") as! WriteAboutViewController
+        guard let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("WriteAboutViewController") as? WriteAboutViewController else {
+            return
+        }
+
         vc.delegate = self
         vc.textAbout = descriptionText
         vc.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
@@ -304,9 +323,6 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
             let vc = (segue.destinationViewController as! CategoryPickerViewController)
                 vc.categoryDelegate = self
                 vc.selectedCategoriesData = chosenCategories
-        } else {
-            let vc = (segue.destinationViewController as! ChooseLocationViewController)
-            vc.delegate = self
         }
     }
 }
