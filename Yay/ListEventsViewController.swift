@@ -101,12 +101,11 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
             cell.picture.sd_setImageWithURL(photoURL)
         }
 
-        event.owner.fetchIfNeededInBackgroundWithBlock({
-            result, error in
+        ParseHelper.fetchObject(event.owner, completion: { (result, error) in
             if error == nil {
-                if let avatar = event.owner["avatar"] as? PFFile {
-                    
-                    avatar.getDataInBackgroundWithBlock({
+                if let avatar = event.owner.avatar {
+
+                    ParseHelper.getData(avatar, completion: {
                         (data:NSData?, error:NSError?) in
                         if(error == nil) {
                             let image = UIImage(data:data!)
@@ -115,14 +114,13 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
                             MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                         }
                     })
-                    
                 }
             } else {
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
         })
         
-        let attendees:[PFUser] = event.attendees.filter({$0.objectId != event.owner.objectId})
+        let attendees:[User] = event.attendees.filter({$0.objectId != event.owner.objectId})
         
         for (index, attendee) in attendees.enumerate() {
             let attendeeButton = attendeeButtons[index]
@@ -130,13 +128,13 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
             attendeeButton.addTarget(self, action: "attendeeProfile:", forControlEvents: .TouchUpInside)
             attendeeButton.tag = indexPath.row
             attendeeButton.titleLabel?.tag = index
-            
-            attendee.fetchIfNeededInBackgroundWithBlock({
+
+            ParseHelper.fetchObject(attendee, completion: {
                 result, error in
                 if error == nil {
-                    if let attendeeAvatar = attendee["avatar"] as? PFFile {
-                        
-                        attendeeAvatar.getDataInBackgroundWithBlock({
+                    if let attendeeAvatar = attendee.avatar {
+
+                        ParseHelper.getData(attendeeAvatar, completion: {
                             (data:NSData?, error:NSError?) in
                             if(error == nil) {
                                 let image = UIImage(data:data!)
@@ -187,18 +185,18 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
     
     @IBAction func join(sender: UIButton) {
         let event:Event! = eventsData[sender.tag]
-        if let user = PFUser.currentUser() {
-            event.fetchIfNeededInBackgroundWithBlock({
+        if let user = ParseHelper.sharedInstance.currentUser {
+            ParseHelper.fetchObject(event, completion: {
                 (result, error) in
                 
-                let requestACL:PFACL = PFACL()
+                let requestACL = ObjectACL()
                 requestACL.publicWriteAccess = true
                 requestACL.publicReadAccess = true
                 let request = Request()
                 request.event = event
                 request.attendee = user
                 request.ACL = requestACL
-                request.saveInBackground()
+                ParseHelper.saveObject(request, completion: nil)
                 
                 sender.hidden = true
                 

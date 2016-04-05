@@ -8,6 +8,20 @@
 
 import Foundation
 
-struct File {
+class File {
+    var parseFile: PFFile?
 
+    var url: String? {
+        get {
+            return parseFile?.url
+        }
+    }
+
+    init?(data: NSData) {
+        parseFile = PFFile(data: data)
+    }
+
+    init?(parseFile: PFFile) {
+        self.parseFile = parseFile
+    }
 }

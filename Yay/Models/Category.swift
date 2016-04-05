@@ -8,26 +8,46 @@
 
 import Foundation
 
-class Category : PFObject, PFSubclassing {
-    
-    override class func initialize() {
-        struct Static {
-            static var onceToken : dispatch_once_t = 0;
-        }
-        dispatch_once(&Static.onceToken) {
-            self.registerSubclass()
+class Category: Object {
+    var name: String {
+        get {
+            return parseObject?.objectForKey("name") as! String
         }
     }
-    
-    static func parseClassName() -> String {
-        return "Category"
+    var photo: File! {
+        get {
+            return File(parseFile: parseObject?.objectForKey("photo") as! PFFile)!
+        }
     }
-    
-    @NSManaged var name: String
-    @NSManaged var photo: PFFile
-    @NSManaged var owner: PFUser?
-    @NSManaged var isPrivate: Bool
-    @NSManaged var attendees: [PFUser]
-    @NSManaged var location: PFGeoPoint?
-    @NSManaged var summary: String
+    var owner: User? {
+        get {
+            return User(parseObject: parseObject?.objectForKey("owner") as? PFObject)!
+        }
+    }
+    var isPrivate: Bool {
+        get {
+            return parseObject?.objectForKey("isPrivate") as! Bool
+        }
+    }
+    var attendees: [User] {
+        get {
+            let parseObjects = parseObject?.objectForKey("attendees") as! [PFObject]
+
+            return parseObjects.map({ User(parseObject: $0) }) as! [User]
+        }
+    }
+    var location: GeoPoint? {
+        get {
+            guard let parseGeoPoint = parseObject?.objectForKey("location") as? PFGeoPoint else {
+                return nil
+            }
+            
+            return GeoPoint(parseGeoPoint: parseGeoPoint)
+        }
+    }
+    var summary: String {
+        get {
+            return parseObject?.objectForKey("summary") as! String
+        }
+    }
 }

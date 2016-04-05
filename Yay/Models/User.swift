@@ -7,102 +7,144 @@
 //
 
 import Foundation
-import CoreLocation
 
-struct User {
+class User: Object {
     var username: String? {
         get {
-            return parseUser?.username
+            return parseObject?.objectForKey("username") as? String
         }
     }
 
     var gender: Int? {
         get {
-            return parseUser?.objectForKey("gender") as? Int
+            return parseObject?.objectForKey("gender") as? Int
+        }
+        set {
+            guard let gender = gender else {
+                return
+            }
+
+            parseObject?.setObject(gender, forKey: "gender")
         }
     }
 
     var newMessage: Bool? {
         get {
-            return parseUser?.objectForKey("newMessage") as? Bool
+            return parseObject?.objectForKey("newMessage") as? Bool
         }
     }
 
     var attAccepted: Bool? {
         get {
-            return parseUser?.objectForKey("attAccepted") as? Bool
+            return parseObject?.objectForKey("attAccepted") as? Bool
         }
     }
 
     var interests: [Category]? {
         get {
-            return parseUser?.objectForKey("interests") as? [Category]
+            return parseObject?.objectForKey("interests") as? [Category]
         }
     }
 
     var invites: Int? {
-    get {
-    return parseUser?.objectForKey("invites") as? Int
-    }
-    }
-
-    var eventsReminder: Bool? {
-    get {
-    return parseUser?.objectForKey("eventsReminder") as? Bool
-    }
-    }
-
-    var name: String? {
-    get {
-    return parseUser?.objectForKey("name") as? String
-    }
-    }
-
-    var about: String? {
-    get {
-    return parseUser?.objectForKey("about") as? String
-    }
-    }
-
-    var updatedAt: NSDate? {
-    get {
-    return parseUser?.objectForKey("updatedAt") as? NSDate
-    }
-    }
-
-    var authData: [String : AnyObject?]? {
         get {
-            return parseUser?.objectForKey("authData") as? Dictionary
+            return parseObject?.objectForKey("invites") as? Int
         }
     }
 
-    var location: CLLocationCoordinate2D? {
+    var eventsReminder: Bool? {
         get {
-            return parseUser?.objectForKey("location") as? CLLocationCoordinate2D
+            return parseObject?.objectForKey("eventsReminder") as? Bool
+        }
+    }
+
+    var name: String? {
+        get {
+            return parseObject?.objectForKey("name") as? String
+        }
+    }
+
+    var about: String? {
+        get {
+            return parseObject?.objectForKey("about") as? String
+        }
+        set {
+            guard let about = about else {
+                return
+            }
+
+            parseObject?.setObject(about, forKey: "about")
+        }
+    }
+
+    var updatedAt: NSDate? {
+        get {
+            return parseObject?.objectForKey("updatedAt") as? NSDate
+        }
+    }
+
+    var authData: [String : Any?]? {
+        get {
+            return parseObject?.objectForKey("authData") as? Dictionary
+        }
+    }
+
+    var location: GeoPoint? {
+        get {
+            guard let parseGeoPoint = parseObject?.objectForKey("location") as? PFGeoPoint else {
+                return nil
+            }
+
+            return GeoPoint(parseGeoPoint: parseGeoPoint)
         }
     }
 
     var distance: Int? {
         get {
-            return parseUser?.objectForKey("distance") as? Int
+            return parseObject?.objectForKey("distance") as? Int
         }
     }
 
     var dateOfBirth: NSDate? {
         get {
-            return parseUser?.objectForKey("dob") as? NSDate
+            return parseObject?.objectForKey("dob") as? NSDate
         }
     }
 
     var avatar: File? {
         get {
-            return parseUser?.objectForKey("avatar") as? File
+            return parseObject?.objectForKey("avatar") as? File
+        }
+        set {
+            guard let avatar = avatar else {
+                return
+            }
+
+            parseObject?.setObject(PFFile(file: avatar), forKey: "avatar") // NEED CONVERT THIS
         }
     }
 
-    private var parseUser: PFUser?
+    var eventNearby: Bool? {
+        get {
+            return parseObject?.objectForKey("eventNearby") as? Bool
+        }
+    }
 
-    init?(parseUser: PFUser?) {
-        self.parseUser = parseUser
+    var token: String? {
+        get {
+            return parseObject?.objectForKey("token") as? String
+        }
+    }
+
+    var createdAt: NSDate? {
+        get {
+            return parseObject?.objectForKey("createdAt") as? NSDate
+        }
+    }
+
+    var email: String? {
+        get {
+            return parseObject?.objectForKey("email") as? String
+        }
     }
 }

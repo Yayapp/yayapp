@@ -7,22 +7,21 @@
 //
 import Foundation
 
-class Block : PFObject, PFSubclassing {
-    
-    override class func initialize() {
-        struct Static {
-            static var onceToken : dispatch_once_t = 0;
+class Block: Object {
+    var owner: User! {
+        get {
+            return User(parseObject: parseObject?.valueForKey("owner") as? PFObject)
         }
-        dispatch_once(&Static.onceToken) {
-            self.registerSubclass()
+        set {
+            parseObject?.setValue(PFUser(user: owner), forKey: "owner")
         }
     }
-    
-    static func parseClassName() -> String {
-        return "Block"
+    var user: User! {
+        get {
+            return User(parseObject: parseObject?.valueForKey("user") as? PFObject)
+        }
+        set {
+            parseObject?.setValue(PFUser(user: user), forKey: "user")
+        }
     }
-    
-    @NSManaged var owner: PFUser
-    @NSManaged var user: PFUser
-    
 }

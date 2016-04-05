@@ -25,7 +25,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
     var latitude: Double?
     var chosenDate:NSDate?
     var chosenCategories:[Category]! = []
-    var chosenPhoto:PFFile?
+    var chosenPhoto: File?
     var delegate:EventCreationDelegate!
     var timeZone:NSTimeZone!
     var attendeesButtons:[UIButton]!=[]
@@ -184,7 +184,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
         }
     }
     
-    func madeEventPictureChoice(photo: PFFile, pickedPhoto: UIImage?) {
+    func madeEventPictureChoice(photo: File, pickedPhoto: UIImage?) {
         chosenPhoto = photo
         if pickedPhoto != nil {
             eventImage.image = pickedPhoto!

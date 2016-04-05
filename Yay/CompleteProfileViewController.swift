@@ -25,19 +25,20 @@ class CompleteProfileViewController: UIViewController, UIImagePickerControllerDe
     @IBOutlet weak var nameLabel: UILabel!
     
     @IBOutlet weak var proceed: UIButton!
-    
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         picker.delegate = self
-        nameLabel.text = PFUser.currentUser()!.objectForKey("name") as! String
+
+        nameLabel.text = ParseHelper.sharedInstance.currentUser?.name
 
         dismissButton.hidden = dismissButtonHidden
     }
 
     @IBAction func dismissButtonPressed(sender: AnyObject) {
         SVProgressHUD.showWithMaskType(.Gradient)
-        PFUser.logOutInBackgroundWithBlock({ error in
+        ParseHelper.logOutInBackgroundWithBlock({ error in
             SVProgressHUD.dismiss()
             guard error == nil else {
                 MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
@@ -80,19 +81,25 @@ class CompleteProfileViewController: UIViewController, UIImagePickerControllerDe
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         let pickedImage:UIImage = (info[UIImagePickerControllerEditedImage] as! UIImage).resizeToDefault()
         let imageData = UIImageJPEGRepresentation(pickedImage, 70)
-        let imageFile:PFFile = PFFile(data: imageData!)!
+        let imageFile = File(data: imageData!)!
         avatar.image = pickedImage
-        
-        PFUser.currentUser()!.setObject(imageFile, forKey: "avatar")
-        PFUser.currentUser()!.saveInBackgroundWithBlock({
-            result, error in
+
+        typealias BoolResultBlock = (Bool?, NSError?) -> ()
+
+        guard let currentUser = ParseHelper.sharedInstance.currentUser else {
+            return
+        }
+
+        currentUser.avatar = imageFile
+
+        ParseHelper.saveObject(currentUser) { (result, error) in
             if error == nil {
                 self.check()
                 self.dismissViewControllerAnimated(true, completion: nil)
             } else {
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
-        })
+        }
     }
 
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
@@ -107,7 +114,7 @@ class CompleteProfileViewController: UIViewController, UIImagePickerControllerDe
     }
     
     func check(){
-        if(PFUser.currentUser()?.objectForKey("gender") != nil && PFUser.currentUser()?.objectForKey("avatar") != nil) {
+        if (ParseHelper.sharedInstance.currentUser?.gender != nil && ParseHelper.sharedInstance.currentUser?.avatar != nil) {
             proceed.hidden = false
         }
     }
@@ -116,23 +123,35 @@ class CompleteProfileViewController: UIViewController, UIImagePickerControllerDe
         maleButton.backgroundColor = Color.GenderActiveColor
         femaleButton.backgroundColor = UIColor.whiteColor()
         genderImage.image = UIImage(named: "newkid_rank")
-        PFUser.currentUser()?.setObject(1, forKey: "gender")
-        PFUser.currentUser()?.saveInBackground()
+
+        if let currentUser = ParseHelper.sharedInstance.currentUser {
+            currentUser.gender = 1
+            ParseHelper.saveObject(currentUser, completion: nil)
+        }
+
         check()
     }
+
     @IBAction func femaleAction(sender: AnyObject) {
         maleButton.backgroundColor = UIColor.whiteColor()
         femaleButton.backgroundColor = Color.GenderActiveColor
         genderImage.image = UIImage(named: "newfemale_kid_in_blockrank")
-        PFUser.currentUser()?.setObject(0, forKey: "gender")
-        PFUser.currentUser()?.saveInBackground()
+
+        if let currentUser = ParseHelper.sharedInstance.currentUser {
+            currentUser.gender = 0
+            ParseHelper.saveObject(currentUser, completion: nil)
+        }
+
         check()
     }
     
     @IBAction func proceedAction(sender: AnyObject) {
-        PFUser.currentUser()?.setObject(bioField.text!, forKey: "about")
-        PFUser.currentUser()?.saveInBackground()
-        
+        guard let currentUser = ParseHelper.sharedInstance.currentUser,
+            bio = bioField.text else {
+                return
+        }
+
+        currentUser.about = bio
+        ParseHelper.saveObject(currentUser, completion: nil)
     }
-    
 }

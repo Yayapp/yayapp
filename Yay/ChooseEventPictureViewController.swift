@@ -9,7 +9,7 @@
 import UIKit
 
 protocol ChooseEventPictureDelegate : NSObjectProtocol {
-    func madeEventPictureChoice(photo: PFFile, pickedPhoto: UIImage?)
+    func madeEventPictureChoice(photo: File, pickedPhoto: UIImage?)
 }
 
 class ChooseEventPictureViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, ChooseCategoryPhotoDelegate {

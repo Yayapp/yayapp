@@ -90,7 +90,7 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
         }
         
         self.senderId = PFUser.currentUser()!.objectId;
-        self.senderDisplayName = PFUser.currentUser()!.name
+        self.senderDisplayName = ParseHelper.sharedInstance.currentUser?.name
         
         self.collectionView!.collectionViewLayout.springinessEnabled = false
         
@@ -184,7 +184,7 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
         JSQSystemSoundPlayer.jsq_playMessageSentSound()
         
         let message: Message = Message()
-        message.user = PFUser.currentUser()!
+        message.user = ParseHelper.sharedInstance.currentUser!
         if event != nil {
             message.event = event!
         } else {
@@ -237,7 +237,7 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
         
         
         let message: Message = Message()
-        message.user = PFUser.currentUser()!
+        message.user = ParseHelper.sharedInstance.currentUser!
         if event != nil {
             message.event = event!
         } else {

@@ -7,39 +7,48 @@
 //
 
 import Foundation
-class Message : PFObject, PFSubclassing, Notification {
-    
-    override class func initialize() {
-        struct Static {
-            static var onceToken : dispatch_once_t = 0;
-        }
-        dispatch_once(&Static.onceToken) {
-            self.registerSubclass()
+
+class Message: Object, Notification {
+    var event: Event? {
+        get {
+            return Event(parseObject: parseObject?.objectForKey("event") as? PFObject)
         }
     }
-    
-    static func parseClassName() -> String {
-        return "Message"
+    var group: Category? {
+        get {
+            return Category(parseObject: parseObject?.objectForKey("group") as? PFObject)
+        }
     }
-    
-    @NSManaged var event: Event?
-    @NSManaged var group: Category?
-    @NSManaged var user: PFUser
-    @NSManaged var text: String?
-    @NSManaged var photo: PFFile?
-    
-    
-    func getPhoto() -> PFFile {
-        return user["avatar"] as! PFFile
+    var user: User! {
+        get {
+            return User(parseObject: parseObject?.objectForKey("user") as? PFObject)!
+        }
+    }
+    var text: String? {
+        get {
+            return parseObject?.valueForKey("text") as? String
+        }
+    }
+    var photo: File? {
+        get {
+            guard let parseFile = parseObject?.valueForKey("photo") as? PFFile else {
+                return nil
+            }
+
+            return File(parseFile: parseFile)
+        }
+    }
+
+    func getPhoto() -> File {
+        return user.avatar!
     }
     
     func getTitle() -> String {
-        if self["event"] != nil {
+        if event != nil {
             return "\(user.name) in \(event!.name)"
         } else {
             return "\(user.name) in \(group!.name)"
         }
-        
     }
     
     func getText() -> String {

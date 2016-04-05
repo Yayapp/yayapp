@@ -8,25 +8,25 @@
 
 import Foundation
 
-extension PFUser {
-    
-    public var name: String {
-        return self.objectForKey("name")! as! String
-    }
-    
-    public var participantIdentifier: String {
-        return self.objectId!
-    }
-    
-    public var avatarImageURL: NSURL? {
-        if let avatar = self.objectForKey("avatar") as? PFFile {
-            return NSURL(string:avatar.url!)
-        }
-        return nil
-    }
-    
-    public var avatarImage: UIImage? {
-        return nil
-    }
-    
-}
+//extension PFUser {
+//    
+//    public var name: String {
+//        return self.objectForKey("name")! as! String
+//    }
+//    
+//    public var participantIdentifier: String {
+//        return self.objectId!
+//    }
+//    
+//    public var avatarImageURL: NSURL? {
+//        if let avatar = self.objectForKey("avatar") as? PFFile {
+//            return NSURL(string:avatar.url!)
+//        }
+//        return nil
+//    }
+//    
+//    public var avatarImage: UIImage? {
+//        return nil
+//    }
+//    
+//}

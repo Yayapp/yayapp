@@ -11,7 +11,7 @@ import UIKit
 class UserProfileViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate,   UIPopoverPresentationControllerDelegate {
 
     let picker = UIImagePickerController()
-    var user:PFUser!
+    var user: User!
     var editdone:UIBarButtonItem!
     var interestsData:[Category]!=[]
     var blocked = false
@@ -46,14 +46,14 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         interestsCollection.tagBorderColor = UIColor.blackColor()
         
         if(user == nil){
-            user = PFUser.currentUser()
+            user = ParseHelper.sharedInstance.currentUser
         }
         
         
 //        interestsCollection.dataSource = self
 //        interestsCollection.delegate = self
         
-        name.text = user.objectForKey("name") as? String
+        name.text = user.name
         
         if(PFUser.currentUser()?.objectId == user.objectId) {
             
@@ -66,8 +66,8 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
             tableView.tableFooterView!.hidden = true
             title = "Profile"
         } else {
-            title = self.user.objectForKey("name") as? String
-            ParseHelper.countBlocks(PFUser.currentUser()!, user: user, completion: { [weak self] count in
+            title = user.name
+            ParseHelper.countBlocks(ParseHelper.sharedInstance.currentUser!, user: user, completion: { [weak self] count in
                 self?.blocked = count > 0
                 self?.blockUnblock.hidden = false
                 })
@@ -78,8 +78,8 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
             result, error in
             if error == nil {
                 let rank = Rank.getRank(result!.count)
-                self.eventsCount.text = rank.getString(self.user["gender"] as! Int)
-                self.rankIcon.image = rank.getImage(self.user["gender"] as! Int)
+                self.eventsCount.text = rank.getString(self.user.gender!)
+                self.rankIcon.image = rank.getImage(self.user.gender!)
             } else {
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
@@ -103,7 +103,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
             }
         })
 
-        if let avatarFile = user.objectForKey("avatar") as? PFFile,
+        if let avatarFile = user.avatar,
             photoURLString = avatarFile.url,
             photoURL = NSURL(string: photoURLString) {
             avatar.layer.borderColor = UIColor.whiteColor().CGColor
@@ -111,8 +111,8 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         }
 
 
-        if user["about"] != nil {
-            setAboutMe((user["about"]! as! String))
+        if user.about != nil {
+            setAboutMe(user.about!)
         }
     }
 
@@ -158,7 +158,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
     }
     
     @IBAction func blockUnblock(sender: AnyObject) {
-        guard let currentUser = PFUser.currentUser() else {
+        guard let currentUser = ParseHelper.sharedInstance.currentUser else {
             return
         }
 
@@ -184,7 +184,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
                 block.owner = currentUser
                 block.user = self.user
                 self.blocked = !self.blocked
-                block.saveInBackgroundWithBlock({ [weak self] (_, error) in
+                ParseHelper.saveObject(block, completion: { [weak self] (_, error) in
                     if let weakSelf = self where error != nil {
                         weakSelf.blocked = !weakSelf.blocked
                         MessageToUser.showDefaultErrorMessage(NSLocalizedString("Something went wrong.", comment: ""))

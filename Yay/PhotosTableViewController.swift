@@ -30,7 +30,7 @@ class PhotosTableViewController: PFQueryTableViewController {
         query.whereKey("category", equalTo: category)
         return query
     }
-    
+
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return tableView.frame.height/3
     }

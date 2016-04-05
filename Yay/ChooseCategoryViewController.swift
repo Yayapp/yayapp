@@ -48,8 +48,12 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
 
         categories.delegate = self
         categories.dataSource = self
-        
-        ParseHelper.getUserCategories(PFUser.currentUser()!, block: {
+
+        guard let currentUser = ParseHelper.sharedInstance.currentUser else {
+            return
+        }
+
+        ParseHelper.getUserCategories(currentUser, block: {
             (categoriesList:[Category]?, error:NSError?) in
             if(error == nil) {
                 self.selectedCategoriesData = categoriesList!
@@ -198,8 +202,12 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         } else {
             selectedCategoriesData.append(category)
         }
-        if (!isEventCreation){
-            category.attendees.append(PFUser.currentUser()!)
+        if (!isEventCreation) {
+            guard let currentUser = PFUser.currentUser() else {
+                return
+            }
+
+            category.attendees.append(currentUser)
             category.saveInBackground()
         }
     }

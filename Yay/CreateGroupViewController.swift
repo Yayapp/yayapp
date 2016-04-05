@@ -23,7 +23,7 @@ class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate
     var isPrivate:Bool = false
     var longitude: Double?
     var latitude: Double?
-    var chosenPhoto:PFFile?
+    var chosenPhoto: File?
     var delegate:GroupCreationDelegate!
     var descriptionText:String!=""
     

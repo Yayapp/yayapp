@@ -7,16 +7,13 @@
 //
 
 import Foundation
-protocol Notification : NSObjectProtocol {
-    
-    func getPhoto() -> PFFile
+
+protocol Notification {
+    func getPhoto() -> File
     func getTitle() -> String
-    
     func getText() -> String
-    
-    func isSelectable() -> Bool
-    
-    func isDecidable() -> Bool
-    
     func getIcon() -> UIImage
+
+    func isSelectable() -> Bool
+    func isDecidable() -> Bool
 }

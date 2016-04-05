@@ -8,24 +8,27 @@
 
 import Foundation
 
-class Report : PFObject, PFSubclassing {
-    
-    override class func initialize() {
-        struct Static {
-            static var onceToken : dispatch_once_t = 0;
-        }
-        dispatch_once(&Static.onceToken) {
-            self.registerSubclass()
+class Report: Object {
+    var event: Event? {
+        get {
+            return parseObject?.valueForKey("event") as? Event
         }
     }
-    
-    static func parseClassName() -> String {
-        return "Report"
-    }
-    
-    @NSManaged var event: Event?
-    @NSManaged var group: Category?
-    @NSManaged var reportedUser: PFUser?
 
-    @NSManaged var user: PFUser
+    var group: Category? {
+        get {
+            return parseObject?.valueForKey("group") as? Category
+        }
+    }
+    var reportedUser: User? {
+        get {
+            return User(parseObject: parseObject?.valueForKey("reportedUser") as? PFObject)
+        }
+    }
+
+    var user: User {
+        get {
+            return User(parseObject: parseObject?.valueForKey("user") as? PFObject)!
+        }
+    }
 }

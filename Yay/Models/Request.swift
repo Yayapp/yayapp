@@ -8,32 +8,41 @@
 
 import Foundation
 
-class Request : PFObject, PFSubclassing, Notification {
-    
-    override class func initialize() {
-        struct Static {
-            static var onceToken : dispatch_once_t = 0;
+class Request: Object, Notification {
+    var event: Event? {
+        get {
+            return Event(parseObject: parseObject?.objectForKey("event") as? PFObject)
         }
-        dispatch_once(&Static.onceToken) {
-            self.registerSubclass()
+        set {
+            if let event = event {
+                parseObject?.setValue(PFObject(event: event), forKey: "event")
+            }
         }
     }
-    
-    static func parseClassName() -> String {
-        return "Request"
+    var group: Category? {
+        get {
+            return Category(parseObject: parseObject?.objectForKey("group") as? PFObject)
+        }
     }
-    
-    @NSManaged var event: Event?
-    @NSManaged var group: Category?
-    @NSManaged var attendee: PFUser
-    @NSManaged var accepted: Bool
+    var attendee: User! {
+        get {
+            return User(parseObject: parseObject?.objectForKey("attendee") as? PFObject)!
+        }
+        set {
+            parseObject?.setValue(PFUser(user: attendee), forKey: "attendee")
+        }
+    }
+    var accepted: Bool {
+        get {
+            return parseObject?.valueForKey("accepted") as? Bool ?? false
+        }
+    }
 
-    
-    func getPhoto() -> PFFile {
+    func getPhoto() -> File {
         if isDecidable() {
-            return attendee["avatar"] as! PFFile
+            return attendee.avatar!
         } else {
-            if self["event"] != nil {
+            if event != nil {
                 return event!.photo
             } else {
                 return group!.photo
@@ -42,11 +51,11 @@ class Request : PFObject, PFSubclassing, Notification {
     }
     
     func getTitle() -> String {
-        if self["accepted"] != nil {
+        if accepted {
             if accepted {
                 return "You're in!"
             } else {
-                if self["event"] != nil {
+                if event != nil {
                     return "It looked lame anyways. View more events..."
                 } else {
                     return "It looked lame anyways. View more groups..."
@@ -58,7 +67,7 @@ class Request : PFObject, PFSubclassing, Notification {
     }
 
     func getText() -> String {
-        if self["event"] != nil {
+        if event != nil {
             return event!.name
         } else {
             return group!.name
@@ -66,7 +75,7 @@ class Request : PFObject, PFSubclassing, Notification {
     }
     
     func isSelectable() -> Bool {
-        if self["accepted"] != nil && !accepted {
+        if accepted && !accepted {
             return false
         } else {
             return true
@@ -74,15 +83,14 @@ class Request : PFObject, PFSubclassing, Notification {
     }
     
     func isDecidable() -> Bool {
-        return self["accepted"] == nil
+        return accepted
     }
     
     func getIcon() -> UIImage {
-            if accepted {
-                return UIImage(named: "play.png")!
-            } else {
-                return UIImage(named: "play.png")!
-            }
+        if accepted {
+            return UIImage(named: "play.png")!
+        } else {
+            return UIImage(named: "play.png")!
+        }
     }
-    
 }

@@ -33,8 +33,12 @@ class CategoryPickerViewController: UIViewController, TTGTextTagCollectionViewDe
         categoriesCollection.tagSelectedCornerRadius = 15
         categoriesCollection.tagBorderColor = UIColor.blackColor()
                 categoriesCollection.tagSelectedBorderWidth = 0
+
+        guard let currentUser = ParseHelper.sharedInstance.currentUser else {
+            return
+        }
         
-        ParseHelper.getUserCategoriesForEvent(PFUser.currentUser()!, block: {
+        ParseHelper.getUserCategoriesForEvent(currentUser, block: {
             (categoriesList:[Category]?, error:NSError?) in
             if(error == nil) {
                 self.categoriesData = categoriesList!

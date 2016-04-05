@@ -76,12 +76,11 @@ class BlurryAlertViewController: UIViewController {
                     MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                 }
             })
-        } else {
-            ParseHelper.removeUserEvents(PFUser.currentUser()!, block: {
+        } else if let currentUser = ParseHelper.sharedInstance.currentUser {
+            ParseHelper.removeUserEvents(currentUser, block: {
                 result, error in
                 if error == nil {
-                    PFUser.currentUser()?.deleteInBackgroundWithBlock({
-                        result, error in
+                    ParseHelper.deleteObject(currentUser, completion: { (_, error) in
                         if error == nil {
                             let defaults = NSUserDefaults.standardUserDefaults()
                             defaults.setBool(false, forKey: "hasPermission")

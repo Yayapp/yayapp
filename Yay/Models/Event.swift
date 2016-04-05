@@ -8,29 +8,59 @@
 
 import Foundation
 
-class Event : PFObject, PFSubclassing {
-	
-	override class func initialize() {
-		struct Static {
-			static var onceToken : dispatch_once_t = 0;
-		}
-		dispatch_once(&Static.onceToken) {
-			self.registerSubclass()
-		}
-	}
-	
-	static func parseClassName() -> String {
-		return "Event"
-	}
-	
-	@NSManaged var categories: [Category]
-	@NSManaged var name: String
-	@NSManaged var owner: PFUser
-	@NSManaged var location: PFGeoPoint
-	@NSManaged var startDate: NSDate
-	@NSManaged var summary: String
-	@NSManaged var photo: PFFile
-    @NSManaged var limit: Int
-    @NSManaged var attendees: [PFUser]
-    @NSManaged var timeZone: String
+class Event: Object {
+    var categories: [Category] {
+        get {
+            let parseObjects = parseObject?.objectForKey("categories") as! [PFObject]
+
+            return parseObjects.map({ Category(parseObject: $0) }) as! [Category]
+        }
+    }
+    var name: String {
+        get {
+            return parseObject?.objectForKey("name") as! String
+        }
+    }
+    var owner: User {
+        get {
+            return User(parseObject: parseObject?.objectForKey("owner") as? PFObject)!
+        }
+    }
+    var location: GeoPoint {
+        get {
+            return GeoPoint(parseGeoPoint: parseObject?.objectForKey("location") as! PFGeoPoint)!
+        }
+    }
+    var startDate: NSDate {
+        get {
+            return parseObject?.objectForKey("startDate") as! NSDate
+        }
+    }
+    var summary: String {
+        get {
+            return parseObject?.objectForKey("summary") as! String
+        }
+    }
+    var photo: File! {
+        get {
+            return File(parseFile: parseObject?.objectForKey("photo") as! PFFile)!
+        }
+    }
+    var limit: Int {
+        get {
+            return parseObject?.objectForKey("limit") as! Int
+        }
+    }
+    var attendees: [User] {
+        get {
+            let parseObjects = parseObject?.objectForKey("attendees") as! [PFObject]
+
+            return parseObjects.map({ User(parseObject: $0) }) as! [User]
+        }
+    }
+    var timeZone: String {
+        get {
+            return parseObject?.objectForKey("timeZone") as! String
+        }
+    }
 }
