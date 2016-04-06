@@ -18,7 +18,7 @@ class RangeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        currentValue = PFUser.currentUser()?.objectForKey("distance") as! Int
+        currentValue = ParseHelper.sharedInstance.currentUser?.distance
         rangeText.text = "\(currentValue)KM"
         rangeSelector.value = Float(currentValue)
         // Do any additional setup after loading the view.
@@ -34,9 +34,9 @@ class RangeViewController: UIViewController {
         rangeText.text = "\(Int(currentValue))KM"
     }
     @IBAction func doneAction(sender: AnyObject) {
-        PFUser.currentUser()?.setObject(currentValue, forKey: "distance")
-        PFUser.currentUser()?.saveInBackground()
-        
+        ParseHelper.sharedInstance.currentUser?.distance = currentValue
+        ParseHelper.saveObject(ParseHelper.sharedInstance.currentUser, completion: nil)
+
         navigationController?.popViewControllerAnimated(true)
     }
 

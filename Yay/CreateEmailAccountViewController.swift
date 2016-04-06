@@ -61,7 +61,7 @@ class CreateEmailAccountViewController: UIViewController {
        
     func proceed() {
         let currentInstallation:PFInstallation = PFInstallation.currentInstallation()
-        currentInstallation["user"] = PFUser.currentUser()
+        currentInstallation["user"] = ParseHelper.sharedInstance.currentUser
         currentInstallation.saveInBackground()
         
         self.performSegueWithIdentifier("proceedToPicker", sender: nil)

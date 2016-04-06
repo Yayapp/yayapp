@@ -19,7 +19,7 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
     var group:Category!
-    var attendees:[PFUser] = []
+    var attendees:[User] = []
     var delegate:GroupChangeDelegate!
     var currentLocation:CLLocation!
     var selectedCategoriesData:[Category]! = []
@@ -64,7 +64,7 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
 
         if let eventsListVC = UIStoryboard.main()?.instantiateViewControllerWithIdentifier(ListEventsViewController.storyboardID) as? ListEventsViewController {
             eventsListVC.eventsData = []
-            ParseHelper.queryEventsForCategories(PFUser.currentUser(), categories: selectedCategoriesData, block: {
+            ParseHelper.queryEventsForCategories(ParseHelper.sharedInstance.currentUser!, categories: selectedCategoriesData, block: {
                 result, error in
                 if error == nil {
                     eventsListVC.reloadAll(result!)
@@ -86,14 +86,14 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
         
         members.text = "\(group.attendees.count) members"
         
-        if(PFUser.currentUser()?.objectId == group.owner?.objectId) {
+        if(ParseHelper.sharedInstance.currentUser?.objectId == group.owner?.objectId) {
             let editdone = UIBarButtonItem(image:UIImage(named: "edit_icon"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("editGroup:"))
             editdone.tintColor = Color.PrimaryActiveColor
             self.navigationItem.setRightBarButtonItem(editdone, animated: false)
             //            attend.setImage(UIImage(named: "cancelevent_button"), forState: .Normal)
         }
 
-        group.fetchInBackgroundWithBlock({ [weak self] fetchedGroup, error in
+        ParseHelper.fetchObject(group, completion: { [weak self] fetchedGroup, error in
             guard let `self` = self,
                 fetchedGroup = fetchedGroup as? Category
                 where error == nil else {
@@ -108,15 +108,15 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
 
             self.attendees = self.group.attendees.filter({$0.objectId != self.group.owner?.objectId})
 
-            let currentPFLocation = PFUser.currentUser()!.objectForKey("location") as! PFGeoPoint
-            self.currentLocation = CLLocation(latitude: currentPFLocation.latitude, longitude: currentPFLocation.longitude)
+            let currentLocation = ParseHelper.sharedInstance.currentUser!.location
+            self.currentLocation = CLLocation(latitude: currentLocation!.latitude, longitude: currentLocation!.longitude)
 
-            self.group.owner?.fetchIfNeededInBackgroundWithBlock({
+            ParseHelper.fetchObject(self.group.owner, completion: {
                 result, error in
                 if error == nil {
-                    if let avatar = self.group.owner?["avatar"] as? PFFile {
+                    if let avatar = self.group.owner?.avatar {
 
-                        avatar.getDataInBackgroundWithBlock({
+                        ParseHelper.getData(avatar, completion: {
                             (data:NSData?, error:NSError?) in
                             if(error == nil) {
                                 let image = UIImage(data:data!)
@@ -133,15 +133,15 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
                 }
             })
 
-            let attendedThisEvent = !(self.group.attendees.filter({$0.objectId == PFUser.currentUser()?.objectId}).count == 0)
+            let attendedThisEvent = !(self.group.attendees.filter({$0.objectId == ParseHelper.sharedInstance.currentUser?.objectId}).count == 0)
 
-            if(PFUser.currentUser()?.objectId != self.group.owner?.objectId) {
+            if(ParseHelper.sharedInstance.currentUser?.objectId != self.group.owner?.objectId) {
 
                 if !attendedThisEvent {
 
                     self.chatButton.enabled = false
 
-                    ParseHelper.getUserRequests(self.group, user: PFUser.currentUser()!, block: {
+                    ParseHelper.getUserRequests(self.group, user: ParseHelper.sharedInstance.currentUser!, block: {
                         result, error in
                         if (error == nil) {
                             if (result == nil || result!.isEmpty){
@@ -175,7 +175,7 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
         self.title  = self.group.name
         self.name.text = self.group.name
 
-        if let photoFile = group.owner?.objectForKey("avatar") as? PFFile,
+        if let photoFile = group.owner?.avatar,
             photoURLString = photoFile.url,
             photoURL = NSURL(string: photoURLString) {
             photo.sd_setImageWithURL(photoURL)
@@ -194,8 +194,8 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
         guard let cell = collectionView.dequeueReusableCellWithReuseIdentifier(GroupsViewCell.reuseIdentifier, forIndexPath: indexPath) as? GroupsViewCell else {
             return UICollectionViewCell()
         }
-        
-        group.attendees[indexPath.row].fetchIfNeededInBackgroundWithBlock({
+
+        ParseHelper.fetchObject(group.attendees[indexPath.row], completion: {
             result, error in
             guard error == nil else {
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
@@ -203,7 +203,7 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
                 return
             }
 
-            if let attendeeAvatar = self.group.attendees[indexPath.row]["avatar"] as? PFFile,
+            if let attendeeAvatar = self.group.attendees[indexPath.row].avatar,
                 photoURLString = attendeeAvatar.url,
                 photoURL = NSURL(string: photoURLString) {
                 cell.image.sd_setImageWithURL(photoURL)
@@ -226,7 +226,7 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
     }
     
     @IBAction func attend(sender: UIButton) {
-        if let user = PFUser.currentUser() {
+        if let user = ParseHelper.sharedInstance.currentUser {
             //            if(user.objectId == event.owner.objectId) {
             //                let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
             //                blurryAlertViewController.action = BlurryAlertViewController.BUTTON_DELETE
@@ -243,18 +243,19 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
             //                self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
             //            } else {
             spinner.startAnimating()
-            group.fetchIfNeededInBackgroundWithBlock({
+
+            ParseHelper.fetchObject(group, completion: {
                 (result, error) in
                 
-                let requestACL:PFACL = PFACL()
+                let requestACL = ObjectACL()
                 requestACL.publicWriteAccess = true
                 requestACL.publicReadAccess = true
                 let request = Request()
                 request.group = self.group
                 request.attendee = user
                 request.ACL = requestACL
-                request.saveInBackground()
-                
+                ParseHelper.saveObject(request, completion: nil)
+
                 self.spinner.stopAnimating()
                 sender.hidden = true
                 
@@ -280,7 +281,7 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
     }
     
     @IBAction func chat(sender: AnyObject) {
-        if PFUser.currentUser() != nil {
+        if ParseHelper.sharedInstance.currentUser != nil {
             if (attendees.count>0) {
                 guard let controller: MessagesTableViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("MessagesTableViewController") as? MessagesTableViewController else {
                     return
@@ -317,7 +318,7 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
     
     
     @IBAction func invite(sender: AnyObject) {
-        if (PFUser.currentUser() != nil) {
+        if (ParseHelper.sharedInstance.currentUser != nil) {
             let mailComposeViewController = configuredMailComposeViewController()
             if MFMailComposeViewController.canSendMail() {
                 self.presentViewController(mailComposeViewController, animated: true, completion: nil)
@@ -334,7 +335,7 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
     }
     
     func configuredMailComposeViewController() -> MFMailComposeViewController {
-        let userName = PFUser.currentUser()?.objectForKey("name") as! String
+        let userName = ParseHelper.sharedInstance.currentUser?.name
         let emailTitle = "\(userName) shared happening from Friendzi app"
         let messageBody = "Hi, please check this group \"\(group.name)\".\n\nhttp://friendzi.io/"
         
@@ -425,8 +426,8 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
         blurryAlertViewController.completion = {
             let report = Report()
             report.group = self.group
-            report.user = PFUser.currentUser()!
-            report.saveInBackgroundWithBlock({
+            report.user = ParseHelper.sharedInstance.currentUser!
+            ParseHelper.saveObject(report, completion: {
                 result, error in
                 if error == nil {
                     self.navigationItem.rightBarButtonItem = nil

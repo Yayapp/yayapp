@@ -13,6 +13,8 @@
 		3123A4321CB3FA0C000AC147 /* PFUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3123A4311CB3FA0C000AC147 /* PFUser.swift */; };
 		3123A4341CB40486000AC147 /* PFObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3123A4331CB40486000AC147 /* PFObject.swift */; };
 		3123A4361CB40764000AC147 /* PFFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3123A4351CB40764000AC147 /* PFFile.swift */; };
+		3123A4381CB4EF7D000AC147 /* PFGeoPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3123A4371CB4EF7D000AC147 /* PFGeoPoint.swift */; };
+		3123A43A1CB548E9000AC147 /* Installation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3123A4391CB548E9000AC147 /* Installation.swift */; };
 		315EE7421CAE815900BD52CF /* CategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EE7411CAE815900BD52CF /* CategoryCollectionViewCell.swift */; };
 		315EE7461CAE81F500BD52CF /* CategoryCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 315EE7441CAE81F500BD52CF /* CategoryCollectionViewCell.xib */; };
 		315EE74C1CAE8AFC00BD52CF /* GroupsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EE74B1CAE8AFC00BD52CF /* GroupsViewCell.swift */; };
@@ -120,6 +122,8 @@
 		3123A4311CB3FA0C000AC147 /* PFUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PFUser.swift; sourceTree = "<group>"; };
 		3123A4331CB40486000AC147 /* PFObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PFObject.swift; sourceTree = "<group>"; };
 		3123A4351CB40764000AC147 /* PFFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PFFile.swift; sourceTree = "<group>"; };
+		3123A4371CB4EF7D000AC147 /* PFGeoPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PFGeoPoint.swift; sourceTree = "<group>"; };
+		3123A4391CB548E9000AC147 /* Installation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Installation.swift; sourceTree = "<group>"; };
 		315EE7411CAE815900BD52CF /* CategoryCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		315EE7441CAE81F500BD52CF /* CategoryCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CategoryCollectionViewCell.xib; sourceTree = "<group>"; };
 		315EE74B1CAE8AFC00BD52CF /* GroupsViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupsViewCell.swift; sourceTree = "<group>"; };
@@ -370,6 +374,7 @@
 		31D94CBD1CAD02D00099A891 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				3123A4371CB4EF7D000AC147 /* PFGeoPoint.swift */,
 				3123A4311CB3FA0C000AC147 /* PFUser.swift */,
 				3123A4351CB40764000AC147 /* PFFile.swift */,
 				3123A4331CB40486000AC147 /* PFObject.swift */,
@@ -401,6 +406,7 @@
 		8B1531B51B5F90E1007A2EC7 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				3123A4391CB548E9000AC147 /* Installation.swift */,
 				997C238E1B6791AE0070DDB2 /* Category.swift */,
 				31CEACA81CB3BAEE00A51F8E /* GeoPoint.swift */,
 				8B1531B61B5F90FB007A2EC7 /* Event.swift */,
@@ -723,6 +729,7 @@
 				995032731B564B4400D792C5 /* LoginViewController.swift in Sources */,
 				995032711B564B4400D792C5 /* AppDelegate.swift in Sources */,
 				993D3EE11B90F2450023B054 /* TermsController.swift in Sources */,
+				3123A43A1CB548E9000AC147 /* Installation.swift in Sources */,
 				993D3EDD1B90DB2F0023B054 /* PrivacyPolicyController.swift in Sources */,
 				995363491B693F4B00350133 /* CustomPointAnnotation.swift in Sources */,
 				995032931B56632700D792C5 /* StartViewController.swift in Sources */,
@@ -756,6 +763,7 @@
 				99B0C6321C77B041004D8A99 /* CategoryPickerViewController.swift in Sources */,
 				99FDE5411B57EB84004CE61B /* SettingsTableViewController.swift in Sources */,
 				99B0C63C1C8084D2004D8A99 /* CreateGroupViewController.swift in Sources */,
+				3123A4381CB4EF7D000AC147 /* PFGeoPoint.swift in Sources */,
 				995032971B5671B900D792C5 /* ChooseLocationViewController.swift in Sources */,
 				995032951B566F3400D792C5 /* EventFinderViewController.swift in Sources */,
 				315EE7671CAEABD200BD52CF /* TabBarController.swift in Sources */,

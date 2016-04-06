@@ -19,15 +19,12 @@ class MapEventsViewController: EventsViewController, MKMapViewDelegate {
         super.viewDidLoad()
 
         mapView.delegate = self
-        let user = PFUser.currentUser()
+        let user = ParseHelper.sharedInstance.currentUser
         
-        let location:PFGeoPoint? = user?.objectForKey("location") as? PFGeoPoint
-        let distance = user?.objectForKey("distance") as? Double
-        if location != nil {
-            let center:CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: location!.latitude , longitude: location!.longitude)
-            
-            let coordinateRegion = MKCoordinateRegionMakeWithDistance(center, regionRadius * distance!, regionRadius * distance!)
-            
+        if let location = user?.location,
+        distance = user?.distance {
+            let center:CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: location.latitude , longitude: location.longitude)
+            let coordinateRegion = MKCoordinateRegionMakeWithDistance(center, regionRadius * Double(distance), regionRadius * Double(distance))
             self.mapView.setRegion(coordinateRegion, animated: true)
         }
         
@@ -64,9 +61,8 @@ class MapEventsViewController: EventsViewController, MKMapViewDelegate {
         }
         
         let customPointAnnotation = annotation as! CustomPointAnnotation
-        
-        
-            customPointAnnotation.event.photo.getDataInBackgroundWithBlock({
+
+        ParseHelper.getData(customPointAnnotation.event.photo, completion: {
                 (data:NSData?, error:NSError?) in
                 if(error == nil){
                     v!.image = UIImage(data:data!)

@@ -17,6 +17,8 @@ typealias BoolResultBlock = (Bool?, NSError?) -> ()
 typealias ErrorResultBlock = (NSError?) -> ()
 typealias ObjectResultBlock = (Object?, NSError?) -> ()
 typealias DataResultBlock = (NSData?, NSError?) -> ()
+typealias UserResultBlock = (User?, NSError?) -> ()
+typealias GeoPointResultBlock = (GeoPoint?, NSError?) -> ()
 
 class ParseHelper {
     static let sharedInstance = ParseHelper()
@@ -32,7 +34,25 @@ class ParseHelper {
         return calendar
     }()
 
-    let currentUser = User(parseObject: PFUser.currentUser())
+    var currentUser: User? {
+        get {
+            guard let parseUser = PFUser.currentUser() else {
+                return nil
+            }
+
+            return User(parseObject: parseUser)
+        }
+    }
+
+    var currentInstallation: Installation? {
+        get {
+            if let installation = Installation(parseObject: PFInstallation.currentInstallation()) {
+                return installation
+            }
+
+            return nil
+        }
+    }
 
     private static let eventParseClassName = "Event"
     private static let blockParseClassName = "Block"
@@ -42,7 +62,7 @@ class ParseHelper {
     private static let reportParseClassName = "Report"
     private static let requestParseClassName = "Request"
 
-    class func getTodayEvents(user:PFUser?, categories:[Category], block:EventsResultBlock?) {
+    class func getTodayEvents(user:User?, categories:[Category], block:EventsResultBlock?) {
         let today = NSDate()
 
         guard let calendar = ParseHelper.gregorianUTCCalendar,
@@ -59,7 +79,7 @@ class ParseHelper {
                         block: block)
 	}
     
-    class func getTomorrowEvents(user:PFUser?, categories:[Category], block:EventsResultBlock?) {
+    class func getTomorrowEvents(user:User?, categories:[Category], block:EventsResultBlock?) {
         let today = NSDate()
 
         guard let calendar = ParseHelper.gregorianUTCCalendar,
@@ -77,7 +97,7 @@ class ParseHelper {
                         block: block)
     }
     
-    class func getLaterEvents(user:PFUser?, categories:[Category], block:EventsResultBlock?) {
+    class func getLaterEvents(user:User?, categories:[Category], block:EventsResultBlock?) {
         let today = NSDate()
 
         guard let calendar = ParseHelper.gregorianUTCCalendar,
@@ -95,7 +115,7 @@ class ParseHelper {
                         block: block)
     }
     
-    class func queryHomeEvents(startDate:NSDate, endDate:NSDate?, user:PFUser!, categories:[Category], block:EventsResultBlock?) {
+    class func queryHomeEvents(startDate:NSDate, endDate:NSDate?, user:User!, categories:[Category], block:EventsResultBlock?) {
         
         let query = PFQuery(className: eventParseClassName)
         query.whereKey("startDate", greaterThanOrEqualTo: startDate)
@@ -107,12 +127,12 @@ class ParseHelper {
         query.orderByDescending("startDate")
         
             let query1 = PFQuery(className: blockParseClassName)
-            query1.whereKey("user", equalTo:user)
+            query1.whereKey("user", equalTo:PFUser(withoutDataUsingUser: user))
             query.whereKey("owner", doesNotMatchKey: "owner", inQuery: query1)
-            let location:PFGeoPoint? = user.objectForKey("location") as? PFGeoPoint
-            if let distance = user.objectForKey("distance") as? Double,
+            let location = user.location
+            if let distance = user.distance,
                 location = location {
-                query.whereKey("location", nearGeoPoint: location, withinKilometers: distance)
+                query.whereKey("location", nearGeoPoint: PFGeoPoint(geoPoint: location), withinKilometers: Double(distance))
             }
 
         if (!categories.isEmpty) {
@@ -122,7 +142,7 @@ class ParseHelper {
         queryEvent(query, block: block)
     }
     
-    class func queryEventsForCategories(user:PFUser!, categories:[Category], block:EventsResultBlock?) {
+    class func queryEventsForCategories(user:User!, categories:[Category], block:EventsResultBlock?) {
         
         let query = PFQuery(className: eventParseClassName)
         query.whereKey("startDate", greaterThan: NSDate())
@@ -130,13 +150,14 @@ class ParseHelper {
         query.orderByDescending("startDate")
         
         let query1 = PFQuery(className: blockParseClassName)
-        query1.whereKey("user", equalTo:user!)
+        query1.whereKey("user", equalTo:PFUser(withoutDataUsingUser: user!))
         query.whereKey("owner", doesNotMatchKey: "owner", inQuery: query1)
-        let location:PFGeoPoint? = user!.objectForKey("location") as? PFGeoPoint
-        if let distance = user.objectForKey("distance") as? Double {
-            query.whereKey("location", nearGeoPoint: location!, withinKilometers: distance)
+
+        if let location = user.location,
+            distance = user.distance {
+            query.whereKey("location", nearGeoPoint: PFGeoPoint(geoPoint: location), withinKilometers: Double(distance))
         }
-        
+
         if (!categories.isEmpty) {
             query.whereKey("categories", containedIn: categories)
         }
@@ -156,7 +177,7 @@ class ParseHelper {
         let startOfToday = today.startOfDay(calendar)
 
         let query = PFQuery(className: eventParseClassName)
-        query.whereKey("attendees", equalTo: user)
+        query.whereKey("attendees", equalTo: PFUser(withoutDataUsingUser: user))
         query.orderByDescending("startDate")
 
         if upcoming {
@@ -168,17 +189,12 @@ class ParseHelper {
         queryEvent(query, block: block)
     }
     
-    class func getOwnerEvents(user: User, block:EventsResultBlock?) {
-        let query = PFQuery(className: eventParseClassName)
-        query.whereKey("owner", equalTo:user)
-        queryEvent(query, block: block)
-    }
-    
     class func queryEvent (query:PFQuery, block:EventsResultBlock?) {
         query.findObjectsInBackgroundWithBlock { objects, error in
             if error == nil {
 
-                let mappedObjects = objects.map({ Event(parseObject: $0) }) as! [Event]
+                let array = objects! as NSArray as! [PFObject]
+                let mappedObjects = array.map({ Event(parseObject: $0) }) as? [Event]
 
                 if let mappedObjects = mappedObjects {
                     block!(mappedObjects, error)
@@ -194,13 +210,16 @@ class ParseHelper {
     class func getUserCategories(user: User, block:CategoriesResultBlock?) {
         
         let query = PFQuery(className: categoryParseClassName)
-        query.whereKey("attendees", equalTo:user)
+        query.whereKey("attendees", equalTo: PFUser(withoutDataUsingUser: user))
         
         query.findObjectsInBackgroundWithBlock {
             objects, error in
             
             if error == nil {
-                if let objects = objects as? [Category] {
+                let array = objects! as NSArray as! [PFObject]
+                let mappedObjects = array.map({ Category(parseObject: $0) }) as? [Category]
+
+                if let objects = mappedObjects {
                     block!(objects, error)
                 }
             } else {
@@ -214,7 +233,7 @@ class ParseHelper {
     class func getUserCategoriesForEvent(user: User, block:CategoriesResultBlock?) {
         
         let query1 = PFQuery(className: categoryParseClassName)
-        query1.whereKey("owner", equalTo:user)
+        query1.whereKey("owner", equalTo:PFUser(withoutDataUsingUser: user))
         
         let query2 = PFQuery(className: categoryParseClassName)
         query2.whereKey("isPrivate", equalTo:false)
@@ -224,7 +243,10 @@ class ParseHelper {
             objects, error in
             
             if error == nil {
-                if let objects = objects as? [Category] {
+                let array = objects! as NSArray as! [PFObject]
+                let mappedObjects = array.map({ Category(parseObject: $0) }) as? [Category]
+
+                if let objects = mappedObjects {
                     block!(objects, error)
                 }
             } else {
@@ -241,7 +263,10 @@ class ParseHelper {
             objects, error in
             
             if error == nil {
-                if let objects = objects as? [Category] {
+                let array = objects! as NSArray as! [PFObject]
+                let mappedObjects = array.map({ Category(parseObject: $0) }) as? [Category]
+
+                if let objects = mappedObjects {
                     block!(objects, error)
                 }
             } else {
@@ -259,7 +284,10 @@ class ParseHelper {
             objects, error in
             
             if error == nil {
-                if let objects = objects as? [Category] {
+                let array = objects! as NSArray as! [PFObject]
+                let mappedObjects = array.map({ Category(parseObject: $0) }) as? [Category]
+
+                if let objects = mappedObjects {
                     block!(objects, error)
                 }
             } else {
@@ -270,15 +298,18 @@ class ParseHelper {
         }
     }
     
-    class func getConversations(user: PFUser, block:EventsResultBlock?) {
+    class func getConversations(user: User, block:EventsResultBlock?) {
         let query = PFQuery(className: eventParseClassName)
-        query.whereKey("attendees", equalTo:user)
+        query.whereKey("attendees", equalTo:PFUser(withoutDataUsingUser: user))
         query.orderByDescending("startDate")
         query.findObjectsInBackgroundWithBlock {
             objects, error in
-            
+
+            let array = objects! as NSArray as! [PFObject]
+            let mappedObjects = array.map({ Event(parseObject: $0) }) as? [Event]
+
             if error == nil {
-                if let objects = objects as? [Event] {
+                if let objects = mappedObjects {
                     block!(objects, error)
                 }
             } else {
@@ -291,7 +322,7 @@ class ParseHelper {
     
     class func getMessages(event:Event, block:MessagesResultBlock?) {
         let query = PFQuery(className: messageParseClassName)
-        query.whereKey("event", equalTo:event)
+        query.whereKey("event", equalTo: PFObject(event: event))
         query.orderByAscending("createdAt")
 //        query.limit = 20
 //        query.skip = 20// * page
@@ -299,7 +330,11 @@ class ParseHelper {
             objects, error in
             
             if error == nil {
-                if let objects = objects as? [Message] {
+
+                let array = objects! as NSArray as! [PFObject]
+                let mappedObjects = array.map({ Message(parseObject: $0) }) as? [Message]
+
+                if let objects = mappedObjects {
                     block!(objects, error)
                 }
             } else {
@@ -312,7 +347,7 @@ class ParseHelper {
     
     class func getMessages(group:Category, block:MessagesResultBlock?) {
         let query = PFQuery(className: messageParseClassName)
-        query.whereKey("group", equalTo:group)
+        query.whereKey("group", equalTo: PFObject(category: group))
         query.orderByAscending("createdAt")
         //        query.limit = 20
         //        query.skip = 20// * page
@@ -320,7 +355,10 @@ class ParseHelper {
             objects, error in
             
             if error == nil {
-                if let objects = objects as? [Message] {
+                let array = objects! as NSArray as! [PFObject]
+                let mappedObjects = array.map({ Message(parseObject: $0) }) as? [Message]
+
+                if let objects = mappedObjects {
                     block!(objects, error)
                 }
             } else {
@@ -334,12 +372,15 @@ class ParseHelper {
     
     class func getEventPhotos(category:Category, block:EventPhotosResultBlock?) {
         let query = PFQuery(className: eventPhotoParseClassName)
-        query.whereKey("category", equalTo: category)
+        query.whereKey("category", equalTo: PFObject(category: category))
         query.findObjectsInBackgroundWithBlock {
             objects, error in
             
             if error == nil {
-                if let objects = objects as? [EventPhoto] {
+                let array = objects! as NSArray as! [PFObject]
+                let mappedObjects = array.map({ EventPhoto(parseObject: $0) }) as? [EventPhoto]
+
+                if let objects = mappedObjects {
                     block!(objects, error)
                 }
             } else {
@@ -350,10 +391,10 @@ class ParseHelper {
         }
     }
    
-    class func countReports(event: Event, user:PFUser, completion:(Int)->()) {
+    class func countReports(event: Event, user:User, completion:(Int)->()) {
         let query = PFQuery(className: reportParseClassName)
-        query.whereKey("user", equalTo:user)
-        query.whereKey("event", equalTo:event)
+        query.whereKey("user", equalTo: PFUser(withoutDataUsingUser: user))
+        query.whereKey("event", equalTo: PFObject(event: event))
         query.countObjectsInBackgroundWithBlock {
             count, error in
             if error == nil {
@@ -365,9 +406,9 @@ class ParseHelper {
     }
     
     
-    class func countRequests(user:PFUser, completion:(Int)->()) {
+    class func countRequests(user:User, completion:(Int)->()) {
         let query1 = PFQuery(className: eventParseClassName)
-        query1.whereKey("owner", equalTo:user)
+        query1.whereKey("owner", equalTo: PFUser(withoutDataUsingUser: user))
         query1.whereKey("startDate", greaterThanOrEqualTo: NSDate())
         
         let query = PFQuery(className: requestParseClassName)
@@ -386,8 +427,8 @@ class ParseHelper {
     class func countBlocks(owner: User, user: User, completion:(Int)->()) {
   
         let query = PFQuery(className: blockParseClassName)
-        query.whereKey("owner", equalTo:owner)
-        query.whereKey("user", equalTo:user)
+        query.whereKey("owner", equalTo: PFUser(withoutDataUsingUser: owner))
+        query.whereKey("user", equalTo: PFUser(withoutDataUsingUser: user))
         query.countObjectsInBackgroundWithBlock {
             count, error in
             if error == nil {
@@ -401,10 +442,13 @@ class ParseHelper {
     class func removeBlocks(owner: User, user: User, completion:(NSError?)->()) {
         
         let query = PFQuery(className: blockParseClassName)
-        query.whereKey("owner", equalTo:owner)
-        query.whereKey("user", equalTo:user)
+        query.whereKey("owner", equalTo: PFUser(withoutDataUsingUser: owner))
+        query.whereKey("user", equalTo: PFUser(withoutDataUsingUser: user))
         query.findObjectsInBackgroundWithBlock { blocks, error in
-            guard let blocks = blocks as? [Block] where error == nil else {
+            let array = blocks! as NSArray as! [PFObject]
+            let mappedObjects = array.map({ Block(parseObject: $0) }) as? [Block]
+
+            guard let blocks = mappedObjects where error == nil else {
                 completion(error)
 
                 return
@@ -413,7 +457,7 @@ class ParseHelper {
             var blocksCount = blocks.count
             
             for block in blocks {
-                block.deleteInBackgroundWithBlock({ (_, error) in
+                ParseHelper.deleteObject(block, completion: { (_, error) in
                     blocksCount -= 1
 
                     guard error == nil else {
@@ -430,10 +474,10 @@ class ParseHelper {
         }
     }
 
-    class func getOwnerRequests(user: PFUser, block:RequestsResultBlock?) {
+    class func getOwnerRequests(user: User, block:RequestsResultBlock?) {
         
         let query1 = PFQuery(className: eventParseClassName)
-        query1.whereKey("owner", equalTo:user)
+        query1.whereKey("owner", equalTo: PFUser(withoutDataUsingUser: user))
         query1.whereKey("startDate", greaterThanOrEqualTo: NSDate())
         
         let query = PFQuery(className: requestParseClassName)
@@ -443,7 +487,10 @@ class ParseHelper {
             objects, error in
             
             if error == nil {
-                if let objects = objects as? [Request] {
+                let array = objects! as NSArray as! [PFObject]
+                let mappedObjects = array.map({ Request(parseObject: $0) }) as? [Request]
+
+                if let objects = mappedObjects {
                     block!(objects, error)
                 }
             } else {
@@ -454,15 +501,18 @@ class ParseHelper {
         }
     }
     
-    class func getUserRequests(event:Event, user: PFUser, block:RequestsResultBlock?) {
+    class func getUserRequests(event:Event, user: User, block:RequestsResultBlock?) {
         let query = PFQuery(className: requestParseClassName)
-        query.whereKey("attendee", equalTo:user)
-        query.whereKey("event", equalTo:event)
+        query.whereKey("attendee", equalTo: PFUser(withoutDataUsingUser: user))
+        query.whereKey("event", equalTo: PFObject(event: event))
         query.findObjectsInBackgroundWithBlock {
             objects, error in
             
             if error == nil {
-                if let objects = objects as? [Request] {
+                let array = objects! as NSArray as! [PFObject]
+                let mappedObjects = array.map({ Request(parseObject: $0) }) as? [Request]
+
+                if let objects = mappedObjects {
                     block!(objects, error)
                 }
             } else {
@@ -473,15 +523,18 @@ class ParseHelper {
         }
     }
     
-    class func getUserRequests(group:Category, user: PFUser, block:RequestsResultBlock?) {
+    class func getUserRequests(group:Category, user: User, block:RequestsResultBlock?) {
         let query = PFQuery(className: requestParseClassName)
-        query.whereKey("attendee", equalTo:user)
-        query.whereKey("group", equalTo:group)
+        query.whereKey("attendee", equalTo: PFUser(withoutDataUsingUser: user))
+        query.whereKey("group", equalTo: PFObject(category: group))
         query.findObjectsInBackgroundWithBlock {
             objects, error in
             
             if error == nil {
-                if let objects = objects as? [Request] {
+                let array = objects! as NSArray as! [PFObject]
+                let mappedObjects = array.map({ Request(parseObject: $0) }) as? [Request]
+
+                if let objects = mappedObjects {
                     block!(objects, error)
                 }
             } else {
@@ -500,7 +553,10 @@ class ParseHelper {
             objects, error in
             
             if error == nil {
-                if let objects = objects as? [Message] {
+                let array = objects! as NSArray as! [PFObject]
+                let mappedObjects = array.map({ Message(parseObject: $0) }) as? [Message]
+
+                if let objects = mappedObjects {
                     block!(objects, error)
                 }
             } else {
@@ -512,7 +568,7 @@ class ParseHelper {
     }
 
     
-    class func getRecentRequests(user: PFUser, block:RequestsResultBlock?) {
+    class func getRecentRequests(user: User, block:RequestsResultBlock?) {
         
         let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
         
@@ -527,11 +583,11 @@ class ParseHelper {
 //        let startNextWeek = calendar!.startOfDayForDate(endWeek!)
         
         let queryEvent = PFQuery(className: eventParseClassName)
-        queryEvent.whereKey("owner", equalTo:user)
+        queryEvent.whereKey("owner", equalTo: PFUser(withoutDataUsingUser: user))
         
         let queryGroup = PFQuery(className: categoryParseClassName)
-        queryGroup.whereKey("owner", equalTo:user)
-        
+        queryEvent.whereKey("owner", equalTo: PFUser(withoutDataUsingUser: user))
+
         let queryFilterEvent = PFQuery(className: requestParseClassName)
         queryFilterEvent.whereKey("event", matchesQuery: queryEvent)
         queryFilterEvent.whereKey("updatedAt", greaterThanOrEqualTo: startDay!)
@@ -545,7 +601,7 @@ class ParseHelper {
         let queryEventGroup = PFQuery.orQueryWithSubqueries([queryFilterEvent, queryFilterGroup])
         
         let query2 = PFQuery(className: requestParseClassName)
-        query2.whereKey("attendee", equalTo:user)
+        query2.whereKey("attendee", equalTo:PFUser(withoutDataUsingUser: user))
         query2.whereKey("updatedAt", greaterThanOrEqualTo: startDay!)
         query2.whereKeyExists("accepted")
         
@@ -557,7 +613,10 @@ class ParseHelper {
             objects, error in
             
             if error == nil {
-                if let objects = objects as? [Request] {
+                let array = objects! as NSArray as! [PFObject]
+                let mappedObjects = array.map({ Request(parseObject: $0) }) as? [Request]
+
+                if let objects = mappedObjects {
                     block!(objects, error)
                 }
             } else {
@@ -570,17 +629,20 @@ class ParseHelper {
     
     class func declineRequests(event:Event){
         let query = PFQuery(className: requestParseClassName)
-        query.whereKey("event", equalTo:event)
+        query.whereKey("event", equalTo: PFObject(event: event))
         query.whereKeyDoesNotExist("accepted")
         query.findObjectsInBackgroundWithBlock({
             objects, error in
             
             if error == nil {
-                if let objects = objects as? [Request] {
+                let array = objects! as NSArray as! [PFObject]
+                let mappedObjects = array.map({ Request(parseObject: $0) }) as? [Request]
+
+                if let objects = mappedObjects {
                     for request in objects {
                         UIApplication.sharedApplication().applicationIconBadgeNumber-=1
                         request.accepted = false
-                        request.saveInBackground()
+                        ParseHelper.deleteObject(request, completion: nil)
                     }
                 }
             }
@@ -590,14 +652,17 @@ class ParseHelper {
     
     class func removeUserEvents(user: User, block:EventsResultBlock?) {
         let query = PFQuery(className: eventParseClassName)
-        query.whereKey("owner", equalTo:user)
+        query.whereKey("owner", equalTo: PFUser(withoutDataUsingUser: user))
         query.findObjectsInBackgroundWithBlock({
             objects, error in
             
             if error == nil {
-                if let objects = objects as? [Event] {
+                let array = objects! as NSArray as! [PFObject]
+                let mappedObjects = array.map({ Event(parseObject: $0) }) as? [Event]
+
+                if let objects = mappedObjects {
                     for event in objects {
-                        event.deleteInBackground()
+                        ParseHelper.deleteObject(event, completion: nil)
                     }
                 }
                 block!(nil, error)
@@ -606,27 +671,53 @@ class ParseHelper {
         })
     }
 
-    class func fetchObject(object: Object, completion:ObjectResultBlock?) {
-        object.parseObject?.fetchInBackgroundWithBlock({ (parseObject, error) in
+    class func fetchObject(object: Object?, completion: ObjectResultBlock?) {
+        object?.parseObject?.fetchInBackgroundWithBlock({ (parseObject, error) in
             completion?(Object(parseObject: parseObject), error)
         })
     }
 
-    class func getData(file: File, completion:DataResultBlock?) {
+    class func getData(file: File, completion: DataResultBlock?) {
         file.parseFile?.getDataInBackgroundWithBlock({ (data, error) in
             completion?(data, error)
         })
     }
 
-    class func saveObject(object: Object, completion:BoolResultBlock?) {
-        object.parseObject?.saveInBackgroundWithBlock(completion)
+    class func saveObject(object: Object?, completion: BoolResultBlock?) {
+        object?.parseObject?.saveInBackgroundWithBlock(completion)
     }
 
-    class func deleteObject(object: Object, completion:BoolResultBlock?) {
-        object.parseObject?.deleteInBackgroundWithBlock(completion)
+    class func deleteObject(object: Object?, completion: BoolResultBlock?) {
+        object?.parseObject?.deleteInBackgroundWithBlock(completion)
+    }
+
+    class func logInWithUsernameInBackground(username: String, password: String, completion: UserResultBlock?) {
+        PFUser.logInWithUsernameInBackground(username, password: password) { (parseUser, error) in
+            completion?(User(parseObject: parseUser), error)
+        }
     }
 
     class func logOutInBackgroundWithBlock(completion:ErrorResultBlock?) {
         PFUser.logOutInBackgroundWithBlock(completion)
+    }
+
+    class func signUpInBackgroundWithBlock(user: User, completion: BoolResultBlock?) {
+        let parseUser = PFUser(user: user)
+        parseUser.signUpInBackgroundWithBlock(completion)
+    }
+
+    class func geoPointForCurrentLocationInBackground(completion: GeoPointResultBlock?) {
+        PFGeoPoint.geoPointForCurrentLocationInBackground { (pfGeoPoint, error) in
+            completion?(GeoPoint(parseGeoPoint: pfGeoPoint), error)
+        }
+    }
+//
+//    let array = objects! as NSArray as! [PFObject]
+//    let mappedObjects = array.map({ Event(parseObject: $0) }) as? [Event]
+    private static func mappedObjects<T: Object>(parseArray: [PFObject], type: T) -> [T] {
+        let array = parseArray as NSArray as! [PFObject]
+        let mappedObjects = array.map({ T(parseObject: $0) }) as? [T]
+
+        return mappedObjects!
     }
 }

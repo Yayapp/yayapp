@@ -30,15 +30,15 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        guard let currentUser = PFUser.currentUser() else {
+        guard let currentUser = ParseHelper.sharedInstance.currentUser else {
             return
         }
 
         picker.delegate = self
         
-        name.text = currentUser.objectForKey("name") as? String
+        name.text = currentUser.name
       
-        gender = currentUser.objectForKey("gender") as! Int
+        gender = currentUser.gender
         
         if gender == 0 {
             femaleAction(true)
@@ -46,14 +46,14 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
             maleAction(true)
         }
         
-        if let avatarFile = PFUser.currentUser()?.objectForKey("avatar") as? PFFile,
+        if let avatarFile = ParseHelper.sharedInstance.currentUser?.avatar,
             photoURLString = avatarFile.url,
             photoURL = NSURL(string: photoURLString) {
             avatar.layer.borderColor = UIColor.whiteColor().CGColor
             avatar.sd_setImageWithURL(photoURL)
         }
 
-        about.text = currentUser.objectForKey("about") as? String
+        about.text = currentUser.about
     }
     
    
@@ -82,16 +82,17 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     @IBAction func editdone(sender: AnyObject) {
-        PFUser.currentUser()?.setObject(gender, forKey: "gender")
-        
+        ParseHelper.sharedInstance.currentUser?.gender = gender
+
         if avatarData != nil {
-            let imageFile:PFFile = PFFile(data: avatarData!)!
-            PFUser.currentUser()!.setObject(imageFile, forKey: "avatar")
+            let imageFile = File(data: avatarData!)!
+            ParseHelper.sharedInstance.currentUser!.avatar = imageFile
         }
-        PFUser.currentUser()?.setObject(name.text!, forKey: "name")
-        
-        PFUser.currentUser()?.setObject(about.text!, forKey: "about")
-        PFUser.currentUser()!.saveInBackgroundWithBlock({
+
+        ParseHelper.sharedInstance.currentUser?.name = name.text
+        ParseHelper.sharedInstance.currentUser?.about = about.text
+
+        ParseHelper.saveObject(ParseHelper.sharedInstance.currentUser!, completion: {
             result, error in
             if error != nil {
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)

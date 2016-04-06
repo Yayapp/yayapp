@@ -21,7 +21,7 @@ class RequestsTableViewController: UITableViewController {
 
         tableView.registerNib(RequestTableViewCell.nib, forCellReuseIdentifier: RequestTableViewCell.reuseIdentifier)
         
-        ParseHelper.getOwnerRequests(PFUser.currentUser()!, block: {
+        ParseHelper.getOwnerRequests(ParseHelper.sharedInstance.currentUser!, block: {
             result, error in
             if (error == nil){
                 self.requests = result!
@@ -51,8 +51,8 @@ class RequestsTableViewController: UITableViewController {
         }
 
         let request:Request! = requests[indexPath.row]
-        
-        request.event!.fetchIfNeededInBackgroundWithBlock({
+
+        ParseHelper.fetchObject(request.event!, completion: {
             result, error in
             if error == nil {
                 cell.eventName.text = request.event!.name
@@ -61,13 +61,13 @@ class RequestsTableViewController: UITableViewController {
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
         })
-        
-        request.attendee.fetchIfNeededInBackgroundWithBlock({
+
+        ParseHelper.fetchObject(request.attendee, completion: {
             result, error in
             if error == nil {
-                cell.name.text = request.attendee.objectForKey("name") as! String!
+                cell.name.text = request.attendee.name
 
-                if let avatarFile = request.attendee.objectForKey("avatar") as? PFFile,
+                if let avatarFile = request.attendee.avatar,
                     photoURLString = avatarFile.url,
                     photoURL = NSURL(string: photoURLString) {
                     cell.avatar.sd_setImageWithURL(photoURL)
@@ -103,9 +103,9 @@ class RequestsTableViewController: UITableViewController {
         let request = requests[sender.tag]
         
         request.event!.attendees.append(request.attendee)
-        request.event!.saveInBackground()
+        ParseHelper.saveObject(request.event!, completion: nil)
         request.accepted = true
-        request.saveInBackgroundWithBlock({
+        ParseHelper.saveObject(request, completion: {
             done in
             self.requests.removeAtIndex(sender.tag)
             UIApplication.sharedApplication().applicationIconBadgeNumber-=1
@@ -123,7 +123,7 @@ class RequestsTableViewController: UITableViewController {
     @IBAction func decline(sender: AnyObject) {
         let request = requests[sender.tag]
         request.accepted = false
-        request.saveInBackground()
+        ParseHelper.saveObject(request, completion: nil)
         UIApplication.sharedApplication().applicationIconBadgeNumber-=1
         requests.removeAtIndex(sender.tag)
 //        self.appDelegate.leftViewController.requestsCountLabel.text = "\(self.requests.count)"

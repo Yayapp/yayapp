@@ -13,20 +13,38 @@ class Message: Object, Notification {
         get {
             return Event(parseObject: parseObject?.objectForKey("event") as? PFObject)
         }
+        set {
+            if let event = newValue {
+                parseObject?.setValue(PFObject(event: event), forKey: "event")
+            }
+        }
     }
     var group: Category? {
         get {
             return Category(parseObject: parseObject?.objectForKey("group") as? PFObject)
+        }
+        set {
+            if let group = newValue {
+                parseObject?.setValue(PFObject(category: group), forKey: "group")
+            }
         }
     }
     var user: User! {
         get {
             return User(parseObject: parseObject?.objectForKey("user") as? PFObject)!
         }
+        set {
+            parseObject?.setValue(PFUser(user: user), forKey: "user")
+        }
     }
     var text: String? {
         get {
             return parseObject?.valueForKey("text") as? String
+        }
+        set {
+            if let text = newValue {
+                parseObject?.setValue(text, forKey: "text")
+            }
         }
     }
     var photo: File? {
@@ -36,6 +54,18 @@ class Message: Object, Notification {
             }
 
             return File(parseFile: parseFile)
+        }
+        set {
+            guard let photo = newValue else {
+                return
+            }
+
+            parseObject?.setObject(PFFile(file: photo), forKey: "photo")
+        }
+    }
+    var createdAt: NSDate? {
+        get {
+            return parseObject?.createdAt
         }
     }
 

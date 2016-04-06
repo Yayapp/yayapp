@@ -19,7 +19,7 @@ class ConversationsTableViewController: UITableViewController {
 
         tableView.registerNib(EventPhotoTableViewCell.nib, forCellReuseIdentifier: EventPhotoTableViewCell.reuseIdentifier)
 
-        ParseHelper.getConversations(PFUser.currentUser()!, block: {
+        ParseHelper.getConversations(ParseHelper.sharedInstance.currentUser!, block: {
             result, error in
             if error == nil {
                 self.events = result!

@@ -18,14 +18,13 @@ class SettingsTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        PFUser.currentUser()!.fetchIfNeededInBackgroundWithBlock({
+
+        ParseHelper.fetchObject(ParseHelper.sharedInstance.currentUser!, completion: {
             result, error in
             if error == nil {
                 
-                self.attAccepted.on = PFUser.currentUser()!.objectForKey("attAccepted") as! Bool
-            
-                self.newMessage.on = PFUser.currentUser()!.objectForKey("newMessage") as! Bool
+                self.attAccepted.on = ParseHelper.sharedInstance.currentUser!.attAccepted!
+                self.newMessage.on = ParseHelper.sharedInstance.currentUser!.newMessage!
                 
             } else {
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
@@ -34,12 +33,12 @@ class SettingsTableViewController: UITableViewController {
     }
 
     @IBAction func attAccepted(sender: AnyObject) {
-        PFUser.currentUser()?.setObject(attAccepted.on, forKey: "attAccepted")
-        PFUser.currentUser()?.saveInBackground()
+        ParseHelper.sharedInstance.currentUser?.attAccepted = attAccepted.on
+        ParseHelper.saveObject(ParseHelper.sharedInstance.currentUser, completion: nil)
     }
     
     @IBAction func newMessage(sender: AnyObject) {
-        PFUser.currentUser()?.setObject(newMessage.on, forKey: "newMessage")
-        PFUser.currentUser()?.saveInBackground()
+        ParseHelper.sharedInstance.currentUser?.newMessage = newMessage.on
+        ParseHelper.saveObject(ParseHelper.sharedInstance.currentUser, completion: nil)
     }
  }

@@ -14,7 +14,7 @@ class Request: Object, Notification {
             return Event(parseObject: parseObject?.objectForKey("event") as? PFObject)
         }
         set {
-            if let event = event {
+            if let event = newValue {
                 parseObject?.setValue(PFObject(event: event), forKey: "event")
             }
         }
@@ -22,6 +22,13 @@ class Request: Object, Notification {
     var group: Category? {
         get {
             return Category(parseObject: parseObject?.objectForKey("group") as? PFObject)
+        }
+        set {
+            guard let group = newValue else {
+                return
+            }
+            
+            parseObject?.setValue(PFObject(category: group), forKey: "group")
         }
     }
     var attendee: User! {
@@ -35,6 +42,9 @@ class Request: Object, Notification {
     var accepted: Bool {
         get {
             return parseObject?.valueForKey("accepted") as? Bool ?? false
+        }
+        set {
+            parseObject?.setObject(accepted, forKey: "accepted")
         }
     }
 

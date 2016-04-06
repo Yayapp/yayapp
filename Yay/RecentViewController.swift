@@ -18,7 +18,7 @@ class RecentViewController: UITableViewController {
 
         tableView.registerNib(RequestTableViewCell.nib, forCellReuseIdentifier: RequestTableViewCell.reuseIdentifier)
 
-        guard let currentUser = PFUser.currentUser() else {
+        guard let currentUser = ParseHelper.sharedInstance.currentUser else {
             return
         }
         
@@ -62,13 +62,13 @@ class RecentViewController: UITableViewController {
         }
         
         cell.avatar.layer.borderColor = Color.PrimaryActiveColor.CGColor
-        if (notification.isDecidable() || notification.isKindOfClass(Message)){
+        if (notification.isDecidable() || notification is Message){
             cell.avatar.tag = indexPath.row;
             let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("goToProfile:"))
             cell.avatar.addGestureRecognizer(tapGestureRecognizer)
         }
         
-        if (notification.isKindOfClass(Request) && notification.isDecidable()){
+        if (notification is Request && notification.isDecidable()){
             cell.accept.tag = indexPath.row;
             cell.accept.addTarget(self, action: "accept:", forControlEvents: .TouchUpInside)
             
@@ -81,7 +81,7 @@ class RecentViewController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let notification = notifications[indexPath.row]
         if (notification.isSelectable()){
-            if notification.isKindOfClass(Request){
+            if notification is Request {
                 if (notification as! Request).event != nil {
                     guard let vc = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("EventDetailsViewController") as? EventDetailsViewController else {
                         return
@@ -116,7 +116,7 @@ class RecentViewController: UITableViewController {
             return
         }
         
-        if(notifications[sender.tag].isKindOfClass(Message)){
+        if(notifications[sender.tag] is Message){
             let notification = notifications[sender.tag] as! Message
             vc.user = notification.user
             navigationController?.pushViewController(vc, animated: true)
@@ -133,25 +133,25 @@ class RecentViewController: UITableViewController {
         
         if (request.event != nil) {
             request.event!.attendees.append(request.attendee)
-            request.event!.saveInBackground()
+            ParseHelper.saveObject(request.event!, completion: nil)
             request.accepted = true
-            request.saveInBackgroundWithBlock({
+            ParseHelper.saveObject(request, completion: {
                 done in
                 self.notifications.removeAtIndex(sender.tag)
                 UIApplication.sharedApplication().applicationIconBadgeNumber-=1
                 
                 if(request.event!.attendees.count >= request.event!.limit) {
                     ParseHelper.declineRequests(request.event!)
-                    self.notifications = self.notifications.filter({$0.isKindOfClass(Request) && ($0 as! Request).event != nil && ($0 as! Request).event!.objectId != request.event!.objectId})
+                    self.notifications = self.notifications.filter({$0 is Request && ($0 as! Request).event != nil && ($0 as! Request).event!.objectId != request.event!.objectId})
                 }
                 //            self.appDelegate.leftViewController.requestsCountLabel.text = "\(self.requests.count)"
                 self.tableView.reloadData()
             })
         } else {
             request.group!.attendees.append(request.attendee)
-            request.group!.saveInBackground()
+            ParseHelper.saveObject(request.group!, completion: nil)
             request.accepted = true
-            request.saveInBackgroundWithBlock({
+            ParseHelper.saveObject(request, completion: {
                 done in
                 self.notifications.removeAtIndex(sender.tag)
                 UIApplication.sharedApplication().applicationIconBadgeNumber-=1
@@ -164,7 +164,7 @@ class RecentViewController: UITableViewController {
     @IBAction func decline(sender: AnyObject) {
         let request = notifications[sender.tag] as! Request
         request.accepted = false
-        request.saveInBackground()
+        ParseHelper.saveObject(request.event!, completion: nil)
         UIApplication.sharedApplication().applicationIconBadgeNumber-=1
         notifications.removeAtIndex(sender.tag)
         //        self.appDelegate.leftViewController.requestsCountLabel.text = "\(self.requests.count)"

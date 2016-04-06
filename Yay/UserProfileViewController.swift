@@ -55,7 +55,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         
         name.text = user.name
         
-        if(PFUser.currentUser()?.objectId == user.objectId) {
+        if(ParseHelper.sharedInstance.currentUser?.objectId == user.objectId) {
             
             editdone = UIBarButtonItem(image:UIImage(named: "user_settings_ico"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("settings:"))
             
@@ -197,7 +197,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
                 let report = Report()
                 report.reportedUser = self.user
                 report.user = currentUser
-                report.saveInBackground()
+                ParseHelper.saveObject(report, completion: nil)
         }))
         blockUserAlert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""),
             style: .Cancel,

@@ -73,23 +73,23 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
         } else {
             title = "Create Event"
         }
-        
-    let avatar = PFUser.currentUser()?.objectForKey("avatar") as! PFFile
-        
-        avatar.getDataInBackgroundWithBlock({
-            (data:NSData?, error:NSError?) in
-            if(error == nil) {
-                let image = UIImage(data:data!)
-                self.author.setImage(image, forState: .Normal)
-            } else {
-                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-            }
-        })
+
+        if let avatar = ParseHelper.sharedInstance.currentUser?.avatar {
+            ParseHelper.getData(avatar, completion: {
+                (data:NSData?, error:NSError?) in
+                if(error == nil) {
+                    let image = UIImage(data:data!)
+                    self.author.setImage(image, forState: .Normal)
+                } else {
+                    MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+                }
+            })
+        }
     }
   
     
     func update() {
-        event!.fetchInBackgroundWithBlock({
+        ParseHelper.fetchObject(event!, completion: {
             result, error in
             if error == nil {
                 self.title  = self.event!.name
@@ -190,8 +190,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
             eventImage.image = pickedPhoto!
             eventImage.contentMode = UIViewContentMode.ScaleAspectFill
         } else {
-            
-                photo.getDataInBackgroundWithBlock({
+            ParseHelper.getData(photo, completion: {
                     (data:NSData?, error:NSError?) in
                     if(error == nil) {
                         let image = UIImage(data:data!)
@@ -276,7 +275,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
             createButton.enabled = false
             
             if event == nil {
-                let eventACL:PFACL = PFACL()
+                let eventACL = ObjectACL()
                 eventACL.publicWriteAccess = true
                 eventACL.publicReadAccess = true
                 
@@ -290,19 +289,17 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
             self.event!.startDate = chosenDate!
             self.event!.photo = chosenPhoto!
             self.event!.limit = (limitInt+1)
-            self.event!.owner = PFUser.currentUser()!
-            self.event!.location = PFGeoPoint(latitude: latitude!, longitude: longitude!)
+            self.event!.owner = ParseHelper.sharedInstance.currentUser!
+            self.event!.location = GeoPoint(latitude: latitude!, longitude: longitude!)
             self.event!.timeZone = timeZone!.name
-            
-            self.event!.saveInBackgroundWithBlock({
+
+            ParseHelper.saveObject(self.event!, completion: {
                 (result, error) in
                 if error == nil {
-                    self.event!.addObject(PFUser.currentUser()!, forKey: "attendees")
-                    self.event!.saveInBackgroundWithBlock({
+                    self.event!.attendees.append(ParseHelper.sharedInstance.currentUser!)
+                    ParseHelper.saveObject(self.event!, completion: {
                         (result, error) in
-                        
-                        
-                        
+                                                
                         let root = self.tabBarController?.viewControllers![2] as! UINavigationController
                         root.popViewControllerAnimated(false)
                         guard let vc = UIStoryboard.createEventTab()?.instantiateViewControllerWithIdentifier("CreateEventViewController") as? CreateEventViewController else {

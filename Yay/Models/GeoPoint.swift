@@ -22,7 +22,11 @@ class GeoPoint {
 
     private var parseGeoPoint: PFGeoPoint
 
-    init?(parseGeoPoint: PFGeoPoint) {
-        self.parseGeoPoint = parseGeoPoint
+    init?(parseGeoPoint: PFGeoPoint?) {
+        self.parseGeoPoint = parseGeoPoint!
+    }
+
+    init(latitude: Double, longitude: Double) {
+        self.parseGeoPoint = PFGeoPoint(latitude: latitude, longitude: longitude)
     }
 }

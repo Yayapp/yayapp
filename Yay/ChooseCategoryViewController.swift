@@ -197,18 +197,18 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
     @IBAction func switched(sender: AnyObject) {
         let category = categoriesData[sender.tag]
     
-        if (selectedCategoriesData.contains(category)){
+        if (selectedCategoriesData.contains(category)) {
             selectedCategoriesData = selectedCategoriesData.filter({$0.objectId != category.objectId})
         } else {
             selectedCategoriesData.append(category)
         }
         if (!isEventCreation) {
-            guard let currentUser = PFUser.currentUser() else {
+            guard let currentUser = ParseHelper.sharedInstance.currentUser else {
                 return
             }
 
             category.attendees.append(currentUser)
-            category.saveInBackground()
+            ParseHelper.saveObject(category, completion: nil)
         }
     }
     

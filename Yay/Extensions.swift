@@ -46,19 +46,19 @@ extension String {
     }
 }
 
-extension PFUser {
+extension User {
     func getName() -> String {
-        return self.objectForKey("name") as! String
+        return name!
     }
 
     func getImage(completion: (result: UIImage?) -> Void) {
-        guard let file = self.objectForKey("avatar") as? PFFile else {
+        guard let file = self.avatar else {
             completion(result: nil)
 
             return
         }
 
-        file.getDataInBackgroundWithBlock {
+        ParseHelper.getData(file, completion: {
             result, error in
             var image:UIImage!
             if error == nil {
@@ -67,7 +67,7 @@ extension PFUser {
                image = UIImage(named: "upload_pic")
             }
             completion(result: image)
-        }
+        })
     }
 }
 

@@ -8,20 +8,23 @@
 
 import Foundation
 
-class Object {
+class Object: Equatable {
     let parseObject: PFObject?
 
     init() {
         parseObject = PFObject()
     }
 
-    init?(parseObject: PFObject?) {
+    required init?(parseObject: PFObject?) {
         self.parseObject = parseObject
     }
 
     var objectId: String? {
         get {
             return parseObject?.objectId
+        }
+        set {
+            parseObject?.objectId = objectId
         }
     }
 
@@ -33,4 +36,8 @@ class Object {
             parseObject?.setObject(ACL, forKey: "ACL")
         }
     }
+}
+
+func ==(lhs: Object, rhs: Object) -> Bool {
+    return lhs.objectId == rhs.objectId
 }

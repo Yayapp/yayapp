@@ -27,9 +27,9 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        guard let currentUser = PFUser.currentUser()
-            where currentUser.objectForKey("avatar") != nil && currentUser.objectForKey("gender") != nil && currentUser.objectForKey("about") != nil else {
-                if let completeProfileVC = storyboard?.instantiateViewControllerWithIdentifier(CompleteProfileViewController.storyboardID) as? CompleteProfileViewController {
+        guard let currentUser = ParseHelper.sharedInstance.currentUser
+            where currentUser.avatar != nil && currentUser.gender != nil && currentUser.about != nil else {
+                if let completeProfileVC = UIStoryboard(name: "Auth", bundle: nil).instantiateViewControllerWithIdentifier(CompleteProfileViewController.storyboardID) as? CompleteProfileViewController {
                     completeProfileVC.dismissButtonHidden = false
                     presentViewController(completeProfileVC, animated: false, completion: nil)
                 }
@@ -40,7 +40,7 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
         dateFormatter.dateFormat = "EEE dd MMM '@' H:mm"
         title = currentTitle
 
-        guard let currentPFLocation = currentUser.objectForKey("location") as? PFGeoPoint else {
+        guard let currentPFLocation = currentUser.location else {
             return
         }
 
@@ -155,7 +155,7 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
             })
         }
         
-        if attendeeButtons.count > attendees.count && event.owner.objectId != PFUser.currentUser()?.objectId && attendees.count < (event.limit-1){
+        if attendeeButtons.count > attendees.count && event.owner.objectId != ParseHelper.sharedInstance.currentUser?.objectId && attendees.count < (event.limit-1){
             let attendeeButton = attendeeButtons[attendees.count]
             attendeeButton.addTarget(self, action: "join:", forControlEvents: .TouchUpInside)
             attendeeButton.setTitle("Join", forState: .Normal)

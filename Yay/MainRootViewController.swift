@@ -63,7 +63,7 @@ class MainRootViewController: UIViewController, MFMailComposeViewControllerDeleg
 
         vc.delegate = self
         if(selectedSegment == 0) {
-            ParseHelper.getTodayEvents(PFUser.currentUser(), categories: chosenCategories, block: {
+            ParseHelper.getTodayEvents(ParseHelper.sharedInstance.currentUser, categories: chosenCategories, block: {
                 (eventsList:[Event]?, error:NSError?) in
                 if(error == nil) {
                     vc.reloadAll(eventsList!)
@@ -72,7 +72,7 @@ class MainRootViewController: UIViewController, MFMailComposeViewControllerDeleg
                 }
             })
         } else if (selectedSegment == 1) {
-            ParseHelper.getTomorrowEvents(PFUser.currentUser(), categories: chosenCategories, block: {
+            ParseHelper.getTomorrowEvents(ParseHelper.sharedInstance.currentUser, categories: chosenCategories, block: {
                 (eventsList:[Event]?, error:NSError?) in
                 if(error == nil) {
                     vc.reloadAll(eventsList!)
@@ -81,7 +81,7 @@ class MainRootViewController: UIViewController, MFMailComposeViewControllerDeleg
                 }
             })
         } else {
-            ParseHelper.getLaterEvents(PFUser.currentUser(), categories: chosenCategories, block: {
+            ParseHelper.getLaterEvents(ParseHelper.sharedInstance.currentUser, categories: chosenCategories, block: {
                 (eventsList:[Event]?, error:NSError?) in
                 if(error == nil) {
                     vc.reloadAll(eventsList!)
@@ -95,7 +95,7 @@ class MainRootViewController: UIViewController, MFMailComposeViewControllerDeleg
     }
     
     @IBAction func createEvent(sender: AnyObject) {
-        if PFUser.currentUser() != nil {
+        if ParseHelper.sharedInstance.currentUser != nil {
             guard let vc = UIStoryboard.createEventTab()?.instantiateViewControllerWithIdentifier("CreateEventViewController") as? CreateEventViewController else {
                 return
             }
@@ -170,7 +170,7 @@ class MainRootViewController: UIViewController, MFMailComposeViewControllerDeleg
             return
         }
 
-        vc.user = PFUser.currentUser()
+        vc.user = ParseHelper.sharedInstance.currentUser
         navigationController?.pushViewController(vc, animated: true)
     }
 
@@ -185,7 +185,7 @@ class MainRootViewController: UIViewController, MFMailComposeViewControllerDeleg
     }
     
     func configuredMailComposeViewController() -> MFMailComposeViewController {
-        let userName = PFUser.currentUser()?.objectForKey("name") as! String
+        let userName = ParseHelper.sharedInstance.currentUser?.name
         let emailTitle = "\(userName) invited you to Friendzi app"
         let messageBody = "\(userName) has invited you to join Friendzi. \n\nhttp://friendzi.io/"
         

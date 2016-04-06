@@ -7,10 +7,16 @@
 //
 
 extension PFUser {
+    convenience init(withoutDataUsingUser user: User) {
+        self.init(withoutDataWithClassName: "_User", objectId: user.objectId)
+    }
+
     convenience init(user: User) {
         self.init()
 
-        self.username = user.username
+        if self.username != nil {
+            self.username = user.username
+        }
 
         if let gender = user.gender {
             self.setObject(gender, forKey: "gender")
@@ -53,7 +59,7 @@ extension PFUser {
         }
 
         if let location = user.location {
-            self.setObject(location, forKey: "location")
+            self.setObject(PFGeoPoint(geoPoint: location), forKey: "location")
         }
 
         if let distance = user.distance {

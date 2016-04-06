@@ -42,21 +42,22 @@ class EventFinderViewController: UIViewController, UIAlertViewDelegate, ChooseLo
     func madeLocationChoice(coordinates: CLLocationCoordinate2D){
         CLLocation(latitude: coordinates.latitude, longitude: coordinates.longitude).getLocationString(nil, button: location, timezoneCompletion: nil)
         
-            PFUser.currentUser()!.setObject(PFGeoPoint(latitude: coordinates.latitude, longitude: coordinates.longitude), forKey: "location")
-            PFUser.currentUser()!.saveInBackgroundWithBlock({
-                result, error in
-                self.goToMain()
-            })
-        
+            ParseHelper.sharedInstance.currentUser!.location = GeoPoint(latitude: coordinates.latitude, longitude: coordinates.longitude)
+
+        ParseHelper.saveObject(ParseHelper.sharedInstance.currentUser!, completion: {
+            result, error in
+            self.goToMain()
+        })
+
     }
-    
+
     @IBAction func allowAction(sender: AnyObject) {
-        PFGeoPoint.geoPointForCurrentLocationInBackground( {
-            (geoPoint:PFGeoPoint?, error:NSError?) in
+        ParseHelper.geoPointForCurrentLocationInBackground( {
+            (geoPoint: GeoPoint?, error: NSError?) in
             if (error == nil) {
-                    PFUser.currentUser()!.setObject(geoPoint!, forKey:"location")
-                    PFUser.currentUser()!.saveInBackground()
-                
+                ParseHelper.sharedInstance.currentUser!.location = geoPoint
+                ParseHelper.saveObject(ParseHelper.sharedInstance.currentUser!, completion: nil)
+
                 self.goToMain()
             } else {
                 MessageToUser.showDefaultErrorMessage("Can't retreive location automatically. Please choose location manually", delegate: self)

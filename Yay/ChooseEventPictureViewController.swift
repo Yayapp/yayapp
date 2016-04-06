@@ -91,7 +91,7 @@ class ChooseEventPictureViewController: UIViewController, UITableViewDataSource,
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         let pickedImage:UIImage = (info[UIImagePickerControllerEditedImage] as! UIImage).resizeToDefault()
         let imageData = UIImageJPEGRepresentation(pickedImage, 70)
-        let imageFile:PFFile = PFFile(data: imageData!)!
+        let imageFile = File(data: imageData!)!
         delegate.madeEventPictureChoice(imageFile, pickedPhoto: pickedImage)
         dismissViewControllerAnimated(true, completion: {
             self.navigationController?.popViewControllerAnimated(true)

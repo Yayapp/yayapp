@@ -57,7 +57,7 @@ class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate
     
     
     func update() {
-        group!.fetchInBackgroundWithBlock({
+        ParseHelper.fetchObject(group!, completion: {
             result, error in
             if error == nil {
                 self.title  = self.group!.name
@@ -118,14 +118,13 @@ class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate
         CLLocation(latitude: latitude!, longitude: longitude!).getLocationString(nil, button: location, timezoneCompletion: nil)
     }
     
-    func madeEventPictureChoice(photo: PFFile, pickedPhoto: UIImage?) {
+    func madeEventPictureChoice(photo: File, pickedPhoto: UIImage?) {
         chosenPhoto = photo
         if pickedPhoto != nil {
             eventImage.image = pickedPhoto!
             eventImage.contentMode = UIViewContentMode.ScaleAspectFill
         } else {
-            
-            photo.getDataInBackgroundWithBlock({
+            ParseHelper.getData(photo, completion: {
                 (data:NSData?, error:NSError?) in
                 if(error == nil) {
                     let image = UIImage(data:data!)
@@ -182,7 +181,7 @@ class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate
             createButton.enabled = false
             
             if group == nil {
-                let eventACL:PFACL = PFACL()
+                let eventACL = ObjectACL()
                 eventACL.publicWriteAccess = true
                 eventACL.publicReadAccess = true
                 
@@ -193,15 +192,16 @@ class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate
             self.group!.name = name.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
             self.group!.summary = descriptionText.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
             self.group!.photo = chosenPhoto!
-            self.group!.owner = PFUser.currentUser()!
+            self.group!.owner = ParseHelper.sharedInstance.currentUser!
             if isPrivate {
-                self.group!.location = PFGeoPoint(latitude: latitude!, longitude: longitude!)
+                self.group!.location = GeoPoint(latitude: latitude!, longitude: longitude!)
             }
-            self.group!.saveInBackgroundWithBlock({
+
+            ParseHelper.saveObject(self.group!, completion: {
                 (result, error) in
                 if error == nil {
-                    self.group!.addObject(PFUser.currentUser()!, forKey: "attendees")
-                    self.group!.saveInBackgroundWithBlock({
+                    self.group!.attendees.append(ParseHelper.sharedInstance.currentUser!)
+                    ParseHelper.saveObject(self.group!, completion: {
                         (result, error) in
                         self.delegate.groupCreated(self.group!)
                         self.navigationController?.popViewControllerAnimated(true)

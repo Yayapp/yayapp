@@ -32,12 +32,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             application.registerForRemoteNotifications()
         }
         
-        Category.registerSubclass()
-        EventPhoto.registerSubclass()
-        Event.registerSubclass()
-        Request.registerSubclass()
-        Message.registerSubclass()
-        
         setupParse()
         
         Flurry.startSession("XBT2H8327QRT89B23Y5Q");

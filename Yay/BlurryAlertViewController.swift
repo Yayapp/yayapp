@@ -64,7 +64,7 @@ class BlurryAlertViewController: UIViewController {
     
     @IBAction func deletebutton(sender: AnyObject) {
         if event != nil {
-            event?.deleteInBackgroundWithBlock({
+            ParseHelper.deleteObject(event, completion: {
                 result, error in
                 if error == nil {
                     if result == true {

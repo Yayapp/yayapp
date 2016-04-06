@@ -56,7 +56,7 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
         
         
         if event != nil {
-        event!.fetchInBackgroundWithBlock({
+            ParseHelper.fetchObject(event!, completion: {
             result, error in
             
             self.processAttendees(self.event!.attendees)
@@ -72,7 +72,7 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
             })
         })
         } else {
-            group!.fetchInBackgroundWithBlock({
+            ParseHelper.fetchObject(group!, completion: {
                 result, error in
                 
                 self.processAttendees(self.group!.attendees)
@@ -89,16 +89,16 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
             })
         }
         
-        self.senderId = PFUser.currentUser()!.objectId;
+        self.senderId = ParseHelper.sharedInstance.currentUser!.objectId;
         self.senderDisplayName = ParseHelper.sharedInstance.currentUser?.name
         
         self.collectionView!.collectionViewLayout.springinessEnabled = false
         
     }
     
-    func processAttendees(result:[PFUser]){
+    func processAttendees(result:[User]){
         for attendee in result {
-            attendee.fetchInBackgroundWithBlock({
+            ParseHelper.fetchObject(attendee, completion: {
                 result, error in
                 if error == nil {
                     attendee.getImage({
@@ -119,7 +119,7 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
                 self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, text: message.text))
             } else {
                 let media = JSQPhotoMediaItem()
-                message.photo!.getDataInBackgroundWithBlock({
+                ParseHelper.getData(message.photo!, completion: {
                     result, error in
                     if error == nil {
                         media.image = UIImage(data: result! )
@@ -128,7 +128,6 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
                 })
                 
                 self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, media: media))
-                
             }
             
         }
@@ -160,14 +159,14 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
     func loadMessage(id:String) {
         let message = Message()
         message.objectId = id
-        message.fetchInBackgroundWithBlock({
+        ParseHelper.fetchObject(message, completion: {
             result, error in
             if error == nil {
                 if message.photo == nil {
                     self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, text: message.text))
                     self.finishReceivingMessage()
                 } else {
-                    message.photo!.getDataInBackgroundWithBlock({
+                    ParseHelper.getData(message.photo!, completion: {
                         result, error in
                         self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, media: JSQPhotoMediaItem(image: UIImage(data: result! ))))
                         self.finishReceivingMessage()
@@ -191,7 +190,8 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
             message.group = group!
         }
         message.text = text
-        message.saveInBackgroundWithBlock({
+
+        ParseHelper.saveObject(message, completion: {
             result, error in
             if error == nil {
                 self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, text: message.text))
@@ -233,9 +233,8 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         let pickedImage:UIImage = info[UIImagePickerControllerEditedImage] as! UIImage
         let imageData = UIImagePNGRepresentation(pickedImage)
-        let imageFile:PFFile = PFFile(data: imageData!)!
-        
-        
+        let imageFile = File(data: imageData!)!
+
         let message: Message = Message()
         message.user = ParseHelper.sharedInstance.currentUser!
         if event != nil {
@@ -244,7 +243,7 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
             message.group = group!
         }
         message.photo = imageFile
-        message.saveInBackgroundWithBlock({
+        ParseHelper.saveObject(message, completion: {
             result, error in
             if error == nil {
                 JSQSystemSoundPlayer.jsq_playMessageSentSound()

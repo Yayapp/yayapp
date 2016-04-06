@@ -16,7 +16,7 @@ class ProfileViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-                ParseHelper.getUpcomingPastEvents(PFUser.currentUser()!, upcoming: false, block: {
+                ParseHelper.getUpcomingPastEvents(ParseHelper.sharedInstance.currentUser!, upcoming: false, block: {
                     result, error in
                     if error == nil {
                         self.eventsData = result

@@ -19,7 +19,7 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     let dateFormatter = NSDateFormatter()
     var currentLocation:CLLocation!
     var attendeeButtons:[UIButton]!
-    var attendees:[PFUser] = []
+    var attendees:[User] = []
     var delegate:EventChangeDelegate!
     
     @IBOutlet weak var spinner: UIActivityIndicatorView!
@@ -61,13 +61,13 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
         
         title = event.name
         
-        if(PFUser.currentUser()?.objectId == event.owner.objectId) {
+        if(ParseHelper.sharedInstance.currentUser?.objectId == event.owner.objectId) {
             let editdone = UIBarButtonItem(image:UIImage(named: "edit_icon"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("editEvent:"))
             editdone.tintColor = Color.PrimaryActiveColor
             self.navigationItem.setRightBarButtonItem(editdone, animated: false)
 //            attend.setImage(UIImage(named: "cancelevent_button"), forState: .Normal)
         } else {
-            if let user = PFUser.currentUser() {
+            if let user = ParseHelper.sharedInstance.currentUser {
                 ParseHelper.countReports(event,user: user, completion: {
                     count in
                     if count == 0 {
@@ -82,8 +82,8 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
         }
         
         dateFormatter.dateFormat = "EEE dd MMM 'at' H:mm"
-        
-        event.fetchInBackgroundWithBlock({ [weak self] fetchedEvent, error in
+
+        ParseHelper.fetchObject(event, completion: { [weak self] fetchedEvent, error in
             guard let `self` = self,
                 fetchedEvent = fetchedEvent as? Event
                 where error == nil else {
@@ -98,13 +98,13 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
             for var index = 0; index < (self.event.limit-1); ++index {
                 self.attendeeButtons[index].setImage(UIImage(named: "upload_pic"), forState: .Normal)
             }
-            let currentPFLocation = PFUser.currentUser()!.objectForKey("location") as! PFGeoPoint
-            self.currentLocation = CLLocation(latitude: currentPFLocation.latitude, longitude: currentPFLocation.longitude)
+            let currentLocation = ParseHelper.sharedInstance.currentUser!.location
+            self.currentLocation = CLLocation(latitude: currentLocation!.latitude, longitude: currentLocation!.longitude)
 
-            self.event.owner.fetchIfNeededInBackgroundWithBlock({
+            ParseHelper.fetchObject(self.event.owner, completion: {
                 result, error in
                 if error == nil {
-                    if let avatar = self.event.owner["avatar"] as? PFFile {
+                    if let avatar = self.event.owner.avatar as? PFFile {
 
                         avatar.getDataInBackgroundWithBlock({
                             (data:NSData?, error:NSError?) in
@@ -129,12 +129,12 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                 attendeeButton.addTarget(self, action: "attendeeProfile:", forControlEvents: .TouchUpInside)
                 attendeeButton.tag = index
 
-                attendee.fetchIfNeededInBackgroundWithBlock({
+                ParseHelper.fetchObject(attendee, completion: {
                     result, error in
                     if error == nil {
-                        if let attendeeAvatar = attendee["avatar"] as? PFFile {
+                        if let attendeeAvatar = attendee.avatar {
 
-                            attendeeAvatar.getDataInBackgroundWithBlock({
+                            ParseHelper.getData(attendeeAvatar, completion: {
                                 (data:NSData?, error:NSError?) in
                                 if(error == nil) {
                                     let image = UIImage(data:data!)
@@ -153,15 +153,15 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                 })
             }
 
-            let attendedThisEvent = !(self.event.attendees.filter({$0.objectId == PFUser.currentUser()?.objectId}).count == 0)
+            let attendedThisEvent = !(self.event.attendees.filter({$0.objectId == ParseHelper.sharedInstance.currentUser?.objectId}).count == 0)
 
-            if(PFUser.currentUser()?.objectId != self.event.owner.objectId) {
+            if(ParseHelper.sharedInstance.currentUser?.objectId != self.event.owner.objectId) {
 
                 if !attendedThisEvent && self.event.limit>self.event.attendees.count {
 
                     self.chatButton.enabled = false
 
-                    ParseHelper.getUserRequests(self.event, user: PFUser.currentUser()!, block: {
+                    ParseHelper.getUserRequests(self.event, user: ParseHelper.sharedInstance.currentUser!, block: {
                         result, error in
                         if (error == nil) {
                             if (result == nil || result!.isEmpty){
@@ -211,7 +211,7 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     
     
     @IBAction func attend(sender: UIButton) {
-        if let user = PFUser.currentUser() {
+        if let user = ParseHelper.sharedInstance.currentUser {
             if(user.objectId == event.owner.objectId) {
                 guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as? BlurryAlertViewController else {
                     return
@@ -230,18 +230,18 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                 self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
             } else {
                 spinner.startAnimating()
-                event.fetchIfNeededInBackgroundWithBlock({
+                    ParseHelper.fetchObject(event, completion: {
                     (result, error) in
                     
-                    let requestACL:PFACL = PFACL()
+                    let requestACL = ObjectACL()
                     requestACL.publicWriteAccess = true
                     requestACL.publicReadAccess = true
                     let request = Request()
                     request.event = self.event
                     request.attendee = user
                     request.ACL = requestACL
-                    request.saveInBackground()
-                    
+                        ParseHelper.saveObject(request, completion: nil)
+
                     self.spinner.stopAnimating()
                     sender.hidden = true
                     
@@ -267,7 +267,7 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     }
     
     @IBAction func chat(sender: AnyObject) {
-        if PFUser.currentUser() != nil {
+        if ParseHelper.sharedInstance.currentUser != nil {
             if (attendees.count>0) {
                 guard let controller: MessagesTableViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("MessagesTableViewController") as? MessagesTableViewController else {
                     return
@@ -302,7 +302,7 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     
     
     @IBAction func invite(sender: AnyObject) {
-        if (PFUser.currentUser() != nil) {
+        if ParseHelper.sharedInstance.currentUser != nil {
             let mailComposeViewController = configuredMailComposeViewController()
             if MFMailComposeViewController.canSendMail() {
                 self.presentViewController(mailComposeViewController, animated: true, completion: nil)
@@ -319,7 +319,7 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     }
     
     func configuredMailComposeViewController() -> MFMailComposeViewController {
-        let userName = PFUser.currentUser()?.objectForKey("name") as! String
+        let userName = ParseHelper.sharedInstance.currentUser?.name
         let emailTitle = "\(userName) shared happening from Friendzi app"
         let messageBody = "Hi, please check this happening \"\(event.name)\" on \(dateFormatter.stringFromDate(event.startDate)).\n\nhttp://friendzi.io/"
         
@@ -410,8 +410,8 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
         blurryAlertViewController.completion = {
             let report = Report()
             report.event = self.event
-            report.user = PFUser.currentUser()!
-            report.saveInBackgroundWithBlock({
+            report.user = ParseHelper.sharedInstance.currentUser!
+            ParseHelper.saveObject(report, completion: {
                 result, error in
                 if error == nil {
                     self.navigationItem.rightBarButtonItem = nil

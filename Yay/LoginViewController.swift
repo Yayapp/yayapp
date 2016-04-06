@@ -96,27 +96,31 @@ class LoginViewController: UIViewController, InstagramDelegate {
 
     func proceed(){
         let currentInstallation:PFInstallation = PFInstallation.currentInstallation()
-        currentInstallation["user"] = PFUser.currentUser()
+        currentInstallation["user"] = ParseHelper.sharedInstance.currentUser
         currentInstallation.saveInBackground()
         self.performSegueWithIdentifier("proceed", sender: nil)
     }
    
     
-    func setupDefaults(pfuser:PFUser){
-        pfuser["distance"] = 20
-        pfuser["gender"] = 1
-        pfuser["attAccepted"] = true
-        pfuser["eventNearby"] = true
-        pfuser["newMessage"] = true
-        pfuser["invites"] = 5
-        pfuser["eventsReminder"] = true
+    func setupDefaults(user: User){
+        user.distance = 20
+        user.gender = 1
+        user.attAccepted = true
+        user.eventNearby = true
+        user.newMessage = true
+        user.invites = 5
+        user.eventsReminder = true
     }
     
     func doRegistration(){
         
-        setupDefaults(PFUser.currentUser()!)
-        
-        PFUser.currentUser()?.saveInBackgroundWithBlock({
+        setupDefaults(ParseHelper.sharedInstance.currentUser!)
+
+        guard let currentUser = ParseHelper.sharedInstance.currentUser else {
+            return
+        }
+
+        ParseHelper.saveObject(currentUser, completion: {
             result, error in
             if error == nil {
                 self.proceed()
@@ -146,8 +150,8 @@ class LoginViewController: UIViewController, InstagramDelegate {
                             print(error)
                         }
                         else {
-                            PFUser.currentUser()?.setObject(result.objectForKey("email")!, forKey: "email")
-                            PFUser.currentUser()?.setObject(result.objectForKey("name")!, forKey: "name")
+                            ParseHelper.sharedInstance.currentUser?.email = result.objectForKey("email")! as? String
+                            ParseHelper.sharedInstance.currentUser?.name = result.objectForKey("name")! as? String
                             
                             if user.isNew {
                                 let fbUserId = result.objectForKey("id") as! String
@@ -158,8 +162,8 @@ class LoginViewController: UIViewController, InstagramDelegate {
                                     response,data, error in
                                     if error == nil {
                                         let picture = PFFile(name: "image.jpg", data: data!)
-                                        PFUser.currentUser()!.setObject(picture!, forKey: "avatar")
-                                        PFUser.currentUser()!.saveInBackground()
+                                        ParseHelper.sharedInstance.currentUser!.avatar = File(parseFile: picture!)
+                                        ParseHelper.saveObject(ParseHelper.sharedInstance.currentUser!, completion: nil)
                                     }
                                     else {
                                         print("Error: \(error!.localizedDescription)")
@@ -200,9 +204,9 @@ class LoginViewController: UIViewController, InstagramDelegate {
                             let imageData :NSData =  try NSData(contentsOfURL: pictureUrl, options: NSDataReadingOptions.DataReadingMappedIfSafe)
                             
                             let imageFile = PFFile(name: "image.jpg", data: imageData)
-                            
-                            PFUser.currentUser()?.setObject(imageFile!, forKey: "avatar")
-                            PFUser.currentUser()?.setObject(result.objectForKey("name") as! String, forKey: "name")
+
+                            ParseHelper.sharedInstance.currentUser?.avatar = File(parseFile: imageFile!)
+                            ParseHelper.sharedInstance.currentUser?.name = result.objectForKey("name") as? String
                         } catch {
                             MessageToUser.showDefaultErrorMessage("Something went wrong")
                         }
@@ -225,41 +229,43 @@ class LoginViewController: UIViewController, InstagramDelegate {
     }
     
     func instagramSuccess(token:String, user:InstagramUser) {
-        
-        PFUser.logInWithUsernameInBackground(user.username, password: "\(user.username.MD5())") {
-            (pfuser: PFUser?, error: NSError?) -> Void in
+
+        ParseHelper.logInWithUsernameInBackground(user.username, password: "\(user.username.MD5())", completion: {
+            (pfuser: User?, error: NSError?) -> Void in
             if pfuser != nil {
                 self.proceed()
             } else {
                 if(error!.code == 101) {
-                    let pfuser = PFUser()
+                    let pfuser = User()
 
                     if let profilePictureURL = user.profilePictureURL,
                         imageData: NSData = try? NSData(contentsOfURL: profilePictureURL, options: NSDataReadingOptions.DataReadingMappedIfSafe) {
-                        let imageFile = PFFile(name: "image.jpg", data: imageData)
-                        pfuser["avatar"] = imageFile
+                        if let imageFile = PFFile(name: "image.jpg", data: imageData) {
+                            pfuser.avatar = File(parseFile: imageFile)
+                        }
                     }
                     
                     self.setupDefaults(pfuser)
-                    pfuser["name"] = user.fullName
-                    pfuser["token"] = token
+                    pfuser.name = user.fullName
+                    pfuser.token = token
                     pfuser.password = "\(user.username.MD5())"
                     pfuser.username = user.username
-                    pfuser.signUpInBackgroundWithBlock {
-                        (succeeded: Bool, error: NSError?) -> Void in
+
+                    ParseHelper.signUpInBackgroundWithBlock(pfuser, completion: {
+                        (succeeded: Bool?, error: NSError?) -> Void in
                         if error != nil {
                             MessageToUser.showDefaultErrorMessage("Something went wrong")
                         } else {
                             self.doRegistration()
                         }
-                    }
+                    })
                 } else {
                     MessageToUser.showDefaultErrorMessage("Something went wrong")
                 }
             }
-        }
-       
+        })
     }
+    
     func instagramFailure() {
         MessageToUser.showDefaultErrorMessage("Something went wrong")
     }
@@ -283,9 +289,10 @@ class LoginViewController: UIViewController, InstagramDelegate {
             PFUser.logInWithUsernameInBackground(email.text!, password:password.text!) {
                 (user: PFUser?, error: NSError?) -> Void in
                 if user != nil {
-                    let currentInstallation:PFInstallation = PFInstallation.currentInstallation()
-                    currentInstallation["user"] = PFUser.currentUser()
-                    currentInstallation.saveInBackground()
+                    if let currentInstallation = ParseHelper.sharedInstance.currentInstallation {
+                        currentInstallation.user = ParseHelper.sharedInstance.currentUser
+                        ParseHelper.saveObject(ParseHelper.sharedInstance.currentUser, completion: nil)
+                    }
                     
                     self.performSegueWithIdentifier("proceed", sender: nil)
                 } else if(error!.code == 101) {
