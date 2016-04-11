@@ -9,6 +9,16 @@
 import Foundation
 
 class User: Object {
+    override init() {
+        super.init()
+
+        super.parseObject = PFUser()
+    }
+
+    override init?(parseObject: PFObject?) {
+        super.init(parseObject: parseObject)
+    }
+
     var username: String? {
         get {
             return parseObject?.objectForKey("username") as? String
@@ -63,7 +73,11 @@ class User: Object {
 
     var interests: [Category]? {
         get {
-            return parseObject?.objectForKey("interests") as? [Category]
+            guard let parseObjects = parseObject?.objectForKey("interests") as? [PFObject] else {
+                return nil
+            }
+
+            return parseObjects.map({ Category(parseObject: $0)! })
         }
     }
 
@@ -176,11 +190,11 @@ class User: Object {
             return File(parseFile: parseFile)
         }
         set {
-            guard let avatar = newValue else {
+            guard let avatar = newValue?.parseFile else {
                 return
             }
 
-            parseObject?.setObject(PFFile(file: avatar), forKey: "avatar")
+            parseObject?.setObject(avatar, forKey: "avatar")
         }
     }
 

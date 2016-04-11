@@ -93,16 +93,12 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
             //            attend.setImage(UIImage(named: "cancelevent_button"), forState: .Normal)
         }
 
-        ParseHelper.fetchObject(group, completion: { [weak self] fetchedGroup, error in
-            guard let `self` = self,
-                fetchedGroup = fetchedGroup as? Category
-                where error == nil else {
+        ParseHelper.fetchObject(group, completion: { fetchedGroup, error in
+            guard error == nil else {
                 MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
 
                 return
             }
-
-            self.group = fetchedGroup
 
             self.location.hidden = self.group.location == nil
 

@@ -9,13 +9,13 @@
 import Foundation
 
 class Object: Equatable {
-    let parseObject: PFObject?
+    var parseObject: PFObject?
 
     init() {
-        parseObject = PFObject()
+        parseObject = nil
     }
 
-    required init?(parseObject: PFObject?) {
+    init?(parseObject: PFObject?) {
         self.parseObject = parseObject
     }
 
@@ -24,7 +24,7 @@ class Object: Equatable {
             return parseObject?.objectId
         }
         set {
-            parseObject?.objectId = objectId
+            parseObject?.objectId = newValue
         }
     }
 
@@ -33,7 +33,7 @@ class Object: Equatable {
             return ObjectACL(parseACL: (parseObject?.ACL)!)
         }
         set {
-            parseObject?.setObject(ACL, forKey: "ACL")
+            parseObject?.setObject(PFACL(objectACL:newValue), forKey: "ACL")
         }
     }
 }

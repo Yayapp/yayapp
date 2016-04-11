@@ -95,9 +95,11 @@ class LoginViewController: UIViewController, InstagramDelegate {
 
 
     func proceed(){
-        let currentInstallation:PFInstallation = PFInstallation.currentInstallation()
-        currentInstallation["user"] = ParseHelper.sharedInstance.currentUser
-        currentInstallation.saveInBackground()
+        if let currentInstallation = ParseHelper.sharedInstance.currentInstallation {
+            currentInstallation.user = ParseHelper.sharedInstance.currentUser
+            ParseHelper.saveObject(currentInstallation, completion: nil)
+        }
+
         self.performSegueWithIdentifier("proceed", sender: nil)
     }
    

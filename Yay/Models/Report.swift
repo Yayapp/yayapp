@@ -9,6 +9,16 @@
 import Foundation
 
 class Report: Object {
+    override init() {
+        super.init()
+
+        super.parseObject = PFObject(className: "Report")
+    }
+
+    override init?(parseObject: PFObject?) {
+        super.init(parseObject: parseObject)
+    }
+
     var event: Event? {
         get {
             return parseObject?.valueForKey("event") as? Event
@@ -50,7 +60,7 @@ class Report: Object {
             return User(parseObject: parseObject?.valueForKey("user") as? PFObject)!
         }
         set {
-            parseObject?.setValue(PFUser(user: user), forKey: "user")
+            parseObject?.setValue(PFUser(user: newValue), forKey: "user")
         }
     }
 }

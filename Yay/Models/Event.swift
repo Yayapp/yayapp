@@ -9,88 +9,113 @@
 import Foundation
 
 class Event: Object {
+    override init() {
+        super.init()
+        
+        super.parseObject = PFObject(className: "Event")
+    }
+    
+    override init?(parseObject: PFObject?) {
+        super.init(parseObject: parseObject)
+    }
+
     var categories: [Category] {
         get {
             let parseObjects = parseObject?.objectForKey("categories") as! [PFObject]
 
-            return parseObjects.map({ Category(parseObject: $0) }) as! [Category]
+            return parseObjects.map({ Category(parseObject: $0)! })
         }
         set {
-            parseObject?.setObject(categories.map({ PFObject(category: $0) }), forKey: "categories")
+            parseObject?.setObject(newValue.map({ PFObject(category: $0) }), forKey: "categories")
         }
     }
-    var name: String {
+    var name: String? {
         get {
-            return parseObject?.objectForKey("name") as! String
+            return parseObject?.objectForKey("name") as? String
         }
         set {
-            parseObject?.setObject(name, forKey: "name")
+            parseObject?.setObject(newValue!, forKey: "name")
         }
     }
-    var owner: User {
+    var owner: User? {
         get {
-            return User(parseObject: parseObject?.objectForKey("owner") as? PFObject)!
+            guard let parseObject = parseObject where parseObject.dataAvailable,
+                let owner = parseObject.objectForKey("owner") as? PFObject else {
+                    return nil
+            }
+
+            return User(parseObject: owner)
         }
         set {
-            parseObject?.setObject(PFUser(user: owner), forKey: "owner")
+            guard let user = newValue else {
+                return
+            }
+
+            parseObject?.setObject(PFUser(user: user), forKey: "owner")
         }
     }
     var location: GeoPoint {
         get {
-            return GeoPoint(parseGeoPoint: parseObject?.objectForKey("location") as? PFGeoPoint)!
+            return GeoPoint(parseGeoPoint: parseObject?.objectForKey("location") as? PFGeoPoint) ?? GeoPoint()
         }
         set {
-            parseObject?.setObject(PFGeoPoint(geoPoint: location), forKey: "location")
+            parseObject?.setObject(PFGeoPoint(geoPoint: newValue), forKey: "location")
         }
     }
     var startDate: NSDate {
         get {
-            return parseObject?.objectForKey("startDate") as! NSDate
+            return parseObject?.objectForKey("startDate") as? NSDate ?? NSDate()
         }
         set {
-            parseObject?.setObject(startDate, forKey: "startDate")
+            parseObject?.setObject(newValue, forKey: "startDate")
         }
     }
     var summary: String {
         get {
-            return parseObject?.objectForKey("summary") as! String
+            return parseObject?.objectForKey("summary") as? String ?? ""
         }
         set {
-            parseObject?.setObject(summary, forKey: "summary")
+            parseObject?.setObject(newValue, forKey: "summary")
         }
     }
     var photo: File! {
         get {
-            return File(parseFile: parseObject?.objectForKey("photo") as! PFFile)!
+            return File(parseFile: parseObject?.objectForKey("photo") as! PFFile) ?? File()
         }
         set {
-            parseObject?.setObject(PFFile(file: photo), forKey: "photo")
+            guard let photo = newValue.parseFile else {
+                return
+            }
+
+            parseObject?.setObject(photo, forKey: "photo")
         }
     }
     var limit: Int {
         get {
-            return parseObject?.objectForKey("limit") as! Int
+            return parseObject?.objectForKey("limit") as? Int ?? 0
         }
         set {
-            parseObject?.setObject(limit, forKey: "limit")
+            parseObject?.setObject(newValue, forKey: "limit")
         }
     }
     var attendees: [User] {
         get {
-            let parseObjects = parseObject?.objectForKey("attendees") as! [PFObject]
+            guard let parseObjects = parseObject?.objectForKey("attendees") as? [PFObject] else {
+                return []
+            }
 
-            return parseObjects.map({ User(parseObject: $0) }) as! [User]
+            return parseObjects.map({ User(parseObject: $0)! })
         }
         set {
-            parseObject?.setObject(attendees.map({ PFUser(user: $0) }), forKey: "attendees")
+            parseObject?.setObject(newValue.map({ PFUser(user: $0) }), forKey: "attendees")
         }
     }
     var timeZone: String {
         get {
-            return parseObject?.objectForKey("timeZone") as! String
+            return parseObject?.objectForKey("timeZone") as? String ?? ""
         }
         set {
-            parseObject?.setObject(timeZone, forKey: "timeZone")
+            parseObject?.setObject(newValue, forKey: "timeZone")
         }
     }
 }

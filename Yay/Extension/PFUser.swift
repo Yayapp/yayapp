@@ -12,7 +12,7 @@ extension PFUser {
     }
 
     convenience init(user: User) {
-        self.init()
+        self.init(withoutDataWithClassName: "_User", objectId: user.objectId)
 
         if self.username != nil {
             self.username = user.username
@@ -70,7 +70,7 @@ extension PFUser {
             self.setObject(dateOfBirth, forKey: "dob")
         }
 
-        if let avatar = user.avatar {
+        if let avatar = user.avatar?.parseFile {
             self.setObject(avatar, forKey: "avatar")
         }
 

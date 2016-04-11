@@ -9,6 +9,16 @@
 import Foundation
 
 class Message: Object, Notification {
+    override init() {
+        super.init()
+
+        super.parseObject = PFObject(className: "Message")
+    }
+
+    override init?(parseObject: PFObject?) {
+        super.init(parseObject: parseObject)
+    }
+
     var event: Event? {
         get {
             return Event(parseObject: parseObject?.objectForKey("event") as? PFObject)
@@ -34,7 +44,7 @@ class Message: Object, Notification {
             return User(parseObject: parseObject?.objectForKey("user") as? PFObject)!
         }
         set {
-            parseObject?.setValue(PFUser(user: user), forKey: "user")
+            parseObject?.setValue(PFUser(withoutDataUsingUser: newValue), forKey: "user") // !
         }
     }
     var text: String? {
@@ -56,11 +66,11 @@ class Message: Object, Notification {
             return File(parseFile: parseFile)
         }
         set {
-            guard let photo = newValue else {
+            guard let photo = newValue?.parseFile else {
                 return
             }
 
-            parseObject?.setObject(PFFile(file: photo), forKey: "photo")
+            parseObject?.setObject(photo, forKey: "photo")
         }
     }
     var createdAt: NSDate? {

@@ -9,6 +9,16 @@
 import Foundation
 
 class EventPhoto: Object {
+    override init() {
+        super.init()
+
+        super.parseObject = PFObject(className: "EventPhoto")
+    }
+
+    override init?(parseObject: PFObject?) {
+        super.init(parseObject: parseObject)
+    }
+
     var name: String {
         get {
             return parseObject?.objectForKey("name") as! String

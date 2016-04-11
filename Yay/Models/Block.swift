@@ -8,12 +8,27 @@
 import Foundation
 
 class Block: Object {
+    override init() {
+        super.init()
+
+        super.parseObject = PFObject(className: "Block")
+    }
+
+    override init?(parseObject: PFObject?) {
+        super.init(parseObject: parseObject)
+    }
+
     var owner: User! {
         get {
-            return User(parseObject: parseObject?.valueForKey("owner") as? PFObject)
+            guard let parseObject = parseObject where parseObject.dataAvailable,
+                let owner = parseObject.objectForKey("owner") as? PFObject else {
+                    return nil
+            }
+
+            return User(parseObject: owner)
         }
         set {
-            parseObject?.setValue(PFUser(user: owner), forKey: "owner")
+            parseObject?.setValue(PFUser(user: newValue), forKey: "owner")
         }
     }
     var user: User! {
@@ -21,7 +36,7 @@ class Block: Object {
             return User(parseObject: parseObject?.valueForKey("user") as? PFObject)
         }
         set {
-            parseObject?.setValue(PFUser(user: user), forKey: "user")
+            parseObject?.setValue(PFUser(user: newValue), forKey: "user")
         }
     }
 }

@@ -9,29 +9,52 @@
 import Foundation
 
 class Category: Object {
+    override init() {
+        super.init()
+
+        super.parseObject = PFObject(className: "Category")
+    }
+
+    override init?(parseObject: PFObject?) {
+        super.init(parseObject: parseObject)
+    }
+
     var name: String {
         get {
-            return parseObject?.objectForKey("name") as! String
+            guard let parseObject = parseObject where parseObject.dataAvailable else {
+                return ""
+            }
+
+            return parseObject.objectForKey("name") as? String ?? ""
         }
         set {
-            parseObject?.setObject(name, forKey: "name")
+            parseObject?.setObject(newValue, forKey: "name")
         }
     }
     var photo: File! {
         get {
-            return File(parseFile: parseObject?.objectForKey("photo") as! PFFile)!
+            guard let parseObject = parseObject where parseObject.dataAvailable else {
+                return File()
+            }
+
+            return File(parseFile: parseObject.objectForKey("photo") as! PFFile) ?? File()
         }
         set {
-            guard let photo = newValue else {
+            guard let photo = newValue.parseFile else {
                 return
             }
 
-            parseObject?.setObject(PFFile(file: photo), forKey: "photo")
+            parseObject?.setObject(photo, forKey: "photo")
         }
     }
     var owner: User? {
         get {
-            return User(parseObject: parseObject?.objectForKey("owner") as? PFObject)!
+            guard let parseObject = parseObject where parseObject.dataAvailable,
+                let owner = parseObject.objectForKey("owner") as? PFObject else {
+                return nil
+            }
+
+            return User(parseObject: owner)
         }
         set {
             guard let owner = newValue else {
@@ -43,25 +66,34 @@ class Category: Object {
     }
     var isPrivate: Bool {
         get {
-            return parseObject?.objectForKey("isPrivate") as? Bool ?? false
+            guard let parseObject = parseObject where parseObject.dataAvailable else {
+                return false
+            }
+
+            return parseObject.objectForKey("isPrivate") as? Bool ?? false
         }
     }
     var attendees: [User] {
         get {
-            let parseObjects = parseObject?.objectForKey("attendees") as! [PFObject]
+            guard let parseObject = parseObject where parseObject.dataAvailable else {
+                return []
+            }
 
-            return parseObjects.map({ User(parseObject: $0) }) as! [User]
+            let parseObjects = parseObject.objectForKey("attendees") as? [PFObject] ?? []
+
+            return parseObjects.map({ User(parseObject: $0)! })
         }
         set {
-            parseObject?.setObject(attendees.map({ PFUser(user: $0) }), forKey: "attendees")
+            parseObject?.setObject(newValue.map({ PFUser(user: $0) }), forKey: "attendees")
         }
     }
     var location: GeoPoint? {
         get {
-            guard let parseGeoPoint = parseObject?.objectForKey("location") as? PFGeoPoint else {
-                return nil
+            guard let parseObject = parseObject where parseObject.dataAvailable,
+                let parseGeoPoint = parseObject.objectForKey("location") as? PFGeoPoint else {
+                    return nil
             }
-            
+
             return GeoPoint(parseGeoPoint: parseGeoPoint)
         }
         set {
@@ -74,10 +106,14 @@ class Category: Object {
     }
     var summary: String {
         get {
-            return parseObject?.objectForKey("summary") as! String
+            guard let parseObject = parseObject where parseObject.dataAvailable else {
+                return ""
+            }
+
+            return parseObject.objectForKey("summary") as? String ?? ""
         }
         set {
-            parseObject?.setObject(summary, forKey: "summary")
+            parseObject?.setObject(newValue, forKey: "summary")
         }
     }
 }

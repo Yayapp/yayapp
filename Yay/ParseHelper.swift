@@ -136,7 +136,8 @@ class ParseHelper {
             }
 
         if (!categories.isEmpty) {
-            query.whereKey("categories", containedIn: categories)
+            let parseCategories = categories.map({ PFObject(withoutDataWithClassName:categoryParseClassName, objectId:$0.objectId) })
+            query.whereKey("categories", containedIn: parseCategories)
         }
 
         queryEvent(query, block: block)
@@ -159,7 +160,8 @@ class ParseHelper {
         }
 
         if (!categories.isEmpty) {
-            query.whereKey("categories", containedIn: categories)
+            let parseCategories = categories.map({ PFObject(withoutDataWithClassName:categoryParseClassName, objectId: $0.objectId) })
+            query.whereKey("categories", containedIn: parseCategories)
         }
         
         queryEvent(query, block: block)
@@ -322,7 +324,7 @@ class ParseHelper {
     
     class func getMessages(event:Event, block:MessagesResultBlock?) {
         let query = PFQuery(className: messageParseClassName)
-        query.whereKey("event", equalTo: PFObject(event: event))
+        query.whereKey("event", equalTo: PFObject(withoutDataWithClassName: eventParseClassName, objectId: event.objectId))
         query.orderByAscending("createdAt")
 //        query.limit = 20
 //        query.skip = 20// * page
@@ -347,7 +349,7 @@ class ParseHelper {
     
     class func getMessages(group:Category, block:MessagesResultBlock?) {
         let query = PFQuery(className: messageParseClassName)
-        query.whereKey("group", equalTo: PFObject(category: group))
+        query.whereKey("group", equalTo: PFObject(withoutDataWithClassName: categoryParseClassName, objectId: group.objectId))
         query.orderByAscending("createdAt")
         //        query.limit = 20
         //        query.skip = 20// * page
@@ -372,7 +374,8 @@ class ParseHelper {
     
     class func getEventPhotos(category:Category, block:EventPhotosResultBlock?) {
         let query = PFQuery(className: eventPhotoParseClassName)
-        query.whereKey("category", equalTo: PFObject(category: category))
+        query.whereKey("category", equalTo: PFObject(withoutDataWithClassName: categoryParseClassName, objectId: category.objectId))
+
         query.findObjectsInBackgroundWithBlock {
             objects, error in
             
@@ -394,7 +397,7 @@ class ParseHelper {
     class func countReports(event: Event, user:User, completion:(Int)->()) {
         let query = PFQuery(className: reportParseClassName)
         query.whereKey("user", equalTo: PFUser(withoutDataUsingUser: user))
-        query.whereKey("event", equalTo: PFObject(event: event))
+        query.whereKey("event", equalTo: PFObject(withoutDataWithClassName: eventParseClassName, objectId: event.objectId))
         query.countObjectsInBackgroundWithBlock {
             count, error in
             if error == nil {
@@ -504,7 +507,7 @@ class ParseHelper {
     class func getUserRequests(event:Event, user: User, block:RequestsResultBlock?) {
         let query = PFQuery(className: requestParseClassName)
         query.whereKey("attendee", equalTo: PFUser(withoutDataUsingUser: user))
-        query.whereKey("event", equalTo: PFObject(event: event))
+        query.whereKey("event", equalTo: PFObject(withoutDataWithClassName: eventParseClassName, objectId: event.objectId))
         query.findObjectsInBackgroundWithBlock {
             objects, error in
             
@@ -526,7 +529,7 @@ class ParseHelper {
     class func getUserRequests(group:Category, user: User, block:RequestsResultBlock?) {
         let query = PFQuery(className: requestParseClassName)
         query.whereKey("attendee", equalTo: PFUser(withoutDataUsingUser: user))
-        query.whereKey("group", equalTo: PFObject(category: group))
+        query.whereKey("group", equalTo: PFObject(withoutDataWithClassName: categoryParseClassName, objectId: group.objectId))
         query.findObjectsInBackgroundWithBlock {
             objects, error in
             
@@ -629,7 +632,7 @@ class ParseHelper {
     
     class func declineRequests(event:Event){
         let query = PFQuery(className: requestParseClassName)
-        query.whereKey("event", equalTo: PFObject(event: event))
+        query.whereKey("event", equalTo: PFObject(withoutDataWithClassName: eventParseClassName, objectId: event.objectId))
         query.whereKeyDoesNotExist("accepted")
         query.findObjectsInBackgroundWithBlock({
             objects, error in
@@ -710,14 +713,5 @@ class ParseHelper {
         PFGeoPoint.geoPointForCurrentLocationInBackground { (pfGeoPoint, error) in
             completion?(GeoPoint(parseGeoPoint: pfGeoPoint), error)
         }
-    }
-//
-//    let array = objects! as NSArray as! [PFObject]
-//    let mappedObjects = array.map({ Event(parseObject: $0) }) as? [Event]
-    private static func mappedObjects<T: Object>(parseArray: [PFObject], type: T) -> [T] {
-        let array = parseArray as NSArray as! [PFObject]
-        let mappedObjects = array.map({ T(parseObject: $0) }) as? [T]
-
-        return mappedObjects!
     }
 }

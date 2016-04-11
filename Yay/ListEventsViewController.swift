@@ -103,7 +103,7 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
 
         ParseHelper.fetchObject(event.owner, completion: { (result, error) in
             if error == nil {
-                if let avatar = event.owner.avatar {
+                if let avatar = event.owner!.avatar {
 
                     ParseHelper.getData(avatar, completion: {
                         (data:NSData?, error:NSError?) in
@@ -120,7 +120,7 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
             }
         })
         
-        let attendees:[User] = event.attendees.filter({$0.objectId != event.owner.objectId})
+        let attendees:[User] = event.attendees.filter({$0.objectId != event.owner!.objectId}) as! [User]
         
         for (index, attendee) in attendees.enumerate() {
             let attendeeButton = attendeeButtons[index]
@@ -155,7 +155,7 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
             })
         }
         
-        if attendeeButtons.count > attendees.count && event.owner.objectId != ParseHelper.sharedInstance.currentUser?.objectId && attendees.count < (event.limit-1){
+        if attendeeButtons.count > attendees.count && event.owner!.objectId != ParseHelper.sharedInstance.currentUser?.objectId && attendees.count < (event.limit-1){
             let attendeeButton = attendeeButtons[attendees.count]
             attendeeButton.addTarget(self, action: "join:", forControlEvents: .TouchUpInside)
             attendeeButton.setTitle("Join", forState: .Normal)

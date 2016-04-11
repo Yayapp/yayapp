@@ -285,7 +285,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
             }
             self.event!.name = name.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
             self.event!.summary = descriptionText.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-            self.event!.categories = chosenCategories
+            self.event!.categories = chosenCategories // Unable to save a PFObject with a relation to a cycle.
             self.event!.startDate = chosenDate!
             self.event!.photo = chosenPhoto!
             self.event!.limit = (limitInt+1)

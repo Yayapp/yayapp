@@ -9,6 +9,16 @@
 import Foundation
 
 class Request: Object, Notification {
+    override init() {
+        super.init()
+
+        super.parseObject = PFObject(className: "Request")
+    }
+
+    override init?(parseObject: PFObject?) {
+        super.init(parseObject: parseObject)
+    }
+
     var event: Event? {
         get {
             return Event(parseObject: parseObject?.objectForKey("event") as? PFObject)
@@ -36,7 +46,7 @@ class Request: Object, Notification {
             return User(parseObject: parseObject?.objectForKey("attendee") as? PFObject)!
         }
         set {
-            parseObject?.setValue(PFUser(user: attendee), forKey: "attendee")
+            parseObject?.setValue(PFUser(user: newValue), forKey: "attendee")
         }
     }
     var accepted: Bool {
@@ -44,7 +54,7 @@ class Request: Object, Notification {
             return parseObject?.valueForKey("accepted") as? Bool ?? false
         }
         set {
-            parseObject?.setObject(accepted, forKey: "accepted")
+            parseObject?.setObject(newValue, forKey: "accepted")
         }
     }
 
@@ -78,7 +88,7 @@ class Request: Object, Notification {
 
     func getText() -> String {
         if event != nil {
-            return event!.name
+            return event!.name!
         } else {
             return group!.name
         }

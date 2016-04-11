@@ -61,7 +61,7 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
         
         title = event.name
         
-        if(ParseHelper.sharedInstance.currentUser?.objectId == event.owner.objectId) {
+        if(ParseHelper.sharedInstance.currentUser?.objectId == event.owner!.objectId) {
             let editdone = UIBarButtonItem(image:UIImage(named: "edit_icon"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("editEvent:"))
             editdone.tintColor = Color.PrimaryActiveColor
             self.navigationItem.setRightBarButtonItem(editdone, animated: false)
@@ -83,17 +83,14 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
         
         dateFormatter.dateFormat = "EEE dd MMM 'at' H:mm"
 
-        ParseHelper.fetchObject(event, completion: { [weak self] fetchedEvent, error in
-            guard let `self` = self,
-                fetchedEvent = fetchedEvent as? Event
-                where error == nil else {
-                    MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
+        ParseHelper.fetchObject(event, completion: { fetchedEvent, error in
+            guard error == nil else {
+                MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
 
-                    return
+                return
             }
-
-            self.event = fetchedEvent
-            self.attendees = self.event.attendees.filter({$0.objectId != self.event.owner.objectId})
+            
+            self.attendees = self.event.attendees.filter({$0.objectId != self.event.owner!.objectId})
 
             for var index = 0; index < (self.event.limit-1); ++index {
                 self.attendeeButtons[index].setImage(UIImage(named: "upload_pic"), forState: .Normal)
@@ -104,7 +101,7 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
             ParseHelper.fetchObject(self.event.owner, completion: {
                 result, error in
                 if error == nil {
-                    if let avatar = self.event.owner.avatar as? PFFile {
+                    if let avatar = self.event.owner!.avatar as? PFFile {
 
                         avatar.getDataInBackgroundWithBlock({
                             (data:NSData?, error:NSError?) in
@@ -155,7 +152,7 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
 
             let attendedThisEvent = !(self.event.attendees.filter({$0.objectId == ParseHelper.sharedInstance.currentUser?.objectId}).count == 0)
 
-            if(ParseHelper.sharedInstance.currentUser?.objectId != self.event.owner.objectId) {
+            if(ParseHelper.sharedInstance.currentUser?.objectId != self.event.owner!.objectId) {
 
                 if !attendedThisEvent && self.event.limit>self.event.attendees.count {
 
@@ -212,7 +209,7 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     
     @IBAction func attend(sender: UIButton) {
         if let user = ParseHelper.sharedInstance.currentUser {
-            if(user.objectId == event.owner.objectId) {
+            if(user.objectId == event.owner!.objectId) {
                 guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as? BlurryAlertViewController else {
                     return
                 }

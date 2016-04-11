@@ -133,6 +133,7 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         }
 
         cell.name.text = category.name
+        print(category.name)
         if let photoURLString = category.photo.url,
             photoURL = NSURL(string: photoURLString) {
             cell.photo.sd_setImageWithURL(photoURL)

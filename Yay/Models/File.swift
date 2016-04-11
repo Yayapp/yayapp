@@ -17,6 +17,10 @@ class File {
         }
     }
 
+    init() {
+        
+    }
+
     init?(data: NSData) {
         parseFile = PFFile(data: data)
     }

@@ -12,17 +12,13 @@ class PrivacyPolicyController: UIViewController {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
-    @IBOutlet weak var text: UITextView!
+    @IBOutlet weak var webView: UIWebView!
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
-            let attrString = try? NSMutableAttributedString(
-            data: text.text.dataUsingEncoding(NSUnicodeStringEncoding, allowLossyConversion: false)!,
-            options: [ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType],
-            documentAttributes: nil)
-        
-        text.attributedText = attrString
+        if let path = NSBundle.mainBundle().URLForResource("privacyPolicy", withExtension: "html") {
+            webView.loadRequest(NSURLRequest(URL: path))
+        }
     }
 
 
