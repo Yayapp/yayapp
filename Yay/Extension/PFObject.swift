@@ -18,7 +18,7 @@ extension PFObject {
         self.setObject(parseCategories, forKey: "categories")
 
         if let owner = event.owner {
-            self.setObject(PFUser(user: owner), forKey: "owner")
+            self.setObject(PFUser(withoutDataUsingUser: owner), forKey: "owner")
         }
 
         self.setObject(PFGeoPoint(geoPoint: event.location), forKey: "location")
@@ -31,7 +31,7 @@ extension PFObject {
 
         self.setObject(event.limit, forKey: "limit")
 
-        let parseUsers = event.attendees.map({ PFUser(user: $0) })
+        let parseUsers = event.attendees.map({ PFUser(withoutDataUsingUser: $0) })
         self.setObject(parseUsers, forKey: "attendees")
 
         self.setObject(event.timeZone, forKey: "timeZone")
@@ -51,11 +51,11 @@ extension PFObject {
         self.setObject(category.summary, forKey: "summary")
 
         if let owner = category.owner {
-            self.setObject(PFUser(user: owner), forKey: "owner")
+            self.setObject(PFUser(withoutDataUsingUser: owner), forKey: "owner")
         }
 
         if let location = category.location {
-            self.setObject(location, forKey: "location")
+            self.setObject(PFGeoPoint(geoPoint:location), forKey: "location")
         }
     }
 

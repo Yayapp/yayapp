@@ -246,7 +246,7 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
         if(segue.identifier == "event_details") {
             if let indexPath = sender as? NSIndexPath {
                 let vc = (segue.destinationViewController as! EventDetailsViewController)
-                vc.event = eventsData[indexPath.row]
+                vc.event = eventsData[indexPath.section]
                 vc.delegate = self
             }
         }

@@ -46,7 +46,7 @@ class Request: Object, Notification {
             return User(parseObject: parseObject?.objectForKey("attendee") as? PFObject)!
         }
         set {
-            parseObject?.setValue(PFUser(user: newValue), forKey: "attendee")
+            parseObject?.setValue(PFUser(withoutDataUsingUser: newValue), forKey: "attendee")
         }
     }
     var accepted: Bool {

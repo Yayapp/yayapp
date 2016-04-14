@@ -25,7 +25,7 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
     
     @IBOutlet weak var avatar: UIImageView!
     
-    @IBOutlet weak var about: UITextField!
+    @IBOutlet weak var about: UITextView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -90,7 +90,12 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
         }
 
         ParseHelper.sharedInstance.currentUser?.name = name.text
-        ParseHelper.sharedInstance.currentUser?.about = about.text
+
+        let aboutWithoutExtraLines = about.text.stringByReplacingOccurrencesOfString("\\n+",
+                                                                                     withString: "\n",
+                                                                                     options: .RegularExpressionSearch,
+                                                                                     range:nil)
+        ParseHelper.sharedInstance.currentUser?.about = aboutWithoutExtraLines
 
         ParseHelper.saveObject(ParseHelper.sharedInstance.currentUser!, completion: {
             result, error in
@@ -130,5 +135,31 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
         alertVC.addAction(okAction)
         presentViewController(alertVC, animated: true, completion: nil)
     }
+
+    //MARK: - UITextFieldDelegate
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        view.endEditing(true)
         
+        return true
+    }
+
+    //MARK: - UITextViewDelegate
+
+    func textViewDidBeginEditing(textView: UITextView) {
+        if textView.text == NSLocalizedString("Bio", comment: "") {
+            textView.text = nil
+            textView.textColor = .blackColor()
+        }
+
+        textView.becomeFirstResponder()
+    }
+
+    func textViewDidEndEditing(textView: UITextView) {
+        if textView.text == "" {
+            textView.text = NSLocalizedString("Bio", comment: "")
+            textView.textColor = .lightGrayColor()
+        }
+
+        textView.resignFirstResponder()
+    }
 }

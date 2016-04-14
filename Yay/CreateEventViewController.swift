@@ -13,7 +13,7 @@ protocol EventCreationDelegate : NSObjectProtocol {
     func eventCreated(event:Event)
 }
 
-class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, ChooseLocationDelegate, CategoryPickerDelegate, ChooseEventPictureDelegate, WriteAboutDelegate, UIPopoverPresentationControllerDelegate {
+class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate, CategoryPickerDelegate, ChooseEventPictureDelegate, WriteAboutDelegate, UIPopoverPresentationControllerDelegate {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     var calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
@@ -55,8 +55,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
     
     @IBOutlet weak var attendee4: UIButton!
     
-    
-    
+    @IBOutlet weak var resetButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -112,22 +111,19 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
     }
     
     @IBAction func openDateTimePicker(sender: AnyObject) {
-        guard let map = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("ChooseDateTimeViewController") as? ChooseDateTimeViewController else {
-            return
-        }
+        view.endEditing(true)
 
-        map.delegate = self
-        map.modalPresentationStyle = UIModalPresentationStyle.Popover
+        let datePicker = ActionSheetDatePicker(title: nil, datePickerMode: .DateAndTime, selectedDate: NSDate(), doneBlock: {
+            _, value, _ in
+            guard let date = value as? NSDate else {
+                return
+            }
 
-        
-        let detailPopover: UIPopoverPresentationController = map.popoverPresentationController!
-        detailPopover.delegate = self
-        detailPopover.sourceView = sender as! UIButton
-        
-        detailPopover.permittedArrowDirections = UIPopoverArrowDirection.Down
-        presentViewController(map,
-            animated: true, completion:nil)
-        
+            self.madeDateTimeChoice(date)
+            }, cancelBlock: { ActionStringCancelBlock in return }, origin: self.view)
+
+        datePicker.minuteInterval = 1
+        datePicker.showActionSheetPicker()
     }
     
     @IBAction func openPhotoPicker(sender: AnyObject) {
@@ -151,6 +147,29 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
         presentViewController(vc, animated: true, completion: nil)
     }
     
+    @IBAction func resetButtonPressed(sender: UIButton) {
+        resetUI()
+    }
+
+    func resetUI() {
+        event = nil
+        longitude = 0
+        latitude = 0
+        chosenDate = nil
+        chosenCategories = []
+        chosenPhoto = nil
+        descriptionText = ""
+
+        eventImage.image = nil
+        pickCategory.setTitle(NSLocalizedString("Share with Group", comment: ""), forState: .Normal)
+        dateTimeButton.setTitle(NSLocalizedString("Time & Date", comment: ""), forState: .Normal)
+        location.setTitle(NSLocalizedString("Add Location", comment: ""), forState: .Normal)
+
+        name.text = nil
+        limitInt = 0
+        updateLimitButtonsUI()
+    }
+
     func madeDateTimeChoice(date: NSDate){
         
         chosenDate = date
@@ -180,7 +199,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
            self.pickCategory.setTitle(names.joinWithSeparator(", "), forState: .Normal)
             
         } else {
-            pickCategory.setTitle("PICK CATEGORY", forState: .Normal)
+            pickCategory.setTitle("Share with Group", forState: .Normal)
         }
     }
     
@@ -215,17 +234,21 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
     }
    
     @IBAction func changeLimit(sender: AnyObject) {
-        limitInt = sender.tag + 1
-        for(index, attendeeButton) in attendeesButtons.enumerate(){
+        limitInt = sender.tag
+
+        updateLimitButtonsUI()
+    }
+
+    func updateLimitButtonsUI() {
+        for(_, attendeeButton) in attendeesButtons.enumerate(){
             var buttonImage:UIImage
-            if(index>sender.tag){
+            if(limitInt < attendeeButton.tag){
                 buttonImage = UIImage(named: "accept")!
             } else {
                 buttonImage = UIImage(named: "searchingicon")!
             }
             attendeeButton.setImage(buttonImage, forState: .Normal)
         }
-        
     }
     
     @IBAction func addLocationButtonPressed(sender: AnyObject) {
@@ -253,8 +276,6 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
         self.descriptionText = text
         self.descr.setTitle(text, forState: .Normal)
     }
-
-   
 
     @IBAction func create(sender: AnyObject) {
         
@@ -299,14 +320,8 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseDateDelegate, Ch
                     self.event!.attendees.append(ParseHelper.sharedInstance.currentUser!)
                     ParseHelper.saveObject(self.event!, completion: {
                         (result, error) in
-                                                
-                        let root = self.tabBarController?.viewControllers![2] as! UINavigationController
-                        root.popViewControllerAnimated(false)
-                        guard let vc = UIStoryboard.createEventTab()?.instantiateViewControllerWithIdentifier("CreateEventViewController") as? CreateEventViewController else {
-                            return
-                        }
+                        self.resetUI()
 
-                        root.pushViewController(vc, animated: false)
                         self.spinner.stopAnimating()
                         self.tabBarController?.selectedIndex = 0
                         

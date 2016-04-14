@@ -21,7 +21,8 @@ class BlurryAlertViewController: UIViewController {
     var action:String!
     var event:Event?
     var completion:(()->Void)?
-    
+    var onUserLoggedOut:((error :NSError?) -> Void)?
+
     @IBOutlet weak var cancel: UIButton!
     @IBOutlet weak var cancelButtonPlaceholderView: UIView!
     @IBOutlet weak var about: UILabel!
@@ -80,15 +81,10 @@ class BlurryAlertViewController: UIViewController {
             ParseHelper.removeUserEvents(currentUser, block: {
                 result, error in
                 if error == nil {
-                    ParseHelper.deleteObject(currentUser, completion: { (_, error) in
-                        if error == nil {
-                            let defaults = NSUserDefaults.standardUserDefaults()
-                            defaults.setBool(false, forKey: "hasPermission")
-                            defaults.synchronize()
-                            exit(0)
-                        } else {
-                            MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-                        }
+                    ParseHelper.deleteObject(currentUser, completion: { [weak self] (_, error) in
+                        self?.dismissViewControllerAnimated(true, completion: { 
+                            self?.onUserLoggedOut?(error: error)
+                        })
                     })
                 } else {
                     MessageToUser.showDefaultErrorMessage(error!.localizedDescription)

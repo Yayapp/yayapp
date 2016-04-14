@@ -61,7 +61,7 @@ class Category: Object {
                 return
             }
 
-            parseObject?.setObject(PFUser(user: owner), forKey: "owner")
+            parseObject?.setObject(PFUser(withoutDataUsingUser: owner), forKey: "owner")
         }
     }
     var isPrivate: Bool {
@@ -84,7 +84,7 @@ class Category: Object {
             return parseObjects.map({ User(parseObject: $0)! })
         }
         set {
-            parseObject?.setObject(newValue.map({ PFUser(user: $0) }), forKey: "attendees")
+            parseObject?.setObject(newValue.map({ PFUser(withoutDataUsingUser: $0) }), forKey: "attendees")
         }
     }
     var location: GeoPoint? {

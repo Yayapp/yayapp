@@ -21,7 +21,9 @@ class Event: Object {
 
     var categories: [Category] {
         get {
-            let parseObjects = parseObject?.objectForKey("categories") as! [PFObject]
+            guard let parseObjects = parseObject?.objectForKey("categories") as? [PFObject] else {
+                return []
+            }
 
             return parseObjects.map({ Category(parseObject: $0)! })
         }
@@ -51,7 +53,7 @@ class Event: Object {
                 return
             }
 
-            parseObject?.setObject(PFUser(user: user), forKey: "owner")
+            parseObject?.setObject(PFUser(withoutDataUsingUser: user), forKey: "owner")
         }
     }
     var location: GeoPoint {
@@ -107,7 +109,7 @@ class Event: Object {
             return parseObjects.map({ User(parseObject: $0)! })
         }
         set {
-            parseObject?.setObject(newValue.map({ PFUser(user: $0) }), forKey: "attendees")
+            parseObject?.setObject(newValue.map({ PFUser(withoutDataUsingUser: $0) }), forKey: "attendees")
         }
     }
     var timeZone: String {

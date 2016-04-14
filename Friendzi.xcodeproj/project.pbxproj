@@ -112,7 +112,6 @@
 		99EF69D01BC43F7E00DA0073 /* MessagesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EF69CF1BC43F7E00DA0073 /* MessagesTableViewController.swift */; };
 		99FDE5411B57EB84004CE61B /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FDE5401B57EB84004CE61B /* SettingsTableViewController.swift */; };
 		99FDE5431B580E7D004CE61B /* CreateEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FDE5421B580E7D004CE61B /* CreateEventViewController.swift */; };
-		99FDE5451B58E972004CE61B /* ChooseDateTimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FDE5441B58E972004CE61B /* ChooseDateTimeViewController.swift */; };
 		99FDE54B1B5A74FF004CE61B /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FDE54A1B5A74FF004CE61B /* UserProfileViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -226,7 +225,6 @@
 		99EF69CF1BC43F7E00DA0073 /* MessagesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesTableViewController.swift; sourceTree = "<group>"; };
 		99FDE5401B57EB84004CE61B /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		99FDE5421B580E7D004CE61B /* CreateEventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateEventViewController.swift; sourceTree = "<group>"; };
-		99FDE5441B58E972004CE61B /* ChooseDateTimeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseDateTimeViewController.swift; sourceTree = "<group>"; };
 		99FDE54A1B5A74FF004CE61B /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
 		D8B15517F27561DB20B85177 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -450,7 +448,6 @@
 			isa = PBXGroup;
 			children = (
 				995032961B5671B900D792C5 /* ChooseLocationViewController.swift */,
-				99FDE5441B58E972004CE61B /* ChooseDateTimeViewController.swift */,
 				99EC40FB1B5FFB490093E484 /* InstagramViewController.swift */,
 				997C23901B67B42D0070DDB2 /* ChooseCategoryViewController.swift */,
 				997C23961B67EFCD0070DDB2 /* ChooseEventPictureViewController.swift */,
@@ -730,7 +727,6 @@
 				997C238B1B668CFB0070DDB2 /* EventsViewController.swift in Sources */,
 				99B0C6381C7FB2F6004D8A99 /* AdvancedSettingsTableViewController.swift in Sources */,
 				312DB4581CBB9FF200788AF3 /* PFACL.swift in Sources */,
-				99FDE5451B58E972004CE61B /* ChooseDateTimeViewController.swift in Sources */,
 				993AC6191BA7293C00B677D6 /* TutorialViewController.swift in Sources */,
 				3112B11F1CAABD7900AE064F /* EventsTableViewCell.swift in Sources */,
 				993D3ED71B8CE1170023B054 /* Request.swift in Sources */,

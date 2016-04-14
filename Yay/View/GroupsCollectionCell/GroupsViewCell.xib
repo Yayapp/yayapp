@@ -40,9 +40,6 @@
                 <constraint firstItem="Jpn-S7-Bqj" firstAttribute="top" secondItem="nH8-wu-WS6" secondAttribute="top" id="vQj-tN-aeC"/>
             </constraints>
             <size key="customSize" width="65" height="45"/>
-            <userDefinedRuntimeAttributes>
-                <userDefinedRuntimeAttribute type="boolean" keyPath="keyPath" value="YES"/>
-            </userDefinedRuntimeAttributes>
             <connections>
                 <outlet property="image" destination="Jpn-S7-Bqj" id="mo3-oi-cSw"/>
             </connections>

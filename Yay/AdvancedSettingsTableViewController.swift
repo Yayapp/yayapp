@@ -35,6 +35,27 @@ class AdvancedSettingsTableViewController: UITableViewController {
         blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
         blurryAlertViewController.aboutText = "Sorry, are you sure you want to delete your profile?"
         blurryAlertViewController.messageText = "You'll need another invite to start a new profile again."
+
+        blurryAlertViewController.onUserLoggedOut = { [weak self] error in
+            if error == nil {
+                let defaults = NSUserDefaults.standardUserDefaults()
+                defaults.setBool(false, forKey: "hasPermission")
+                defaults.synchronize()
+
+                guard let startViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("StartViewController") as? StartViewController,
+                    appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate else {
+                    return
+                }
+
+                self?.navigationController?.popToRootViewControllerAnimated(false)
+                appDelegate.window?.rootViewController = startViewController
+                self?.tabBarController?.selectedIndex = 0
+                appDelegate.window?.makeKeyAndVisible()
+            } else {
+                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+            }
+        }
+
         self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
     }
 

@@ -12,12 +12,14 @@ extension PFUser {
     }
 
     convenience init(user: User) {
-        self.init(withoutDataWithClassName: "_User", objectId: user.objectId)
+        self.init()
 
-        if self.username != nil {
-            self.username = user.username
-        }
+        self.username = user.username
 
+        commonInit(user)
+    }
+
+    func commonInit(user: User) {
         if let gender = user.gender {
             self.setObject(gender, forKey: "gender")
         }
@@ -85,7 +87,7 @@ extension PFUser {
         if let createdAt = user.createdAt {
             self.setObject(createdAt, forKey: "createdAt")
         }
-
+        
         if let email = user.email {
             self.setObject(email, forKey: "email")
         }

@@ -78,21 +78,20 @@ class CreateEmailAccountViewController: UIViewController {
             MessageToUser.showDefaultErrorMessage("Email is invalid.")
         } else {
 
-            let user = PFUser()
-            user["name"] = name.text
-            user["distance"] = 20
-            user["gender"] = 1
-            user["attAccepted"] = true
-            user["eventNearby"] = true
-            user["newMessage"] = true
-            user["eventsReminder"] = true
-            user["invites"] = 5
+            let user = User()
+            user.name = name.text
+            user.distance = 20
+            user.gender = 1
+            user.attAccepted = true
+            user.eventNearby = true
+            user.newMessage = true
+            user.eventsReminder = true
+            user.invites = 5
             user.password = password2.text
             user.email = email.text
             user.username = email.text
 
-            user.signUpInBackgroundWithBlock {
-                (succeeded: Bool, error: NSError?) -> Void in
+            ParseHelper.signUpInBackgroundWithBlock(user, completion: { (succeeded, error) in
                 if let error = error {
                     if error.code == 202 {
                         MessageToUser.showDefaultErrorMessage("Email \(user.email) already taken")
@@ -102,7 +101,7 @@ class CreateEmailAccountViewController: UIViewController {
                 } else {
                     self.proceed()
                 }
-            }
+            })
         }
     }
 }

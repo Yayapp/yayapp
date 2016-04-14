@@ -143,7 +143,7 @@
                                     <constraint firstAttribute="height" constant="30" id="48i-WO-aSY"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <state key="normal" title="Share with Groups">
+                                <state key="normal" title="Share with Group">
                                     <color key="titleColor" red="0.35294117650000001" green="0.74901960779999999" blue="0.3294117647" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -370,7 +370,18 @@
                             <constraint firstItem="a7S-B7-6oA" firstAttribute="top" secondItem="C7x-Rc-Jfd" secondAttribute="bottom" constant="8" id="ymi-g2-Mqv"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="EUi-hn-LQ1"/>
+                    <navigationItem key="navigationItem" id="EUi-hn-LQ1">
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="U0r-p6-LHf">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="WzO-x2-frO">
+                                <rect key="frame" x="16" y="7" width="71" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="reset"/>
+                                <connections>
+                                    <action selector="resetButtonPressed:" destination="QtT-Q2-qgG" eventType="touchUpInside" id="B5Q-R3-Nmm"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics">
                         <color key="tintColor" red="0.35294117650000001" green="0.74901960779999999" blue="0.3294117647" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="barTintColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -390,6 +401,7 @@
                         <outlet property="location" destination="3PG-OW-ZM5" id="qa4-6U-qf0"/>
                         <outlet property="name" destination="C7x-Rc-Jfd" id="UG0-TX-QsR"/>
                         <outlet property="pickCategory" destination="CHr-AL-yX4" id="lCz-90-ZB0"/>
+                        <outlet property="resetButton" destination="WzO-x2-frO" id="CyY-gY-3S6"/>
                         <outlet property="spinner" destination="g8L-xc-rUg" id="ktM-Yv-ba1"/>
                     </connections>
                 </viewController>

@@ -233,13 +233,12 @@ class ParseHelper {
     }
     
     class func getUserCategoriesForEvent(user: User, block:CategoriesResultBlock?) {
-        
         let query1 = PFQuery(className: categoryParseClassName)
-        query1.whereKey("owner", equalTo:PFUser(withoutDataUsingUser: user))
-        
+        query1.whereKey("isPrivate", equalTo: false)
+
         let query2 = PFQuery(className: categoryParseClassName)
-        query2.whereKey("isPrivate", equalTo:false)
-        
+        query2.whereKeyDoesNotExist("isPrivate")
+
         let query = PFQuery.orQueryWithSubqueries([query1, query2])
         query.findObjectsInBackgroundWithBlock {
             objects, error in
@@ -351,6 +350,7 @@ class ParseHelper {
         let query = PFQuery(className: messageParseClassName)
         query.whereKey("group", equalTo: PFObject(withoutDataWithClassName: categoryParseClassName, objectId: group.objectId))
         query.orderByAscending("createdAt")
+        query.includeKey("user")
         //        query.limit = 20
         //        query.skip = 20// * page
         query.findObjectsInBackgroundWithBlock {
@@ -706,6 +706,7 @@ class ParseHelper {
 
     class func signUpInBackgroundWithBlock(user: User, completion: BoolResultBlock?) {
         let parseUser = PFUser(user: user)
+        parseUser.password = user.password
         parseUser.signUpInBackgroundWithBlock(completion)
     }
 

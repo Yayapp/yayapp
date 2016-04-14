@@ -21,20 +21,29 @@ class User: Object {
 
     var username: String? {
         get {
-            return parseObject?.objectForKey("username") as? String
+            guard let parseUser = parseObject as? PFUser where parseUser.dataAvailable else {
+                return nil
+            }
+
+            return parseUser.username
         }
         set {
-            guard let username = newValue else {
-                return
+            guard let username = newValue,
+                let parseUser = parseObject as? PFUser else {
+                    return
             }
             
-            parseObject?.setObject(username, forKey: "username")
+            parseUser.username = username
         }
     }
 
     var gender: Int? {
         get {
-            return parseObject?.objectForKey("gender") as? Int
+            guard let parseObject = parseObject where parseObject.dataAvailable else {
+                return nil
+            }
+
+            return parseObject.objectForKey("gender") as? Int
         }
         set {
             guard let gender = newValue else {
@@ -47,7 +56,11 @@ class User: Object {
 
     var newMessage: Bool? {
         get {
-            return parseObject?.objectForKey("newMessage") as? Bool
+            guard let parseObject = parseObject where parseObject.dataAvailable else {
+                return nil
+            }
+
+            return parseObject.objectForKey("newMessage") as? Bool
         }
         set {
             guard let newMessage = newValue else {
@@ -60,7 +73,11 @@ class User: Object {
 
     var attAccepted: Bool? {
         get {
-            return parseObject?.objectForKey("attAccepted") as? Bool
+            guard let parseObject = parseObject where parseObject.dataAvailable else {
+                return nil
+            }
+
+            return parseObject.objectForKey("attAccepted") as? Bool
         }
         set {
             guard let attAccepted = newValue else {
@@ -83,7 +100,11 @@ class User: Object {
 
     var invites: Int? {
         get {
-            return parseObject?.objectForKey("invites") as? Int
+            guard let parseObject = parseObject where parseObject.dataAvailable else {
+                return nil
+            }
+
+            return parseObject.objectForKey("invites") as? Int
         }
         set {
             guard let invites = newValue else {
@@ -96,7 +117,11 @@ class User: Object {
 
     var eventsReminder: Bool? {
         get {
-            return parseObject?.objectForKey("eventsReminder") as? Bool
+            guard let parseObject = parseObject where parseObject.dataAvailable else {
+                return nil
+            }
+
+            return parseObject.objectForKey("eventsReminder") as? Bool
         }
         set {
             guard let eventsReminder = newValue else {
@@ -109,7 +134,12 @@ class User: Object {
 
     var name: String? {
         get {
-            return parseObject?.objectForKey("name") as? String
+            guard let parseObject = parseObject where parseObject.dataAvailable,
+                let name = parseObject.objectForKey("name") as? String else {
+                return nil
+            }
+
+            return name
         }
         set {
             guard let name = newValue else {
@@ -122,7 +152,11 @@ class User: Object {
 
     var about: String? {
         get {
-            return parseObject?.objectForKey("about") as? String
+            guard let parseObject = parseObject where parseObject.dataAvailable else {
+                return nil
+            }
+
+            return parseObject.objectForKey("about") as? String
         }
         set {
             guard let about = newValue else {
@@ -135,20 +169,29 @@ class User: Object {
 
     var updatedAt: NSDate? {
         get {
-            return parseObject?.objectForKey("updatedAt") as? NSDate
+            guard let parseObject = parseObject where parseObject.dataAvailable else {
+                return nil
+            }
+
+            return parseObject.objectForKey("updatedAt") as? NSDate
         }
     }
 
     var authData: NSDictionary? {
         get {
-            return parseObject?.objectForKey("authData") as? NSDictionary
+            guard let parseObject = parseObject where parseObject.dataAvailable else {
+                return nil
+            }
+
+            return parseObject.objectForKey("authData") as? NSDictionary
         }
     }
 
     var location: GeoPoint? {
         get {
-            guard let parseGeoPoint = parseObject?.objectForKey("location") as? PFGeoPoint else {
-                return nil
+            guard let parseObject = parseObject where parseObject.dataAvailable,
+                let parseGeoPoint = parseObject.objectForKey("location") as? PFGeoPoint else {
+                    return nil
             }
 
             return GeoPoint(parseGeoPoint: parseGeoPoint)
@@ -164,7 +207,11 @@ class User: Object {
 
     var distance: Int? {
         get {
-            return parseObject?.objectForKey("distance") as? Int
+            guard let parseObject = parseObject where parseObject.dataAvailable else {
+                return nil
+            }
+
+            return parseObject.objectForKey("distance") as? Int
         }
         set {
             guard let distance = newValue else {
@@ -177,14 +224,19 @@ class User: Object {
 
     var dateOfBirth: NSDate? {
         get {
-            return parseObject?.objectForKey("dob") as? NSDate
+            guard let parseObject = parseObject where parseObject.dataAvailable else {
+                return nil
+            }
+
+            return parseObject.objectForKey("dob") as? NSDate
         }
     }
 
     var avatar: File? {
         get {
-            guard let parseFile = parseObject?.objectForKey("avatar") as? PFFile else {
-                return nil
+            guard let parseObject = parseObject where parseObject.dataAvailable,
+                let parseFile = parseObject.objectForKey("avatar") as? PFFile else {
+                    return nil
             }
 
             return File(parseFile: parseFile)
@@ -200,7 +252,11 @@ class User: Object {
 
     var eventNearby: Bool? {
         get {
-            return parseObject?.objectForKey("eventNearby") as? Bool
+            guard let parseObject = parseObject where parseObject.dataAvailable else {
+                return nil
+            }
+
+            return parseObject.objectForKey("eventNearby") as? Bool
         }
         set {
             guard let eventNearby = newValue else {
@@ -213,7 +269,11 @@ class User: Object {
 
     var token: String? {
         get {
-            return parseObject?.objectForKey("token") as? String
+            guard let parseObject = parseObject where parseObject.dataAvailable else {
+                return nil
+            }
+
+            return parseObject.objectForKey("token") as? String
         }
         set {
             guard let token = newValue else {
@@ -226,7 +286,11 @@ class User: Object {
 
     var password: String? {
         get {
-            return parseObject?.objectForKey("password") as? String
+            guard let parseObject = parseObject where parseObject.dataAvailable else {
+                return nil
+            }
+
+            return parseObject.objectForKey("password") as? String
         }
         set {
             guard let password = newValue else {
@@ -239,13 +303,21 @@ class User: Object {
 
     var createdAt: NSDate? {
         get {
-            return parseObject?.objectForKey("createdAt") as? NSDate
+            guard let parseObject = parseObject where parseObject.dataAvailable else {
+                return nil
+            }
+
+            return parseObject.objectForKey("createdAt") as? NSDate
         }
     }
 
     var email: String? {
         get {
-            return parseObject?.objectForKey("email") as? String
+            guard let parseObject = parseObject where parseObject.dataAvailable else {
+                return nil
+            }
+
+            return parseObject.objectForKey("email") as? String
         }
         set {
             guard let email = newValue else {

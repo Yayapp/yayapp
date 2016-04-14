@@ -51,7 +51,7 @@ class Report: Object {
                 return
             }
 
-            parseObject?.setValue(PFUser(user: reportedUser), forKey: "reportedUser")
+            parseObject?.setValue(PFUser(withoutDataUsingUser: reportedUser), forKey: "reportedUser")
         }
     }
 
@@ -60,7 +60,7 @@ class Report: Object {
             return User(parseObject: parseObject?.valueForKey("user") as? PFObject)!
         }
         set {
-            parseObject?.setValue(PFUser(user: newValue), forKey: "user")
+            parseObject?.setValue(PFUser(withoutDataUsingUser: newValue), forKey: "user")
         }
     }
 }

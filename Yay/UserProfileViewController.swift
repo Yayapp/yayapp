@@ -8,7 +8,7 @@
 
 import UIKit
 
-class UserProfileViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate,   UIPopoverPresentationControllerDelegate {
+class UserProfileViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate,   UIPopoverPresentationControllerDelegate, TTGTextTagCollectionViewDelegate {
 
     let picker = UIImagePickerController()
     var user: User!
@@ -44,15 +44,17 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         interestsCollection.tagSelectedCornerRadius = 0
         interestsCollection.tagSelectedBorderWidth = 0
         interestsCollection.tagBorderColor = UIColor.blackColor()
-        
+        interestsCollection.horizontalSpacing = 12
+        interestsCollection.verticalSpacing = 12
+
         if(user == nil){
             user = ParseHelper.sharedInstance.currentUser
         }
         
         
 //        interestsCollection.dataSource = self
-//        interestsCollection.delegate = self
-        
+        interestsCollection.delegate = self
+
         name.text = user.name
         
         if(ParseHelper.sharedInstance.currentUser?.objectId == user.objectId) {
@@ -133,26 +135,15 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        
         if indexPath.row == 1 {
-            interestsCollection.sizeToFit()
-            if interestsCollection.frame.height<44 {
-                return 44
-            } else {
-                return interestsCollection.frame.height + interestsCollection.frame.height*50/100
-            }
-        } else if indexPath.row == 0 {
-            about.sizeToFit()
-            if about.frame.height<44 {
-                return 44
-            } else {
-                return about.frame.height + 16
-            }
-        } else {
-            return 44
+            return interestsCollection.contentHeight
         }
+
+        about.sizeToFit()
+
+        return about.frame.height < 44 ? 44 : about.frame.height + 16
     }
-      
+
     @IBAction func settings(sender: AnyObject) {
         performSegueWithIdentifier("settings", sender: nil)
     }
@@ -204,5 +195,9 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
             handler: nil))
 
         presentViewController(blockUserAlert, animated: true, completion: nil)
+    }
+
+    func textTagCollectionView(textTagCollectionView: TTGTextTagCollectionView!, updateContentHeight newContentHeight: CGFloat) {
+        tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 1, inSection: 0)], withRowAnimation: UITableViewRowAnimation.None)
     }
 }

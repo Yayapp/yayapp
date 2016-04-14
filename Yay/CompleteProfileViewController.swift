@@ -21,7 +21,7 @@ class CompleteProfileViewController: UIViewController, UIImagePickerControllerDe
     @IBOutlet weak var maleButton: UIButton!
     @IBOutlet weak var femaleButton: UIButton!
     @IBOutlet weak var genderImage: UIImageView!
-    @IBOutlet weak var bioField: UITextField!
+    @IBOutlet weak var bioField: UITextView!
     @IBOutlet weak var nameLabel: UILabel!
     
     @IBOutlet weak var proceed: UIButton!
@@ -146,12 +146,36 @@ class CompleteProfileViewController: UIViewController, UIImagePickerControllerDe
     }
     
     @IBAction func proceedAction(sender: AnyObject) {
-        guard let currentUser = ParseHelper.sharedInstance.currentUser,
-            bio = bioField.text else {
-                return
+        if let currentUser = ParseHelper.sharedInstance.currentUser,
+            bio = bioField.text {
+            let aboutWithoutExtraLines = bio.stringByReplacingOccurrencesOfString("\\n+",
+                                                                                  withString: "\n",
+                                                                                  options: .RegularExpressionSearch,
+                                                                                  range:nil)
+            ParseHelper.sharedInstance.currentUser?.about = aboutWithoutExtraLines
+
+            currentUser.about = bio
+            ParseHelper.saveObject(currentUser, completion: nil)
+        }
+    }
+
+    //MARK: - UITextViewDelegate
+
+    func textViewDidBeginEditing(textView: UITextView) {
+        if textView.text == NSLocalizedString("Add a bio (optional)", comment: "") {
+            textView.text = nil
+            textView.textColor = .blackColor()
         }
 
-        currentUser.about = bio
-        ParseHelper.saveObject(currentUser, completion: nil)
+        textView.becomeFirstResponder()
+    }
+
+    func textViewDidEndEditing(textView: UITextView) {
+        if textView.text == "" {
+            textView.text = NSLocalizedString("Add a bio (optional)", comment: "")
+            textView.textColor = .lightGrayColor()
+        }
+
+        textView.resignFirstResponder()
     }
 }

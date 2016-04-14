@@ -28,7 +28,7 @@ class Block: Object {
             return User(parseObject: owner)
         }
         set {
-            parseObject?.setValue(PFUser(user: newValue), forKey: "owner")
+            parseObject?.setValue(PFUser(withoutDataUsingUser: newValue), forKey: "owner")
         }
     }
     var user: User! {
@@ -36,7 +36,7 @@ class Block: Object {
             return User(parseObject: parseObject?.valueForKey("user") as? PFObject)
         }
         set {
-            parseObject?.setValue(PFUser(user: newValue), forKey: "user")
+            parseObject?.setValue(PFUser(withoutDataUsingUser: newValue), forKey: "user")
         }
     }
 }
