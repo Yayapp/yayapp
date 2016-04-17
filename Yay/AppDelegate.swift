@@ -156,6 +156,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         defaultACL.publicReadAccess = true
         PFACL.setDefaultACL(defaultACL, withAccessForCurrentUser: true)
     }
-    
+
+    func gotoMainTabBarScreen() {
+        self.window!.rootViewController = self.mainNavigation
+        self.window!.makeKeyAndVisible()
+    }
 }
 

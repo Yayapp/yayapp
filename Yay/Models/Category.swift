@@ -47,6 +47,22 @@ class Category: Object {
             parseObject?.setObject(photo, forKey: "photo")
         }
     }
+    var photoThumb: File! {
+        get {
+            guard let parseObject = parseObject where parseObject.dataAvailable else {
+                return File()
+            }
+
+            return File(parseFile: parseObject.objectForKey("photoThumb") as! PFFile) ?? File()
+        }
+        set {
+            guard let photo = newValue.parseFile else {
+                return
+            }
+
+            parseObject?.setObject(photo, forKey: "photoThumb")
+        }
+    }
     var owner: User? {
         get {
             guard let parseObject = parseObject where parseObject.dataAvailable,

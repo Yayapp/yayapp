@@ -100,14 +100,22 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
         for attendee in result {
             ParseHelper.fetchObject(attendee, completion: {
                 result, error in
-                if error == nil {
+                guard let _ = result where error == nil else {
+                    self.avatars[attendee.objectId!] = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(named: "upload_pic"), diameter: 45)
+
+                    return
+                }
+
                     attendee.getImage({
                         result in
+                        guard let result = result else {
+                            self.avatars[attendee.objectId!] = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(named: "upload_pic"), diameter: 45)
+
+                            return
+                        }
+                        
                         self.avatars[attendee.objectId!] = JSQMessagesAvatarImageFactory.avatarImageWithImage(result, diameter: 45)
                     })
-                } else {
-                    self.avatars[attendee.objectId!] = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(named: "upload_pic"), diameter: 45)
-                }
             })
         }
     }

@@ -67,7 +67,7 @@ class ProfileViewController: UITableViewController {
 //    }
 
     @IBAction func logout(sender: AnyObject) {
-        PFUser.logOutInBackgroundWithBlock({
+        ParseHelper.logOutInBackgroundWithBlock({
             error in
             if error == nil {
                 guard let startViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("StartViewController") as? StartViewController else {

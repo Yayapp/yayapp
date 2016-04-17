@@ -192,6 +192,13 @@ class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate
             self.group!.name = name.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
             self.group!.summary = descriptionText.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
             self.group!.photo = chosenPhoto!
+
+            if let group = group,
+                resizedImage = eventImage.image?.resizedToSize(CGSize(width: 70, height: 70)),
+                thumbImageData = UIImageJPEGRepresentation(resizedImage, 0.85) {
+                group.photoThumb = File(data: thumbImageData)
+            }
+
             self.group!.owner = ParseHelper.sharedInstance.currentUser!
             if isPrivate {
                 self.group!.location = GeoPoint(latitude: latitude!, longitude: longitude!)

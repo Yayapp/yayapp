@@ -23,11 +23,6 @@ class EventFinderViewController: UIViewController, UIAlertViewDelegate, ChooseLo
 
     }
     
-    func goToMain() {
-            appDelegate.window!.rootViewController = appDelegate.mainNavigation
-            appDelegate.window!.makeKeyAndVisible()
-    }
-    
     @IBAction func openLocationPicker(sender: AnyObject) {
         guard let map = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("ChooseLocationViewController") as? ChooseLocationViewController else {
             return
@@ -46,9 +41,8 @@ class EventFinderViewController: UIViewController, UIAlertViewDelegate, ChooseLo
 
         ParseHelper.saveObject(ParseHelper.sharedInstance.currentUser!, completion: {
             result, error in
-            self.goToMain()
+            self.appDelegate.gotoMainTabBarScreen()
         })
-
     }
 
     @IBAction func allowAction(sender: AnyObject) {
@@ -58,7 +52,7 @@ class EventFinderViewController: UIViewController, UIAlertViewDelegate, ChooseLo
                 ParseHelper.sharedInstance.currentUser!.location = geoPoint
                 ParseHelper.saveObject(ParseHelper.sharedInstance.currentUser!, completion: nil)
 
-                self.goToMain()
+                self.appDelegate.gotoMainTabBarScreen()
             } else {
                 MessageToUser.showDefaultErrorMessage("Can't retreive location automatically. Please choose location manually", delegate: self)
             }

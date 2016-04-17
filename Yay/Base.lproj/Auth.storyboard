@@ -459,7 +459,6 @@
                         <outlet property="name" destination="9Kd-EG-wLh" id="5gj-xT-wFm"/>
                         <outlet property="password1" destination="hB6-if-RUh" id="0oi-q5-9Wv"/>
                         <outlet property="password2" destination="4Gf-0d-1RP" id="LNL-Rb-hKe"/>
-                        <segue destination="zSP-ZQ-F6n" kind="show" identifier="proceed" id="NDv-lM-SCZ"/>
                         <segue destination="D2h-ES-ZUb" kind="show" identifier="proceedToPicker" id="ig1-zm-eLs"/>
                     </connections>
                 </viewController>
@@ -691,7 +690,6 @@
                                                 </state>
                                                 <connections>
                                                     <action selector="proceedAction:" destination="D2h-ES-ZUb" eventType="touchUpInside" id="1l5-rb-TBZ"/>
-                                                    <segue destination="zSP-ZQ-F6n" kind="show" id="Kc7-ka-ovh"/>
                                                 </connections>
                                             </button>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Add a bio (optional)" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="CPu-jj-17Q">
@@ -792,8 +790,5 @@
         <image name="searchingicon" width="138" height="138"/>
         <image name="uploadphoto_ico" width="42" height="46"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="dCM-D0-qCd"/>
-    </inferredMetricsTieBreakers>
     <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
 </document>

@@ -704,6 +704,10 @@ class ParseHelper {
         PFUser.logOutInBackgroundWithBlock(completion)
     }
 
+    class func requestPasswordResetForEmail(email: String, completion:BoolResultBlock?) {
+        PFUser.requestPasswordResetForEmailInBackground(email, block: completion)
+    }
+
     class func signUpInBackgroundWithBlock(user: User, completion: BoolResultBlock?) {
         let parseUser = PFUser(user: user)
         parseUser.password = user.password

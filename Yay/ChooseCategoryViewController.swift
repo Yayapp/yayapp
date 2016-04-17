@@ -39,7 +39,6 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
     var publicCategoriesData:[Category]! = []
     var selectedCategoriesData:[Category]! = []
     var selectedCategoryType: CategoryType = .All
-    var isEventCreation:Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,31 +48,20 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         categories.delegate = self
         categories.dataSource = self
 
-        guard let currentUser = ParseHelper.sharedInstance.currentUser else {
-            return
-        }
+        ParseHelper.getCategories({ (categoriesList: [Category]?, error: NSError?) in
+            guard let currentUser = ParseHelper.sharedInstance.currentUser where error == nil else {
+                if let error = error {
+                    MessageToUser.showDefaultErrorMessage(error.localizedDescription)
+                }
 
-        ParseHelper.getUserCategories(currentUser, block: {
-            (categoriesList:[Category]?, error:NSError?) in
-            if(error == nil) {
-                self.selectedCategoriesData = categoriesList!
-                self.allAction(true)
-            } else {
-                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+                return
             }
-        })
-        
-        
-        ParseHelper.getCategories({
-            (categoriesList:[Category]?, error:NSError?) in
-            if(error == nil) {
-                self.categoriesData = categoriesList!
-                self.privateCategoriesData = self.categoriesData.filter({$0.isPrivate})
-                self.publicCategoriesData = self.categoriesData.filter({!$0.isPrivate})
-                self.allAction(true)
-            } else {
-                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-            }
+
+            self.categoriesData = categoriesList!
+            self.privateCategoriesData = self.categoriesData.filter({ $0.isPrivate })
+            self.publicCategoriesData = self.categoriesData.filter({ !$0.isPrivate })
+            self.selectedCategoriesData = self.categoriesData.filter({ $0.attendees.contains(currentUser) })
+            self.allAction(true)
         })
     }
 
@@ -133,8 +121,8 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         }
 
         cell.name.text = category.name
-        print(category.name)
-        if let photoURLString = category.photo.url,
+
+        if let photoURLString = category.photoThumb.url,
             photoURL = NSURL(string: photoURLString) {
             cell.photo.sd_setImageWithURL(photoURL)
         }
@@ -203,14 +191,13 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         } else {
             selectedCategoriesData.append(category)
         }
-        if (!isEventCreation) {
-            guard let currentUser = ParseHelper.sharedInstance.currentUser else {
-                return
-            }
 
-            category.attendees.append(currentUser)
-            ParseHelper.saveObject(category, completion: nil)
+        guard let currentUser = ParseHelper.sharedInstance.currentUser else {
+            return
         }
+
+        category.attendees.append(currentUser)
+        ParseHelper.saveObject(category, completion: nil)
     }
     
     @IBAction func searchAction(sender: AnyObject) {
@@ -233,7 +220,7 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
 
     func search(searchText:String){
         ParseHelper.searchCategories(searchText, block: {
-            (categoriesList:[Category]?, error:NSError?) in
+            (categoriesList: [Category]?, error: NSError?) in
             if(error == nil) {
                 self.categoriesData = categoriesList!
                 self.privateCategoriesData = self.categoriesData.filter({$0.isPrivate})

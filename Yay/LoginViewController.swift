@@ -29,7 +29,7 @@ class LoginViewController: UIViewController, InstagramDelegate {
         alert.addAction(UIAlertAction(title: "Reset", style: UIAlertActionStyle.Default, handler: {
             (action: UIAlertAction) in
             if (!tField.text!.isEmpty && tField.text!.isEmail()) {
-                PFUser.requestPasswordResetForEmailInBackground(tField.text!, block: {
+                ParseHelper.requestPasswordResetForEmail(tField.text!, completion: {
                     result, error in
                     if(error == nil) {
                         MessageToUser.showMessage("Reset password", textId: "We've sent you password reset instructions. Please check your email.")
@@ -100,7 +100,11 @@ class LoginViewController: UIViewController, InstagramDelegate {
             ParseHelper.saveObject(currentInstallation, completion: nil)
         }
 
-        self.performSegueWithIdentifier("proceed", sender: nil)
+        if ParseHelper.sharedInstance.currentUser?.location == nil {
+            self.performSegueWithIdentifier("proceed", sender: nil)
+        } else {
+            self.appDelegate.gotoMainTabBarScreen()
+        }
     }
    
     
@@ -288,21 +292,23 @@ class LoginViewController: UIViewController, InstagramDelegate {
         } else if email.text!.isEmail() == false {
             MessageToUser.showDefaultErrorMessage("Email is invalid.")
         } else {
-            PFUser.logInWithUsernameInBackground(email.text!, password:password.text!) {
-                (user: PFUser?, error: NSError?) -> Void in
+            ParseHelper.logInWithUsernameInBackground(email.text!, password:password.text!, completion: { (user: User?, error: NSError?) in
                 if user != nil {
                     if let currentInstallation = ParseHelper.sharedInstance.currentInstallation {
                         currentInstallation.user = ParseHelper.sharedInstance.currentUser
                         ParseHelper.saveObject(ParseHelper.sharedInstance.currentUser, completion: nil)
                     }
-                    
+                    if user?.location == nil {
                     self.performSegueWithIdentifier("proceed", sender: nil)
+                    } else {
+                        self.appDelegate.gotoMainTabBarScreen()
+                    }
                 } else if(error!.code == 101) {
                     MessageToUser.showDefaultErrorMessage("Invalid email or password")
                 } else {
                     MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
                 }
-            }
+            })
         }
     }
     

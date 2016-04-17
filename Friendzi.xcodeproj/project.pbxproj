@@ -48,6 +48,7 @@
 		31CEACA51CB2B58400A51F8E /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31CEACA41CB2B58400A51F8E /* File.swift */; };
 		31CEACA71CB3989D00A51F8E /* Object.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31CEACA61CB3989D00A51F8E /* Object.swift */; };
 		31CEACA91CB3BAEE00A51F8E /* GeoPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31CEACA81CB3BAEE00A51F8E /* GeoPoint.swift */; };
+		31D374DB1CC0EDD8007B7189 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D374DA1CC0EDD8007B7189 /* UIImage.swift */; };
 		31D94CBF1CAD02FF0099A891 /* NSDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D94CBE1CAD02FF0099A891 /* NSDate.swift */; };
 		31DF59871CAE72D100621F54 /* EventPhotoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DF59861CAE72D100621F54 /* EventPhotoTableViewCell.swift */; };
 		31DF598A1CAE73E300621F54 /* EventPhotoFlatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 31DF59881CAE73E300621F54 /* EventPhotoFlatTableViewCell.xib */; };
@@ -158,6 +159,7 @@
 		31CEACA41CB2B58400A51F8E /* File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		31CEACA61CB3989D00A51F8E /* Object.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Object.swift; sourceTree = "<group>"; };
 		31CEACA81CB3BAEE00A51F8E /* GeoPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeoPoint.swift; sourceTree = "<group>"; };
+		31D374DA1CC0EDD8007B7189 /* UIImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		31D94CBE1CAD02FF0099A891 /* NSDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDate.swift; sourceTree = "<group>"; };
 		31DF59861CAE72D100621F54 /* EventPhotoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventPhotoTableViewCell.swift; sourceTree = "<group>"; };
 		31DF59881CAE73E300621F54 /* EventPhotoFlatTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventPhotoFlatTableViewCell.xib; sourceTree = "<group>"; };
@@ -394,6 +396,7 @@
 			isa = PBXGroup;
 			children = (
 				3123A4371CB4EF7D000AC147 /* PFGeoPoint.swift */,
+				31D374DA1CC0EDD8007B7189 /* UIImage.swift */,
 				3123A4311CB3FA0C000AC147 /* PFUser.swift */,
 				312DB4571CBB9FF200788AF3 /* PFACL.swift */,
 				3123A4331CB40486000AC147 /* PFObject.swift */,
@@ -726,6 +729,7 @@
 				99B0C6361C7F9768004D8A99 /* TextField.swift in Sources */,
 				997C238B1B668CFB0070DDB2 /* EventsViewController.swift in Sources */,
 				99B0C6381C7FB2F6004D8A99 /* AdvancedSettingsTableViewController.swift in Sources */,
+				31D374DB1CC0EDD8007B7189 /* UIImage.swift in Sources */,
 				312DB4581CBB9FF200788AF3 /* PFACL.swift in Sources */,
 				993AC6191BA7293C00B677D6 /* TutorialViewController.swift in Sources */,
 				3112B11F1CAABD7900AE064F /* EventsTableViewCell.swift in Sources */,

@@ -156,6 +156,14 @@ class CompleteProfileViewController: UIViewController, UIImagePickerControllerDe
 
             currentUser.about = bio
             ParseHelper.saveObject(currentUser, completion: nil)
+
+            if currentUser.location == nil {
+                if let vc = self.storyboard?.instantiateViewControllerWithIdentifier("EventFinderViewController") {
+                    self.presentViewController(vc, animated: true, completion: nil)
+                }
+            } else {
+                (UIApplication.sharedApplication().delegate as? AppDelegate)?.gotoMainTabBarScreen()
+            }
         }
     }
 
