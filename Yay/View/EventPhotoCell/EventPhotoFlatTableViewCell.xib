@@ -27,14 +27,36 @@
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mjW-8N-3zk">
+                        <rect key="frame" x="134" y="43" width="52" height="52"/>
+                        <subviews>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Jhz-gP-pc9">
+                                <rect key="frame" x="16" y="16" width="20" height="20"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.5" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="Jhz-gP-pc9" firstAttribute="leading" secondItem="mjW-8N-3zk" secondAttribute="leading" constant="16" id="Bcy-Wp-CNf"/>
+                            <constraint firstAttribute="trailing" secondItem="Jhz-gP-pc9" secondAttribute="trailing" constant="16" id="Te2-s0-Ix6"/>
+                            <constraint firstItem="Jhz-gP-pc9" firstAttribute="top" secondItem="mjW-8N-3zk" secondAttribute="top" constant="16" id="ppm-4U-8jn"/>
+                            <constraint firstAttribute="bottom" secondItem="Jhz-gP-pc9" secondAttribute="bottom" constant="16" id="xrv-iC-jLE"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="8"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="mjW-8N-3zk" firstAttribute="centerX" secondItem="2yG-CN-Fud" secondAttribute="centerX" id="17O-xj-u60"/>
                     <constraint firstItem="bM8-gu-UG0" firstAttribute="leading" secondItem="2yG-CN-Fud" secondAttribute="leading" id="3ku-fb-X2W"/>
                     <constraint firstAttribute="trailing" secondItem="bM8-gu-UG0" secondAttribute="trailing" id="C1v-qa-u6n"/>
                     <constraint firstItem="bM8-gu-UG0" firstAttribute="top" secondItem="2yG-CN-Fud" secondAttribute="top" id="C83-mc-3NB"/>
                     <constraint firstAttribute="bottom" secondItem="S9w-Ib-8gX" secondAttribute="bottom" constant="8" id="P44-uA-M2c"/>
                     <constraint firstAttribute="bottom" secondItem="bM8-gu-UG0" secondAttribute="bottom" id="WhI-3M-cex"/>
                     <constraint firstItem="S9w-Ib-8gX" firstAttribute="leading" secondItem="2yG-CN-Fud" secondAttribute="leading" constant="8" id="aay-Kf-2iT"/>
+                    <constraint firstItem="mjW-8N-3zk" firstAttribute="centerY" secondItem="2yG-CN-Fud" secondAttribute="centerY" id="p4n-Wq-7GR"/>
                     <constraint firstItem="S9w-Ib-8gX" firstAttribute="width" secondItem="S9w-Ib-8gX" secondAttribute="height" multiplier="304:21" id="qfx-2l-vLv"/>
                     <constraint firstAttribute="trailing" secondItem="S9w-Ib-8gX" secondAttribute="trailing" constant="8" id="yUX-lp-wMf"/>
                 </constraints>
@@ -45,6 +67,8 @@
                 </variation>
             </tableViewCellContentView>
             <connections>
+                <outlet property="activityIndicatorView" destination="Jhz-gP-pc9" id="qN0-wY-gDc"/>
+                <outlet property="activityPlaceholderView" destination="mjW-8N-3zk" id="2ZE-nu-9rJ"/>
                 <outlet property="name" destination="S9w-Ib-8gX" id="LWj-GF-rxS"/>
                 <outlet property="photo" destination="bM8-gu-UG0" id="YJ4-Em-f1o"/>
             </connections>

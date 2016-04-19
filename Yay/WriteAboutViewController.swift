@@ -23,6 +23,11 @@ class WriteAboutViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        NSNotificationCenter.defaultCenter().addObserver(self,
+                                                         selector: #selector(UserProfileViewController.handleUserLogout),
+                                                         name: Constants.userDidLogoutNotification,
+                                                         object: nil)
+
         text.text = textAbout
         text.becomeFirstResponder()
         
@@ -37,6 +42,12 @@ class WriteAboutViewController: UIViewController {
         self.view.insertSubview(blurEffectView, atIndex: 0)
     }
 
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self,
+                                                            name: Constants.userDidLogoutNotification,
+                                                            object: nil)
+    }
+
     @IBAction func ok(sender: AnyObject) {
         delegate.writeAboutDone(text.text)
         dismissViewControllerAnimated(true, completion: nil)
@@ -45,6 +56,9 @@ class WriteAboutViewController: UIViewController {
     @IBAction func cancel(sender: AnyObject) {
         dismissViewControllerAnimated(true, completion: nil)
     }
-    
 
+    //MARK: - Notification Handlers
+    func handleUserLogout() {
+        dismissViewControllerAnimated(false, completion: nil)
+    }
 }

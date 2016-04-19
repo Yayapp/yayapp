@@ -15,7 +15,9 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
     var editdone:UIBarButtonItem!
     var gender:Int!
     var avatarData:NSData?
-    
+
+    private var isShowingBioPlaceholder = true
+
     @IBOutlet weak var maleButton: UIButton!
     
     @IBOutlet weak var femaleButton: UIButton!
@@ -53,7 +55,11 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
             avatar.sd_setImageWithURL(photoURL)
         }
 
-        about.text = currentUser.about
+        if let bio = currentUser.about where bio.characters.count > 0 {
+            isShowingBioPlaceholder = false
+            about.textColor = .blackColor()
+            about.text = bio
+        }
     }
     
    
@@ -65,7 +71,6 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
             self.picker.allowsEditing = true
             self.picker.sourceType = UIImagePickerControllerSourceType.Camera
             self.picker.cameraCaptureMode = .Photo
-            self.picker.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
             self.picker.showsCameraControls = true;
             self.presentViewController(self.picker, animated: true, completion: nil)
         }))
@@ -73,7 +78,6 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
             (action: UIAlertAction) in
             self.picker.allowsEditing = true //2
             self.picker.sourceType = .PhotoLibrary //3
-            self.picker.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
             self.presentViewController(self.picker, animated: true, completion: nil)
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
@@ -95,7 +99,7 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
                                                                                      withString: "\n",
                                                                                      options: .RegularExpressionSearch,
                                                                                      range:nil)
-        ParseHelper.sharedInstance.currentUser?.about = aboutWithoutExtraLines
+        ParseHelper.sharedInstance.currentUser?.about = isShowingBioPlaceholder ? "" : aboutWithoutExtraLines
 
         ParseHelper.saveObject(ParseHelper.sharedInstance.currentUser!, completion: {
             result, error in
@@ -121,8 +125,11 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         let pickedImage:UIImage = (info[UIImagePickerControllerEditedImage] as! UIImage).resizeToDefault()
+
         avatarData = UIImageJPEGRepresentation(pickedImage, 70)
         avatar.image = pickedImage
+
+        picker.dismissViewControllerAnimated(true, completion: nil)
     }
     //What to do if the image picker cancels.
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
@@ -146,7 +153,7 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
     //MARK: - UITextViewDelegate
 
     func textViewDidBeginEditing(textView: UITextView) {
-        if textView.text == NSLocalizedString("Bio", comment: "") {
+        if isShowingBioPlaceholder {
             textView.text = nil
             textView.textColor = .blackColor()
         }
@@ -158,6 +165,10 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
         if textView.text == "" {
             textView.text = NSLocalizedString("Bio", comment: "")
             textView.textColor = .lightGrayColor()
+
+            isShowingBioPlaceholder = true
+        } else {
+            isShowingBioPlaceholder = false
         }
 
         textView.resignFirstResponder()

@@ -48,9 +48,9 @@ class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate
         
         if group != nil {
             update()
-            title = "Edit Event"
+            title = NSLocalizedString("Edit Group", comment: "")
         } else {
-            title = "Create Event"
+            title = NSLocalizedString("Create Group", comment: "")
         }
         self.publicAction(true)
     }

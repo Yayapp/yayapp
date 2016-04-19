@@ -19,6 +19,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
     var calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
 
     var event:Event?
+    var isEditMode = false
     
     let dateFormatter = NSDateFormatter()
     var longitude: Double?
@@ -55,22 +56,28 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
     
     @IBOutlet weak var attendee4: UIButton!
     
-    @IBOutlet weak var resetButton: UIButton!
+    @IBOutlet weak var leftNavigationButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+        NSNotificationCenter.defaultCenter().addObserver(self,
+                                                         selector: #selector(CreateEventViewController.handleUserLogout),
+                                                         name: Constants.userDidLogoutNotification,
+                                                         object: nil)
+
         attendeesButtons = [attendee1, attendee2, attendee3, attendee4]
         
         pickCategory.layer.borderColor = UIColor.whiteColor().CGColor
         name.delegate = self
         dateFormatter.dateFormat = "EEE dd MMM 'at' H:mm"
+
+        title = isEditMode ? NSLocalizedString("Edit Event", comment: "") : NSLocalizedString("Create Event", comment: "")
+        leftNavigationButton.setTitle(isEditMode ? NSLocalizedString("back", comment: "") : NSLocalizedString("reset", comment: ""), forState: .Normal)
+        createButton.setTitle(isEditMode ? NSLocalizedString("Save", comment: "") : NSLocalizedString("Create Event & Invite Friends", comment: ""), forState: .Normal)
         
         if event != nil {
             update()
-            title = "Edit Event"
-        } else {
-            title = "Create Event"
         }
 
         if let avatar = ParseHelper.sharedInstance.currentUser?.avatar {
@@ -85,12 +92,22 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
             })
         }
     }
-  
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self,
+                                                            name: Constants.userDidLogoutNotification,
+                                                            object: nil)
+    }
     
     func update() {
-        ParseHelper.fetchObject(event!, completion: {
-            result, error in
-            if error == nil {
+        guard let eventID = event?.objectId else {
+            return
+        }
+
+        ParseHelper.fetchEvent(eventID, completion: { result, error in
+            if let fetchedEvent = result as? Event where error == nil {
+                self.event = fetchedEvent
+
                 self.title  = self.event!.name
                 self.name.text = self.event!.name
                 self.descriptionText = self.event!.summary
@@ -104,7 +121,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
                 self.madeDateTimeChoice(self.event!.startDate)
                 self.madeLocationChoice(CLLocationCoordinate2D(latitude: self.event!.location.latitude, longitude: self.event!.location.longitude))
             } else {
-                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+                MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
             }
         })
         
@@ -147,16 +164,20 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
         presentViewController(vc, animated: true, completion: nil)
     }
     
-    @IBAction func resetButtonPressed(sender: UIButton) {
-        resetUI()
+    @IBAction func leftNavigationButtonPressed(sender: UIButton) {
+        if (isEditMode) {
+            navigationController?.popViewControllerAnimated(true)
+        } else {
+            resetContent()
+        }
     }
 
-    func resetUI() {
+    func resetContent() {
         event = nil
         longitude = 0
         latitude = 0
         chosenDate = nil
-        chosenCategories = []
+        chosenCategories.removeAll()
         chosenPhoto = nil
         descriptionText = ""
 
@@ -278,7 +299,10 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
     }
 
     @IBAction func create(sender: AnyObject) {
-        
+        guard let currentUser = ParseHelper.sharedInstance.currentUser else {
+            return
+        }
+
         if name.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).isEmpty {
             MessageToUser.showDefaultErrorMessage("Please enter name")
         } else if longitude == nil || latitude == nil {
@@ -317,14 +341,20 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
             ParseHelper.saveObject(self.event!, completion: {
                 (result, error) in
                 if error == nil {
-                    self.event!.attendees.append(ParseHelper.sharedInstance.currentUser!)
-                    ParseHelper.saveObject(self.event!, completion: {
-                        (result, error) in
-                        self.resetUI()
+                    if (self.event?.attendees.contains(currentUser) == false) {
+                        self.event?.attendees.append(currentUser)
+                    }
+
+                    ParseHelper.saveObject(self.event!, completion: { (result, error) in
+                        if (self.isEditMode) {
+                            self.navigationController?.popViewControllerAnimated(true)
+                        } else {
+                            self.resetContent()
+                        }
 
                         self.spinner.stopAnimating()
                         self.tabBarController?.selectedIndex = 0
-                        
+
                     })
                 } else {
                     self.spinner.stopAnimating()
@@ -342,5 +372,11 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
                 vc.categoryDelegate = self
                 vc.selectedCategoriesData = chosenCategories
         }
+    }
+
+    //MARK: - Notification Handlers
+    func handleUserLogout() {
+        navigationController?.popToRootViewControllerAnimated(false)
+        resetContent()
     }
 }

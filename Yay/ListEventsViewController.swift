@@ -27,10 +27,18 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        NSNotificationCenter.defaultCenter().addObserver(self,
+                                                         selector: #selector(ListEventsViewController.handleUserLogout),
+                                                         name: Constants.userDidLogoutNotification,
+                                                         object: nil)
+
         guard let currentUser = ParseHelper.sharedInstance.currentUser
-            where currentUser.avatar != nil && currentUser.gender != nil && currentUser.about != nil else {
+            where currentUser.avatar != nil && currentUser.gender != nil else {
                 if let completeProfileVC = UIStoryboard(name: "Auth", bundle: nil).instantiateViewControllerWithIdentifier(CompleteProfileViewController.storyboardID) as? CompleteProfileViewController {
                     completeProfileVC.dismissButtonHidden = false
+                    completeProfileVC.onNextButtonPressed = {
+                        (UIApplication.sharedApplication().delegate as? AppDelegate)?.gotoMainTabBarScreen()
+                    }
                     presentViewController(completeProfileVC, animated: false, completion: nil)
                 }
 
@@ -54,7 +62,12 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
             reloadAll(events)
         }
     }
-   
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self,
+                                                            name: Constants.userDidLogoutNotification,
+                                                            object: nil)
+    }
 
     override func reloadAll(eventsList:[Event]) {
         eventsData = eventsList
@@ -250,6 +263,13 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
                 vc.delegate = self
             }
         }
+    }
+
+    //MARK: - Notification Handlers
+    func handleUserLogout() {
+        eventsFirst?.removeAll()
+        eventsData.removeAll()
+        events.reloadData()
     }
 }
 

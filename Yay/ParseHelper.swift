@@ -34,6 +34,10 @@ class ParseHelper {
         return calendar
     }()
 
+    lazy var eventPhotosQuery: PFQuery = {
+        return PFQuery(className: eventPhotoParseClassName)
+    }()
+
     var currentUser: User? {
         get {
             guard let parseUser = PFUser.currentUser() else {
@@ -373,10 +377,11 @@ class ParseHelper {
     
     
     class func getEventPhotos(category:Category, block:EventPhotosResultBlock?) {
-        let query = PFQuery(className: eventPhotoParseClassName)
-        query.whereKey("category", equalTo: PFObject(withoutDataWithClassName: categoryParseClassName, objectId: category.objectId))
+        ParseHelper.sharedInstance.eventPhotosQuery.cancel()
 
-        query.findObjectsInBackgroundWithBlock {
+        ParseHelper.sharedInstance.eventPhotosQuery.whereKey("category", equalTo: PFObject(withoutDataWithClassName: categoryParseClassName, objectId: category.objectId))
+
+        ParseHelper.sharedInstance.eventPhotosQuery.findObjectsInBackgroundWithBlock {
             objects, error in
             
             if error == nil {
@@ -674,6 +679,16 @@ class ParseHelper {
         })
     }
 
+    class func fetchEvent(eventID: String, completion: ObjectResultBlock?) {
+        let query = PFQuery(className: eventParseClassName)
+        query.whereKey("objectId", equalTo: eventID)
+        query.includeKey("categories")
+        query.includeKey("attendees")
+        query.getFirstObjectInBackgroundWithBlock({ parseObject, error in
+            completion?(Event(parseObject: parseObject), error)
+        })
+    }
+
     class func fetchObject(object: Object?, completion: ObjectResultBlock?) {
         object?.parseObject?.fetchInBackgroundWithBlock({ (parseObject, error) in
             completion?(Object(parseObject: parseObject), error)
@@ -695,7 +710,7 @@ class ParseHelper {
     }
 
     class func logInWithUsernameInBackground(username: String, password: String, completion: UserResultBlock?) {
-        PFUser.logInWithUsernameInBackground(username, password: password) { (parseUser, error) in
+        PFUser.logInWithUsernameInBackground(username.lowercaseString, password: password.lowercaseString) { (parseUser, error) in
             completion?(User(parseObject: parseUser), error)
         }
     }
@@ -705,11 +720,13 @@ class ParseHelper {
     }
 
     class func requestPasswordResetForEmail(email: String, completion:BoolResultBlock?) {
-        PFUser.requestPasswordResetForEmailInBackground(email, block: completion)
+        PFUser.requestPasswordResetForEmailInBackground(email.lowercaseString, block: completion)
     }
 
     class func signUpInBackgroundWithBlock(user: User, completion: BoolResultBlock?) {
         let parseUser = PFUser(user: user)
+        parseUser.username = user.username?.lowercaseString
+        parseUser.email = user.email?.lowercaseString
         parseUser.password = user.password
         parseUser.signUpInBackgroundWithBlock(completion)
     }

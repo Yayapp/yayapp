@@ -27,9 +27,20 @@ class NotificationsController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+        NSNotificationCenter.defaultCenter().addObserver(self,
+                                                         selector: #selector(NotificationsController.handleUserLogout),
+                                                         name: Constants.userDidLogoutNotification,
+                                                         object: nil)
+
         recentAction(true)
         
+    }
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self,
+                                                            name: Constants.userDidLogoutNotification,
+                                                            object: nil)
     }
 
     func removeInactiveViewController(inactiveViewController: UIViewController?) {
@@ -88,7 +99,6 @@ class NotificationsController: UIViewController {
         guard let vc = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("RequestsTableViewController") as? RequestsTableViewController else {
             return
         }
-
         updateActiveViewController(vc)
         recentUnderline.hidden = true
         chatUnderline.hidden = true
@@ -98,4 +108,8 @@ class NotificationsController: UIViewController {
         requestsButton.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
     }
 
+    //MARK: - Notification Handlers
+    func handleUserLogout() {
+        recentAction(true)
+    }
 }

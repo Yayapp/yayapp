@@ -12,6 +12,9 @@ class CompleteProfileViewController: UIViewController, UIImagePickerControllerDe
     static let storyboardID = "completeProfileViewController"
 
     var dismissButtonHidden = true
+    var onNextButtonPressed: (() -> Void)?
+
+    private var isShowingBioPlaceholder = true
     
     let picker = UIImagePickerController()
     
@@ -26,14 +29,39 @@ class CompleteProfileViewController: UIViewController, UIImagePickerControllerDe
     
     @IBOutlet weak var proceed: UIButton!
 
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         picker.delegate = self
 
-        nameLabel.text = ParseHelper.sharedInstance.currentUser?.name
+        if let currentUser = ParseHelper.sharedInstance.currentUser {
+            nameLabel.text = currentUser.name
 
-        dismissButton.hidden = dismissButtonHidden
+            if let gender = currentUser.gender {
+                if gender == 1 {
+                    maleButton.backgroundColor = Color.GenderActiveColor
+                    femaleButton.backgroundColor = UIColor.whiteColor()
+                } else {
+                    femaleButton.backgroundColor = Color.GenderActiveColor
+                    maleButton.backgroundColor = UIColor.whiteColor()
+                }
+            }
+
+            if let avatarURLString = currentUser.avatar?.url,
+                avatarURL = NSURL(string: avatarURLString) {
+                avatar.sd_setImageWithURL(avatarURL)
+            }
+
+            if let bio = currentUser.about where bio.characters.count > 0 {
+                isShowingBioPlaceholder = false
+                bioField.textColor = .blackColor()
+                bioField.text = bio
+            }
+
+            dismissButton.hidden = dismissButtonHidden
+
+            check()
+        }
     }
 
     @IBAction func dismissButtonPressed(sender: AnyObject) {
@@ -146,15 +174,15 @@ class CompleteProfileViewController: UIViewController, UIImagePickerControllerDe
     }
     
     @IBAction func proceedAction(sender: AnyObject) {
+        isShowingBioPlaceholder = NSLocalizedString("Add a bio (optional)", comment: "") == bioField.text || bioField.text.characters.count == 0
         if let currentUser = ParseHelper.sharedInstance.currentUser,
             bio = bioField.text {
             let aboutWithoutExtraLines = bio.stringByReplacingOccurrencesOfString("\\n+",
                                                                                   withString: "\n",
                                                                                   options: .RegularExpressionSearch,
                                                                                   range:nil)
-            ParseHelper.sharedInstance.currentUser?.about = aboutWithoutExtraLines
+            currentUser.about = isShowingBioPlaceholder ? "" : aboutWithoutExtraLines
 
-            currentUser.about = bio
             ParseHelper.saveObject(currentUser, completion: nil)
 
             if currentUser.location == nil {
@@ -162,7 +190,9 @@ class CompleteProfileViewController: UIViewController, UIImagePickerControllerDe
                     self.presentViewController(vc, animated: true, completion: nil)
                 }
             } else {
-                (UIApplication.sharedApplication().delegate as? AppDelegate)?.gotoMainTabBarScreen()
+                dismissViewControllerAnimated(true, completion: { [unowned self] in
+                    self.onNextButtonPressed?()
+                })
             }
         }
     }
@@ -170,7 +200,7 @@ class CompleteProfileViewController: UIViewController, UIImagePickerControllerDe
     //MARK: - UITextViewDelegate
 
     func textViewDidBeginEditing(textView: UITextView) {
-        if textView.text == NSLocalizedString("Add a bio (optional)", comment: "") {
+        if isShowingBioPlaceholder {
             textView.text = nil
             textView.textColor = .blackColor()
         }
@@ -182,6 +212,10 @@ class CompleteProfileViewController: UIViewController, UIImagePickerControllerDe
         if textView.text == "" {
             textView.text = NSLocalizedString("Add a bio (optional)", comment: "")
             textView.textColor = .lightGrayColor()
+
+            isShowingBioPlaceholder = true
+        } else {
+            isShowingBioPlaceholder = false
         }
 
         textView.resignFirstResponder()

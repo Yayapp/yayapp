@@ -18,6 +18,11 @@ class MapEventsViewController: EventsViewController, MKMapViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        NSNotificationCenter.defaultCenter().addObserver(self,
+                                                         selector: #selector(MapEventsViewController.handleUserLogout),
+                                                         name: Constants.userDidLogoutNotification,
+                                                         object: nil)
+
         mapView.delegate = self
         let user = ParseHelper.sharedInstance.currentUser
         
@@ -30,7 +35,12 @@ class MapEventsViewController: EventsViewController, MKMapViewDelegate {
         
     }
 
-    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self,
+                                                            name: Constants.userDidLogoutNotification,
+                                                            object: nil)
+    }
+
     override func reloadAll(events:[Event]) {
         eventsData = events
         
@@ -89,5 +99,10 @@ class MapEventsViewController: EventsViewController, MKMapViewDelegate {
         mapView.removeAnnotations(mapView.annotations)
         eventsData = eventsData.filter({$0.objectId != event.objectId})
         reloadAll(eventsData)
+    }
+
+    //MARK: - Notification Handlers
+    func handleUserLogout() {
+        reloadAll([])
     }
 }

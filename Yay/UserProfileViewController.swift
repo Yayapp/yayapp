@@ -29,9 +29,13 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        NSNotificationCenter.defaultCenter().addObserver(self,
+                                                         selector: #selector(UserProfileViewController.handleUserLogout),
+                                                         name: Constants.userDidLogoutNotification,
+                                                         object: nil)
         picker.delegate = self
-//        interestsCollection.scrollEnabled = false
-        
+
         tableView.estimatedRowHeight = 100.0
         tableView.rowHeight = UITableViewAutomaticDimension
         
@@ -46,14 +50,15 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         interestsCollection.tagBorderColor = UIColor.blackColor()
         interestsCollection.horizontalSpacing = 12
         interestsCollection.verticalSpacing = 12
+        interestsCollection.delegate = self
+    }
+
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
 
         if(user == nil){
             user = ParseHelper.sharedInstance.currentUser
         }
-        
-        
-//        interestsCollection.dataSource = self
-        interestsCollection.delegate = self
 
         name.text = user.name
         
@@ -99,9 +104,6 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
                 }
                 self.interestsCollection.addTags(names)
                 self.interestsCollection.setTagAtIndex(0, selected: true)
-//                self.interestsCollection.reloadData()
-//                self.interestsCollection.frame.size = CGSize(width: self.interestsCollection.frame.width, height: self.interestsCollection.contentSize.height + 44)
-//                self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 1, inSection: 0)], withRowAnimation: UITableViewRowAnimation.None)
             }
         })
 
@@ -116,6 +118,19 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         if user.about != nil {
             setAboutMe(user.about!)
         }
+    }
+
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        interestsCollection.removeAllTags()
+        interestsCollection.reload()
+    }
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self,
+                                                            name: Constants.userDidLogoutNotification,
+                                                            object: nil)
     }
 
     func setAboutMe(text:String){
@@ -199,5 +214,24 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
 
     func textTagCollectionView(textTagCollectionView: TTGTextTagCollectionView!, updateContentHeight newContentHeight: CGFloat) {
         tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 1, inSection: 0)], withRowAnimation: UITableViewRowAnimation.None)
+    }
+
+    //MARK: - Notification Handlers
+    func handleUserLogout() {
+        navigationController?.popToRootViewControllerAnimated(false)
+
+        user = nil
+        interestsData.removeAll()
+        interestsCollection.removeAllTags()
+        interestsCollection.reload()
+        blocked = false
+        name?.text = nil
+        avatar?.image = nil
+        eventsCount?.text = nil
+        about?.text = nil
+        rankIcon?.image = nil
+        blockUnblock?.hidden = true
+
+        tableView.reloadData()
     }
 }

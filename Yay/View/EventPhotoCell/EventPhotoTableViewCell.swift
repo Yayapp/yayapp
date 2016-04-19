@@ -16,11 +16,31 @@ class EventPhotoTableViewCell: UITableViewCell {
 
     @IBOutlet weak var name: UILabel?
     @IBOutlet weak var photo: UIImageView?
+    @IBOutlet weak var activityPlaceholderView: UIView!
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
+
+    func showActivityIndicator() {
+        activityPlaceholderView.hidden = false
+        activityIndicatorView.startAnimating()
+    }
+
+    func hideActivityIndicator() {
+        activityPlaceholderView.hidden = true
+        activityIndicatorView.stopAnimating()
+    }
+
+    override func setSelected(selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+
+        activityPlaceholderView.backgroundColor = UIColor(white: 1, alpha: 0.5)
+    }
 
     override func prepareForReuse() {
         super.prepareForReuse()
 
         name?.text = nil
         photo?.image = nil
+        activityPlaceholderView.hidden = true
+        activityIndicatorView.stopAnimating()
     }
 }

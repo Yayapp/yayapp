@@ -377,7 +377,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="reset"/>
                                 <connections>
-                                    <action selector="resetButtonPressed:" destination="QtT-Q2-qgG" eventType="touchUpInside" id="B5Q-R3-Nmm"/>
+                                    <action selector="leftNavigationButtonPressed:" destination="QtT-Q2-qgG" eventType="touchUpInside" id="hGj-24-9sz"/>
                                 </connections>
                             </button>
                         </barButtonItem>
@@ -398,10 +398,10 @@
                         <outlet property="descr" destination="eTN-S4-Wt2" id="G9g-A1-PaI"/>
                         <outlet property="eventImage" destination="mLA-BX-NBd" id="Esh-kZ-fkP"/>
                         <outlet property="eventPhoto" destination="oqO-s0-a05" id="6cW-iK-BD3"/>
+                        <outlet property="leftNavigationButton" destination="WzO-x2-frO" id="G0U-Oz-XFC"/>
                         <outlet property="location" destination="3PG-OW-ZM5" id="qa4-6U-qf0"/>
                         <outlet property="name" destination="C7x-Rc-Jfd" id="UG0-TX-QsR"/>
                         <outlet property="pickCategory" destination="CHr-AL-yX4" id="lCz-90-ZB0"/>
-                        <outlet property="resetButton" destination="WzO-x2-frO" id="CyY-gY-3S6"/>
                         <outlet property="spinner" destination="g8L-xc-rUg" id="ktM-Yv-ba1"/>
                     </connections>
                 </viewController>

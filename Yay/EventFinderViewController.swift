@@ -10,17 +10,14 @@ import UIKit
 import MapKit
 
 class EventFinderViewController: UIViewController, UIAlertViewDelegate, ChooseLocationDelegate {
-
-    let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-    
-   
-    
     @IBOutlet weak var searchingAnimation: UIImageView!
     @IBOutlet weak var location: UIButton!
-    
+
+    let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    var gotoMainTabBarScreen: (() -> Void)?
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
     }
     
     @IBAction func openLocationPicker(sender: AnyObject) {
@@ -39,10 +36,8 @@ class EventFinderViewController: UIViewController, UIAlertViewDelegate, ChooseLo
         
             ParseHelper.sharedInstance.currentUser!.location = GeoPoint(latitude: coordinates.latitude, longitude: coordinates.longitude)
 
-        ParseHelper.saveObject(ParseHelper.sharedInstance.currentUser!, completion: {
-            result, error in
-            self.appDelegate.gotoMainTabBarScreen()
-        })
+        ParseHelper.saveObject(ParseHelper.sharedInstance.currentUser!, completion: nil)
+        appDelegate.gotoMainTabBarScreen()
     }
 
     @IBAction func allowAction(sender: AnyObject) {

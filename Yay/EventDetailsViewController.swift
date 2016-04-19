@@ -368,10 +368,12 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     }
     
     @IBAction func editEvent(sender: AnyObject){
-        guard let vc = UIStoryboard.createEventTab()?.instantiateViewControllerWithIdentifier("CreateEventViewController") as? CreateEventViewController else {
-            return
+        guard let vc = UIStoryboard.createEventTab()?.instantiateViewControllerWithIdentifier("CreateEventViewController") as? CreateEventViewController,
+            currentUser = ParseHelper.sharedInstance.currentUser else {
+                return
         }
 
+        vc.isEditMode = event.owner?.objectId == currentUser.objectId
         vc.event = event
         vc.delegate = self
         navigationController?.pushViewController(vc, animated: true)

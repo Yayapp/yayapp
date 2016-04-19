@@ -33,6 +33,12 @@ class MainRootViewController: UIViewController, MFMailComposeViewControllerDeleg
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        NSNotificationCenter.defaultCenter().addObserver(self,
+                                                         selector: #selector(MainRootViewController.handleUserLogout),
+                                                         name: Constants.userDidLogoutNotification,
+                                                         object: nil)
+
         let image : UIImage = UIImage(named: "logo")!
         let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
         imageView.contentMode = .ScaleAspectFit
@@ -41,6 +47,10 @@ class MainRootViewController: UIViewController, MFMailComposeViewControllerDeleg
     }
     
     override func viewWillAppear(animated: Bool) {
+        guard let _ = ParseHelper.sharedInstance.currentUser else {
+            return
+        }
+
         today(true)
     }
 
@@ -49,6 +59,12 @@ class MainRootViewController: UIViewController, MFMailComposeViewControllerDeleg
         if Prefs.getPref(Prefs.tut) == false {
             Prefs.setPref(Prefs.tut)
         }
+    }
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self,
+                                                            name: Constants.userDidLogoutNotification,
+                                                            object: nil)
     }
     
 
@@ -116,15 +132,7 @@ class MainRootViewController: UIViewController, MFMailComposeViewControllerDeleg
     }
     
     @IBAction func today(sender: AnyObject) {
-        selectedSegment = 0
-        todayUnderline.hidden = false
-        tomorrowUnderline.hidden = true
-        thisWeekUnderline.hidden = true
-
-        today.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
-        tomorrow.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        thisWeek.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        
+        setupUIForTodayTab()
         segmentChanged()
     }
     
@@ -276,5 +284,29 @@ class MainRootViewController: UIViewController, MFMailComposeViewControllerDeleg
             navigationItem.rightBarButtonItem!.image = UIImage(named: "mapmarkerico")
         }
         segmentChanged()
+    }
+
+    //MARK: - UI Helpers
+    func setupUIForTodayTab() {
+        selectedSegment = 0
+
+        todayUnderline.hidden = false
+        tomorrowUnderline.hidden = true
+        thisWeekUnderline.hidden = true
+
+        today.setTitleColor(Color.PrimaryActiveColor, forState: .Normal)
+        tomorrow.setTitleColor(.blackColor(), forState: .Normal)
+        thisWeek.setTitleColor(.blackColor(), forState: .Normal)
+    }
+
+    //MARK: - Notification Handlers
+    func handleUserLogout() {
+        navigationController?.popToRootViewControllerAnimated(false)
+        
+        isMapView = false
+        eventsData.removeAll()
+        chosenCategories.removeAll()
+
+        setupUIForTodayTab()
     }
 }

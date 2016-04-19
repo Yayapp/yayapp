@@ -47,7 +47,10 @@ extension PFObject {
         }
 
         self.setObject(category.isPrivate, forKey: "isPrivate")
-        self.setObject(category.attendees, forKey: "attendees")
+
+        let parseUsers = category.attendees.map({ PFUser(withoutDataUsingUser: $0) })
+        self.setObject(parseUsers, forKey: "attendees")
+
         self.setObject(category.summary, forKey: "summary")
 
         if let owner = category.owner {

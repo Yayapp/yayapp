@@ -67,18 +67,27 @@ class ProfileViewController: UITableViewController {
 //    }
 
     @IBAction func logout(sender: AnyObject) {
-        ParseHelper.logOutInBackgroundWithBlock({
-            error in
-            if error == nil {
-                guard let startViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("StartViewController") as? StartViewController else {
-                    return
-                }
+        SVProgressHUD.show()
 
-                self.navigationController!.popToRootViewControllerAnimated(false)
-                self.appDelegate.window!.rootViewController = startViewController
-                self.tabBarController?.selectedIndex = 0
-                self.appDelegate.window!.makeKeyAndVisible()
+        ParseHelper.logOutInBackgroundWithBlock({ error in
+            SVProgressHUD.dismiss()
+
+            guard error == nil else {
+                MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
+
+                return
             }
+
+            self.tabBarController?.selectedIndex = 0
+            self.navigationController?.popViewControllerAnimated(false)
+            NSNotificationCenter.defaultCenter().postNotificationName(Constants.userDidLogoutNotification, object: nil)
+
+            guard let startViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("StartViewController") as? StartViewController else {
+                return
+            }
+
+            self.appDelegate.window!.rootViewController = startViewController
+            self.appDelegate.window!.makeKeyAndVisible()
         })
     }
 

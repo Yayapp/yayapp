@@ -43,6 +43,11 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        NSNotificationCenter.defaultCenter().addObserver(self,
+                                                         selector: #selector(ChooseCategoryViewController.handleUserLogout),
+                                                         name: Constants.userDidLogoutNotification,
+                                                         object: nil)
+
         categories.registerNib(CategoryCollectionViewCell.nib, forCellWithReuseIdentifier: CategoryCollectionViewCell.reuseIdentifier)
 
         categories.delegate = self
@@ -63,6 +68,12 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
             self.selectedCategoriesData = self.categoriesData.filter({ $0.attendees.contains(currentUser) })
             self.allAction(true)
         })
+    }
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self,
+                                                            name: Constants.userDidLogoutNotification,
+                                                            object: nil)
     }
 
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
@@ -248,6 +259,22 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
             where segue.identifier == "create" {
             vc.delegate = self
         }
+    }
+
+    //MARK: - Notification Handlers
+    func handleUserLogout() {
+        navigationController?.popToRootViewControllerAnimated(false)
+        
+        searchController.active = false
+        searchControllerText = nil
+
+        categoriesData.removeAll()
+        privateCategoriesData.removeAll()
+        publicCategoriesData.removeAll()
+        selectedCategoriesData.removeAll()
+        selectedCategoryType = .All
+
+        allAction(true)
     }
 }
 

@@ -21,18 +21,6 @@ class PhotosTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        ParseHelper.getEventPhotos(category) { [weak self] (photos, error) in
-            guard let photos = photos
-                where error == nil else {
-                    MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
-
-                    return
-            }
-            
-            self?.eventPhotos = photos
-            self?.tableView .reloadData()
-        }
-
         tableView.registerNib(EventPhotoTableViewCell.flatNib, forCellReuseIdentifier: EventPhotoTableViewCell.flatReuseIdentifier)
     }
 
