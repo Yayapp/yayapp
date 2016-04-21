@@ -63,9 +63,7 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
             }
 
             self.categoriesData = categoriesList!
-            self.privateCategoriesData = self.categoriesData.filter({ $0.isPrivate })
-            self.publicCategoriesData = self.categoriesData.filter({ !$0.isPrivate })
-            self.selectedCategoriesData = self.categoriesData.filter({ $0.attendees.contains(currentUser) })
+
             self.allAction(true)
         })
     }
@@ -162,6 +160,13 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
     }
     
     @IBAction func allAction(sender: AnyObject) {
+        privateCategoriesData = categoriesData.filter({ $0.isPrivate })
+        publicCategoriesData = categoriesData.filter({ !$0.isPrivate })
+
+        if let currentUser = ParseHelper.sharedInstance.currentUser {
+            selectedCategoriesData = categoriesData.filter({ $0.attendees.contains(currentUser) })
+        }
+
         allUnderline.hidden = false
         privateUnderline.hidden = true
         publicUnderline.hidden = true
@@ -234,8 +239,6 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
             (categoriesList: [Category]?, error: NSError?) in
             if(error == nil) {
                 self.categoriesData = categoriesList!
-                self.privateCategoriesData = self.categoriesData.filter({$0.isPrivate})
-                self.publicCategoriesData = self.categoriesData.filter({!$0.isPrivate})
                 self.allAction(true)
             } else {
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)

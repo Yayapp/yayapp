@@ -78,10 +78,6 @@ class InstagramViewController: UIViewController, UIWebViewDelegate {
 //        return true
     }
     
-    func webView(webView: UIWebView, didFailLoadWithError error: NSError?) {
-        MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
-    }
-    
     @IBAction func close(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
     }

@@ -25,14 +25,16 @@ class CategoryPickerViewController: UIViewController, TTGTextTagCollectionViewDe
         super.viewDidLoad()
      
         categoriesCollection.delegate = self
-        categoriesCollection.tagTextColor = UIColor.blackColor()
-        categoriesCollection.tagSelectedTextColor = UIColor.whiteColor()
+        categoriesCollection.tagTextColor = .blackColor()
+        categoriesCollection.tagSelectedTextColor = .whiteColor()
         categoriesCollection.tagSelectedBackgroundColor = Color.PrimaryActiveColor
         categoriesCollection.tagTextFont = UIFont.boldSystemFontOfSize(15)
-        categoriesCollection.tagCornerRadius = 15
-        categoriesCollection.tagSelectedCornerRadius = 15
-        categoriesCollection.tagBorderColor = UIColor.blackColor()
-                categoriesCollection.tagSelectedBorderWidth = 0
+        categoriesCollection.tagCornerRadius = 10
+        categoriesCollection.tagSelectedCornerRadius = 10
+        categoriesCollection.tagBorderColor = .blackColor()
+        categoriesCollection.tagSelectedBorderWidth = 0
+        categoriesCollection.horizontalSpacing = 12
+        categoriesCollection.verticalSpacing = 12
 
         guard let currentUser = ParseHelper.sharedInstance.currentUser else {
             return

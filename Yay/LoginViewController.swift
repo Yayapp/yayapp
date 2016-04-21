@@ -213,6 +213,7 @@ class LoginViewController: UIViewController, InstagramDelegate {
 
                             ParseHelper.sharedInstance.currentUser?.avatar = File(parseFile: imageFile!)
                             ParseHelper.sharedInstance.currentUser?.name = result.objectForKey("name") as? String
+                            ParseHelper.sharedInstance.currentUser?.about = result.objectForKey("description") as? String
                         } catch {
                             MessageToUser.showDefaultErrorMessage("Something went wrong")
                         }
@@ -238,9 +239,7 @@ class LoginViewController: UIViewController, InstagramDelegate {
 
         ParseHelper.logInWithUsernameInBackground(user.username, password: "\(user.username.MD5())", completion: {
             (pfuser: User?, error: NSError?) -> Void in
-            if pfuser != nil {
-                self.proceed()
-            } else {
+            if error != nil {
                 if(error!.code == 101) {
                     let pfuser = User()
 
@@ -253,6 +252,7 @@ class LoginViewController: UIViewController, InstagramDelegate {
                     
                     self.setupDefaults(pfuser)
                     pfuser.name = user.fullName
+                    pfuser.about = user.bio
                     pfuser.token = token
                     pfuser.password = "\(user.username.MD5())"
                     pfuser.username = user.username
@@ -262,12 +262,16 @@ class LoginViewController: UIViewController, InstagramDelegate {
                         if error != nil {
                             MessageToUser.showDefaultErrorMessage("Something went wrong")
                         } else {
-                            self.doRegistration()
+                            self.proceed()
                         }
                     })
                 } else {
                     MessageToUser.showDefaultErrorMessage("Something went wrong")
+
+                    return
                 }
+            } else if pfuser != nil {
+                self.proceed()
             }
         })
     }
