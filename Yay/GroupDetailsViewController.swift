@@ -382,7 +382,7 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
         }
     }
     
-    @IBAction func editEvent(sender: AnyObject){
+    @IBAction func editGroup(sender: AnyObject) {
         guard let vc = UIStoryboard.groupsTab()?.instantiateViewControllerWithIdentifier("CreateGroupViewController") as? CreateGroupViewController else {
             return
         }

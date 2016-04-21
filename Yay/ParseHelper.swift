@@ -736,4 +736,21 @@ class ParseHelper {
             completion?(GeoPoint(parseGeoPoint: pfGeoPoint), error)
         }
     }
+
+    class func changeStateOfCategory(category: Category, toJoined isJoined: Bool, completion: BoolResultBlock?) {
+        guard let currentUser = ParseHelper.sharedInstance.currentUser else {
+            return
+        }
+
+        var categoryAttendees = category.attendees
+
+        if isJoined && !categoryAttendees.contains(currentUser) {
+            categoryAttendees.append(currentUser)
+        } else if !isJoined {
+            categoryAttendees = categoryAttendees.filter{$0 != currentUser}
+        }
+
+        category.attendees = categoryAttendees
+        ParseHelper.saveObject(category, completion:completion)
+    }
 }

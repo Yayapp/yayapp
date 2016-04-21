@@ -114,20 +114,7 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
             return UICollectionViewCell()
         }
     
-        var category:Category
-
-        switch (selectedCategoryType) {
-        case .Private:
-            category = privateCategoriesData[indexPath.row]
-        case .Public:
-            category = publicCategoriesData[indexPath.row]
-        default:
-            if(indexPath.section == 0) {
-                category = publicCategoriesData[indexPath.row]
-            } else {
-                category = privateCategoriesData[indexPath.row]
-            }
-        }
+        let category = categoryForIndexPath(indexPath)
 
         cell.name.text = category.name
 
@@ -139,24 +126,18 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         cell.switched.on = self.selectedCategoriesData.contains(category)
 
         cell.switched.tag = indexPath.row;
-        cell.switched.addTarget(self, action: "switched:", forControlEvents: .TouchUpInside)
-        
+
+        cell.onSwitchValueChanged = { [unowned self] isSwitcherOn in
+            ParseHelper.changeStateOfCategory(self.categoryForIndexPath(indexPath),
+                                              toJoined: isSwitcherOn,
+                                              completion: nil)
+        }
+
         return cell
     }
 
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        var category:Category
-        
-        switch (selectedCategoryType) {
-        case .Private: category = privateCategoriesData[indexPath.row]
-        case .Public: category = publicCategoriesData[indexPath.row]
-        default: if(indexPath.section == 0) {
-            category = publicCategoriesData[indexPath.row]
-        } else {
-            category = privateCategoriesData[indexPath.row]
-            }
-        }
-        performSegueWithIdentifier("details", sender: category)
+        performSegueWithIdentifier("details", sender: categoryForIndexPath(indexPath))
     }
     
     @IBAction func allAction(sender: AnyObject) {
@@ -197,23 +178,6 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         publicButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         privateButton.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
         categories.reloadData()
-    }
-    
-    @IBAction func switched(sender: AnyObject) {
-        let category = categoriesData[sender.tag]
-    
-        if (selectedCategoriesData.contains(category)) {
-            selectedCategoriesData = selectedCategoriesData.filter({$0.objectId != category.objectId})
-        } else {
-            selectedCategoriesData.append(category)
-        }
-
-        guard let currentUser = ParseHelper.sharedInstance.currentUser else {
-            return
-        }
-
-        category.attendees.append(currentUser)
-        ParseHelper.saveObject(category, completion: nil)
     }
     
     @IBAction func searchAction(sender: AnyObject) {
@@ -262,6 +226,22 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
             where segue.identifier == "create" {
             vc.delegate = self
         }
+    }
+
+    //MARK: - Helpers
+    func categoryForIndexPath(indexPath: NSIndexPath) -> Category {
+        var category: Category
+
+        switch (selectedCategoryType) {
+        case .Private:
+            category = privateCategoriesData[indexPath.row]
+        case .Public:
+            category = publicCategoriesData[indexPath.row]
+        default:
+            category = indexPath.section == 0 ? publicCategoriesData[indexPath.row] : privateCategoriesData[indexPath.row]
+        }
+
+        return category
     }
 
     //MARK: - Notification Handlers

@@ -16,6 +16,8 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var photo: UIImageView!
     @IBOutlet weak var switched: UISwitch!
 
+    var onSwitchValueChanged:((isOn: Bool) -> Void)?
+
     override func awakeFromNib() {
         super.awakeFromNib()
 
@@ -29,5 +31,9 @@ class CategoryCollectionViewCell: UICollectionViewCell {
         name.text = nil
         photo.image = nil
         switched.on = false
+    }
+
+    @IBAction func switchValueChanged(sender: UISwitch) {
+        onSwitchValueChanged?(isOn: sender.on)
     }
 }
