@@ -54,9 +54,12 @@ class ChooseLocationViewController: UIViewController, CLLocationManagerDelegate,
     func handleLongPress(getstureRecognizer : UIGestureRecognizer){
         if getstureRecognizer.state != .Began { return }
         
-        if self.mapView.annotations.count != 0{
-            let annotation = self.mapView.annotations[0] 
-            self.mapView.removeAnnotation(annotation)
+        if self.mapView.annotations.count != 0 {
+            for annonation in self.mapView.annotations {
+                if let annonation = annonation as? MKPointAnnotation {
+                    self.mapView.removeAnnotation(annonation)
+                }
+            }
         }
         
         let touchPoint = getstureRecognizer.locationInView(self.mapView)

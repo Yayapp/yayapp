@@ -15,10 +15,12 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
     @IBOutlet weak var allButton: UIButton!
     @IBOutlet weak var publicButton: UIButton!
     @IBOutlet weak var privateButton: UIButton!
+    @IBOutlet private weak var myGroupsButton: UIButton?
     
     @IBOutlet weak var allUnderline: UIView!
     @IBOutlet weak var publicUnderline: UIView!
     @IBOutlet weak var privateUnderline: UIView!
+    @IBOutlet private var myGroupsUnderline: UIView?
   
     @IBOutlet weak var navBar: UINavigationBar!
     
@@ -33,10 +35,12 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         return searchController
     }()
     var searchControllerText: String?
+    var needsRefreshContent: Bool = false
 
     var categoriesData:[Category]! = []
     var privateCategoriesData:[Category]! = []
     var publicCategoriesData:[Category]! = []
+    var myCategoriesData:[Category]! = []
     var selectedCategoriesData:[Category]! = []
     var selectedCategoryType: CategoryType = .All
 
@@ -53,8 +57,27 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         categories.delegate = self
         categories.dataSource = self
 
+        loadContent()
+    }
+
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+
+        if needsRefreshContent {
+            loadContent()
+        }
+    }
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self,
+                                                            name: Constants.userDidLogoutNotification,
+                                                            object: nil)
+    }
+
+    //MARK: - Content Loading
+    func loadContent() {
         ParseHelper.getCategories({ (categoriesList: [Category]?, error: NSError?) in
-            guard let currentUser = ParseHelper.sharedInstance.currentUser where error == nil else {
+            guard let _ = ParseHelper.sharedInstance.currentUser where error == nil else {
                 if let error = error {
                     MessageToUser.showDefaultErrorMessage(error.localizedDescription)
                 }
@@ -68,14 +91,8 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         })
     }
 
-    deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self,
-                                                            name: Constants.userDidLogoutNotification,
-                                                            object: nil)
-    }
-
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-        if selectedCategoryType == CategoryType.All{
+        if selectedCategoryType == CategoryType.All {
             return 2
         } else {
             return 1
@@ -86,6 +103,7 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         switch (selectedCategoryType) {
             case .Private: return privateCategoriesData.count
             case .Public: return publicCategoriesData.count
+            case .My: return myCategoriesData.count
             default: if section == 0{
                         return publicCategoriesData.count
                     } else {
@@ -122,9 +140,15 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
             photoURL = NSURL(string: photoURLString) {
             cell.photo.sd_setImageWithURL(photoURL)
         }
-
-        cell.switched.on = self.selectedCategoriesData.contains(category)
-
+        
+//        cell.switched.on = self.selectedCategoriesData.contains(category)
+        
+        if let currentUser = ParseHelper.sharedInstance.currentUser,
+            categoryOwner = category.owner {
+            cell.switched.on = category.attendees.contains(currentUser)
+            cell.enableSwitcher = categoryOwner.objectId != currentUser.objectId
+        }
+        
         cell.switched.tag = indexPath.row;
 
         cell.onSwitchValueChanged = { [unowned self] isSwitcherOn in
@@ -143,40 +167,67 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
     @IBAction func allAction(sender: AnyObject) {
         privateCategoriesData = categoriesData.filter({ $0.isPrivate })
         publicCategoriesData = categoriesData.filter({ !$0.isPrivate })
+        myCategoriesData = categoriesData.filter({ (category) -> Bool in
+            guard let owner = category.owner,
+                currentUser = ParseHelper.sharedInstance.currentUser else {
+                return false
+            }
+            
+            return owner.objectId == currentUser.objectId
+        })
 
         if let currentUser = ParseHelper.sharedInstance.currentUser {
             selectedCategoriesData = categoriesData.filter({ $0.attendees.contains(currentUser) })
         }
-
+        
         allUnderline.hidden = false
-        privateUnderline.hidden = true
         publicUnderline.hidden = true
+        privateUnderline.hidden = true
+        myGroupsUnderline?.hidden = true
         selectedCategoryType = CategoryType.All
         allButton.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
         publicButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         privateButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        myGroupsButton?.setTitleColor(UIColor.blackColor(), forState: .Normal)
         categories.reloadData()
     }
     
     @IBAction func publicAction(sender: AnyObject) {
         allUnderline.hidden = true
-        privateUnderline.hidden = true
         publicUnderline.hidden = false
+        privateUnderline.hidden = true
+        myGroupsUnderline?.hidden = true
         selectedCategoryType = CategoryType.Public
         allButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         publicButton.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
         privateButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        myGroupsButton?.setTitleColor(UIColor.blackColor(), forState: .Normal)
         categories.reloadData()
     }
     
     @IBAction func privateAction(sender: AnyObject) {
         allUnderline.hidden = true
-        privateUnderline.hidden = false
         publicUnderline.hidden = true
+        privateUnderline.hidden = false
+        myGroupsUnderline?.hidden = true
         selectedCategoryType = CategoryType.Private
         allButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         publicButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         privateButton.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
+        myGroupsButton?.setTitleColor(UIColor.blackColor(), forState: .Normal)
+        categories.reloadData()
+    }
+    
+    @IBAction func displayMyGroups(sender: UIButton) {
+        allUnderline.hidden = true
+        publicUnderline.hidden = true
+        privateUnderline.hidden = true
+        myGroupsUnderline?.hidden = false
+        selectedCategoryType = .My
+        allButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        publicButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        privateButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        myGroupsButton?.setTitleColor(Color.PrimaryActiveColor, forState: .Normal)
         categories.reloadData()
     }
     
@@ -208,7 +259,6 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
         })
-        
     }
     
     func groupCreated(group:Category) {
@@ -237,6 +287,8 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
             category = privateCategoriesData[indexPath.row]
         case .Public:
             category = publicCategoriesData[indexPath.row]
+        case .My:
+            category = myCategoriesData[indexPath.row]
         default:
             category = indexPath.section == 0 ? publicCategoriesData[indexPath.row] : privateCategoriesData[indexPath.row]
         }
@@ -246,6 +298,7 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
 
     //MARK: - Notification Handlers
     func handleUserLogout() {
+        needsRefreshContent = true
         navigationController?.popToRootViewControllerAnimated(false)
         
         searchController.active = false
@@ -254,6 +307,7 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         categoriesData.removeAll()
         privateCategoriesData.removeAll()
         publicCategoriesData.removeAll()
+        myCategoriesData.removeAll()
         selectedCategoriesData.removeAll()
         selectedCategoryType = .All
 

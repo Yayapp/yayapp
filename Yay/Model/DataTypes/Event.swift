@@ -109,7 +109,7 @@ class Event: Object {
             return parseObjects.map({ User(parseObject: $0)! })
         }
         set {
-            parseObject?.setObject(newValue.map({ PFUser(withoutDataUsingUser: $0) }), forKey: "attendees")
+            parseObject?.setObject(newValue.map({ PFUser(pointerUsingUser: $0) }), forKey: "attendees")
         }
     }
     var timeZone: String {

@@ -124,7 +124,6 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
                 MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
             }
         })
-        
     }
     
     @IBAction func openDateTimePicker(sender: AnyObject) {
@@ -185,6 +184,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
         pickCategory.setTitle(NSLocalizedString("Share with Group", comment: ""), forState: .Normal)
         dateTimeButton.setTitle(NSLocalizedString("Time & Date", comment: ""), forState: .Normal)
         location.setTitle(NSLocalizedString("Add Location", comment: ""), forState: .Normal)
+        descr.setTitle(NSLocalizedString("Add Description", comment: ""), forState: .Normal)
 
         name.text = nil
         limitInt = 0
@@ -295,7 +295,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
     
     func writeAboutDone(text: String) {
         self.descriptionText = text
-        self.descr.setTitle(text, forState: .Normal)
+        self.descr.setTitle(text.isEmpty ? NSLocalizedString("Add Description", comment: "") : text, forState: .Normal)
     }
 
     @IBAction func create(sender: AnyObject) {

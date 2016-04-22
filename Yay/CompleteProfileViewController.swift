@@ -107,6 +107,8 @@ class CompleteProfileViewController: UIViewController, UIImagePickerControllerDe
     }
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        SVProgressHUD.show()
+
         let pickedImage:UIImage = (info[UIImagePickerControllerEditedImage] as! UIImage).resizeToDefault()
         let imageData = UIImageJPEGRepresentation(pickedImage, 70)
         let imageFile = File(data: imageData!)!
@@ -121,6 +123,8 @@ class CompleteProfileViewController: UIViewController, UIImagePickerControllerDe
         currentUser.avatar = imageFile
 
         ParseHelper.saveObject(currentUser) { (result, error) in
+            SVProgressHUD.dismiss()
+
             if error == nil {
                 self.check()
                 self.dismissViewControllerAnimated(true, completion: nil)

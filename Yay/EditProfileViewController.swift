@@ -86,6 +86,7 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     @IBAction func editdone(sender: AnyObject) {
+        SVProgressHUD.show()
         ParseHelper.sharedInstance.currentUser?.gender = gender
 
         if avatarData != nil {
@@ -103,6 +104,8 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
 
         ParseHelper.saveObject(ParseHelper.sharedInstance.currentUser!, completion: {
             result, error in
+            SVProgressHUD.dismiss()
+
             if error != nil {
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             } else {

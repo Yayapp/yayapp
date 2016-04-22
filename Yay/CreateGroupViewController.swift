@@ -19,7 +19,8 @@ class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
     var group:Category?
-    
+    var isEditMode = false
+
     var isPrivate:Bool = false
     var longitude: Double?
     var latitude: Double?
@@ -53,6 +54,9 @@ class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate
             title = NSLocalizedString("Create Group", comment: "")
         }
         self.publicAction(true)
+
+        let submitButtonTitle = isEditMode ? NSLocalizedString("Save", comment: "") : NSLocalizedString("Create Group & Invite Friends", comment: "")
+        createButton.setTitle(submitButtonTitle, forState: .Normal)
     }
     
     
@@ -161,10 +165,8 @@ class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate
     
     func writeAboutDone(text: String) {
         self.descriptionText = text
-        self.descr.setTitle(text, forState: .Normal)
+        self.descr.setTitle(text.isEmpty ? NSLocalizedString("Add Description", comment: "") : text, forState: .Normal)
     }
-    
-    
     
     @IBAction func create(sender: AnyObject) {
         
@@ -180,14 +182,14 @@ class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate
             spinner.startAnimating()
             createButton.enabled = false
             
-            if group == nil {
+            if !isEditMode {
                 let eventACL = ObjectACL()
                 eventACL.publicWriteAccess = true
                 eventACL.publicReadAccess = true
                 
                 self.group = Category()
                 self.group!.ACL = eventACL
-                self.group!.attendees = []
+                self.group!.attendees = [ParseHelper.sharedInstance.currentUser!]
             }
             self.group!.name = name.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
             self.group!.summary = descriptionText.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
@@ -207,12 +209,8 @@ class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate
             ParseHelper.saveObject(self.group!, completion: {
                 (result, error) in
                 if error == nil {
-                    self.group!.attendees.append(ParseHelper.sharedInstance.currentUser!)
-                    ParseHelper.saveObject(self.group!, completion: {
-                        (result, error) in
-                        self.delegate.groupCreated(self.group!)
-                        self.navigationController?.popViewControllerAnimated(true)
-                    })
+                    self.delegate.groupCreated(self.group!)
+                    self.navigationController?.popViewControllerAnimated(true)
                 } else {
                     self.spinner.stopAnimating()
                     self.createButton.enabled = false

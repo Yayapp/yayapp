@@ -8,5 +8,5 @@
 
 import Foundation
 enum CategoryType {
-    case All, Private, Public
+    case All, Private, Public, My
 }

@@ -103,6 +103,10 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
             self.location.hidden = self.group.location == nil
 
             self.attendees = self.group.attendees.filter({$0.objectId != self.group.owner?.objectId})
+            
+            if let user = ParseHelper.sharedInstance.currentUser {
+                self.attendButton.setTitle(self.attendTitle(self.attendees.contains(user)), forState: .Normal)
+            }
 
             let currentLocation = ParseHelper.sharedInstance.currentUser!.location
             self.currentLocation = CLLocation(latitude: currentLocation!.latitude, longitude: currentLocation!.longitude)
@@ -221,59 +225,23 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
         navigationController?.pushViewController(profileVC, animated: true)
     }
     
+    func attendTitle(isJoined: Bool) -> String {
+        return isJoined ? NSLocalizedString("Join", comment: "") : NSLocalizedString("Leave", comment: "")
+    }
+    
     @IBAction func attend(sender: UIButton) {
-        if let user = ParseHelper.sharedInstance.currentUser {
-            //            if(user.objectId == event.owner.objectId) {
-            //                let blurryAlertViewController = self.storyboard!.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as! BlurryAlertViewController
-            //                blurryAlertViewController.action = BlurryAlertViewController.BUTTON_DELETE
-            //                blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
-            //                blurryAlertViewController.messageText = "Sorry, are you sure you want to delete this event?"
-            //                blurryAlertViewController.hasCancelAction = true
-            //                blurryAlertViewController.group = group
-            //                blurryAlertViewController.completion = {
-            //                    if self.delegate != nil {
-            //                        self.delegate.groupRemoved(self.group)
-            //                    }
-            //                    self.navigationController?.popViewControllerAnimated(false)
-            //                }
-            //                self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
-            //            } else {
-            spinner.startAnimating()
-
-            ParseHelper.fetchObject(group, completion: {
-                (result, error) in
-                
-                let requestACL = ObjectACL()
-                requestACL.publicWriteAccess = true
-                requestACL.publicReadAccess = true
-                let request = Request()
-                request.group = self.group
-                request.attendee = user
-                request.ACL = requestACL
-                ParseHelper.saveObject(request, completion: nil)
-
-                self.spinner.stopAnimating()
-                sender.hidden = true
-                
-                guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as?BlurryAlertViewController else {
-                    return
-                }
-
-                blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
-                blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
-                blurryAlertViewController.aboutText = "Your request has been sent."
-                blurryAlertViewController.messageText = "We will notify you of the outcome."
-                self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
-                
-            })
-            //            }
-        } else {
-            guard let vc = UIStoryboard.auth()?.instantiateViewControllerWithIdentifier("LoginViewController") as? LoginViewController else {
-                return
-            }
-
-            presentViewController(vc, animated: true, completion: nil)
+        guard let user = ParseHelper.sharedInstance.currentUser else {
+            return
         }
+        
+        let isJoined = group.attendees.contains(user);
+        self.attendButton.setTitle(attendTitle(isJoined), forState: .Normal)
+        
+        ParseHelper.changeStateOfCategory(group, toJoined: !isJoined, completion: { result, error in
+            if (error != nil) {
+                MessageToUser.showDefaultErrorMessage(NSLocalizedString("Error occurred in changing your status in current group.", comment: ""))
+            }
+        });
     }
     
     @IBAction func chat(sender: AnyObject) {
@@ -387,6 +355,7 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
             return
         }
 
+        vc.isEditMode = true
         vc.group = group
         vc.delegate = self
         navigationController?.pushViewController(vc, animated: true)
