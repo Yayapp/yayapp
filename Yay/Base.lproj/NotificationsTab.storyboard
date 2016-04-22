@@ -37,7 +37,7 @@
         <!--Notifications-->
         <scene sceneID="vsq-DI-XDx">
             <objects>
-                <viewController storyboardIdentifier="NotificationsController" title="Notifications" id="pTT-Up-it6" customClass="NotificationsController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="NotificationsController" title="Notifications" automaticallyAdjustsScrollViewInsets="NO" id="pTT-Up-it6" customClass="NotificationsController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="7y6-i7-iHc"/>
                         <viewControllerLayoutGuide type="bottom" id="zxi-rw-fca"/>

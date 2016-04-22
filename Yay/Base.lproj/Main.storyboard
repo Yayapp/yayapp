@@ -490,7 +490,7 @@
         <!--Messages Table View Controller-->
         <scene sceneID="O1E-g3-DwG">
             <objects>
-                <tableViewController storyboardIdentifier="MessagesTableViewController" id="xKi-eZ-Rrf" customClass="MessagesTableViewController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="MessagesTableViewController" automaticallyAdjustsScrollViewInsets="NO" id="xKi-eZ-Rrf" customClass="MessagesTableViewController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="t9O-Oi-BU8" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1000,7 +1000,7 @@
         <!--Requests-->
         <scene sceneID="oZm-gw-cLf">
             <objects>
-                <tableViewController storyboardIdentifier="RequestsTableViewController" title="Requests" id="n9u-3g-UAk" customClass="RequestsTableViewController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="RequestsTableViewController" title="Requests" automaticallyAdjustsScrollViewInsets="NO" id="n9u-3g-UAk" customClass="RequestsTableViewController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="71" sectionHeaderHeight="22" sectionFooterHeight="22" id="8I1-2c-7Hx">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1044,7 +1044,7 @@
         <!--Recent-->
         <scene sceneID="CIc-HA-X5L">
             <objects>
-                <tableViewController storyboardIdentifier="RecentViewController" title="Recent" id="6eR-NA-sri" customClass="RecentViewController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="RecentViewController" title="Recent" automaticallyAdjustsScrollViewInsets="NO" id="6eR-NA-sri" customClass="RecentViewController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="71" sectionHeaderHeight="22" sectionFooterHeight="22" id="kya-OO-myf">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

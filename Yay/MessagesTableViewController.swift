@@ -149,7 +149,6 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
             self.picker.allowsEditing = true
             self.picker.sourceType = UIImagePickerControllerSourceType.Camera
             self.picker.cameraCaptureMode = .Photo
-            self.picker.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
             self.picker.showsCameraControls = true;
             self.presentViewController(self.picker, animated: true, completion: nil)
         }))
@@ -157,7 +156,6 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
             (action: UIAlertAction) in
             self.picker.allowsEditing = true //2
             self.picker.sourceType = .PhotoLibrary //3
-            self.picker.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
             self.presentViewController(self.picker, animated: true, completion: nil)
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
