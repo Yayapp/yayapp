@@ -124,21 +124,18 @@ class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate
     
     func madeEventPictureChoice(photo: File, pickedPhoto: UIImage?) {
         chosenPhoto = photo
+
+        eventImage.contentMode = .ScaleAspectFill
+
         if pickedPhoto != nil {
             eventImage.image = pickedPhoto!
-            eventImage.contentMode = UIViewContentMode.ScaleAspectFill
-        } else {
-            ParseHelper.getData(photo, completion: {
-                (data:NSData?, error:NSError?) in
-                if(error == nil) {
-                    let image = UIImage(data:data!)
-                    self.eventImage.image = image
-                    self.eventImage.contentMode = UIViewContentMode.ScaleAspectFill
-                } else {
+        } else if let photoURLString = photo.url,
+            photoURL = NSURL(string: photoURLString) {
+            eventImage.sd_setImageWithURL(photoURL, completed: { (_, error, _, _) in
+                if error != nil {
                     MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                 }
             })
-            
         }
     }
     
@@ -189,27 +186,35 @@ class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate
                 
                 self.group = Category()
                 self.group!.ACL = eventACL
-                self.group!.attendees = [ParseHelper.sharedInstance.currentUser!]
+                self.group!.attendeeIDs = [ParseHelper.sharedInstance.currentUser!.objectId!]
             }
-            self.group!.name = name.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-            self.group!.summary = descriptionText.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-            self.group!.photo = chosenPhoto!
+            
+            guard let group = group,
+                currentUser = ParseHelper.sharedInstance.currentUser else {
+                    return
+            }
+            
+            group.name = name.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+            group.summary = descriptionText.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+            group.owner = currentUser
+            group.photo = chosenPhoto!
+            group.isPrivate = isPrivate
 
-            if let group = group,
-                resizedImage = eventImage.image?.resizedToSize(CGSize(width: 70, height: 70)),
+            if let resizedImage = eventImage.image?.resizedToSize(CGSize(width: 70, height: 70)),
                 thumbImageData = UIImageJPEGRepresentation(resizedImage, 0.85) {
                 group.photoThumb = File(data: thumbImageData)
             }
-
-            self.group!.owner = ParseHelper.sharedInstance.currentUser!
+            
             if isPrivate {
-                self.group!.location = GeoPoint(latitude: latitude!, longitude: longitude!)
+                if let latitude = latitude, longitude = longitude {
+                    group.location = GeoPoint(latitude: latitude, longitude: longitude)
+                }
             }
 
-            ParseHelper.saveObject(self.group!, completion: {
+            ParseHelper.saveObject(group, completion: {
                 (result, error) in
                 if error == nil {
-                    self.delegate.groupCreated(self.group!)
+                    self.delegate.groupCreated(group)
                     self.navigationController?.popViewControllerAnimated(true)
                 } else {
                     self.spinner.stopAnimating()

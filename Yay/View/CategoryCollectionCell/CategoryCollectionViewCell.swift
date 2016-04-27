@@ -17,15 +17,6 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var switched: UISwitch!
 
     var onSwitchValueChanged:((isOn: Bool) -> Void)?
-    var enableSwitcher: Bool? {
-        didSet(isEnabled) {
-            guard let isEnabled = isEnabled else {
-                return
-            }
-            
-            self.switched.userInteractionEnabled = isEnabled
-        }
-    }
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -40,6 +31,7 @@ class CategoryCollectionViewCell: UICollectionViewCell {
         name.text = nil
         photo.image = nil
         switched.on = false
+        switched.enabled = true
     }
 
     @IBAction func switchValueChanged(sender: UISwitch) {

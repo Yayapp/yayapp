@@ -24,6 +24,8 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
     var currentLocation:CLLocation!
     var selectedCategoriesData:[Category]! = []
     
+    var updatedStatusInGroup: (() -> Void)?
+    
     @IBOutlet weak var attendeesButtons: UICollectionView!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     @IBOutlet weak var photo: UIImageView!
@@ -32,6 +34,7 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
     @IBOutlet weak var location: UIButton!
     
     @IBOutlet weak var attendButton: UIButton!
+    @IBOutlet weak var attendButtonHeight: NSLayoutConstraint!
     
     @IBOutlet weak var distance: UILabel!
     
@@ -50,11 +53,13 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
     @IBOutlet weak var members: UILabel!
     
     @IBOutlet weak var descr: UITextView!
-    
-    
+    @IBOutlet weak var switherPlaceholderTopSpace: NSLayoutConstraint!
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        switherPlaceholderTopSpace.constant = view.bounds.width / 160 * 91
+        
         if let messagesVC = UIStoryboard.main()?.instantiateViewControllerWithIdentifier(MessagesTableViewController.storyboardID) as? MessagesTableViewController {
             messagesVC.group = group
             addChildViewController(messagesVC)
@@ -84,7 +89,7 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
         
         descr.textContainerInset = UIEdgeInsetsMake(10, 10, 10, 10)
         
-        members.text = "\(group.attendees.count) members"
+        members.text = "\(group.attendeeIDs.count) members"
         
         if(ParseHelper.sharedInstance.currentUser?.objectId == group.owner?.objectId) {
             let editdone = UIBarButtonItem(image:UIImage(named: "edit_icon"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("editGroup:"))
@@ -93,76 +98,91 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
             //            attend.setImage(UIImage(named: "cancelevent_button"), forState: .Normal)
         }
 
-        ParseHelper.fetchObject(group, completion: { fetchedGroup, error in
-            guard error == nil else {
-                MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
+        ParseHelper.fetchObject(group, completion: { [weak self] fetchedObject, error in
+            guard let fetchedObject = fetchedObject,
+                fetchedGroup = Category(object: fetchedObject)
+                where error == nil else {
+                    MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
 
-                return
+                    return
             }
 
-            self.location.hidden = self.group.location == nil
+            self?.group = fetchedGroup
 
-            self.attendees = self.group.attendees.filter({$0.objectId != self.group.owner?.objectId})
-            
-            if let user = ParseHelper.sharedInstance.currentUser {
-                self.attendButton.setTitle(self.attendTitle(self.attendees.contains(user)), forState: .Normal)
-            }
+            self?.location.hidden = fetchedGroup.location == nil
 
-            let currentLocation = ParseHelper.sharedInstance.currentUser!.location
-            self.currentLocation = CLLocation(latitude: currentLocation!.latitude, longitude: currentLocation!.longitude)
+            ParseHelper.fetchUsers(fetchedGroup.attendeeIDs.filter({$0 != fetchedGroup.owner?.objectId}), completion: { (fetchedUsers, error) in
+                guard let fetchedUsers = fetchedUsers where error == nil else {
+                    MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
 
-            ParseHelper.fetchObject(self.group.owner, completion: {
-                result, error in
-                if error == nil {
-                    if let avatar = self.group.owner?.avatar {
+                    return
+                }
 
-                        ParseHelper.getData(avatar, completion: {
-                            (data:NSData?, error:NSError?) in
-                            if(error == nil) {
-                                let image = UIImage(data:data!)
-                                self.author.setImage(image, forState: .Normal)
+                self?.attendees = fetchedUsers
+                self?.attendeesButtons.reloadData()
+
+                if let currentUserID = ParseHelper.sharedInstance.currentUser?.objectId {
+                    self?.attendButton.setTitle(self?.attendTitle(fetchedGroup.attendeeIDs.contains(currentUserID)), forState: .Normal)
+                    let isAttendButtonHidden = currentUserID == fetchedGroup.owner?.objectId
+                    self?.attendButton.hidden = isAttendButtonHidden
+                    self?.attendButtonHeight.constant = isAttendButtonHidden ? 0 : 35
+                }
+
+                let currentLocation = ParseHelper.sharedInstance.currentUser!.location
+                self?.currentLocation = CLLocation(latitude: currentLocation!.latitude, longitude: currentLocation!.longitude)
+
+                ParseHelper.fetchObject(fetchedGroup.owner, completion: {
+                    result, error in
+                    guard let fetchedObject = result,
+                        fetchedOwner = User(object: fetchedObject) where error == nil else {
+                            MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
+
+                            return
+                    }
+
+                    if let avatarURLString = fetchedOwner.avatar?.url,
+                        avatarURL = NSURL(string: avatarURLString) {
+                        self?.author.sd_setImageWithURL(avatarURL, forState: .Normal, completed: { (_, error, _, _) in
+                            if error != nil {
+                                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+                            }
+                        })
+                    } else {
+                        self?.author.setImage(UIImage(named: "upload_pic"), forState: .Normal)
+                    }
+                })
+
+                let attendedThisEvent = !(fetchedGroup.attendeeIDs.filter({$0 == ParseHelper.sharedInstance.currentUser?.objectId}).count == 0)
+
+                if(ParseHelper.sharedInstance.currentUser?.objectId != fetchedGroup.owner?.objectId) {
+
+                    if !attendedThisEvent {
+
+                        self?.chatButton.enabled = false
+
+                        ParseHelper.getUserRequests(fetchedGroup, user: ParseHelper.sharedInstance.currentUser!, block: {
+                            result, error in
+                            if (error == nil) {
+                                if (result == nil || result!.isEmpty){
+                                    self?.attendButton.hidden = false
+                                } else {
+                                    self?.attendButton.hidden = true
+                                }
                             } else {
                                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                             }
                         })
                     } else {
-                        self.author.setImage(UIImage(named: "upload_pic"), forState: .Normal)
+                        self?.descr.hidden = true
+                        self?.attendButton.hidden = true
                     }
-                } else {
-                    MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                 }
+                self?.update()
             })
-
-            let attendedThisEvent = !(self.group.attendees.filter({$0.objectId == ParseHelper.sharedInstance.currentUser?.objectId}).count == 0)
-
-            if(ParseHelper.sharedInstance.currentUser?.objectId != self.group.owner?.objectId) {
-
-                if !attendedThisEvent {
-
-                    self.chatButton.enabled = false
-
-                    ParseHelper.getUserRequests(self.group, user: ParseHelper.sharedInstance.currentUser!, block: {
-                        result, error in
-                        if (error == nil) {
-                            if (result == nil || result!.isEmpty){
-                                self.attendButton.hidden = false
-                            } else {
-                                self.attendButton.hidden = true
-                            }
-                        } else {
-                            MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-                        }
-                    })
-                } else {
-                    self.descr.hidden = true
-                    self.attendButton.hidden = true
-                }
-            }
-            self.update()
-        })
+            })
         switchToDetails(true)
     }
-
+    
     func update() {
         if let locationPF = self.group.location {
             let distanceBetween: CLLocationDistance = CLLocation(latitude: locationPF.latitude, longitude: locationPF.longitude).distanceFromLocation(self.currentLocation)
@@ -187,7 +207,7 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return group.attendees.count
+        return attendees.count
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
@@ -195,22 +215,13 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
             return UICollectionViewCell()
         }
 
-        ParseHelper.fetchObject(group.attendees[indexPath.row], completion: {
-            result, error in
-            guard error == nil else {
-                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-
-                return
-            }
-
-            if let attendeeAvatar = self.group.attendees[indexPath.row].avatar,
+            if let attendeeAvatar = self.attendees[indexPath.row].avatar,
                 photoURLString = attendeeAvatar.url,
                 photoURL = NSURL(string: photoURLString) {
                 cell.image.sd_setImageWithURL(photoURL)
             } else {
                 cell.image.image = UIImage(named: "upload_pic")
             }
-        })
 
         return cell
     }
@@ -220,13 +231,13 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
             return
         }
 
-        profileVC.user = group.attendees[indexPath.row]
+        profileVC.user = attendees[indexPath.row]
 
         navigationController?.pushViewController(profileVC, animated: true)
     }
     
     func attendTitle(isJoined: Bool) -> String {
-        return isJoined ? NSLocalizedString("Join", comment: "") : NSLocalizedString("Leave", comment: "")
+        return isJoined ? NSLocalizedString("Leave", comment: "") : NSLocalizedString("Join", comment: "")
     }
     
     @IBAction func attend(sender: UIButton) {
@@ -234,14 +245,30 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
             return
         }
         
-        let isJoined = group.attendees.contains(user);
-        self.attendButton.setTitle(attendTitle(isJoined), forState: .Normal)
+        let isJoined = attendees.contains(user);
+        self.attendButton.setTitle(attendTitle(!isJoined), forState: .Normal)
         
         ParseHelper.changeStateOfCategory(group, toJoined: !isJoined, completion: { result, error in
-            if (error != nil) {
+            if error == nil {
+                if !isJoined {
+                    guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as? BlurryAlertViewController else {
+                        return
+                    }
+                    
+                    blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
+                    blurryAlertViewController.modalPresentationStyle = .CurrentContext
+                    
+                    blurryAlertViewController.aboutText = NSLocalizedString("Your request has been sent.", comment: "")
+                    blurryAlertViewController.messageText = NSLocalizedString("We will notify you of the outcome.", comment: "")
+
+                    self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
+                }
+                
+                self.updatedStatusInGroup?()
+            } else {
                 MessageToUser.showDefaultErrorMessage(NSLocalizedString("Error occurred in changing your status in current group.", comment: ""))
             }
-        });
+        })
     }
     
     @IBAction func chat(sender: AnyObject) {
@@ -266,19 +293,31 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
     }
     
     @IBAction func switchToDetails(sender: AnyObject) {
+        view.endEditing(true)
+
         chatUnderline.hidden = true
         detailsUnderline.hidden = false
         messagesContainer.hidden = true
         eventsContainer.hidden = false
+
+        switherPlaceholderTopSpace.constant = self.view.bounds.width / 160 * 91
+        UIView.animateWithDuration(0.1) {
+            self.view.layoutIfNeeded()
+        }
     }
-    
+
     @IBAction func switchToChat(sender: AnyObject) {
         chatUnderline.hidden = false
         detailsUnderline.hidden = true
         messagesContainer.hidden = false
         eventsContainer.hidden = true
+
+        switherPlaceholderTopSpace.constant = 0
+        UIView.animateWithDuration(0.1) {
+            self.view.layoutIfNeeded()
+        }
     }
-    
+
     
     
     @IBAction func invite(sender: AnyObject) {

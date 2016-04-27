@@ -22,3 +22,6 @@ pod "TTGTagCollectionView"
 pod "TPKeyboardAvoiding"
 pod "SDWebImage"
 pod "ActionSheetPicker-3.0"
+pod "Branch"
+pod 'Fabric'
+pod 'Crashlytics'

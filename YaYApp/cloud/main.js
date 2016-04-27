@@ -44,10 +44,9 @@ Parse.Cloud.afterSave("Block", function(request) {
                       reqQuery.find().then(function(results) {
                                            return Parse.Object.destroyAll(results);
                                            }).then(function() {
-                                                   query.equalTo("attendees", user)
-                                                   query.include("attendees")
+                                                   query.equalTo("attendeeIDs", user.id)
                                                    query.each(function (event) {
-                                                              event.remove("attendees",user);
+                                                              event.remove("attendeeIDs", user.id);
                                                               event.save();      
                                                               })
                                                    }, function(error) {
@@ -84,10 +83,10 @@ Parse.Cloud.beforeDelete(Parse.User, function(request, response) {
                          
                          var Event = Parse.Object.extend("Event");
                          var query = new Parse.Query(Event);
-                         query.equalTo("attendees", Parse.User.current())
-                         query.include("attendees")
+                         query.equalTo("attendeeIDs", Parse.User.current().id)
+                         query.include("attendeeIDs")
                          query.each(function (event) {
-                                    event.remove("attendees",Parse.User.current());
+                                    event.remove("attendeeIDs", Parse.User.current().id);
                                     event.save();
                                     })
                          
@@ -193,7 +192,7 @@ Parse.Cloud.afterSave("Message", function(request) {
                                              var userName = user.get('name');
                                              var eventName = event.get('name');
                                              var array = [];
-                                             var attendees = event.get('attendees')
+                                             var attendeeIDs = event.get('attendeeIDs')
                                              var fullMessage = ""
                                              if (image == null) {
                                              fullMessage = "There is a new message in conversation \"" + eventName + "\" from " + userName + ": " + message
@@ -201,9 +200,9 @@ Parse.Cloud.afterSave("Message", function(request) {
                                              fullMessage = "There is a new photo in conversation \"" + eventName + "\" from " + userName
                                              }
                                              
-                                             for(i = 0; i < attendees.length; i++){
-                                                if(user.id != attendees[i].id){
-                                                    array[i]= attendees[i].id;
+                                             for (i = 0; i < attendeeIDs.length; i++) {
+                                                if (user.id != attendeeIDs[i]) {
+                                                    array[i] = attendeeIDs[i]
                                                 }
                                              }
                                              

@@ -101,8 +101,12 @@ class RequestsTableViewController: UITableViewController {
     @IBAction func accept(sender: AnyObject) {
         
         let request = requests[sender.tag]
-        
-        request.event!.attendees.append(request.attendee)
+
+        guard let attendeeId = request.attendee.objectId else {
+            return
+        }
+
+        request.event!.attendeeIDs.append(attendeeId)
         ParseHelper.saveObject(request.event!, completion: nil)
         request.accepted = true
         ParseHelper.saveObject(request, completion: {
@@ -110,7 +114,7 @@ class RequestsTableViewController: UITableViewController {
             self.requests.removeAtIndex(sender.tag)
             UIApplication.sharedApplication().applicationIconBadgeNumber-=1
             
-            if(request.event!.attendees.count >= request.event!.limit) {
+            if(request.event!.attendeeIDs.count >= request.event!.limit) {
                 ParseHelper.declineRequests(request.event!)
                 self.requests = self.requests.filter({$0.event!.objectId != request.event!.objectId})
             }

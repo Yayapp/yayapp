@@ -19,6 +19,12 @@ class Category: Object {
         super.init(parseObject: parseObject)
     }
 
+    init?(object: Object?) {
+        super.init()
+
+        self.parseObject = object?.parseObject
+    }
+
     var name: String {
         get {
             guard let parseObject = parseObject where parseObject.dataAvailable else {
@@ -88,19 +94,23 @@ class Category: Object {
 
             return parseObject.objectForKey("isPrivate") as? Bool ?? false
         }
+        set {
+            parseObject?.setObject(newValue, forKey: "isPrivate")
+        }
     }
-    var attendees: [User] {
+    var attendeeIDs: [String] {
         get {
             guard let parseObject = parseObject where parseObject.dataAvailable else {
                 return []
             }
 
-            let parseObjects = parseObject.objectForKey("attendees") as? [PFObject] ?? []
+            let elements = parseObject.objectForKey("attendeeIDs") as? [String] ?? []
 
-            return parseObjects.map({ User(parseObject: $0)! })
+            return Array(Set(elements))
         }
         set {
-            parseObject?.setObject(newValue.map({ PFUser(pointerUsingUser: $0) }), forKey: "attendees")
+            let uniqueElements = Array(Set(newValue))
+            parseObject?.setObject(uniqueElements, forKey: "attendeeIDs")
         }
     }
     var location: GeoPoint? {

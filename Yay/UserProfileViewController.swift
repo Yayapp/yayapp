@@ -12,6 +12,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
 
     let picker = UIImagePickerController()
     var user: User!
+    var userID: String?
     var editdone:UIBarButtonItem!
     var interestsData:[Category]!=[]
     var blocked = false
@@ -56,18 +57,50 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 
-        if(user == nil){
+        if user == nil && userID == nil {
             user = ParseHelper.sharedInstance.currentUser
-        }
+            setupUIWithUserInfo()
+        } else if let userID = userID {
+            SVProgressHUD.show()
+            ParseHelper.fetchUser(userID, completion: { [weak self] (fetchedUser, error) in
+                SVProgressHUD.dismiss()
 
+                guard let user = fetchedUser where error == nil else {
+                    MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
+
+                    return
+                }
+
+                self?.user = user
+                self?.setupUIWithUserInfo()
+            })
+        } else {
+            setupUIWithUserInfo()
+        }
+    }
+
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        interestsCollection.removeAllTags()
+        interestsCollection.reload()
+    }
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self,
+                                                            name: Constants.userDidLogoutNotification,
+                                                            object: nil)
+    }
+
+    func setupUIWithUserInfo() {
         name.text = user.name
-        
+
         if(ParseHelper.sharedInstance.currentUser?.objectId == user.objectId) {
-            
+
             editdone = UIBarButtonItem(image:UIImage(named: "user_settings_ico"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("settings:"))
-            
+
             self.navigationItem.setRightBarButtonItem(editdone, animated: false)
-            
+
             let tblView =  UIView(frame: CGRectZero)
             tableView.tableFooterView = tblView
             tableView.tableFooterView!.hidden = true
@@ -79,8 +112,8 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
                 self?.blockUnblock.hidden = false
                 })
         }
-        
-        
+
+
         ParseHelper.getUpcomingPastEvents(user, upcoming: false, block: {
             result, error in
             if error == nil {
@@ -91,10 +124,10 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
         })
-        
+
         ParseHelper.getUserCategories(user, block: {
             categories, error in
-            
+
             if error == nil {
                 self.interestsData = categories
                 var names:[String] = []
@@ -118,19 +151,6 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         if user.about != nil {
             setAboutMe(user.about!)
         }
-    }
-
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-
-        interestsCollection.removeAllTags()
-        interestsCollection.reload()
-    }
-
-    deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self,
-                                                            name: Constants.userDidLogoutNotification,
-                                                            object: nil)
     }
 
     func setAboutMe(text:String){

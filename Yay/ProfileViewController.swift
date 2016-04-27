@@ -78,6 +78,8 @@ class ProfileViewController: UITableViewController {
                 return
             }
 
+//            Branch.getInstance().logout()
+
             self.tabBarController?.selectedIndex = 0
             self.navigationController?.popViewControllerAnimated(false)
             NSNotificationCenter.defaultCenter().postNotificationName(Constants.userDidLogoutNotification, object: nil)

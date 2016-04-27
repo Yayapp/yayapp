@@ -18,6 +18,7 @@ typealias ErrorResultBlock = (NSError?) -> ()
 typealias ObjectResultBlock = (Object?, NSError?) -> ()
 typealias DataResultBlock = (NSData?, NSError?) -> ()
 typealias UserResultBlock = (User?, NSError?) -> ()
+typealias UsersResultBlock = ([User]?, NSError?) -> ()
 typealias GeoPointResultBlock = (GeoPoint?, NSError?) -> ()
 
 class ParseHelper {
@@ -264,6 +265,7 @@ class ParseHelper {
     
     class func getCategories(block:CategoriesResultBlock?) {
         let query = PFQuery(className: categoryParseClassName)
+        query.includeKey("owner")
         query.findObjectsInBackgroundWithBlock {
             objects, error in
             
@@ -683,7 +685,6 @@ class ParseHelper {
         let query = PFQuery(className: eventParseClassName)
         query.whereKey("objectId", equalTo: eventID)
         query.includeKey("categories")
-        query.includeKey("attendees")
         query.getFirstObjectInBackgroundWithBlock({ parseObject, error in
             completion?(Event(parseObject: parseObject), error)
         })
@@ -737,20 +738,58 @@ class ParseHelper {
         }
     }
 
+    class func fetchUser(objectID: String, completion: UserResultBlock?) {
+        let query = PFUser.query()
+        query?.whereKey("objectId", equalTo: objectID)
+        query?.getFirstObjectInBackgroundWithBlock({ parseObject, error in
+            completion?(User(parseObject: parseObject), error)
+        })
+    }
+
+    class func fetchUsers(objectIDs: [String], completion: UsersResultBlock?) {
+        let query = PFUser.query()
+        query?.whereKey("objectId", containedIn: objectIDs)
+        query?.findObjectsInBackgroundWithBlock({ parseObjects, error in
+            if let objects = parseObjects {
+                let mappedObjects = objects.map({ User(parseObject: $0) }) as? [User]
+                completion?(mappedObjects, error)
+            } else {
+                completion?(nil, error)
+            }
+        })
+    }
+
     class func changeStateOfCategory(category: Category, toJoined isJoined: Bool, completion: BoolResultBlock?) {
         guard let currentUser = ParseHelper.sharedInstance.currentUser else {
             return
         }
 
-        var categoryAttendees = category.attendees
+        var categoryAttendeeIDs = category.attendeeIDs
 
-        if isJoined && !categoryAttendees.contains(currentUser) {
-            categoryAttendees.append(currentUser)
+        if isJoined && !categoryAttendeeIDs.contains(currentUser.objectId!) {
+            categoryAttendeeIDs.append(currentUser.objectId!)
         } else if !isJoined {
-            categoryAttendees = categoryAttendees.filter{$0 != currentUser}
+            categoryAttendeeIDs = categoryAttendeeIDs.filter{$0 != currentUser.objectId!}
         }
 
-        category.attendees = categoryAttendees
+        category.attendeeIDs = categoryAttendeeIDs
         ParseHelper.saveObject(category, completion:completion)
+    }
+    
+    class func changeStateOfEvent(event: Event, toJoined isJoined: Bool, completion: BoolResultBlock?) {
+        guard let currentUser = ParseHelper.sharedInstance.currentUser else {
+            return
+        }
+        
+        var eventAttendees = event.attendeeIDs
+        
+        if isJoined && !eventAttendees.contains(currentUser.objectId!) {
+            eventAttendees.append(currentUser.objectId!)
+        } else if !isJoined {
+            eventAttendees = eventAttendees.filter { $0 != currentUser.objectId! }
+        }
+        
+        event.attendeeIDs = eventAttendees
+        ParseHelper.saveObject(event, completion: completion)
     }
 }

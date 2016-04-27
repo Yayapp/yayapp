@@ -31,8 +31,7 @@ extension PFObject {
 
         self.setObject(event.limit, forKey: "limit")
 
-        let parseUsers = event.attendees.map({ PFUser(withoutDataUsingUser: $0) })
-        self.setObject(parseUsers, forKey: "attendees")
+        self.setObject(event.attendeeIDs, forKey: "attendeeIDs")
 
         self.setObject(event.timeZone, forKey: "timeZone")
     }
@@ -48,8 +47,7 @@ extension PFObject {
 
         self.setObject(category.isPrivate, forKey: "isPrivate")
 
-        let parseUsers = category.attendees.map({ PFUser(withoutDataUsingUser: $0) })
-        self.setObject(parseUsers, forKey: "attendees")
+        self.setObject(category.attendeeIDs, forKey: "attendeeIDs")
 
         self.setObject(category.summary, forKey: "summary")
 

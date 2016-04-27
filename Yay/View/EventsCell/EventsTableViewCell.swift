@@ -56,5 +56,9 @@ class EventsTableViewCell: UITableViewCell {
         location.text = NSLocalizedString("Loading location...", comment: "")
         date.text = nil
         howFar.text = nil
+
+        for button in [author, attended1, attended2, attended3, attended4] {
+            button.setImage(nil, forState: .Normal)
+        }
     }
 }

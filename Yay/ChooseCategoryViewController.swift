@@ -133,51 +133,54 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         }
     
         let category = categoryForIndexPath(indexPath)
-
         cell.name.text = category.name
-
+        
         if let photoURLString = category.photoThumb.url,
             photoURL = NSURL(string: photoURLString) {
             cell.photo.sd_setImageWithURL(photoURL)
         }
-        
-//        cell.switched.on = self.selectedCategoriesData.contains(category)
-        
-        if let currentUser = ParseHelper.sharedInstance.currentUser,
-            categoryOwner = category.owner {
-            cell.switched.on = category.attendees.contains(currentUser)
-            cell.enableSwitcher = categoryOwner.objectId != currentUser.objectId
-        }
-        
-        cell.switched.tag = indexPath.row;
 
+        cell.switched.tag = indexPath.row;
+        
         cell.onSwitchValueChanged = { [unowned self] isSwitcherOn in
             ParseHelper.changeStateOfCategory(self.categoryForIndexPath(indexPath),
                                               toJoined: isSwitcherOn,
                                               completion: nil)
+        }
+        
+        if let currentUserID = ParseHelper.sharedInstance.currentUser?.objectId {
+            cell.switched.on = category.attendeeIDs.contains(currentUserID)
+            
+            if let categoryOwnerId = category.owner?.objectId {
+                cell.switched.enabled = categoryOwnerId != currentUserID
+            }
         }
 
         return cell
     }
 
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        performSegueWithIdentifier("details", sender: categoryForIndexPath(indexPath))
+        performSegueWithIdentifier("details", sender: indexPath)
     }
     
-    @IBAction func allAction(sender: AnyObject) {
+    func configureCategories() {
         privateCategoriesData = categoriesData.filter({ $0.isPrivate })
         publicCategoriesData = categoriesData.filter({ !$0.isPrivate })
         myCategoriesData = categoriesData.filter({ (category) -> Bool in
             guard let owner = category.owner,
                 currentUser = ParseHelper.sharedInstance.currentUser else {
-                return false
+                    return false
             }
             
             return owner.objectId == currentUser.objectId
         })
+    }
+    
+    @IBAction func allAction(sender: AnyObject) {
+        configureCategories()
 
-        if let currentUser = ParseHelper.sharedInstance.currentUser {
-            selectedCategoriesData = categoriesData.filter({ $0.attendees.contains(currentUser) })
+        if let currentUserID = ParseHelper.sharedInstance.currentUser?.objectId {
+            selectedCategoriesData = categoriesData.filter({ $0.attendeeIDs.contains(currentUserID) })
         }
         
         allUnderline.hidden = false
@@ -223,7 +226,7 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         publicUnderline.hidden = true
         privateUnderline.hidden = true
         myGroupsUnderline?.hidden = false
-        selectedCategoryType = .My
+        selectedCategoryType = CategoryType.My
         allButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         publicButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         privateButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
@@ -267,11 +270,17 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
         if(segue.identifier == "details") {
-            let vc = (segue.destinationViewController as! GroupDetailsViewController)
-            vc.group = sender as! Category
+            guard let vc = segue.destinationViewController as? GroupDetailsViewController,
+                indexPath = sender as? NSIndexPath else {
+                return
+            }
+
+            vc.group = categoryForIndexPath(indexPath)
             vc.selectedCategoriesData = selectedCategoriesData
+            vc.updatedStatusInGroup = {
+                self.categories.reloadItemsAtIndexPaths([indexPath])
+            }
         } else if let vc = segue.destinationViewController as? CreateGroupViewController
             where segue.identifier == "create" {
             vc.delegate = self

@@ -19,6 +19,12 @@ class User: Object {
         super.init(parseObject: parseObject)
     }
 
+    init?(object: Object) {
+        super.init()
+        
+        self.parseObject = object.parseObject
+    }
+
     var username: String? {
         get {
             guard let parseUser = parseObject as? PFUser where parseUser.dataAvailable else {

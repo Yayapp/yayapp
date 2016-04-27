@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Fabric
+import Crashlytics
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -22,8 +24,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        Fabric.with([Crashlytics.self])
+
         SVProgressHUD.setDefaultMaskType(.Gradient)
-        
+
         // Checking if app is running iOS 8
         if (application.respondsToSelector("registerForRemoteNotifications")) {
             // Register device for iOS8
@@ -56,7 +60,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             window!.rootViewController = mainNavigation
             window!.makeKeyAndVisible()
         }
-        
+
+        let branch: Branch = Branch.getInstance()
+        branch.initSessionWithLaunchOptions(launchOptions, andRegisterDeepLinkHandler: { params, error in
+            if let params = params,
+                type = params["type"] as? String where type == "event",
+                let eventID = params["objectId"] as? String {
+                DataProxy.sharedInstance.invitedEventID = eventID
+                NSNotificationCenter.defaultCenter().postNotificationName(Constants.userInvitedToEventNotification, object: nil, userInfo: params)
+            }
+        })
+
         return true
     }
     
@@ -119,6 +133,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
+
+//        if Branch.getInstance().handleDeepLink(url) {
+//            return true
+//        }
         
         let sanitizedURL:NSURL = GSDDeepLink.handleDeepLink(url)
         

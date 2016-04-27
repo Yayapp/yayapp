@@ -468,67 +468,6 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </imageView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a3n-sd-izI">
-                                <rect key="frame" x="0.0" y="246" width="320" height="45"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OHM-87-MfR">
-                                        <rect key="frame" x="0.0" y="0.0" width="156" height="45"/>
-                                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
-                                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <state key="normal" title="Details">
-                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="switchToDetails:" destination="guw-5R-m4j" eventType="touchUpInside" id="kpv-GV-qoq"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Mb-to-OYX">
-                                        <rect key="frame" x="164" y="0.0" width="156" height="45"/>
-                                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
-                                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <state key="normal" title="Chat">
-                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="switchToChat:" destination="guw-5R-m4j" eventType="touchUpInside" id="4sI-NM-0Oz"/>
-                                        </connections>
-                                    </button>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HMs-L0-c1m">
-                                        <rect key="frame" x="0.0" y="40" width="156" height="5"/>
-                                        <color key="backgroundColor" red="0.35294117650000001" green="0.74901960779999999" blue="0.3294117647" alpha="1" colorSpace="calibratedRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="5" id="TgJ-FU-bvy"/>
-                                        </constraints>
-                                    </view>
-                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Dp-2f-QdJ">
-                                        <rect key="frame" x="164" y="40" width="156" height="5"/>
-                                        <color key="backgroundColor" red="0.35294117650000001" green="0.74901960779999999" blue="0.3294117647" alpha="1" colorSpace="calibratedRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="5" id="b32-ai-rSo"/>
-                                        </constraints>
-                                    </view>
-                                </subviews>
-                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstItem="OHM-87-MfR" firstAttribute="leading" secondItem="a3n-sd-izI" secondAttribute="leading" id="5jy-EV-aVa"/>
-                                    <constraint firstItem="OHM-87-MfR" firstAttribute="top" secondItem="a3n-sd-izI" secondAttribute="top" id="9Yj-iY-3D6"/>
-                                    <constraint firstItem="0Dp-2f-QdJ" firstAttribute="bottom" secondItem="9Mb-to-OYX" secondAttribute="bottom" id="BUZ-hh-J49"/>
-                                    <constraint firstItem="9Mb-to-OYX" firstAttribute="leading" secondItem="OHM-87-MfR" secondAttribute="trailing" constant="8" id="Hw5-Oh-X1I"/>
-                                    <constraint firstItem="9Mb-to-OYX" firstAttribute="trailing" secondItem="0Dp-2f-QdJ" secondAttribute="trailing" id="JET-eP-quD"/>
-                                    <constraint firstItem="HMs-L0-c1m" firstAttribute="trailing" secondItem="OHM-87-MfR" secondAttribute="trailing" id="KV0-dw-fu3"/>
-                                    <constraint firstItem="OHM-87-MfR" firstAttribute="bottom" secondItem="HMs-L0-c1m" secondAttribute="bottom" id="N1I-Ue-Tv0"/>
-                                    <constraint firstAttribute="bottom" secondItem="9Mb-to-OYX" secondAttribute="bottom" id="Oed-5w-cu6"/>
-                                    <constraint firstItem="HMs-L0-c1m" firstAttribute="leading" secondItem="OHM-87-MfR" secondAttribute="leading" id="QOs-rf-P5R"/>
-                                    <constraint firstItem="9Mb-to-OYX" firstAttribute="leading" secondItem="0Dp-2f-QdJ" secondAttribute="leading" id="S7U-S6-TbA"/>
-                                    <constraint firstItem="9Mb-to-OYX" firstAttribute="top" secondItem="a3n-sd-izI" secondAttribute="top" id="dCX-kc-EC4"/>
-                                    <constraint firstItem="OHM-87-MfR" firstAttribute="width" secondItem="9Mb-to-OYX" secondAttribute="width" id="f6N-rG-X5r"/>
-                                    <constraint firstAttribute="height" constant="45" id="roP-kw-1X9"/>
-                                    <constraint firstAttribute="trailing" secondItem="9Mb-to-OYX" secondAttribute="trailing" id="xHK-Kx-cMV"/>
-                                    <constraint firstAttribute="bottom" secondItem="OHM-87-MfR" secondAttribute="bottom" id="xhd-LS-0S2"/>
-                                </constraints>
-                            </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D5T-UD-FFp">
                                 <rect key="frame" x="8" y="72" width="304" height="25"/>
                                 <constraints>
@@ -597,7 +536,7 @@
                                 </connections>
                             </button>
                             <containerView hidden="YES" opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lcF-MI-9FI">
-                                <rect key="frame" x="0.0" y="291" width="320" height="105"/>
+                                <rect key="frame" x="0.0" y="109" width="320" height="287"/>
                             </containerView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qcw-Wn-Nbn">
                                 <rect key="frame" x="8" y="151" width="304" height="20"/>
@@ -615,28 +554,6 @@
                                     </mask>
                                 </variation>
                             </label>
-                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WZk-3I-EFz">
-                                <rect key="frame" x="0.0" y="291" width="320" height="140"/>
-                            </containerView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bCj-Yf-TAO">
-                                <rect key="frame" x="0.0" y="396" width="320" height="35"/>
-                                <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="35" id="doK-Sc-fIa"/>
-                                </constraints>
-                                <state key="normal">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="attend:" destination="guw-5R-m4j" eventType="touchUpInside" id="1iS-fU-rPe"/>
-                                </connections>
-                            </button>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Quf-bJ-2lA">
-                                <rect key="frame" x="0.0" y="291" width="320" height="105"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Zs9-vz-UNj">
                                 <rect key="frame" x="73" y="193" width="247" height="45"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -651,6 +568,89 @@
                                 </collectionViewFlowLayout>
                                 <cells/>
                             </collectionView>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WZk-3I-EFz">
+                                <rect key="frame" x="0.0" y="109" width="320" height="322"/>
+                            </containerView>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bCj-Yf-TAO">
+                                <rect key="frame" x="0.0" y="396" width="320" height="35"/>
+                                <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="doK-Sc-fIa"/>
+                                </constraints>
+                                <state key="normal">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="attend:" destination="guw-5R-m4j" eventType="touchUpInside" id="1iS-fU-rPe"/>
+                                </connections>
+                            </button>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Quf-bJ-2lA">
+                                <rect key="frame" x="0.0" y="109" width="320" height="287"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a3n-sd-izI">
+                                <rect key="frame" x="0.0" y="64" width="320" height="45"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OHM-87-MfR">
+                                        <rect key="frame" x="0.0" y="0.0" width="156" height="45"/>
+                                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <state key="normal" title="Details">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="switchToDetails:" destination="guw-5R-m4j" eventType="touchUpInside" id="kpv-GV-qoq"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Mb-to-OYX">
+                                        <rect key="frame" x="164" y="0.0" width="156" height="45"/>
+                                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <state key="normal" title="Chat">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="switchToChat:" destination="guw-5R-m4j" eventType="touchUpInside" id="4sI-NM-0Oz"/>
+                                        </connections>
+                                    </button>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HMs-L0-c1m">
+                                        <rect key="frame" x="0.0" y="40" width="156" height="5"/>
+                                        <color key="backgroundColor" red="0.35294117650000001" green="0.74901960779999999" blue="0.3294117647" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="5" id="TgJ-FU-bvy"/>
+                                        </constraints>
+                                    </view>
+                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Dp-2f-QdJ">
+                                        <rect key="frame" x="164" y="40" width="156" height="5"/>
+                                        <color key="backgroundColor" red="0.35294117650000001" green="0.74901960779999999" blue="0.3294117647" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="5" id="b32-ai-rSo"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="OHM-87-MfR" firstAttribute="leading" secondItem="a3n-sd-izI" secondAttribute="leading" id="5jy-EV-aVa"/>
+                                    <constraint firstItem="OHM-87-MfR" firstAttribute="top" secondItem="a3n-sd-izI" secondAttribute="top" id="9Yj-iY-3D6"/>
+                                    <constraint firstItem="0Dp-2f-QdJ" firstAttribute="bottom" secondItem="9Mb-to-OYX" secondAttribute="bottom" id="BUZ-hh-J49"/>
+                                    <constraint firstItem="9Mb-to-OYX" firstAttribute="leading" secondItem="OHM-87-MfR" secondAttribute="trailing" constant="8" id="Hw5-Oh-X1I"/>
+                                    <constraint firstItem="9Mb-to-OYX" firstAttribute="trailing" secondItem="0Dp-2f-QdJ" secondAttribute="trailing" id="JET-eP-quD"/>
+                                    <constraint firstItem="HMs-L0-c1m" firstAttribute="trailing" secondItem="OHM-87-MfR" secondAttribute="trailing" id="KV0-dw-fu3"/>
+                                    <constraint firstItem="OHM-87-MfR" firstAttribute="bottom" secondItem="HMs-L0-c1m" secondAttribute="bottom" id="N1I-Ue-Tv0"/>
+                                    <constraint firstAttribute="bottom" secondItem="9Mb-to-OYX" secondAttribute="bottom" id="Oed-5w-cu6"/>
+                                    <constraint firstItem="HMs-L0-c1m" firstAttribute="leading" secondItem="OHM-87-MfR" secondAttribute="leading" id="QOs-rf-P5R"/>
+                                    <constraint firstItem="9Mb-to-OYX" firstAttribute="leading" secondItem="0Dp-2f-QdJ" secondAttribute="leading" id="S7U-S6-TbA"/>
+                                    <constraint firstItem="9Mb-to-OYX" firstAttribute="top" secondItem="a3n-sd-izI" secondAttribute="top" id="dCX-kc-EC4"/>
+                                    <constraint firstItem="OHM-87-MfR" firstAttribute="width" secondItem="9Mb-to-OYX" secondAttribute="width" id="f6N-rG-X5r"/>
+                                    <constraint firstAttribute="height" constant="45" id="roP-kw-1X9"/>
+                                    <constraint firstAttribute="trailing" secondItem="9Mb-to-OYX" secondAttribute="trailing" id="xHK-Kx-cMV"/>
+                                    <constraint firstAttribute="bottom" secondItem="OHM-87-MfR" secondAttribute="bottom" id="xhd-LS-0S2"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -676,6 +676,7 @@
                             <constraint firstItem="a3n-sd-izI" firstAttribute="top" secondItem="zkS-NI-rhs" secondAttribute="bottom" id="U4H-cK-BL1"/>
                             <constraint firstItem="Quf-bJ-2lA" firstAttribute="top" secondItem="a3n-sd-izI" secondAttribute="bottom" id="WPy-Wa-9iL"/>
                             <constraint firstItem="lcF-MI-9FI" firstAttribute="leading" secondItem="XcH-RG-S6N" secondAttribute="leading" id="XDE-ri-PdB"/>
+                            <constraint firstItem="a3n-sd-izI" firstAttribute="top" secondItem="voJ-3u-7r9" secondAttribute="bottom" id="XhO-q7-SEw"/>
                             <constraint firstItem="eT5-uy-Msw" firstAttribute="top" secondItem="deh-Nc-LMW" secondAttribute="bottom" constant="4" id="YTN-8f-Ycq"/>
                             <constraint firstAttribute="trailing" secondItem="bCj-Yf-TAO" secondAttribute="trailing" id="Z4H-RM-6uc"/>
                             <constraint firstItem="deh-Nc-LMW" firstAttribute="leading" secondItem="XcH-RG-S6N" secondAttribute="leading" constant="8" id="Zhz-VQ-44Z"/>
@@ -705,6 +706,7 @@
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="U4H-cK-BL1"/>
                                 <exclude reference="y7q-y2-3Zn"/>
                                 <exclude reference="7ma-hd-Hao"/>
                                 <exclude reference="c5O-8n-1gk"/>
@@ -719,6 +721,7 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="attendButton" destination="bCj-Yf-TAO" id="gSe-Mo-bIu"/>
+                        <outlet property="attendButtonHeight" destination="doK-Sc-fIa" id="w0Y-26-L7t"/>
                         <outlet property="attendeesButtons" destination="Zs9-vz-UNj" id="G0I-zP-dpr"/>
                         <outlet property="author" destination="Skq-uY-aQX" id="l2z-SP-ap8"/>
                         <outlet property="chatButton" destination="9Mb-to-OYX" id="aTu-BN-rNi"/>
@@ -734,6 +737,7 @@
                         <outlet property="name" destination="D5T-UD-FFp" id="jnQ-P6-EKu"/>
                         <outlet property="photo" destination="zkS-NI-rhs" id="7B7-11-BZL"/>
                         <outlet property="spinner" destination="3mB-Zs-Mtm" id="Zzc-yd-xCU"/>
+                        <outlet property="switherPlaceholderTopSpace" destination="XhO-q7-SEw" id="OKS-LF-0Z7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9ob-oo-n06" userLabel="First Responder" sceneMemberID="firstResponder"/>

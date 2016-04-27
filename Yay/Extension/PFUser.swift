@@ -11,6 +11,10 @@ extension PFUser {
         self.init(withoutDataWithClassName: "_User", objectId: user.objectId)
     }
 
+    convenience init(pointerUsingUser user: User) {
+        self.init(withoutDataWithClassName: "User", objectId: user.objectId)
+    }
+
     convenience init(user: User) {
         self.init()
 

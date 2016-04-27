@@ -80,16 +80,9 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
             update()
         }
 
-        if let avatar = ParseHelper.sharedInstance.currentUser?.avatar {
-            ParseHelper.getData(avatar, completion: {
-                (data:NSData?, error:NSError?) in
-                if(error == nil) {
-                    let image = UIImage(data:data!)
-                    self.author.setImage(image, forState: .Normal)
-                } else {
-                    MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-                }
-            })
+        if let avatarURLString = ParseHelper.sharedInstance.currentUser?.avatar?.url,
+            avatarURL = NSURL(string: avatarURLString) {
+            self.author.sd_setImageWithURL(avatarURL, forState: .Normal)
         }
     }
 
@@ -226,21 +219,18 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
     
     func madeEventPictureChoice(photo: File, pickedPhoto: UIImage?) {
         chosenPhoto = photo
+
+        eventImage.contentMode = .ScaleAspectFill
+
         if pickedPhoto != nil {
             eventImage.image = pickedPhoto!
-            eventImage.contentMode = UIViewContentMode.ScaleAspectFill
-        } else {
-            ParseHelper.getData(photo, completion: {
-                    (data:NSData?, error:NSError?) in
-                    if(error == nil) {
-                        let image = UIImage(data:data!)
-                        self.eventImage.image = image
-                        self.eventImage.contentMode = UIViewContentMode.ScaleAspectFill
-                    } else {
-                        MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-                    }
-                })
-            
+        } else if let photoURLString = photo.url,
+            photoURL = NSURL(string: photoURLString) {
+            eventImage.sd_setImageWithURL(photoURL, completed: { (_, error, _, _) in
+                if error != nil {
+                    MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+                }
+            })
         }
     }
 
@@ -299,7 +289,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
     }
 
     @IBAction func create(sender: AnyObject) {
-        guard let currentUser = ParseHelper.sharedInstance.currentUser else {
+        guard let currentUserID = ParseHelper.sharedInstance.currentUser?.objectId else {
             return
         }
 
@@ -326,7 +316,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
                 
                 self.event = Event()
                 self.event!.ACL = eventACL
-                self.event!.attendees = []
+                self.event!.attendeeIDs = []
             }
             self.event!.name = name.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
             self.event!.summary = descriptionText.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
@@ -341,8 +331,8 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
             ParseHelper.saveObject(self.event!, completion: {
                 (result, error) in
                 if error == nil {
-                    if (self.event?.attendees.contains(currentUser) == false) {
-                        self.event?.attendees.append(currentUser)
+                    if (self.event?.attendeeIDs.contains(currentUserID) != true) {
+                        self.event?.attendeeIDs.append(currentUserID)
                     }
 
                     ParseHelper.saveObject(self.event!, completion: { (result, error) in
@@ -354,7 +344,16 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
 
                         self.spinner.stopAnimating()
                         self.tabBarController?.selectedIndex = 0
-
+                        
+                        guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as? BlurryAlertViewController else {
+                            return
+                        }
+                        
+                        blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
+                        blurryAlertViewController.modalPresentationStyle = .CurrentContext
+                        let action = self.isEditMode ? "updated" : "created"
+                        blurryAlertViewController.aboutText = NSLocalizedString("This event was successfully " + action + ".", comment: "")
+                        self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
                     })
                 } else {
                     self.spinner.stopAnimating()

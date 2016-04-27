@@ -10,4 +10,5 @@ import Foundation
 
 struct Constants {
     static let userDidLogoutNotification = "userDidLogoutNotification"
+    static let userInvitedToEventNotification = "userInvitedToEventNotification"
 }

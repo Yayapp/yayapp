@@ -40,6 +40,8 @@ class CategoryPickerViewController: UIViewController, TTGTextTagCollectionViewDe
             return
         }
         
+        SVProgressHUD.show()
+        
         ParseHelper.getUserCategoriesForEvent(currentUser, block: {
             (categoriesList:[Category]?, error:NSError?) in
             if(error == nil) {
@@ -51,6 +53,8 @@ class CategoryPickerViewController: UIViewController, TTGTextTagCollectionViewDe
                         self.categoriesCollection.setTagAtIndex(UInt(index), selected: true)
                     }
                 }
+                
+                SVProgressHUD.dismiss()
             } else {
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }

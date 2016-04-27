@@ -31,6 +31,10 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
                                                          selector: #selector(ListEventsViewController.handleUserLogout),
                                                          name: Constants.userDidLogoutNotification,
                                                          object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self,
+                                                         selector: #selector(ListEventsViewController.handleInviteToEvent),
+                                                         name: Constants.userInvitedToEventNotification,
+                                                         object: nil)
 
         guard let currentUser = ParseHelper.sharedInstance.currentUser
             where currentUser.avatar != nil && currentUser.gender != nil else {
@@ -63,10 +67,49 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
         }
     }
 
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+
+        guard let invitedEventID = DataProxy.sharedInstance.invitedEventID else {
+            return
+        }
+
+        openInvitedEventDetails(invitedEventID)
+    }
+
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self,
                                                             name: Constants.userDidLogoutNotification,
                                                             object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self,
+                                                            name: Constants.userInvitedToEventNotification,
+                                                            object: nil)
+    }
+
+    func openInvitedEventDetails(eventID: String) {
+        guard let invitedEventID = DataProxy.sharedInstance.invitedEventID,
+            eventDetailsVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("EventDetailsViewController") as? EventDetailsViewController else {
+                return
+        }
+
+        eventDetailsVC.delegate = self
+        SVProgressHUD.show()
+
+        ParseHelper.fetchEvent(invitedEventID, completion: { [weak self] (fetchedObject, error) in
+            SVProgressHUD.dismiss()
+
+            guard let fetchedEvent = fetchedObject as? Event
+                where error == nil else {
+                    MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
+
+                    return
+            }
+
+            eventDetailsVC.event = fetchedEvent
+            self?.navigationController?.pushViewController(eventDetailsVC, animated: true)
+
+            DataProxy.sharedInstance.invitedEventID = nil
+            })
     }
 
     override func reloadAll(eventsList:[Event]) {
@@ -116,48 +159,43 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
 
         ParseHelper.fetchObject(event.owner, completion: { (result, error) in
             if error == nil {
-                if let avatar = event.owner!.avatar {
-
-                    ParseHelper.getData(avatar, completion: {
-                        (data:NSData?, error:NSError?) in
-                        if(error == nil) {
-                            let image = UIImage(data:data!)
-                            cell.author.setImage(image, forState: .Normal)
-                        } else {
-                            MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-                        }
-                    })
+                if let avatarURLString = event.owner!.avatar?.url,
+                    avatarURL = NSURL(string: avatarURLString) {
+                    cell.author.sd_setImageWithURL(avatarURL, forState: .Normal)
                 }
             } else {
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
         })
+
+        cell.author.tag = indexPath.section
+        cell.author.addTarget(self, action: #selector(ListEventsViewController.authorProfile(_:)), forControlEvents: .TouchUpInside)
+
+        let allAttendeeIDsWithoutOwner = event.attendeeIDs.filter({$0 != event.owner!.objectId})
+        let attendeeIDs = allAttendeeIDsWithoutOwner[0..<min(allAttendeeIDsWithoutOwner.count, attendeeButtons.count)]
         
-        let attendees:[User] = event.attendees.filter({$0.objectId != event.owner!.objectId}) as! [User]
-        
-        for (index, attendee) in attendees.enumerate() {
+        for (index, attendeeID) in attendeeIDs.enumerate() {
             let attendeeButton = attendeeButtons[index]
 
             attendeeButton.addTarget(self, action: "attendeeProfile:", forControlEvents: .TouchUpInside)
-            attendeeButton.tag = indexPath.row
+
+            attendeeButton.tag = indexPath.section
             attendeeButton.titleLabel?.tag = index
 
-            ParseHelper.fetchObject(attendee, completion: {
+            ParseHelper.fetchUser(attendeeID, completion: {
                 result, error in
                 if error == nil {
-                    if let attendeeAvatar = attendee.avatar {
+                    if let attendeeAvatarURLString = result!.avatar?.url,
+                        attendeeAvatarURL = NSURL(string: attendeeAvatarURLString) {
+                        attendeeButton.sd_setImageWithURL(attendeeAvatarURL, forState: .Normal, completed: { (_, error, _, _) in
+                            guard error == nil else {
+                                MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
 
-                        ParseHelper.getData(attendeeAvatar, completion: {
-                            (data:NSData?, error:NSError?) in
-                            if(error == nil) {
-                                let image = UIImage(data:data!)
-                                attendeeButton.setImage(image, forState: .Normal)
-                                attendeeButton.hidden = false
-                            } else {
-                                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+                                return
                             }
+
+                            attendeeButton.hidden = false
                         })
-                        
                     } else {
                         attendeeButton.setImage(UIImage(named: "upload_pic"), forState: .Normal)
                         MessageToUser.showDefaultErrorMessage("Some user has no avatar.")
@@ -168,8 +206,8 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
             })
         }
         
-        if attendeeButtons.count > attendees.count && event.owner!.objectId != ParseHelper.sharedInstance.currentUser?.objectId && attendees.count < (event.limit-1){
-            let attendeeButton = attendeeButtons[attendees.count]
+        if attendeeButtons.count > attendeeIDs.count && event.owner!.objectId != ParseHelper.sharedInstance.currentUser?.objectId && attendeeIDs.count < (event.limit-1){
+            let attendeeButton = attendeeButtons[attendeeIDs.count]
             attendeeButton.addTarget(self, action: "join:", forControlEvents: .TouchUpInside)
             attendeeButton.setTitle("Join", forState: .Normal)
             attendeeButton.hidden = false
@@ -238,7 +276,7 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
             return
         }
 
-        userProfileViewController.user = event.owner
+        userProfileViewController.userID = event.owner?.objectId
         
         navigationController?.pushViewController(userProfileViewController, animated: true)
     }
@@ -249,11 +287,11 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
             return
         }
 
-        userProfileViewController.user = event.attendees[(sender.titleLabel?.tag)!]
+        userProfileViewController.userID = event.attendeeIDs[(sender.titleLabel?.tag)!]
         
         navigationController?.pushViewController(userProfileViewController, animated: true)
     }
-    
+
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         if(segue.identifier == "event_details") {
@@ -270,6 +308,15 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
         eventsFirst?.removeAll()
         eventsData.removeAll()
         events.reloadData()
+    }
+
+    func handleInviteToEvent(notification: NSNotification) {
+        guard let userInfo = notification.userInfo,
+            eventID = userInfo["objectId"] as? String else {
+                return
+        }
+
+        openInvitedEventDetails(eventID)
     }
 }
 

@@ -142,23 +142,6 @@
                         <nil key="highlightedColor"/>
                         <size key="shadowOffset" width="0.0" height="0.0"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ccx-D0-9Gq">
-                        <rect key="frame" x="8" y="87" width="304" height="17"/>
-                        <constraints>
-                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="80" id="5o3-RV-URC"/>
-                            <constraint firstAttribute="height" constant="20" id="ixr-Cl-CUn"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
-                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <nil key="highlightedColor"/>
-                        <size key="shadowOffset" width="0.0" height="0.0"/>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="5o3-RV-URC"/>
-                                <exclude reference="ixr-Cl-CUn"/>
-                            </mask>
-                        </variation>
-                    </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading location..." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="snO-oF-Zez">
                         <rect key="frame" x="8" y="35" width="304" height="25"/>
                         <constraints>
@@ -172,6 +155,23 @@
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="yMt-kA-E8s"/>
+                            </mask>
+                        </variation>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ccx-D0-9Gq">
+                        <rect key="frame" x="8" y="91" width="304" height="17"/>
+                        <constraints>
+                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="80" id="5o3-RV-URC"/>
+                            <constraint firstAttribute="height" constant="20" id="ixr-Cl-CUn"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                        <size key="shadowOffset" width="0.0" height="0.0"/>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="5o3-RV-URC"/>
+                                <exclude reference="ixr-Cl-CUn"/>
                             </mask>
                         </variation>
                     </label>

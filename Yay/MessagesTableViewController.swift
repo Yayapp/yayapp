@@ -59,7 +59,7 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
             ParseHelper.fetchObject(event!, completion: {
             result, error in
             
-            self.processAttendees(self.event!.attendees)
+            self.processAttendees(self.event!.attendeeIDs)
             
             ParseHelper.getMessages(self.event!, block: {
                 result, error in
@@ -75,7 +75,7 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
             ParseHelper.fetchObject(group!, completion: {
                 result, error in
                 
-                self.processAttendees(self.group!.attendees)
+                self.processAttendees(self.group!.attendeeIDs)
                 
                 ParseHelper.getMessages(self.group!, block: {
                     result, error in
@@ -96,12 +96,11 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
         
     }
     
-    func processAttendees(result:[User]){
-        for attendee in result {
-            ParseHelper.fetchObject(attendee, completion: {
-                result, error in
-                guard let _ = result where error == nil else {
-                    self.avatars[attendee.objectId!] = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(named: "upload_pic"), diameter: 45)
+    func processAttendees(attendeeIDs: [String]) {
+        for attendeeID in attendeeIDs {
+            ParseHelper.fetchUser(attendeeID, completion: { fetchedAttendee, error in
+                guard let attendee = fetchedAttendee where error == nil else {
+                    self.avatars[attendeeID] = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(named: "upload_pic"), diameter: 45)
 
                     return
                 }
@@ -234,6 +233,33 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
     
     override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1
+    }
+    
+    override func collectionView(collectionView: JSQMessagesCollectionView!, didTapMessageBubbleAtIndexPath indexPath: NSIndexPath!) {
+        let message = messages[indexPath.row]
+        
+        if message.isMediaMessage {
+            let mediaItem = message.media
+            
+            if mediaItem.isKindOfClass(JSQPhotoMediaItem) {
+                let photoItem = mediaItem as? JSQPhotoMediaItem
+                presentImage(photoItem?.image)
+            }
+        }
+    }
+    
+    func presentImage(image: UIImage?) {
+        guard let imageViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("ImageViewController") as? ImageViewController else {
+            return
+        }
+        
+        imageViewController.modalPresentationStyle = .OverCurrentContext
+        imageViewController.backgroundImage = image
+        imageViewController.imageTapped = {
+            imageViewController.dismissViewControllerAnimated(true, completion: nil)
+        }
+        
+        presentViewController(imageViewController, animated: true, completion: nil)
     }
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {

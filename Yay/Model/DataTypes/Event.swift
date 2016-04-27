@@ -100,16 +100,19 @@ class Event: Object {
             parseObject?.setObject(newValue, forKey: "limit")
         }
     }
-    var attendees: [User] {
+    var attendeeIDs: [String] {
         get {
-            guard let parseObjects = parseObject?.objectForKey("attendees") as? [PFObject] else {
+            guard let parseObject = parseObject where parseObject.dataAvailable else {
                 return []
             }
 
-            return parseObjects.map({ User(parseObject: $0)! })
+            let elements = parseObject.objectForKey("attendeeIDs") as? [String] ?? []
+
+            return Array(Set(elements))
         }
         set {
-            parseObject?.setObject(newValue.map({ PFUser(pointerUsingUser: $0) }), forKey: "attendees")
+            let uniqueElements = Array(Set(newValue))
+            parseObject?.setObject(uniqueElements, forKey: "attendeeIDs")
         }
     }
     var timeZone: String {
