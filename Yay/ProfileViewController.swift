@@ -100,7 +100,7 @@ class ProfileViewController: UITableViewController {
             eventsData = eventsData
             where indexPath.row == 1 {
             eventsListVC.eventsData = eventsData
-            eventsListVC.title = "Past Events"
+            eventsListVC.currentTitle = "Events Archive"
 
             navigationController?.pushViewController(eventsListVC, animated: true)
         }

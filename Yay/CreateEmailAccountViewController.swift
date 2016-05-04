@@ -91,10 +91,13 @@ class CreateEmailAccountViewController: UIViewController {
             user.email = email.text
             user.username = email.text
 
+            SVProgressHUD.show()
             ParseHelper.signUpInBackgroundWithBlock(user, completion: { (succeeded, error) in
+                SVProgressHUD.dismiss()
+
                 if let error = error {
                     if error.code == 202 {
-                        MessageToUser.showDefaultErrorMessage("Email \(user.email) already taken")
+                        MessageToUser.showDefaultErrorMessage("Email \(user.email ?? "") already taken")
                     } else {
                         MessageToUser.showDefaultErrorMessage(error.localizedDescription)
                     }

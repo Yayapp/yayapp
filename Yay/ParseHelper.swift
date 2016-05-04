@@ -266,6 +266,14 @@ class ParseHelper {
     class func getCategories(block:CategoriesResultBlock?) {
         let query = PFQuery(className: categoryParseClassName)
         query.includeKey("owner")
+
+//        if let geoPoint = PFUser.currentUser()?.objectForKey("location") as? PFGeoPoint,
+//            distance = PFUser.currentUser()?.objectForKey("distance") as? Double {
+//            query.whereKey("location",
+//                           nearGeoPoint: geoPoint,
+//                           withinKilometers: distance)
+//        }
+
         query.findObjectsInBackgroundWithBlock {
             objects, error in
             
@@ -378,10 +386,8 @@ class ParseHelper {
     }
     
     
-    class func getEventPhotos(category:Category, block:EventPhotosResultBlock?) {
+    class func getEventPhotos(block:EventPhotosResultBlock?) {
         ParseHelper.sharedInstance.eventPhotosQuery.cancel()
-
-        ParseHelper.sharedInstance.eventPhotosQuery.whereKey("category", equalTo: PFObject(withoutDataWithClassName: categoryParseClassName, objectId: category.objectId))
 
         ParseHelper.sharedInstance.eventPhotosQuery.findObjectsInBackgroundWithBlock {
             objects, error in
@@ -774,6 +780,17 @@ class ParseHelper {
 
         category.attendeeIDs = categoryAttendeeIDs
         ParseHelper.saveObject(category, completion:completion)
+    }
+
+    class func requestJoinGroup(group: Category, completion: BoolResultBlock?) {
+        let requestACL = ObjectACL()
+        requestACL.publicWriteAccess = true
+        requestACL.publicReadAccess = true
+        let request = Request()
+        request.group = group
+        request.attendee = ParseHelper.sharedInstance.currentUser!
+        request.ACL = requestACL
+        ParseHelper.saveObject(request, completion: completion)
     }
     
     class func changeStateOfEvent(event: Event, toJoined isJoined: Bool, completion: BoolResultBlock?) {

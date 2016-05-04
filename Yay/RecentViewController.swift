@@ -164,7 +164,7 @@ class RecentViewController: UITableViewController {
     @IBAction func decline(sender: AnyObject) {
         let request = notifications[sender.tag] as! Request
         request.accepted = false
-        ParseHelper.saveObject(request.event!, completion: nil)
+        ParseHelper.saveObject(request, completion: nil)
         UIApplication.sharedApplication().applicationIconBadgeNumber-=1
         notifications.removeAtIndex(sender.tag)
         //        self.appDelegate.leftViewController.requestsCountLabel.text = "\(self.requests.count)"

@@ -95,6 +95,8 @@ class LoginViewController: UIViewController, InstagramDelegate {
 
 
     func proceed(){
+        SVProgressHUD.dismiss()
+
         if let currentInstallation = ParseHelper.sharedInstance.currentInstallation {
             currentInstallation.user = ParseHelper.sharedInstance.currentUser
             ParseHelper.saveObject(currentInstallation, completion: nil)
@@ -137,13 +139,19 @@ class LoginViewController: UIViewController, InstagramDelegate {
     }
  
     @IBAction func facebookLogin(sender: AnyObject) {
+        SVProgressHUD.show()
+
         let permissions:[String] = ["email","user_about_me", "user_relationships", "user_birthday", "user_location"]
         PFFacebookUtils.logInInBackgroundWithReadPermissions(permissions) {
             (user: PFUser?, error: NSError?) -> Void in
             
             if error != nil {
+                SVProgressHUD.dismiss()
                 MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
+
+                return
             }
+
             if let user = user {
                 
                 if (FBSDKAccessToken.currentAccessToken() != nil){
@@ -152,7 +160,9 @@ class LoginViewController: UIViewController, InstagramDelegate {
                     let userProfileRequest = FBSDKGraphRequest(graphPath: "me", parameters: userProfileRequestParams)
                     let graphConnection = FBSDKGraphRequestConnection()
                     graphConnection.addRequest(userProfileRequest, completionHandler: { (connection: FBSDKGraphRequestConnection!, result: AnyObject!, error: NSError!) -> Void in
+
                         if(error != nil){
+                            SVProgressHUD.dismiss()
                             print(error)
                         }
                         else {
@@ -172,10 +182,11 @@ class LoginViewController: UIViewController, InstagramDelegate {
                                         ParseHelper.saveObject(ParseHelper.sharedInstance.currentUser!, completion: nil)
                                     }
                                     else {
+                                        SVProgressHUD.dismiss()
                                         print("Error: \(error!.localizedDescription)")
                                     }
                                 })
-                          
+
                                 self.doRegistration()
                             } else {
                                 self.proceed()
@@ -236,6 +247,7 @@ class LoginViewController: UIViewController, InstagramDelegate {
     }
     
     func instagramSuccess(token:String, user:InstagramUser) {
+        SVProgressHUD.show()
 
         ParseHelper.logInWithUsernameInBackground(user.username, password: "\(user.username.MD5())", completion: {
             (pfuser: User?, error: NSError?) -> Void in
@@ -259,6 +271,8 @@ class LoginViewController: UIViewController, InstagramDelegate {
 
                     ParseHelper.signUpInBackgroundWithBlock(pfuser, completion: {
                         (succeeded: Bool?, error: NSError?) -> Void in
+                        SVProgressHUD.dismiss()
+
                         if error != nil {
                             MessageToUser.showDefaultErrorMessage("Something went wrong")
                         } else {
@@ -266,6 +280,7 @@ class LoginViewController: UIViewController, InstagramDelegate {
                         }
                     })
                 } else {
+                    SVProgressHUD.dismiss()
                     MessageToUser.showDefaultErrorMessage("Something went wrong")
 
                     return
@@ -296,11 +311,14 @@ class LoginViewController: UIViewController, InstagramDelegate {
         } else if email.text!.isEmail() == false {
             MessageToUser.showDefaultErrorMessage("Email is invalid.")
         } else {
+            SVProgressHUD.show()
             ParseHelper.logInWithUsernameInBackground(email.text!, password:password.text!, completion: { (user: User?, error: NSError?) in
+                SVProgressHUD.dismiss()
+
                 if user != nil {
                     if let currentInstallation = ParseHelper.sharedInstance.currentInstallation {
                         currentInstallation.user = ParseHelper.sharedInstance.currentUser
-                        ParseHelper.saveObject(ParseHelper.sharedInstance.currentUser, completion: nil)
+                        ParseHelper.saveObject(ParseHelper.sharedInstance.currentInstallation, completion: nil)
                     }
                     if user?.location == nil {
                     self.performSegueWithIdentifier("proceed", sender: nil)
@@ -308,8 +326,10 @@ class LoginViewController: UIViewController, InstagramDelegate {
                         self.appDelegate.gotoMainTabBarScreen()
                     }
                 } else if(error!.code == 101) {
+                    SVProgressHUD.dismiss()
                     MessageToUser.showDefaultErrorMessage("Invalid email or password")
                 } else {
+                    SVProgressHUD.dismiss()
                     MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
                 }
             })

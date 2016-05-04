@@ -15,7 +15,6 @@ protocol ChooseCategoryPhotoDelegate : NSObjectProtocol {
 class PhotosTableViewController: UITableViewController {
 
     var eventPhotos:[EventPhoto] = []
-    var category:Category!
     var delegate:ChooseCategoryPhotoDelegate!
     
     override func viewDidLoad() {

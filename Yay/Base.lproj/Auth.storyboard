@@ -478,13 +478,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9cz-Mu-nPX">
-                                <rect key="frame" x="85" y="407" width="150" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="150" id="kIZ-bD-wzA"/>
-                                    <constraint firstAttribute="height" constant="30" id="sRI-B2-JuZ"/>
-                                </constraints>
+                            <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="9cz-Mu-nPX">
+                                <rect key="frame" x="20" y="401" width="280" height="36"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <inset key="contentEdgeInsets" minX="0.0" minY="10" maxX="0.0" maxY="10"/>
                                 <state key="normal" title="Don't allow">
                                     <color key="titleColor" red="0.48627450980392156" green="0.49803921568627452" blue="0.50196078431372548" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -529,10 +526,12 @@
                             <constraint firstItem="L9g-c1-DOD" firstAttribute="centerY" secondItem="BBT-qY-CUG" secondAttribute="centerY" id="19R-bw-fCT"/>
                             <constraint firstItem="8al-Yo-MZ2" firstAttribute="leading" secondItem="BBT-qY-CUG" secondAttribute="leadingMargin" constant="90" id="3Rq-hy-ULz"/>
                             <constraint firstItem="L9g-c1-DOD" firstAttribute="top" secondItem="8al-Yo-MZ2" secondAttribute="bottom" constant="30" id="4DH-RZ-7qW"/>
+                            <constraint firstAttribute="trailing" secondItem="9cz-Mu-nPX" secondAttribute="trailing" constant="20" id="8fA-IV-K1a"/>
                             <constraint firstAttribute="trailing" secondItem="L9g-c1-DOD" secondAttribute="trailing" constant="16" id="HNd-mi-BMg"/>
                             <constraint firstAttribute="trailingMargin" secondItem="8al-Yo-MZ2" secondAttribute="trailing" constant="90" id="Rnr-d2-fiz"/>
                             <constraint firstItem="kgM-FH-MzR" firstAttribute="leading" secondItem="BBT-qY-CUG" secondAttribute="leading" id="Teg-Z3-26c"/>
                             <constraint firstItem="L9g-c1-DOD" firstAttribute="leading" secondItem="BBT-qY-CUG" secondAttribute="leading" constant="16" id="YR3-ws-4Nx"/>
+                            <constraint firstItem="9cz-Mu-nPX" firstAttribute="leading" secondItem="BBT-qY-CUG" secondAttribute="leading" constant="20" id="aTl-yq-jAA"/>
                             <constraint firstAttribute="centerX" secondItem="9cz-Mu-nPX" secondAttribute="centerX" id="c3a-ip-OmX"/>
                             <constraint firstItem="Abw-Pv-e2n" firstAttribute="top" secondItem="kgM-FH-MzR" secondAttribute="bottom" id="g0H-6d-Yww"/>
                             <constraint firstItem="kgM-FH-MzR" firstAttribute="top" secondItem="9cz-Mu-nPX" secondAttribute="bottom" constant="8" id="mSG-I3-dmO"/>

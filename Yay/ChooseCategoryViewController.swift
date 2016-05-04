@@ -143,9 +143,27 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         cell.switched.tag = indexPath.row;
         
         cell.onSwitchValueChanged = { [unowned self] isSwitcherOn in
-            ParseHelper.changeStateOfCategory(self.categoryForIndexPath(indexPath),
-                                              toJoined: isSwitcherOn,
-                                              completion: nil)
+            let category = self.categoryForIndexPath(indexPath)
+
+            if category.isPrivate {
+                ParseHelper.requestJoinGroup(category, completion: nil)
+
+                guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as? BlurryAlertViewController else {
+                    return
+                }
+
+                blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
+                blurryAlertViewController.modalPresentationStyle = .CurrentContext
+
+                blurryAlertViewController.aboutText = NSLocalizedString("Your request has been sent.", comment: "")
+                blurryAlertViewController.messageText = NSLocalizedString("We will notify you of the outcome.", comment: "")
+
+                self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
+            } else {
+                ParseHelper.changeStateOfCategory(category,
+                                                  toJoined: true,
+                                                  completion: nil)
+            }
         }
         
         if let currentUserID = ParseHelper.sharedInstance.currentUser?.objectId {
@@ -286,6 +304,9 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
             vc.delegate = self
         }
     }
+
+    //MARK: - Segue
+    @IBAction func unwindToChooseCategory(segue: UIStoryboardSegue) { }
 
     //MARK: - Helpers
     func categoryForIndexPath(indexPath: NSIndexPath) -> Category {

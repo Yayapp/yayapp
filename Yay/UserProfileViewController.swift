@@ -24,8 +24,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
     
     @IBOutlet weak var about: UILabel!
     @IBOutlet weak var rankIcon: UIImageView!
-    @IBOutlet weak var blockUnblock: UIButton!
-    
+
     @IBOutlet weak var interestsCollection: TTGTextTagCollectionView!
     
     override func viewDidLoad() {
@@ -95,24 +94,25 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
     func setupUIWithUserInfo() {
         name.text = user.name
 
-        if(ParseHelper.sharedInstance.currentUser?.objectId == user.objectId) {
+        let isCurrentUser = ParseHelper.sharedInstance.currentUser?.objectId == user.objectId
 
-            editdone = UIBarButtonItem(image:UIImage(named: "user_settings_ico"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("settings:"))
-
-            self.navigationItem.setRightBarButtonItem(editdone, animated: false)
+        if isCurrentUser {
+            editdone = UIBarButtonItem(image:UIImage(named: "user_settings_ico"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(UserProfileViewController.settings(_:)))
+            navigationItem.setRightBarButtonItem(editdone, animated: false)
 
             let tblView =  UIView(frame: CGRectZero)
             tableView.tableFooterView = tblView
             tableView.tableFooterView!.hidden = true
             title = "Profile"
         } else {
-            title = user.name
+            navigationItem.title = user.name
+
             ParseHelper.countBlocks(ParseHelper.sharedInstance.currentUser!, user: user, completion: { [weak self] count in
                 self?.blocked = count > 0
-                self?.blockUnblock.hidden = false
+                self?.editdone = UIBarButtonItem(image:UIImage(named: "reporticon"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(UserProfileViewController.blockUnblock))
+                self?.navigationItem.setRightBarButtonItem(self?.editdone, animated: false)
                 })
         }
-
 
         ParseHelper.getUpcomingPastEvents(user, upcoming: false, block: {
             result, error in
@@ -183,21 +183,24 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         performSegueWithIdentifier("settings", sender: nil)
     }
     
-    @IBAction func blockUnblock(sender: AnyObject) {
+    func blockUnblock() {
         guard let currentUser = ParseHelper.sharedInstance.currentUser else {
             return
         }
-
-        let blockUserAlert = UIAlertController(title: NSLocalizedString("Block User", comment: ""),
-                                               message: NSLocalizedString("You are about to block this user. Are you sure?", comment: ""),
-                                               preferredStyle: .Alert)
-
-        blockUserAlert.addAction(UIAlertAction(title: blocked ? NSLocalizedString("Unblock User", comment: "") : NSLocalizedString("Block User", comment: ""),
-            style: .Default,
-            handler: { [unowned self] (_) in
+        
+        let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        if let reportViewController = mainStoryboard.instantiateViewControllerWithIdentifier(ReportViewController.storyboardID) as? ReportViewController {
+            reportViewController.modalPresentationStyle = .OverCurrentContext
+            reportViewController.modalTransitionStyle = .CrossDissolve
+            
+            if blocked {
+                reportViewController.blockButtonTitle = NSLocalizedString("Unblock User", comment: "")
+            }
+            
+            reportViewController.onBlock = {
                 if self.blocked {
                     self.blocked = false
-
+                    
                     ParseHelper.removeBlocks(currentUser, user: self.user, completion: { [weak self] error in
                         if let _ = self where error != nil {
                             MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
@@ -205,7 +208,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
                     
                     return
                 }
-
+                
                 let block = Block()
                 block.owner = currentUser
                 block.user = self.user
@@ -215,21 +218,18 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
                         weakSelf.blocked = !weakSelf.blocked
                         MessageToUser.showDefaultErrorMessage(NSLocalizedString("Something went wrong.", comment: ""))
                     }
-                })
-            }))
-        blockUserAlert.addAction(UIAlertAction(title: NSLocalizedString("Flag User", comment: ""),
-            style: .Default,
-            handler: { [unowned self] (_) in
+                    })
+            }
+            
+            reportViewController.onReport = {
                 let report = Report()
                 report.reportedUser = self.user
                 report.user = currentUser
                 ParseHelper.saveObject(report, completion: nil)
-        }))
-        blockUserAlert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""),
-            style: .Cancel,
-            handler: nil))
-
-        presentViewController(blockUserAlert, animated: true, completion: nil)
+            }
+            
+            self.presentViewController(reportViewController, animated: true, completion: nil)
+        }
     }
 
     func textTagCollectionView(textTagCollectionView: TTGTextTagCollectionView!, updateContentHeight newContentHeight: CGFloat) {
@@ -250,7 +250,7 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
         eventsCount?.text = nil
         about?.text = nil
         rankIcon?.image = nil
-        blockUnblock?.hidden = true
+        navigationItem.setRightBarButtonItem(nil, animated: false)
 
         tableView.reloadData()
     }

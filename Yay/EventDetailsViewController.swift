@@ -55,8 +55,12 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     @IBOutlet weak var attendButton: UIButton!
     @IBOutlet weak var attendButtonHeight: NSLayoutConstraint!
 
+    var attendedThisEvent: Bool?
+
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        chatButton.enabled = false
 
         switherPlaceholderTopSpace.constant = view.bounds.width / 160 * 91
         
@@ -104,6 +108,8 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                 self?.attendButton.hidden = isAttendButtonHidden
                 self?.attendButtonHeight.constant = isAttendButtonHidden ? 0 : 35
             }
+            
+            self?.attendButton.alpha = 0.0
 
             ParseHelper.fetchUsers(fetchedEvent.attendeeIDs.filter({$0 != fetchedEvent.owner!.objectId}), completion: { (fetchedUsers, error) in
                 guard let fetchedUsers = fetchedUsers where error == nil else {
@@ -143,7 +149,10 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                     }
                 })
 
-                for (index, attendee) in fetchedUsers.enumerate() {
+                let allAttendeesWithoutOwner = fetchedUsers.filter({ $0.objectId != fetchedEvent.owner!.objectId })
+                let attendees = allAttendeesWithoutOwner[0..<min(allAttendeesWithoutOwner.count, self?.attendeeButtons?.count ?? 0)]
+
+                for (index, attendee) in attendees.enumerate() {
                     let attendeeButton = self?.attendeeButtons[index]
 
                     attendeeButton?.addTarget(self, action: "attendeeProfile:", forControlEvents: .TouchUpInside)
@@ -160,37 +169,47 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                     }
                 }
 
-                let attendedThisEvent = !(fetchedEvent.attendeeIDs.filter({$0 == ParseHelper.sharedInstance.currentUser?.objectId}).count == 0)
+                self?.chatButton.enabled = true
 
+                self?.attendedThisEvent = !(fetchedEvent.attendeeIDs.filter({$0 == ParseHelper.sharedInstance.currentUser?.objectId}).count == 0) || ParseHelper.sharedInstance.currentUser?.objectId == fetchedEvent.owner!.objectId
+                
+                self?.chatButton.selected = !(self?.attendedThisEvent ?? false)
+                
                 if(ParseHelper.sharedInstance.currentUser?.objectId != fetchedEvent.owner!.objectId) {
-
-                    if !attendedThisEvent && fetchedEvent.limit > fetchedEvent.attendeeIDs.count {
-
-                        self?.chatButton.enabled = false
-
+                    if self?.attendedThisEvent != true && fetchedEvent.limit > fetchedEvent.attendeeIDs.count {
                         ParseHelper.getUserRequests(fetchedEvent, user: ParseHelper.sharedInstance.currentUser!, block: {
                             result, error in
                             if (error == nil) {
                                 if (result == nil || result!.isEmpty){
                                     if let attendeeButton = self?.attendeeButtons[fetchedUsers.count] {
-                                        attendeeButton.addTarget(self, action: "attend:", forControlEvents: .TouchUpInside)
+                                        attendeeButton.removeTarget(nil, action: nil, forControlEvents: .AllEvents)
+                                        attendeeButton.addTarget(self, action: #selector(EventDetailsViewController.attend(_:)), forControlEvents: .TouchUpInside)
+                                        attendeeButton.setImage(nil, forState: .Normal)
                                         attendeeButton.setTitle("JOIN", forState: .Normal)
                                         attendeeButton.hidden = false
+                                        self?.attendButton.alpha = 1.0
                                     }
+                                } else {
+                                    self?.attendButton.removeTarget(nil, action: nil, forControlEvents: .AllEvents)
+                                    self?.attendButton.setImage(nil, forState: .Normal)
+                                    self?.attendButton.setTitle("Pending…", forState: .Normal)
+                                    self?.attendButton.backgroundColor = UIColor(red:0.93, green:0.40, blue:0.29, alpha:1.00)
+                                    self?.attendButton.hidden = false
+                                    self?.attendButton.alpha = 1.0
                                 }
                             } else {
                                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                             }
                         })
                     } else {
-                        if !attendedThisEvent {
-                            self?.chatButton.enabled = false
-                        }
+                        self?.attendButton.alpha = 1.0
                     }
+                } else {
+                    self?.attendButton.alpha = 1.0
                 }
-
+                
                 self?.update()
-                })
+            })
         })
     }
 
@@ -215,7 +234,8 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
         }
         
         self.date.text = self.dateFormatter.stringFromDate(self.event.startDate)
-        self.distance.text = "\(distanceStr)km"
+        self.distance.text = distanceBetween > 0 ? "\(distanceStr)km" : nil
+
         CLLocation(latitude: self.event.location.latitude, longitude: self.event.location.longitude).getLocationString(nil, button: location, timezoneCompletion: nil)
     }
     
@@ -228,20 +248,32 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
             return
         }
         
-        let isJoined = event.attendeeIDs.contains(currentUserID);
-        attendButton.setTitle(attendTitle(!isJoined), forState: .Normal)
-        
-        ParseHelper.changeStateOfEvent(event, toJoined: !isJoined, completion: { result, error in
-            if (error != nil) {
-                MessageToUser.showDefaultErrorMessage(NSLocalizedString("Error occurred in changing your status in current event.", comment: ""))
-            }
-        })
-        
-        if !isJoined {
+        let isJoined = event.attendeeIDs.contains(currentUserID)
+
+        if isJoined {
+            ParseHelper.changeStateOfEvent(event, toJoined: false, completion: { result, error in
+                if (error != nil) {
+                    MessageToUser.showDefaultErrorMessage(NSLocalizedString("Error occurred in changing your status in current event.", comment: ""))
+                }
+            })
+
+            attendButton.setTitle(NSLocalizedString("Join", comment: ""), forState: .Normal)
+        } else {
+            attendButton.hidden = true
+
+            let requestACL = ObjectACL()
+            requestACL.publicWriteAccess = true
+            requestACL.publicReadAccess = true
+            let request = Request()
+            request.event = event
+            request.attendee = ParseHelper.sharedInstance.currentUser!
+            request.ACL = requestACL
+            ParseHelper.saveObject(request, completion: nil)
+
             guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as? BlurryAlertViewController else {
                 return
             }
-            
+
             blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
             blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
             blurryAlertViewController.aboutText = "Your request has been sent."
@@ -251,32 +283,35 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     }
     
     @IBAction func chat(sender: AnyObject) {
-        if ParseHelper.sharedInstance.currentUser != nil {
-            if (attendees.count>0) {
-                guard let controller: MessagesTableViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("MessagesTableViewController") as? MessagesTableViewController else {
-                    return
-                }
-
-                controller.event = event
-                self.navigationController!.pushViewController(controller, animated: true)
-            } else {
-                MessageToUser.showDefaultErrorMessage("There are no attendees yet.")
-            }
-        } else {
+        guard let _ = ParseHelper.sharedInstance.currentUser else {
             guard let vc = UIStoryboard.auth()?.instantiateViewControllerWithIdentifier("LoginViewController") as? LoginViewController else {
                 return
             }
 
             presentViewController(vc, animated: true, completion: nil)
+
+            return
+        }
+
+        if (attendees.count>0) {
+            guard let controller: MessagesTableViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("MessagesTableViewController") as? MessagesTableViewController else {
+                return
+            }
+
+            controller.event = event
+            self.navigationController!.pushViewController(controller, animated: true)
+        } else {
+            MessageToUser.showDefaultErrorMessage("There are no attendees yet.")
         }
     }
-    
+
     @IBAction func switchToDetails(sender: AnyObject) {
         view.endEditing(true)
 
         chatUnderline.hidden = true
         detailsUnderline.hidden = false
         messagesContainer.hidden = true
+        eventActionButton.hidden = false
 
         switherPlaceholderTopSpace.constant = self.view.bounds.width / 160 * 91
         UIView.animateWithDuration(0.1) {
@@ -285,9 +320,17 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     }
 
     @IBAction func switchToChat(sender: AnyObject) {
+        guard attendedThisEvent == true else {
+            MessageToUser.showMessage(NSLocalizedString("Denied", comment: ""),
+                                      textId: NSLocalizedString("You must be attended to this event", comment: ""))
+
+            return
+        }
+
         chatUnderline.hidden = false
         detailsUnderline.hidden = true
         messagesContainer.hidden = false
+        eventActionButton.hidden = true
 
         switherPlaceholderTopSpace.constant = 0
         UIView.animateWithDuration(0.1) {

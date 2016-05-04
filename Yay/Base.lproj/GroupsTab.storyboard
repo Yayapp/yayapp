@@ -64,9 +64,9 @@
                                 </constraints>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HmY-cz-QdU" userLabel="My Button">
-                                <rect key="frame" x="248" y="64" width="72" height="44"/>
+                                <rect key="frame" x="225.5" y="64" width="94.5" height="44"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <state key="normal" title="My">
+                                <state key="normal" title="My Groups">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -74,14 +74,14 @@
                                 </connections>
                             </button>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t5E-Mc-ZYp" userLabel="My Underline">
-                                <rect key="frame" x="248" y="103" width="72" height="5"/>
+                                <rect key="frame" x="225.5" y="103" width="94.5" height="5"/>
                                 <color key="backgroundColor" red="0.35294117650000001" green="0.74901960779999999" blue="0.3294117647" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="5" id="0Sk-Yr-4sf"/>
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mog-EA-7jc">
-                                <rect key="frame" x="72" y="64" width="80" height="44"/>
+                                <rect key="frame" x="72" y="64" width="64" height="44"/>
                                 <state key="normal" title="Public">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -100,7 +100,7 @@
                                 </connections>
                             </button>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QEQ-3D-dUf">
-                                <rect key="frame" x="72" y="103" width="80" height="5"/>
+                                <rect key="frame" x="72" y="103" width="64" height="5"/>
                                 <color key="backgroundColor" red="0.35294117650000001" green="0.74901960779999999" blue="0.3294117647" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="5" id="MVO-pY-ykN"/>
@@ -114,14 +114,14 @@
                                 </constraints>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X1e-jO-LxF">
-                                <rect key="frame" x="160" y="103" width="80" height="5"/>
+                                <rect key="frame" x="144" y="103" width="73.5" height="5"/>
                                 <color key="backgroundColor" red="0.35294117650000001" green="0.74901960779999999" blue="0.3294117647" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="5" id="hdk-Tu-N8W"/>
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F3n-4d-ecD">
-                                <rect key="frame" x="160" y="64" width="80" height="44"/>
+                                <rect key="frame" x="144" y="64" width="73.5" height="44"/>
                                 <state key="normal" title="Private">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -134,7 +134,7 @@
                         <constraints>
                             <constraint firstItem="xcS-LH-fQF" firstAttribute="width" secondItem="aT7-QB-oGx" secondAttribute="width" multiplier="0.2" id="3d5-AN-QAs"/>
                             <constraint firstItem="Mog-EA-7jc" firstAttribute="trailing" secondItem="QEQ-3D-dUf" secondAttribute="trailing" id="3iv-kZ-zpa"/>
-                            <constraint firstItem="F3n-4d-ecD" firstAttribute="width" secondItem="aT7-QB-oGx" secondAttribute="width" multiplier="0.25" id="3lb-Jz-emH"/>
+                            <constraint firstItem="F3n-4d-ecD" firstAttribute="width" secondItem="aT7-QB-oGx" secondAttribute="width" multiplier="0.23" id="3lb-Jz-emH"/>
                             <constraint firstItem="QEQ-3D-dUf" firstAttribute="bottom" secondItem="Mog-EA-7jc" secondAttribute="bottom" id="4qq-VJ-FEP"/>
                             <constraint firstItem="Mog-EA-7jc" firstAttribute="top" secondItem="aLz-Qt-Oxk" secondAttribute="top" id="5Ph-KK-hWb"/>
                             <constraint firstItem="t5E-Mc-ZYp" firstAttribute="width" secondItem="HmY-cz-QdU" secondAttribute="width" multiplier="0.2" id="7wT-GJ-tVv"/>
@@ -154,7 +154,7 @@
                             <constraint firstItem="xcS-LH-fQF" firstAttribute="trailing" secondItem="UgB-sH-3kv" secondAttribute="trailing" id="VGU-Jw-guQ"/>
                             <constraint firstItem="hm8-u3-msq" firstAttribute="top" secondItem="tSr-5M-Gzf" secondAttribute="bottom" id="WO5-Wg-e71"/>
                             <constraint firstItem="aLz-Qt-Oxk" firstAttribute="leading" secondItem="aT7-QB-oGx" secondAttribute="leading" id="ZfP-uK-eTg"/>
-                            <constraint firstItem="Mog-EA-7jc" firstAttribute="width" secondItem="aT7-QB-oGx" secondAttribute="width" multiplier="0.25" id="abB-zm-5Qu"/>
+                            <constraint firstItem="Mog-EA-7jc" firstAttribute="width" secondItem="aT7-QB-oGx" secondAttribute="width" multiplier="0.2" id="abB-zm-5Qu"/>
                             <constraint firstItem="xcS-LH-fQF" firstAttribute="top" secondItem="aLz-Qt-Oxk" secondAttribute="top" id="bt8-hh-H3q"/>
                             <constraint firstItem="F3n-4d-ecD" firstAttribute="leading" secondItem="Mog-EA-7jc" secondAttribute="trailing" constant="8" id="e2o-eo-oGO"/>
                             <constraint firstItem="Mog-EA-7jc" firstAttribute="leading" secondItem="QEQ-3D-dUf" secondAttribute="leading" id="f1N-Zd-ugS"/>
@@ -227,6 +227,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mN2-tr-1g4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="3vG-4K-gdL" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="2502" y="-1801"/>
         </scene>
@@ -439,16 +440,17 @@
                         <outlet property="privateButton" destination="tj9-jR-3UQ" id="A4q-JF-fLG"/>
                         <outlet property="publicButton" destination="aa6-Sz-Hgc" id="YLF-Z2-K1R"/>
                         <outlet property="spinner" destination="Pbu-GI-iAI" id="AYJ-d7-8cD"/>
+                        <segue destination="3vG-4K-gdL" kind="unwind" identifier="chooseCategorySegue" unwindAction="unwindToChooseCategory:" id="5hc-sH-XDG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YWn-0G-Pxv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2983" y="-2122"/>
+            <point key="canvasLocation" x="2999" y="-2110"/>
         </scene>
         <!--GroupDetailsViewController-->
         <scene sceneID="4dv-8C-qn7">
             <objects>
-                <viewController storyboardIdentifier="GroupDetailsViewController" title="GroupDetailsViewController" automaticallyAdjustsScrollViewInsets="NO" hidesBottomBarWhenPushed="YES" id="guw-5R-m4j" customClass="GroupDetailsViewController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="GroupDetailsViewController" title="GroupDetailsViewController" automaticallyAdjustsScrollViewInsets="NO" id="guw-5R-m4j" customClass="GroupDetailsViewController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="voJ-3u-7r9"/>
                         <viewControllerLayoutGuide type="bottom" id="eGn-5f-ips"/>
@@ -612,6 +614,9 @@
                                         <state key="normal" title="Chat">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="disabled">
+                                            <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
                                             <action selector="switchToChat:" destination="guw-5R-m4j" eventType="touchUpInside" id="4sI-NM-0Oz"/>

@@ -21,7 +21,11 @@ class Request: Object, Notification {
 
     var event: Event? {
         get {
-            return Event(parseObject: parseObject?.objectForKey("event") as? PFObject)
+            if parseObject?.objectForKey("event") != nil {
+                return Event(parseObject: parseObject?.objectForKey("event") as? PFObject)
+            } else {
+                return nil
+            }
         }
         set {
             if let event = newValue {
@@ -49,12 +53,14 @@ class Request: Object, Notification {
             parseObject?.setValue(PFUser(withoutDataUsingUser: newValue), forKey: "attendee")
         }
     }
-    var accepted: Bool {
+    var accepted: Bool? {
         get {
-            return parseObject?.valueForKey("accepted") as? Bool ?? false
+            return parseObject?.valueForKey("accepted") as? Bool
         }
         set {
-            parseObject?.setObject(newValue, forKey: "accepted")
+            if let newValue = newValue {
+                parseObject?.setObject(newValue, forKey: "accepted")
+            }
         }
     }
 
@@ -71,7 +77,7 @@ class Request: Object, Notification {
     }
     
     func getTitle() -> String {
-        if accepted {
+        if let accepted = accepted {
             if accepted {
                 return "You're in!"
             } else {
@@ -82,35 +88,27 @@ class Request: Object, Notification {
                 }
             }
         } else {
-            return "\(attendee.name) sent a request"
+            return "\(attendee.name ?? "") sent a request"
         }
     }
 
     func getText() -> String {
-        if event != nil {
-            return event!.name!
+        if let event = event {
+            return event.name ?? ""
         } else {
-            return group!.name
+            return ""
         }
     }
     
     func isSelectable() -> Bool {
-        if accepted && !accepted {
-            return false
-        } else {
-            return true
-        }
+        return accepted ?? true
     }
     
     func isDecidable() -> Bool {
-        return accepted
+        return accepted ?? true
     }
     
     func getIcon() -> UIImage {
-        if accepted {
-            return UIImage(named: "play.png")!
-        } else {
-            return UIImage(named: "play.png")!
-        }
+        return UIImage(named: "play.png")!
     }
 }

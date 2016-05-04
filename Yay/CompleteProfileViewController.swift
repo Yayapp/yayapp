@@ -203,13 +203,13 @@ class CompleteProfileViewController: UIViewController, UIImagePickerControllerDe
 
     //MARK: - UITextViewDelegate
 
-    func textViewDidBeginEditing(textView: UITextView) {
+    func textViewShouldBeginEditing(textView: UITextView) -> Bool {
         if isShowingBioPlaceholder {
             textView.text = nil
             textView.textColor = .blackColor()
         }
-
-        textView.becomeFirstResponder()
+        
+        return true
     }
 
     func textViewDidEndEditing(textView: UITextView) {

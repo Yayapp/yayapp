@@ -16,8 +16,7 @@ class ChooseEventPictureViewController: UIViewController, UITableViewDataSource,
 
     let picker = UIImagePickerController()
     var delegate:ChooseEventPictureDelegate!
-    var categories:[Category]! = []
-    var fetchingDataIndexPath: NSIndexPath?
+    var contentDataSource = [String : [EventPhoto]]()
     
     @IBOutlet weak var photos: UITableView!
     
@@ -28,21 +27,29 @@ class ChooseEventPictureViewController: UIViewController, UITableViewDataSource,
         photos.registerNib(EventPhotoTableViewCell.flatNib, forCellReuseIdentifier: EventPhotoTableViewCell.flatReuseIdentifier)
         photos.delegate = self
         photos.dataSource = self
-        
-        ParseHelper.getCategories({
-            (categories:[Category]?, error:NSError?) in
-            if(error == nil) {
-                self.categories = categories!
-                self.photos.reloadData()
-            } else {
-                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+
+        ParseHelper.getEventPhotos { [weak self] eventPhotos, error in
+            guard let eventPhotos = eventPhotos where error == nil else {
+                    MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
+
+                    return
             }
-        })
+
+            for eventPhoto in eventPhotos {
+                if self?.contentDataSource.keys.contains(eventPhoto.name) == true {
+                    self?.contentDataSource[eventPhoto.name]?.append(eventPhoto)
+                } else {
+                    self?.contentDataSource[eventPhoto.name] = [eventPhoto]
+                }
+            }
+
+            self?.photos.reloadData()
+        }
     }
 
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categories.count
+        return contentDataSource.keys.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -51,73 +58,34 @@ class ChooseEventPictureViewController: UIViewController, UITableViewDataSource,
             return UITableViewCell()
         }
 
-        let category:Category! = categories[indexPath.row]
-        
-        cell.name?.text = category.name
+        let key = Array(contentDataSource.keys)[indexPath.row]
 
-        if let photoURLString = category.photo.url,
-            photoURL = NSURL(string: photoURLString) {
-            cell.photo?.sd_setImageWithURL(photoURL)
+        guard let eventPhoto = contentDataSource[key]?.first else {
+            return cell
         }
 
-        if let fetchingDataIndexPath = self.fetchingDataIndexPath where fetchingDataIndexPath == indexPath {
-            cell.showActivityIndicator()
-        } else {
-            cell.hideActivityIndicator()
+        cell.name?.text = eventPhoto.name
+
+        if let photoURLString = eventPhoto.photo.url,
+            photoURL = NSURL(string: photoURLString) {
+            cell.photo?.sd_setImageWithURL(photoURL)
         }
 
         return cell
     }
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        guard let cell = tableView.dequeueReusableCellWithIdentifier(EventPhotoTableViewCell.flatReuseIdentifier, forIndexPath: indexPath) as? EventPhotoTableViewCell else {
-            return
-        }
+        let key = Array(contentDataSource.keys)[indexPath.row]
 
-        fetchDataForIndexPath(indexPath)
-
-        let category = categories[indexPath.row]
-
-        if let photoURLString = category.photo.url,
-            photoURL = NSURL(string: photoURLString) {
-            cell.photo?.sd_setImageWithURL(photoURL)
-        }
-    }
-
-    func fetchDataForIndexPath(indexPath: NSIndexPath) {
-        guard let  vc = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("PhotosTableViewController") as? PhotosTableViewController else {
-            return
-        }
-
-        fetchingDataIndexPath = indexPath
-        photos.reloadData()
-
-        let category = categories[indexPath.row]
-
-        ParseHelper.getEventPhotos(category) { [weak self] photos, error in
-            self?.fetchingDataIndexPath = nil
-            self?.photos.reloadData()
-
-            guard let photos = photos
-                where error == nil else {
-                    MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
-
-                    return
-            }
-
-            if photos.isEmpty {
-                self?.delegate.madeEventPictureChoice(category.photo, pickedPhoto: nil)
-                self?.navigationController?.popViewControllerAnimated(true)
-
+        guard let  vc = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("PhotosTableViewController") as? PhotosTableViewController,
+            eventPhotos = contentDataSource[key] else {
                 return
-            }
-
-            vc.delegate = self
-            vc.category = category
-            vc.eventPhotos = photos
-
-            self?.navigationController?.pushViewController(vc, animated: true)
         }
+
+        vc.delegate = self
+        vc.eventPhotos = eventPhotos
+        
+        navigationController?.pushViewController(vc, animated: true)
     }
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {

@@ -43,6 +43,9 @@ class EventsTableViewCell: UITableViewCell {
             button.setNeedsLayout()
             button.layoutIfNeeded()
             button.layer.cornerRadius = author.bounds.width / 2
+            button.imageView?.contentMode = .ScaleAspectFill
+            button.clipsToBounds = true
+            button.backgroundColor = UIColor(red:0.94, green:0.94, blue:0.96, alpha:1.00)
         }
 
         self.attendeesButtons = attendeesButtons
@@ -59,6 +62,32 @@ class EventsTableViewCell: UITableViewCell {
 
         for button in [author, attended1, attended2, attended3, attended4] {
             button.setImage(nil, forState: .Normal)
+
+            button.hidden = button != author
+        }
+    }
+    
+    override func setHighlighted(highlighted: Bool, animated: Bool) {
+        super.setHighlighted(highlighted, animated: animated)
+        
+        if self.attendeesButtons == nil {
+            return
+        }
+        
+        for button in attendeesButtons! {
+            button.backgroundColor = UIColor(red:0.94, green:0.94, blue:0.96, alpha:1.00)
+        }
+    }
+    
+    override func setSelected(selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        
+        if self.attendeesButtons == nil {
+            return
+        }
+        
+        for button in attendeesButtons! {
+            button.backgroundColor = UIColor(red:0.94, green:0.94, blue:0.96, alpha:1.00)
         }
     }
 }

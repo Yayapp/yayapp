@@ -82,7 +82,11 @@ class Event: Object {
     }
     var photo: File! {
         get {
-            return File(parseFile: parseObject?.objectForKey("photo") as! PFFile) ?? File()
+            if let parseObject = parseObject {
+                return File(parseFile: parseObject.objectForKey("photo") as! PFFile)
+            } else {
+                return File()
+            }
         }
         set {
             guard let photo = newValue.parseFile else {

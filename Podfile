@@ -25,3 +25,4 @@ pod "ActionSheetPicker-3.0"
 pod "Branch"
 pod 'Fabric'
 pod 'Crashlytics'
+pod 'WYPopoverController', :git => 'https://github.com/sammcewan/WYPopoverController.git'

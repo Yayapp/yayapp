@@ -85,9 +85,9 @@ class Message: Object, Notification {
     
     func getTitle() -> String {
         if event != nil {
-            return "\(user.name) in \(event!.name)"
+            return "\(user.name ?? "") in \(event!.name ?? "")"
         } else {
-            return "\(user.name) in \(group!.name)"
+            return "\(user.name ?? "") in \(group!.name ?? "")"
         }
     }
     

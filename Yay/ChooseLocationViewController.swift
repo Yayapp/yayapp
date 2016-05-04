@@ -104,5 +104,19 @@ class ChooseLocationViewController: UIViewController, CLLocationManagerDelegate,
         }
     }
 
+    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
+        let pin = mapView.dequeueReusableAnnotationViewWithIdentifier("myPin") as? MKPinAnnotationView ?? MKPinAnnotationView(annotation: annotation, reuseIdentifier: "myPin")
+
+        pin.animatesDrop = true
+        pin.draggable = true
+
+        return pin
+    }
+
+    func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, didChangeDragState newState: MKAnnotationViewDragState, fromOldState oldState: MKAnnotationViewDragState) {
+        if newState == .Ending {
+            mapView.showsUserLocation = false
+        }
+    }
 }
 

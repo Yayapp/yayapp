@@ -29,3 +29,4 @@
 #import <Branch/Branch.h>
 #import <Branch/BranchUniversalObject.h>
 #import <Branch/BranchLinkProperties.h>
+#import <WYPopoverController/WYPopoverController.h>

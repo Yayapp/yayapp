@@ -42,7 +42,8 @@ class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate
     @IBOutlet weak var privateButton: UIButton!
     
     @IBOutlet weak var createButton: UIButton!
-    
+    var deleteGroupButton: UIBarButtonItem!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         name.delegate = self
@@ -57,9 +58,18 @@ class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate
 
         let submitButtonTitle = isEditMode ? NSLocalizedString("Save", comment: "") : NSLocalizedString("Create Group & Invite Friends", comment: "")
         createButton.setTitle(submitButtonTitle, forState: .Normal)
+
+        if isEditMode && group?.owner?.objectId == ParseHelper.sharedInstance.currentUser?.objectId {
+            deleteGroupButton = UIBarButtonItem(title: NSLocalizedString("Delete", comment: ""),
+                                                style: .Plain,
+                                                target: self,
+                                                action: #selector(CreateGroupViewController.deleteGroup))
+            deleteGroupButton.setTitleTextAttributes([NSForegroundColorAttributeName : UIColor.redColor()], forState: .Normal)
+            navigationItem.setRightBarButtonItem(deleteGroupButton, animated: false)
+        }
     }
-    
-    
+
+
     func update() {
         ParseHelper.fetchObject(group!, completion: {
             result, error in
@@ -86,14 +96,12 @@ class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate
         privateButton.backgroundColor = UIColor.whiteColor()
         publicButton.backgroundColor = Color.PrimaryActiveColor
         isPrivate = false
-        location.hidden = true
     }
     
     @IBAction func privateAction(sender: AnyObject) {
         privateButton.backgroundColor = Color.PrimaryActiveColor
         publicButton.backgroundColor = UIColor.whiteColor()
         isPrivate = true
-        location.hidden = false
     }
 
     @IBAction func addLocationButtonPressed(sender: AnyObject) {
@@ -204,11 +212,9 @@ class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate
                 thumbImageData = UIImageJPEGRepresentation(resizedImage, 0.85) {
                 group.photoThumb = File(data: thumbImageData)
             }
-            
-            if isPrivate {
-                if let latitude = latitude, longitude = longitude {
-                    group.location = GeoPoint(latitude: latitude, longitude: longitude)
-                }
+
+            if let latitude = latitude, longitude = longitude {
+                group.location = GeoPoint(latitude: latitude, longitude: longitude)
             }
 
             ParseHelper.saveObject(group, completion: {
@@ -221,6 +227,30 @@ class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate
                     self.createButton.enabled = false
                 }
             })
+        }
+    }
+
+    func deleteGroup() {
+        SVProgressHUD.show()
+
+        ParseHelper.deleteObject(group, completion: { [weak self] _, error in
+            SVProgressHUD.dismiss()
+
+            guard error == nil else {
+                MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
+
+                return
+            }
+
+            self?.performSegueWithIdentifier("chooseCategorySegue", sender: self)
+            })
+    }
+
+    //MARK: - Segue
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if let chooseCategoryVC = segue.destinationViewController as? ChooseCategoryViewController
+            where segue.identifier == "chooseCategorySegue" {
+            chooseCategoryVC.loadContent()
         }
     }
 }

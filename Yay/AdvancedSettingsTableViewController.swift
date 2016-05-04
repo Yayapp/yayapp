@@ -33,8 +33,8 @@ class AdvancedSettingsTableViewController: UITableViewController {
 
         blurryAlertViewController.action = BlurryAlertViewController.BUTTON_DELETE
         blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
-        blurryAlertViewController.aboutText = "Sorry, are you sure you want to delete your profile?"
-        blurryAlertViewController.messageText = "You'll need another invite to start a new profile again."
+        blurryAlertViewController.aboutText = "Are you sure you want to delete your profile?"
+        blurryAlertViewController.messageText = ""
 
         blurryAlertViewController.onUserLoggedOut = { [weak self] error in
             if error == nil {

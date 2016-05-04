@@ -44,9 +44,7 @@ class MainRootViewController: UIViewController, MFMailComposeViewControllerDeleg
         imageView.contentMode = .ScaleAspectFit
         imageView.image = image
         self.navigationItem.titleView = imageView
-    }
-    
-    override func viewWillAppear(animated: Bool) {
+
         guard let _ = ParseHelper.sharedInstance.currentUser else {
             return
         }

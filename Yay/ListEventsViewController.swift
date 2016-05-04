@@ -19,6 +19,7 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
     var currentTitle:String?
     let dateFormatter = NSDateFormatter()
     var currentLocation:CLLocation?
+    var introPopover: WYPopoverController?
     
     
     @IBOutlet weak var events: UITableView!
@@ -51,6 +52,21 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
 
         dateFormatter.dateFormat = "EEE dd MMM '@' H:mm"
         title = currentTitle
+        
+        if let introController = self.storyboard?.instantiateViewControllerWithIdentifier(IntroViewController.storyboardID) as? IntroViewController {
+            self.introPopover = WYPopoverController(contentViewController: introController)
+            self.introPopover?.beginThemeUpdates()
+            self.introPopover?.theme.overlayColor = UIColor.whiteColor().colorWithAlphaComponent(0.5)
+            self.introPopover?.endThemeUpdates()
+            
+            if let tabbarController = self.tabBarController,
+                let controllersCount = tabbarController.viewControllers?.count
+            {
+                let elementWidth = CGRectGetWidth(self.view.bounds) / CGFloat(controllersCount)
+                
+                self.introPopover?.presentPopoverFromRect(CGRectMake(elementWidth / 2, CGRectGetHeight(self.view.bounds) - CGRectGetHeight(tabbarController.tabBar.bounds), 1, 1), inView: self.view, permittedArrowDirections: .Down, animated: false, options: .Fade)
+            }
+        }
 
         guard let currentPFLocation = currentUser.location else {
             return
@@ -150,7 +166,7 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
         cllocation.getLocationString(cell.location, button: nil, timezoneCompletion: nil)
 
         cell.date.text = dateFormatter.stringFromDate(event.startDate)
-        cell.howFar.text = "\(distanceStr)km"
+        cell.howFar.text = distanceBetween > 0 ? "\(distanceStr)km" : nil
         
         if let photoURLString = event.photo.url,
             photoURL = NSURL(string: photoURLString) {
@@ -206,12 +222,14 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
             })
         }
         
-        if attendeeButtons.count > attendeeIDs.count && event.owner!.objectId != ParseHelper.sharedInstance.currentUser?.objectId && attendeeIDs.count < (event.limit-1){
+        if attendeeButtons.count > attendeeIDs.count && event.owner!.objectId != ParseHelper.sharedInstance.currentUser?.objectId && attendeeIDs.count < (event.limit-1) && !allAttendeeIDsWithoutOwner.contains(ParseHelper.sharedInstance.currentUser!.objectId!)
+        {
             let attendeeButton = attendeeButtons[attendeeIDs.count]
+            attendeeButton.removeTarget(nil, action: nil, forControlEvents: .AllEvents)
             attendeeButton.addTarget(self, action: "join:", forControlEvents: .TouchUpInside)
-            attendeeButton.setTitle("Join", forState: .Normal)
+            attendeeButton.setTitle("JOIN", forState: .Normal)
             attendeeButton.hidden = false
-            attendeeButton.tag = indexPath.row
+            attendeeButton.tag = indexPath.section
         }
         
         return cell
@@ -235,6 +253,8 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
     }
     
     @IBAction func join(sender: UIButton) {
+        sender.hidden = true
+
         let event:Event! = eventsData[sender.tag]
         if let user = ParseHelper.sharedInstance.currentUser {
             ParseHelper.fetchObject(event, completion: {
@@ -248,9 +268,7 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
                 request.attendee = user
                 request.ACL = requestACL
                 ParseHelper.saveObject(request, completion: nil)
-                
-                sender.hidden = true
-                
+
                 guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as? BlurryAlertViewController else {
                     return
                 }
@@ -287,7 +305,10 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
             return
         }
 
-        userProfileViewController.userID = event.attendeeIDs[(sender.titleLabel?.tag)!]
+        let allAttendeeIDsWithoutOwner = event.attendeeIDs.filter({ $0 != event.owner!.objectId })
+        let attendeeIDs = allAttendeeIDsWithoutOwner[0..<min(allAttendeeIDsWithoutOwner.count, 4)]
+
+        userProfileViewController.userID = attendeeIDs[(sender.titleLabel?.tag)!]
         
         navigationController?.pushViewController(userProfileViewController, animated: true)
     }

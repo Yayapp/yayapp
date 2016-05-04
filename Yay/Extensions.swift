@@ -109,6 +109,19 @@ extension CLLocation {
                     }
                     cityCountry.appendString(zip)
                 }
+
+                if let subLocality = placeMark.subLocality {
+                    cityCountry.appendString("\(cityCountry.length > 0 ? ", " : "")\(subLocality)")
+                }
+
+                if let locality = placeMark.locality {
+                    cityCountry.appendString("\(cityCountry.length > 0 ? ", " : "")\(locality)")
+                }
+
+                if let administrativeArea = placeMark.administrativeArea {
+                    cityCountry.appendString("\(cityCountry.length > 0 ? ", " : "")\(administrativeArea)")
+                }
+
                 if cityCountry.length > 0 {
                     if label != nil {
                         label!.text = cityCountry as String

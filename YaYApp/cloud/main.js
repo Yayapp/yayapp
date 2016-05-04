@@ -290,6 +290,8 @@ Parse.Cloud.afterSave("Request", function(request) {
                                                   }});
                                   
                                   } else if (accepted) {
+                                      var acceptedState = accepted ? "accepted" : "declined"
+
                                   user.fetch({
                                              success: function(user) {
                                              if (user.get('attAccepted') == true){
@@ -299,7 +301,7 @@ Parse.Cloud.afterSave("Request", function(request) {
                                              Parse.Push.send({
                                                              where: pushQuery,
                                                              data: {
-                                                             alert: "Attendance to happening \"" + eventName + "\" accepted",
+                                                             alert: "Attendance to happening \"" + eventName + "\"" + acceptedState,
                                                              "content-available": 1,
                                                              "sound":"layerbell.caf"
                                                              }

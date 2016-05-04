@@ -73,7 +73,8 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
         dateFormatter.dateFormat = "EEE dd MMM 'at' H:mm"
 
         title = isEditMode ? NSLocalizedString("Edit Event", comment: "") : NSLocalizedString("Create Event", comment: "")
-        leftNavigationButton.setTitle(isEditMode ? NSLocalizedString("back", comment: "") : NSLocalizedString("reset", comment: ""), forState: .Normal)
+        leftNavigationButton.setTitle(NSLocalizedString("back", comment: ""), forState: .Normal)
+        leftNavigationButton.hidden = event == nil
         createButton.setTitle(isEditMode ? NSLocalizedString("Save", comment: "") : NSLocalizedString("Create Event & Invite Friends", comment: ""), forState: .Normal)
         
         if event != nil {
@@ -131,6 +132,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
             self.madeDateTimeChoice(date)
             }, cancelBlock: { ActionStringCancelBlock in return }, origin: self.view)
 
+        datePicker.minimumDate = NSDate()
         datePicker.minuteInterval = 1
         datePicker.showActionSheetPicker()
     }
@@ -157,11 +159,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
     }
     
     @IBAction func leftNavigationButtonPressed(sender: UIButton) {
-        if (isEditMode) {
-            navigationController?.popViewControllerAnimated(true)
-        } else {
-            resetContent()
-        }
+        navigationController?.popViewControllerAnimated(true)
     }
 
     func resetContent() {
