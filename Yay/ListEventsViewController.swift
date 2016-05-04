@@ -19,8 +19,7 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
     var currentTitle:String?
     let dateFormatter = NSDateFormatter()
     var currentLocation:CLLocation?
-    var introPopover: WYPopoverController?
-    
+
     
     @IBOutlet weak var events: UITableView!
     
@@ -52,21 +51,6 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
 
         dateFormatter.dateFormat = "EEE dd MMM '@' H:mm"
         title = currentTitle
-        
-        if let introController = self.storyboard?.instantiateViewControllerWithIdentifier(IntroViewController.storyboardID) as? IntroViewController {
-            self.introPopover = WYPopoverController(contentViewController: introController)
-            self.introPopover?.beginThemeUpdates()
-            self.introPopover?.theme.overlayColor = UIColor.whiteColor().colorWithAlphaComponent(0.5)
-            self.introPopover?.endThemeUpdates()
-            
-            if let tabbarController = self.tabBarController,
-                let controllersCount = tabbarController.viewControllers?.count
-            {
-                let elementWidth = CGRectGetWidth(self.view.bounds) / CGFloat(controllersCount)
-                
-                self.introPopover?.presentPopoverFromRect(CGRectMake(elementWidth / 2, CGRectGetHeight(self.view.bounds) - CGRectGetHeight(tabbarController.tabBar.bounds), 1, 1), inView: self.view, permittedArrowDirections: .Down, animated: false, options: .Fade)
-            }
-        }
 
         guard let currentPFLocation = currentUser.location else {
             return
@@ -85,6 +69,25 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+
+        if let popoverController = storyboard?.instantiateViewControllerWithIdentifier(PopoverViewController.storyboardID) as? PopoverViewController,
+            let controllersCount = tabBarController?.viewControllers?.count
+            where DataProxy.sharedInstance.needsShowEventsListTabHint {
+                let elementWidth = CGRectGetWidth(view.bounds) / CGFloat(controllersCount)
+
+                popoverController.arrowViewLeadingSpace = elementWidth / 2 - 20
+                popoverController.text = NSLocalizedString("Looks like nothing is happening! We can help with that! Let's see what interest groups you'd like to be a part of, so you can start socializing. ;)", comment: "")
+                popoverController.submitButtonTitle = NSLocalizedString("Next Step (1/4)", comment: "")
+
+                popoverController.skipButtonHidden = true
+                popoverController.onSubmitPressed = { [weak self] in
+                    self?.presentedViewController?.dismissViewControllerAnimated(false, completion: nil)
+                    self?.tabBarController?.selectedIndex = 1
+                }
+
+                DataProxy.sharedInstance.needsShowEventsListTabHint = false
+                presentViewController(popoverController, animated: false, completion: nil)
+        }
 
         guard let invitedEventID = DataProxy.sharedInstance.invitedEventID else {
             return

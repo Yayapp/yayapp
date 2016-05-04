@@ -102,6 +102,8 @@ class CreateEmailAccountViewController: UIViewController {
                         MessageToUser.showDefaultErrorMessage(error.localizedDescription)
                     }
                 } else {
+                    DataProxy.sharedInstance.setNeedsShowAllHints(true)
+
                     self.proceed()
                 }
             })

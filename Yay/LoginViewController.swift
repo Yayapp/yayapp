@@ -97,8 +97,9 @@ class LoginViewController: UIViewController, InstagramDelegate {
     func proceed(){
         SVProgressHUD.dismiss()
 
-        if let currentInstallation = ParseHelper.sharedInstance.currentInstallation {
-            currentInstallation.user = ParseHelper.sharedInstance.currentUser
+        if let currentInstallation = ParseHelper.sharedInstance.currentInstallation,
+        currentUser = ParseHelper.sharedInstance.currentUser {
+            currentInstallation.user = currentUser
             ParseHelper.saveObject(currentInstallation, completion: nil)
         }
 
@@ -170,6 +171,8 @@ class LoginViewController: UIViewController, InstagramDelegate {
                             ParseHelper.sharedInstance.currentUser?.name = result.objectForKey("name")! as? String
                             
                             if user.isNew {
+                                DataProxy.sharedInstance.setNeedsShowAllHints(true)
+
                                 let fbUserId = result.objectForKey("id") as! String
                                 let url:NSURL = NSURL(string:"https://graph.facebook.com/\(fbUserId)/picture?width=200&height=200")!
               
@@ -208,6 +211,8 @@ class LoginViewController: UIViewController, InstagramDelegate {
             if let user = user {
                 
                 if user.isNew {
+                    DataProxy.sharedInstance.setNeedsShowAllHints(true)
+
                     let url:NSURL = NSURL(string:"https://api.twitter.com/1.1/users/show.json?screen_name=\(PFTwitterUtils.twitter()!.screenName!)")!
                     let request:NSMutableURLRequest = NSMutableURLRequest(URL:url)
                     PFTwitterUtils.twitter()?.signRequest(request)
@@ -253,6 +258,8 @@ class LoginViewController: UIViewController, InstagramDelegate {
             (pfuser: User?, error: NSError?) -> Void in
             if error != nil {
                 if(error!.code == 101) {
+                    DataProxy.sharedInstance.setNeedsShowAllHints(true)
+
                     let pfuser = User()
 
                     if let profilePictureURL = user.profilePictureURL,
@@ -316,8 +323,9 @@ class LoginViewController: UIViewController, InstagramDelegate {
                 SVProgressHUD.dismiss()
 
                 if user != nil {
-                    if let currentInstallation = ParseHelper.sharedInstance.currentInstallation {
-                        currentInstallation.user = ParseHelper.sharedInstance.currentUser
+                    if let currentInstallation = ParseHelper.sharedInstance.currentInstallation,
+                    currentUser = ParseHelper.sharedInstance.currentUser {
+                        currentInstallation.user = currentUser
                         ParseHelper.saveObject(ParseHelper.sharedInstance.currentInstallation, completion: nil)
                     }
                     if user?.location == nil {

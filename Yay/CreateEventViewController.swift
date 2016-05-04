@@ -57,6 +57,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
     @IBOutlet weak var attendee4: UIButton!
     
     @IBOutlet weak var leftNavigationButton: UIButton!
+    @IBOutlet weak var dimmingView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -85,6 +86,45 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
             avatarURL = NSURL(string: avatarURLString) {
             self.author.sd_setImageWithURL(avatarURL, forState: .Normal)
         }
+    }
+
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+
+        guard DataProxy.sharedInstance.needsShowCreateEventTabHint else {
+            return
+        }
+
+        dimmingView.hidden = false
+
+        let titleImageView = UIImageView(image: UIImage(named: "logoInactive"))
+        titleImageView.contentMode = .ScaleAspectFit
+        titleImageView.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
+        navigationItem.titleView = titleImageView
+
+        if let popoverController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(PopoverViewController.storyboardID) as? PopoverViewController,
+            let controllersCount = tabBarController?.viewControllers?.count {
+            let elementWidth = CGRectGetWidth(view.bounds) / CGFloat(controllersCount)
+
+            popoverController.arrowViewLeadingSpace = elementWidth * 3 - (elementWidth / 2) - 20
+            popoverController.text = NSLocalizedString("Want to make something happen? Get a small group together for dinner, a festival, the museum, a show, drinks or a night out on the town?", comment: "")
+            popoverController.submitButtonTitle = NSLocalizedString("Create Event (3/4)", comment: "")
+            popoverController.onSubmitPressed = { [weak self] in
+                self?.handlePopoverDismiss()
+            }
+            popoverController.onSkipPressed = { [weak self] in
+                self?.handlePopoverDismiss()
+            }
+
+            DataProxy.sharedInstance.needsShowCreateEventTabHint = false
+            presentViewController(popoverController, animated: false, completion: nil)
+        }
+    }
+
+    func handlePopoverDismiss() {
+        presentedViewController?.dismissViewControllerAnimated(true, completion: nil)
+        dimmingView.hidden = true
+        navigationItem.titleView = nil
     }
 
     deinit {
@@ -341,17 +381,35 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
                         }
 
                         self.spinner.stopAnimating()
-                        self.tabBarController?.selectedIndex = 0
-                        
-                        guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as? BlurryAlertViewController else {
-                            return
+
+                        if !self.isEditMode {
+                            if DataProxy.sharedInstance.needsShowInviteHint {
+                                if let shareEventHintVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(ShareEventHintViewController.storyboardID) as? ShareEventHintViewController {
+                                    shareEventHintVC.event = self.event
+                                    shareEventHintVC.onCancelPressed = { [weak self] in
+                                        self?.presentedViewController?.dismissViewControllerAnimated(false, completion: nil)
+                                        self?.tabBarController?.selectedIndex = 0
+                                    }
+
+                                    DataProxy.sharedInstance.needsShowInviteHint = false
+                                    self.presentViewController(shareEventHintVC, animated: true, completion: nil)
+                                }
+                            } else {
+                                guard let shareItemVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(ShareItemViewController.storyboardID) as? ShareItemViewController else {
+                                    return
+                                }
+
+                                shareItemVC.modalPresentationStyle = .OverCurrentContext
+                                shareItemVC.modalTransitionStyle = .CrossDissolve
+                                shareItemVC.item = self.event
+                                shareItemVC.onCancelPressed = { [weak self] in
+                                    self?.presentedViewController?.dismissViewControllerAnimated(false, completion: nil)
+                                    self?.tabBarController?.selectedIndex = 0
+                                }
+                                
+                                self.presentViewController(shareItemVC, animated: true, completion: nil)
+                            }
                         }
-                        
-                        blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
-                        blurryAlertViewController.modalPresentationStyle = .CurrentContext
-                        let action = self.isEditMode ? "updated" : "created"
-                        blurryAlertViewController.aboutText = NSLocalizedString("This event was successfully " + action + ".", comment: "")
-                        self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
                     })
                 } else {
                     self.spinner.stopAnimating()

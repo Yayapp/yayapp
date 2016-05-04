@@ -231,19 +231,24 @@ class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate
     }
 
     func deleteGroup() {
-        SVProgressHUD.show()
+        let deleteGroupAlert = UIAlertController(title: nil, message: NSLocalizedString("Are you sure you want to delete your group?", comment: ""), preferredStyle: .Alert)
+        deleteGroupAlert.addAction(UIAlertAction(title: NSLocalizedString("Delete", comment: ""), style: .Destructive, handler: { [unowned self] _ in
+            SVProgressHUD.show()
 
-        ParseHelper.deleteObject(group, completion: { [weak self] _, error in
-            SVProgressHUD.dismiss()
+            ParseHelper.deleteObject(self.group, completion: { [weak self] _, error in
+                SVProgressHUD.dismiss()
 
-            guard error == nil else {
-                MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
+                guard error == nil else {
+                    MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
 
-                return
-            }
+                    return
+                }
 
-            self?.performSegueWithIdentifier("chooseCategorySegue", sender: self)
-            })
+                self?.performSegueWithIdentifier("chooseCategorySegue", sender: self)
+                })
+        }))
+        deleteGroupAlert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .Cancel, handler: nil))
+        presentViewController(deleteGroupAlert, animated: true, completion: nil)
     }
 
     //MARK: - Segue

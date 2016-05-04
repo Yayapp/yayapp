@@ -16,6 +16,7 @@ class ShareItemViewController: UIViewController, MFMessageComposeViewControllerD
     
     var item: Object?
     var generatedShortURL: String?
+    var onCancelPressed: (() -> ())?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -114,7 +115,11 @@ class ShareItemViewController: UIViewController, MFMessageComposeViewControllerD
     }
 
     @IBAction func cancelButtonPressed(sender: AnyObject) {
-        dismissViewControllerAnimated(true, completion: nil)
+        if let onCancelPressed = onCancelPressed {
+            onCancelPressed()
+        } else {
+            dismissViewControllerAnimated(true, completion: nil)
+        }
     }
 
     //MARK: - Helpers

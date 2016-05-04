@@ -63,6 +63,23 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 
+        if let popoverController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(PopoverViewController.storyboardID) as? PopoverViewController,
+            let controllersCount = tabBarController?.viewControllers?.count
+            where DataProxy.sharedInstance.needsShowGroupsTabHint {
+            let elementWidth = CGRectGetWidth(view.bounds) / CGFloat(controllersCount)
+
+            popoverController.arrowViewLeadingSpace = elementWidth * 2 - (elementWidth / 2) - 20
+            popoverController.text = NSLocalizedString("Request to join group that interest you. Don't see anything that you're into?  Then, create your own private group!", comment: "")
+            popoverController.submitButtonTitle = NSLocalizedString("Choose Group (2/4)", comment: "")
+            popoverController.skipButtonHidden = true
+            popoverController.onSubmitPressed = { [weak self] in
+                self?.presentedViewController?.dismissViewControllerAnimated(true, completion: nil)
+            }
+
+            DataProxy.sharedInstance.needsShowGroupsTabHint = false
+            presentViewController(popoverController, animated: false, completion: nil)
+        }
+
         if needsRefreshContent {
             loadContent()
         }

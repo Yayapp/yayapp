@@ -19,6 +19,9 @@
 		310553F21CCE2C1800EAB1BA /* ShareItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 310553F11CCE2C1800EAB1BA /* ShareItemViewController.swift */; };
 		3112B11F1CAABD7900AE064F /* EventsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3112B11D1CAABD7900AE064F /* EventsTableViewCell.swift */; };
 		3112B1201CAABD7900AE064F /* EventsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3112B11E1CAABD7900AE064F /* EventsTableViewCell.xib */; };
+		311F6B611CD9F51800DFA62E /* PopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 311F6B601CD9F51800DFA62E /* PopoverViewController.swift */; };
+		311F6B631CDA010600DFA62E /* TriangleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 311F6B621CDA010600DFA62E /* TriangleView.swift */; };
+		311F6B651CDA271300DFA62E /* ShareEventHintViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 311F6B641CDA271300DFA62E /* ShareEventHintViewController.swift */; };
 		3123A4321CB3FA0C000AC147 /* PFUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3123A4311CB3FA0C000AC147 /* PFUser.swift */; };
 		3123A4341CB40486000AC147 /* PFObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3123A4331CB40486000AC147 /* PFObject.swift */; };
 		3123A4381CB4EF7D000AC147 /* PFGeoPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3123A4371CB4EF7D000AC147 /* PFGeoPoint.swift */; };
@@ -138,6 +141,9 @@
 		310553F11CCE2C1800EAB1BA /* ShareItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareItemViewController.swift; sourceTree = "<group>"; };
 		3112B11D1CAABD7900AE064F /* EventsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsTableViewCell.swift; sourceTree = "<group>"; };
 		3112B11E1CAABD7900AE064F /* EventsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventsTableViewCell.xib; sourceTree = "<group>"; };
+		311F6B601CD9F51800DFA62E /* PopoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopoverViewController.swift; sourceTree = "<group>"; };
+		311F6B621CDA010600DFA62E /* TriangleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TriangleView.swift; sourceTree = "<group>"; };
+		311F6B641CDA271300DFA62E /* ShareEventHintViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareEventHintViewController.swift; sourceTree = "<group>"; };
 		3123A4311CB3FA0C000AC147 /* PFUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PFUser.swift; sourceTree = "<group>"; };
 		3123A4331CB40486000AC147 /* PFObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PFObject.swift; sourceTree = "<group>"; };
 		3123A4371CB4EF7D000AC147 /* PFGeoPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PFGeoPoint.swift; sourceTree = "<group>"; };
@@ -163,6 +169,7 @@
 		3160BA951CAA693400047691 /* global.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = global.json; sourceTree = "<group>"; };
 		3160BA971CAA693400047691 /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		31633E511CCE59D1009C6075 /* DataProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataProxy.swift; sourceTree = "<group>"; };
+		316F304E1CCE1DED001C7DC2 /* Friendzi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Friendzi.entitlements; sourceTree = "<group>"; };
 		31CD15A41CBBD3BC00B5BE26 /* privacyPolicy.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = privacyPolicy.html; sourceTree = "<group>"; };
 		31CD15A61CBBD52200B5BE26 /* termsOfService.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = termsOfService.html; sourceTree = "<group>"; };
 		31CEAC9D1CB28C6800A51F8E /* UIStoryboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIStoryboard.swift; sourceTree = "<group>"; };
@@ -262,6 +269,7 @@
 		3112B1191CAABD3F00AE064F /* View */ = {
 			isa = PBXGroup;
 			children = (
+				311F6B621CDA010600DFA62E /* TriangleView.swift */,
 				31D375211CC0FB38007B7189 /* TextField.swift */,
 				31CEACA11CB2A56900A51F8E /* Storyboards */,
 				31DF59851CAE72D100621F54 /* EventPhotoCell */,
@@ -510,6 +518,7 @@
 		995032621B564B4400D792C5 = {
 			isa = PBXGroup;
 			children = (
+				316F304E1CCE1DED001C7DC2 /* Friendzi.entitlements */,
 				9950326D1B564B4400D792C5 /* Yay */,
 				9950326C1B564B4400D792C5 /* Products */,
 				7F1CE1198C8FF0D6E40770ED /* Pods */,
@@ -605,6 +614,8 @@
 				1F03CD031CCFA56C00C90055 /* ImageViewController.swift */,
 				7469FA411CD8057D0038E02E /* ReportViewController.swift */,
 				7469FA4C1CD947210038E02E /* IntroViewController.swift */,
+				311F6B601CD9F51800DFA62E /* PopoverViewController.swift */,
+				311F6B641CDA271300DFA62E /* ShareEventHintViewController.swift */,
 			);
 			name = controllers;
 			sourceTree = "<group>";
@@ -791,6 +802,7 @@
 				99509E8A1B9618FA003BF7CD /* PhotosTableViewController.swift in Sources */,
 				31D3751C1CC0F8F5007B7189 /* Request.swift in Sources */,
 				99EC40F81B5D90630093E484 /* Prefs.swift in Sources */,
+				311F6B651CDA271300DFA62E /* ShareEventHintViewController.swift in Sources */,
 				31D375221CC0FB38007B7189 /* TextField.swift in Sources */,
 				31D3750F1CC0F8F5007B7189 /* Block.swift in Sources */,
 				99EC40FC1B5FFB4A0093E484 /* InstagramViewController.swift in Sources */,
@@ -837,6 +849,7 @@
 				31DF59871CAE72D100621F54 /* EventPhotoTableViewCell.swift in Sources */,
 				3123A4341CB40486000AC147 /* PFObject.swift in Sources */,
 				99253FF61B6ABBF40078B668 /* Extensions.swift in Sources */,
+				311F6B611CD9F51800DFA62E /* PopoverViewController.swift in Sources */,
 				31D3751B1CC0F8F5007B7189 /* Report.swift in Sources */,
 				9907A3591BCBEC0C00D98A6F /* Utils.swift in Sources */,
 				3160BA9F1CAA693400047691 /* Makefile in Sources */,
@@ -849,6 +862,7 @@
 				31D375151CC0F8F5007B7189 /* GeoPoint.swift in Sources */,
 				993D3ED91B8DCA900023B054 /* RequestsTableViewController.swift in Sources */,
 				3123A4321CB3FA0C000AC147 /* PFUser.swift in Sources */,
+				311F6B631CDA010600DFA62E /* TriangleView.swift in Sources */,
 				7469FA4D1CD947210038E02E /* IntroViewController.swift in Sources */,
 				997C23911B67B42D0070DDB2 /* ChooseCategoryViewController.swift in Sources */,
 				31D375181CC0F8F5007B7189 /* Notification.swift in Sources */,
@@ -1044,6 +1058,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Friendzi.entitlements;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				ENABLE_BITCODE = NO;
@@ -1098,6 +1113,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Friendzi.entitlements;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				ENABLE_BITCODE = NO;
