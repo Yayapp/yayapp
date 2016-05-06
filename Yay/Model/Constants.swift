@@ -11,6 +11,8 @@ import Foundation
 struct Constants {
     static let userDidLogoutNotification = "userDidLogoutNotification"
     static let userInvitedToEventNotification = "userInvitedToEventNotification"
+    static let groupPendingStatusChangedNotification = "groupPendingStatusChangedNotification"
+    static let eventPendingStatusChangedNotification = "eventPendingStatusChangedNotification"
 
     static let needsShowEventsListTabHintKey = "needsShowEventsListTabHint"
     static let needsShowGroupsTabHintKey = "needsShowGroupsTabHint"

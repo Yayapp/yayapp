@@ -9,7 +9,7 @@
 import UIKit
 import MessageUI
 
-class MainRootViewController: UIViewController, MFMailComposeViewControllerDelegate, EventCreationDelegate, ListEventsDelegate {
+class MainRootViewController: UIViewController, MFMailComposeViewControllerDelegate, EventChangeDelegate, ListEventsDelegate {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     var rightSwitchBarButtonItem:UIBarButtonItem?
@@ -124,11 +124,17 @@ class MainRootViewController: UIViewController, MFMailComposeViewControllerDeleg
             presentViewController(vc, animated: true, completion: nil)
         }
     }
+
+    //MARK: - EventChangeDelegate
     
     func eventCreated(event:Event) {
         segmentChanged()
     }
-    
+
+    func eventChanged(event: Event) { }
+
+    func eventRemoved(event: Event) { }
+
     @IBAction func today(sender: AnyObject) {
         setupUIForTodayTab()
         segmentChanged()

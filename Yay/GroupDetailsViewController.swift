@@ -9,7 +9,6 @@
 import UIKit
 import MessageUI
 
-
 protocol GroupChangeDelegate : NSObjectProtocol {
     func groupChanged(group:Category)
     func groupRemoved(group:Category)
@@ -55,12 +54,40 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
     @IBOutlet weak var descr: UITextView!
     @IBOutlet weak var switherPlaceholderTopSpace: NSLayoutConstraint!
 
-    var attendedThisGroup: Bool?
+    private var attendState: AttendState = .Hidden {
+        didSet {
+            attendButton.hidden = attendState == .Hidden
+            attendButtonHeight.constant = attendState == .Hidden ? 0 : 35
+
+            switch (attendState) {
+            case .Pending:
+                attendButton.setTitle(NSLocalizedString("Pending...", comment: ""), forState: .Normal)
+                attendButton.backgroundColor = .appOrangeColor()
+
+            case .Join:
+                attendButton.setTitle(NSLocalizedString("Join Group", comment: ""), forState: .Normal)
+                attendButton.backgroundColor = .appBlackColor()
+
+            case .Leave:
+                attendButton.setTitle(NSLocalizedString("Leave", comment: ""), forState: .Normal)
+                attendButton.backgroundColor = .appBlackColor()
+
+            default:
+                break
+            }
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        NSNotificationCenter.defaultCenter().addObserver(self,
+                                                         selector: #selector(updateAttendUI),
+                                                         name: Constants.groupPendingStatusChangedNotification,
+                                                         object: nil)
+
         chatButton.enabled = false
+        attendState = .Hidden
 
         switherPlaceholderTopSpace.constant = view.bounds.width / 160 * 91
         
@@ -104,7 +131,9 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
 
         ParseHelper.fetchObject(group, completion: { [weak self] fetchedObject, error in
             guard let fetchedObject = fetchedObject,
-                fetchedGroup = Category(object: fetchedObject)
+                fetchedGroup = Category(object: fetchedObject),
+                fetchedGroupID = fetchedGroup.objectId,
+                currentUserID = ParseHelper.sharedInstance.currentUser?.objectId
                 where error == nil else {
                     MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
 
@@ -125,11 +154,8 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
                 self?.attendees = fetchedUsers
                 self?.attendeesButtons.reloadData()
 
-                if let currentUserID = ParseHelper.sharedInstance.currentUser?.objectId {
-                    self?.attendButton.setTitle(self?.attendTitle(fetchedGroup.attendeeIDs.contains(currentUserID)), forState: .Normal)
-                    let isAttendButtonHidden = currentUserID == fetchedGroup.owner?.objectId
-                    self?.attendButton.hidden = isAttendButtonHidden
-                    self?.attendButtonHeight.constant = isAttendButtonHidden ? 0 : 35
+                if ParseHelper.sharedInstance.currentUser == fetchedGroup.owner {
+                    self?.attendState = .Hidden
                 }
 
                 let currentLocation = ParseHelper.sharedInstance.currentUser!.location
@@ -156,35 +182,18 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
                     }
                 })
 
-                self?.attendedThisGroup = !(fetchedGroup.attendeeIDs.filter({$0 == ParseHelper.sharedInstance.currentUser?.objectId}).count == 0) || ParseHelper.sharedInstance.currentUser?.objectId == fetchedGroup.owner!.objectId
                 self?.chatButton.enabled = true
 
-                if(ParseHelper.sharedInstance.currentUser?.objectId != fetchedGroup.owner?.objectId) {
-
-                    if self?.attendedThisGroup != true {
-                        ParseHelper.getUserRequests(fetchedGroup, user: ParseHelper.sharedInstance.currentUser!, block: {
-                            result, error in
-                            if (error == nil) {
-                                if (result == nil || result!.isEmpty){
-                                    self?.attendButton.hidden = false
-                                } else {
-                                    self?.attendButton.hidden = true
-                                }
-                            } else {
-                                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-                            }
-                        })
-                    } else {
-                        self?.descr.hidden = true
-                        self?.attendButton.hidden = true
-                    }
-                }
                 self?.update()
             })
             })
         switchToDetails(true)
     }
-    
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+
     func update() {
         if let locationPF = self.group.location {
             let distanceBetween: CLLocationDistance = CLLocation(latitude: locationPF.latitude, longitude: locationPF.longitude).distanceFromLocation(self.currentLocation)
@@ -196,18 +205,42 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
         }
         self.title  = self.group.name
         self.name.text = self.group.name
+        descr.text = group.summary
 
         if let photoFile = group.owner?.avatar,
             photoURLString = photoFile.url,
             photoURL = NSURL(string: photoURLString) {
             photo.sd_setImageWithURL(photoURL)
         }
+
+        updateAttendUI()
+    }
+
+    func updateAttendUI() {
+        guard let currentUserID = ParseHelper.sharedInstance.currentUser?.objectId,
+            groupID = group.objectId else {
+                return
+        }
+
+        let isAttendedToGroup = group.attendeeIDs.contains(currentUserID)
+
+        if ParseHelper.sharedInstance.currentUser == group.owner {
+            attendState = .Hidden
+        } else if ParseHelper.sharedInstance.currentUser?.pendingGroupIDs.contains(groupID) == true {
+            attendState = .Pending
+        } else if isAttendedToGroup {
+            attendState = .Leave
+        } else {
+            attendState = .Join
+        }
+
+        descr.hidden = !isAttendedToGroup
     }
 
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1
     }
-    
+
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return attendees.count
     }
@@ -238,44 +271,30 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
         navigationController?.pushViewController(profileVC, animated: true)
     }
     
-    func attendTitle(isJoined: Bool) -> String {
-        return isJoined ? NSLocalizedString("Leave", comment: "") : NSLocalizedString("Join", comment: "")
-    }
-    
     @IBAction func attend(sender: UIButton) {
-        guard let user = ParseHelper.sharedInstance.currentUser else {
+        guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as? BlurryAlertViewController else {
             return
         }
 
-        if group.isPrivate {
-            attendButton.hidden = true
+        if attendState == .Pending || attendState == .Leave {
+            attendState = .Join
+        } else if attendState == .Join {
+            attendState = group.isPrivate ? .Pending : .Leave
+        }
 
-            ParseHelper.requestJoinGroup(group, completion: nil)
+        ParseHelper.changeStateOfCategory(group,
+                                          toJoined: attendState == .Leave || attendState == .Pending,
+                                          completion: nil)
+        updatedStatusInGroup?()
 
-            guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as? BlurryAlertViewController else {
-                return
-            }
-
+        if attendState == .Pending {
             blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
             blurryAlertViewController.modalPresentationStyle = .CurrentContext
 
             blurryAlertViewController.aboutText = NSLocalizedString("Your request has been sent.", comment: "")
             blurryAlertViewController.messageText = NSLocalizedString("We will notify you of the outcome.", comment: "")
 
-            presentViewController(blurryAlertViewController, animated: true, completion: nil)
-        } else {
-            let isJoined = attendees.contains(user)
-            self.attendButton.setTitle(attendTitle(!isJoined), forState: .Normal)
-
-            ParseHelper.changeStateOfCategory(group, toJoined: true, completion: { [weak self] _, error in
-                guard error == nil else {
-                    MessageToUser.showDefaultErrorMessage(NSLocalizedString("Error occurred in changing your status in current group.", comment: ""))
-
-                    return
-                }
-
-                self?.updatedStatusInGroup?()
-                })
+            self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
         }
     }
 
@@ -315,7 +334,8 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
     }
 
     @IBAction func switchToChat(sender: AnyObject) {
-        guard attendedThisGroup == true else {
+        guard let currentUserID = ParseHelper.sharedInstance.currentUser?.objectId
+        where group.attendeeIDs.contains(currentUserID) == true else {
             MessageToUser.showMessage(NSLocalizedString("Denied", comment: ""),
                                       textId: NSLocalizedString("You must be attended to this group", comment: ""))
 

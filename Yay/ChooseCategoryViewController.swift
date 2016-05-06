@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UISearchBarDelegate, GroupCreationDelegate {
+class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UISearchBarDelegate, GroupCreationDelegate, GroupChangeDelegate {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
@@ -35,7 +35,7 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         return searchController
     }()
     var searchControllerText: String?
-    var needsRefreshContent: Bool = false
+    var userDidLogout = false
 
     var categoriesData:[Category]! = []
     var privateCategoriesData:[Category]! = []
@@ -51,13 +51,17 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
                                                          selector: #selector(ChooseCategoryViewController.handleUserLogout),
                                                          name: Constants.userDidLogoutNotification,
                                                          object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self,
+                                                         selector: #selector(ChooseCategoryViewController.handleGroupPendingStatusChange),
+                                                         name: Constants.groupPendingStatusChangedNotification,
+                                                         object: nil)
 
         categories.registerNib(CategoryCollectionViewCell.nib, forCellWithReuseIdentifier: CategoryCollectionViewCell.reuseIdentifier)
 
         categories.delegate = self
         categories.dataSource = self
 
-        loadContent()
+        loadContent(needsSelectFirstTab: true)
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -80,20 +84,17 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
             presentViewController(popoverController, animated: false, completion: nil)
         }
 
-        if needsRefreshContent {
-            loadContent()
-        }
+        loadContent(needsSelectFirstTab: userDidLogout)
+        userDidLogout = false
     }
 
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self,
-                                                            name: Constants.userDidLogoutNotification,
-                                                            object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
     //MARK: - Content Loading
-    func loadContent() {
-        ParseHelper.getCategories({ (categoriesList: [Category]?, error: NSError?) in
+    func loadContent(needsSelectFirstTab needsSelectFirstTab: Bool) {
+        ParseHelper.getCategories({ [weak self] (categoriesList: [Category]?, error: NSError?) in
             guard let _ = ParseHelper.sharedInstance.currentUser where error == nil else {
                 if let error = error {
                     MessageToUser.showDefaultErrorMessage(error.localizedDescription)
@@ -102,9 +103,13 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
                 return
             }
 
-            self.categoriesData = categoriesList!
+            self?.categoriesData = categoriesList!
 
-            self.allAction(true)
+            if needsSelectFirstTab {
+                self?.allAction(true)
+            } else {
+                self?.categories.reloadData()
+            }
         })
     }
 
@@ -160,15 +165,17 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         cell.switched.tag = indexPath.row;
         
         cell.onSwitchValueChanged = { [unowned self] isSwitcherOn in
-            let category = self.categoryForIndexPath(indexPath)
-
-            if category.isPrivate {
-                ParseHelper.requestJoinGroup(category, completion: nil)
-
-                guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as? BlurryAlertViewController else {
+            guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as? BlurryAlertViewController else {
                     return
-                }
+            }
 
+            cell.switched.onTintColor = category.isPrivate ? .appOrangeColor() : .appGreenColor()
+
+            ParseHelper.changeStateOfCategory(category,
+                                              toJoined: isSwitcherOn,
+                                              completion: nil)
+
+            if category.isPrivate && isSwitcherOn {
                 blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
                 blurryAlertViewController.modalPresentationStyle = .CurrentContext
 
@@ -176,19 +183,27 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
                 blurryAlertViewController.messageText = NSLocalizedString("We will notify you of the outcome.", comment: "")
 
                 self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
-            } else {
-                ParseHelper.changeStateOfCategory(category,
-                                                  toJoined: true,
-                                                  completion: nil)
             }
         }
         
-        if let currentUserID = ParseHelper.sharedInstance.currentUser?.objectId {
-            cell.switched.on = category.attendeeIDs.contains(currentUserID)
-            
-            if let categoryOwnerId = category.owner?.objectId {
-                cell.switched.enabled = categoryOwnerId != currentUserID
+        if let currentUserID = ParseHelper.sharedInstance.currentUser?.objectId,
+            let categoryOwnerId = category.owner?.objectId,
+            categoryID = category.objectId {
+            let isSwitchOn = category.attendeeIDs.contains(currentUserID) || ParseHelper.sharedInstance.currentUser?.pendingGroupIDs.contains(categoryID) == true
+
+            cell.switched.on = isSwitchOn
+
+            if categoryOwnerId == currentUserID || !category.isPrivate {
+                cell.switched.onTintColor = .appGreenColor()
+            } else {
+                if isSwitchOn {
+                    cell.switched.onTintColor = ParseHelper.sharedInstance.currentUser?.pendingGroupIDs.contains(categoryID) == true ? .appOrangeColor() : .appGreenColor()
+                } else {
+                    cell.switched.onTintColor = category.isPrivate ? .appOrangeColor() : .appGreenColor()
+                }
             }
+
+            cell.switched.enabled = categoryOwnerId != currentUserID
         }
 
         return cell
@@ -311,6 +326,7 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
                 return
             }
 
+            vc.delegate = self
             vc.group = categoryForIndexPath(indexPath)
             vc.selectedCategoriesData = selectedCategoriesData
             vc.updatedStatusInGroup = {
@@ -320,6 +336,15 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
             where segue.identifier == "create" {
             vc.delegate = self
         }
+    }
+
+    //MARK: - GroupChangeDelegate
+    func groupChanged(group: Category) {
+        loadContent(needsSelectFirstTab: false)
+    }
+
+    func groupRemoved(group: Category) {
+        loadContent(needsSelectFirstTab: false)
     }
 
     //MARK: - Segue
@@ -345,7 +370,7 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
 
     //MARK: - Notification Handlers
     func handleUserLogout() {
-        needsRefreshContent = true
+        userDidLogout = true
         navigationController?.popToRootViewControllerAnimated(false)
         
         searchController.active = false
@@ -359,6 +384,10 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         selectedCategoryType = .All
 
         allAction(true)
+    }
+
+    func handleGroupPendingStatusChange() {
+        loadContent(needsSelectFirstTab: false)
     }
 }
 

@@ -2,7 +2,7 @@
 //  User.swift
 //  Friendzi
 //
-//  Created by Yuriy B. on 4/4/16.
+//  Created by Yakiv Kovalsky on 4/4/16.
 //  Copyright © 2016 KrazyLabs LLC. All rights reserved.
 //
 
@@ -331,6 +331,30 @@ class User: Object {
             }
 
             parseObject?.setObject(email, forKey: "email")
+        }
+    }
+    var pendingGroupIDs: [String] {
+        get {
+            guard let parseObject = parseObject where parseObject.dataAvailable else {
+                return []
+            }
+
+            return parseObject.objectForKey("pendingGroupIDs") as? [String] ?? []
+        }
+        set {
+            parseObject?.setObject(newValue, forKey: "pendingGroupIDs")
+        }
+    }
+    var pendingEventIDs: [String] {
+        get {
+            guard let parseObject = parseObject where parseObject.dataAvailable else {
+                return []
+            }
+
+            return parseObject.objectForKey("pendingEventIDs") as? [String] ?? []
+        }
+        set {
+            parseObject?.setObject(newValue, forKey: "pendingEventIDs")
         }
     }
 }

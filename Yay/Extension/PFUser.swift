@@ -95,5 +95,7 @@ extension PFUser {
         if let email = user.email {
             self.setObject(email, forKey: "email")
         }
+
+        self.setObject(user.pendingGroupIDs, forKey: "pendingGroupIDs")
     }
 }

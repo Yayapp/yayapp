@@ -125,6 +125,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
         }
+
+        if let needsRefreshGroupsContent = userInfo["needsRefreshGroupsContent"] as? Int
+            where needsRefreshGroupsContent == 1 {
+            NSNotificationCenter.defaultCenter().postNotificationName(Constants.groupPendingStatusChangedNotification, object: nil)
+        }
+
+        if let needsRefreshEventsContent = userInfo["needsRefreshEventsContent"] as? Int
+            where needsRefreshEventsContent == 1 {
+            NSNotificationCenter.defaultCenter().postNotificationName(Constants.eventPendingStatusChangedNotification, object: nil)
+        }
     }
     
     func applicationWillResignActive(application: UIApplication) {

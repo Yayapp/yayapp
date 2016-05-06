@@ -8,7 +8,11 @@
 
 import Foundation
 
-class Category: Object {
+class Category: Object, Hashable {
+    var hashValue: Int {
+        return parseObject?.objectId?.hash ?? 0
+    }
+    
     override init() {
         super.init()
 

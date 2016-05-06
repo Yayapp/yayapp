@@ -256,60 +256,160 @@ Parse.Cloud.afterSave("Message", function(request) {
                       });
 
 Parse.Cloud.afterSave("Request", function(request) {
-                      var accepted = request.object.get('accepted');
-                      var user = request.object.get('attendee');
-                      var event = request.object.get('event');
-                      var owner = event.get('owner');
-                      event.fetch({
-                                  success: function(event) {
-                                  
-                                  owner = event.get('owner');
-                                  
-                                  var timeZone = event.get('timeZone');
-                                  
-                                  eventName = event.get('name');
-                                  if(accepted == null) {
-                                  var eventName = event.get('name');
-                                  
-                                  var pushQuery = new Parse.Query(Parse.Installation);
-                                  pushQuery.equalTo('user', owner);
-                                  
-                                  Parse.Push.send({
-                                                  where: pushQuery,
-                                                  data: {
-                                                  alert: "There is a new attendee to happening \"" + eventName + "\"",
-                                                  "content-available": 1,
-                                                  "sound":"layerbell.caf",
-                                                  badge: "Increment",
-                                                  "request_id":request.object.id
-                                                  }
-                                                  }, {
-                                                  success: function() {},
-                                                  error: function(error) {
-                                                  throw "Got an error " + error.code + " : " + error.message;
-                                                  }});
-                                  
-                                  } else if (accepted) {
-                                      var acceptedState = accepted ? "accepted" : "declined"
+    Parse.Cloud.useMasterKey()
 
-                                  user.fetch({
-                                             success: function(user) {
-                                             if (user.get('attAccepted') == true){
-                                             var pushQuery = new Parse.Query(Parse.Installation);
-                                             pushQuery.equalTo('user', user);
-                                             
-                                             Parse.Push.send({
-                                                             where: pushQuery,
-                                                             data: {
-                                                             alert: "Attendance to happening \"" + eventName + "\"" + acceptedState,
-                                                             "content-available": 1,
-                                                             "sound":"layerbell.caf"
-                                                             }
-                                                             }, {
-                                                             success: function() {},
-                                                             error: function(error) {
-                                                             throw "Got an error " + error.code + " : " + error.message;
-                                                             }});
-                                             }}});
-                                  }}});
-                      });
+    var accepted = request.object.get('accepted')
+    var attendee = request.object.get('attendee')
+    var event = request.object.get('event')
+    var group = request.object.get('group')
+
+    var requestedItem
+    var isEvent = false
+
+    if (event != undefined) {
+        requestedItem = event
+        isEvent = true
+    } else if (group != undefined) {
+        requestedItem = group
+    } else {
+        console.log("no requested item")
+
+        return
+    }
+
+    requestedItem.fetch().then(function(fetchedItem) {
+        var owner = fetchedItem.get('owner')
+        var itemName = fetchedItem.get('name')
+
+        if (accepted == undefined) {
+            var pushQuery = new Parse.Query(Parse.Installation)
+            pushQuery.equalTo('user', owner)
+
+            Parse.Push.send({
+            where: pushQuery,
+            data: {
+            alert: "There is a new attendee to happening \"" + itemName + "\"",
+                "content-available": 1,
+                "sound":"layerbell.caf",
+            badge: "Increment",
+                "request_id":request.object.id
+            }
+            }, {
+            success: function() {
+                attendee.fetch().then(function(attendee) {
+                    var pendingEventIDs = attendee.get("pendingEventIDs") == undefined ? [] : attendee.get("pendingEventIDs")
+                    var pendingGroupIDs = attendee.get("pendingGroupIDs") == undefined ? [] : attendee.get("pendingGroupIDs")
+
+                    if (isEvent && (pendingEventIDs.indexOf(fetchedItem.id) < 0)) {
+                        attendee.add("pendingEventIDs", fetchedItem.id)
+                    } else if (pendingGroupIDs.indexOf(fetchedItem.id) < 0) {
+                        attendee.add("pendingGroupIDs", fetchedItem.id)
+                    }
+
+                    attendee.save().then(function(result) { })
+                })
+            },
+            error: function(error) {
+                throw "Got an error " + error.code + " : " + error.message
+            }})
+        } else {
+            var acceptedState = accepted ? "accepted" : "declined"
+
+            attendee.fetch().then(function(user) {
+                var pendingEventIDs = attendee.get("pendingEventIDs") == undefined ? [] : attendee.get("pendingEventIDs")
+                var pendingGroupIDs = attendee.get("pendingGroupIDs") == undefined ? [] : attendee.get("pendingGroupIDs")
+                var updatedArray
+
+                if (isEvent) {
+                    updatedArray = pendingEventIDs.filter(function(item) {
+                        return item != fetchedItem.id;
+                    })
+                } else {
+                    updatedArray = pendingGroupIDs.filter(function(item) {
+                        console.log("item" + item + "fetchedItem.id" + fetchedItem.id)
+
+                        return item != fetchedItem.id;
+                    })
+                }
+
+                console.log("Set" + updatedArray + "to " + attendee.id + "isEvent: " + isEvent)
+                attendee.set(isEvent ? "pendingEventIDs" : "pendingGroupIDs", updatedArray)
+
+                attendee.save(null, {
+                success: function(result) {
+                    console.log("attendee saved")
+                    if (user.get('attAccepted') == true) {
+                        var pushQuery = new Parse.Query(Parse.Installation);
+                        pushQuery.equalTo('user', user);
+
+                        var refreshContentKey = isEvent ? "needsRefreshEventsContent" : "needsRefreshGroupsContent"
+
+                        Parse.Push.send({
+                        where: pushQuery,
+                        data: {
+                            refreshContentKey : true,
+                        alert: "Attendance to happening \"" + itemName + "\"" + acceptedState,
+                            "content-available": 1,
+                            "sound":"layerbell.caf",
+                        }
+                        },  {
+                        success: function() {
+                            console.log("push sent")
+                        }, error: function(error) {
+                            throw "Got an error " + error.code + " : " + error.message;
+                        }
+                        })
+                    }
+                }, error: function(error) {
+                    throw "Got an attendee save error " + error.code + " : " + error.message;
+                }
+                })
+            })
+        }
+    })
+})
+
+
+Parse.Cloud.beforeDelete("Request", function(request, response) {
+    Parse.Cloud.useMasterKey()
+
+    var attendee = request.object.get('attendee')
+    var event = request.object.get('event')
+    var group = request.object.get('group')
+
+    var requestedItem
+    var isEvent = false
+
+    if (event != undefined) {
+        requestedItem = event
+        isEvent = true
+    } else if (group != undefined) {
+        requestedItem = group
+    } else {
+        console.log("no requested item")
+
+        return
+    }
+
+    attendee.fetch().then(function(attendee) {
+        var pendingEventIDs = attendee.get("pendingEventIDs") == undefined ? [] : attendee.get("pendingEventIDs")
+        var pendingGroupIDs = attendee.get("pendingGroupIDs") == undefined ? [] : attendee.get("pendingGroupIDs")
+        var updatedArray
+
+        if (isEvent) {
+            updatedArray = pendingEventIDs.filter(function(item) {
+                return item != requestedItem.id;
+            })
+        } else {
+            updatedArray = pendingGroupIDs.filter(function(item) {
+                return item != requestedItem.id;
+            })
+        }
+
+        attendee.set(isEvent ? "pendingEventIDs" : "pendingGroupIDs", updatedArray)
+
+        attendee.save().then(function(result) {
+            response.success()
+        })
+    }, function(error) {response.error(error)})
+})

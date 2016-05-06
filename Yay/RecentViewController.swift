@@ -62,19 +62,30 @@ class RecentViewController: UITableViewController {
         }
         
         cell.avatar.layer.borderColor = Color.PrimaryActiveColor.CGColor
-        if (notification.isDecidable() || notification is Message){
+
+        if notification is Message {
             cell.avatar.tag = indexPath.row;
-            let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("goToProfile:"))
+            let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:#selector(RecentViewController.goToProfile(_:)))
             cell.avatar.addGestureRecognizer(tapGestureRecognizer)
         }
         
-        if (notification is Request && notification.isDecidable()){
-            cell.accept.tag = indexPath.row;
-            cell.accept.addTarget(self, action: "accept:", forControlEvents: .TouchUpInside)
-            
-            cell.decline.tag = indexPath.row;
-            cell.decline.addTarget(self, action: "decline:", forControlEvents: .TouchUpInside)
+        if let request = notification as? Request {
+            if notification.isDecidable() {
+                cell.accept.hidden = false
+                cell.accept.setImage(UIImage(named: "createevent_button"), forState: .Normal)
+                cell.accept.tag = indexPath.row;
+                cell.accept.addTarget(self, action: #selector(RecentViewController.accept(_:)), forControlEvents: .TouchUpInside)
+
+                cell.decline.hidden = false
+                cell.decline.setImage(UIImage(named: "cancelevent_button"), forState: .Normal)
+                cell.decline.tag = indexPath.row;
+                cell.decline.addTarget(self, action: #selector(RecentViewController.decline(_:)), forControlEvents: .TouchUpInside)
+            } else {
+                cell.decline.hidden = true
+                cell.accept.setImage(UIImage(named: request.accepted == true ? "accept" : "requestRejected"), forState: .Normal)
+            }
         }
+
         return cell
     }
     

@@ -250,12 +250,4 @@ class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate
         deleteGroupAlert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .Cancel, handler: nil))
         presentViewController(deleteGroupAlert, animated: true, completion: nil)
     }
-
-    //MARK: - Segue
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let chooseCategoryVC = segue.destinationViewController as? ChooseCategoryViewController
-            where segue.identifier == "chooseCategorySegue" {
-            chooseCategoryVC.loadContent()
-        }
-    }
 }

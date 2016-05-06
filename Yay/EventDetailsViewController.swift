@@ -9,7 +9,7 @@
 import UIKit
 import MessageUI
 
-class EventDetailsViewController: UIViewController, MFMailComposeViewControllerDelegate, EventCreationDelegate {
+class EventDetailsViewController: UIViewController, MFMailComposeViewControllerDelegate, EventChangeDelegate {
     
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
@@ -55,10 +55,41 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     @IBOutlet weak var attendButton: UIButton!
     @IBOutlet weak var attendButtonHeight: NSLayoutConstraint!
 
+    private var attendState: AttendState = .Hidden {
+        didSet {
+            attendButton.hidden = attendState == .Hidden
+            attendButtonHeight.constant = attendState == .Hidden ? 0 : 35
+
+            switch (attendState) {
+            case .Pending:
+                attendButton.setTitle(NSLocalizedString("Pending...", comment: ""), forState: .Normal)
+                attendButton.backgroundColor = .appOrangeColor()
+
+            case .Join:
+                attendButton.setTitle(NSLocalizedString("Join Event", comment: ""), forState: .Normal)
+                attendButton.backgroundColor = .appBlackColor()
+
+            case .Leave:
+                attendButton.setTitle(NSLocalizedString("Leave", comment: ""), forState: .Normal)
+                attendButton.backgroundColor = .appBlackColor()
+
+            default:
+                break
+            }
+        }
+    }
+
     var attendedThisEvent: Bool?
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        NSNotificationCenter.defaultCenter().addObserver(self,
+                                                         selector: #selector(updateAttendUI),
+                                                         name: Constants.groupPendingStatusChangedNotification,
+                                                         object: nil)
+
+        attendState = .Hidden
 
         chatButton.enabled = false
 
@@ -102,14 +133,9 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
 
             self?.event = fetchedEvent
             
-            if let currentUserID = ParseHelper.sharedInstance.currentUser?.objectId {
-                self?.attendButton.setTitle(self?.attendTitle(fetchedEvent.attendeeIDs.contains(currentUserID)), forState: .Normal)
-                let isAttendButtonHidden = currentUserID == self?.event.owner?.objectId
-                self?.attendButton.hidden = isAttendButtonHidden
-                self?.attendButtonHeight.constant = isAttendButtonHidden ? 0 : 35
+            if ParseHelper.sharedInstance.currentUser == fetchedEvent.owner {
+                self?.attendState = .Hidden
             }
-            
-            self?.attendButton.alpha = 0.0
 
             ParseHelper.fetchUsers(fetchedEvent.attendeeIDs.filter({$0 != fetchedEvent.owner!.objectId}), completion: { (fetchedUsers, error) in
                 guard let fetchedUsers = fetchedUsers where error == nil else {
@@ -175,39 +201,6 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                 
                 self?.chatButton.selected = !(self?.attendedThisEvent ?? false)
                 
-                if(ParseHelper.sharedInstance.currentUser?.objectId != fetchedEvent.owner!.objectId) {
-                    if self?.attendedThisEvent != true && fetchedEvent.limit > fetchedEvent.attendeeIDs.count {
-                        ParseHelper.getUserRequests(fetchedEvent, user: ParseHelper.sharedInstance.currentUser!, block: {
-                            result, error in
-                            if (error == nil) {
-                                if (result == nil || result!.isEmpty){
-                                    if let attendeeButton = self?.attendeeButtons[fetchedUsers.count] {
-                                        attendeeButton.removeTarget(nil, action: nil, forControlEvents: .AllEvents)
-                                        attendeeButton.addTarget(self, action: #selector(EventDetailsViewController.attend(_:)), forControlEvents: .TouchUpInside)
-                                        attendeeButton.setImage(nil, forState: .Normal)
-                                        attendeeButton.setTitle("JOIN", forState: .Normal)
-                                        attendeeButton.hidden = false
-                                        self?.attendButton.alpha = 1.0
-                                    }
-                                } else {
-                                    self?.attendButton.removeTarget(nil, action: nil, forControlEvents: .AllEvents)
-                                    self?.attendButton.setImage(nil, forState: .Normal)
-                                    self?.attendButton.setTitle("Pending…", forState: .Normal)
-                                    self?.attendButton.backgroundColor = UIColor(red:0.93, green:0.40, blue:0.29, alpha:1.00)
-                                    self?.attendButton.hidden = false
-                                    self?.attendButton.alpha = 1.0
-                                }
-                            } else {
-                                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-                            }
-                        })
-                    } else {
-                        self?.attendButton.alpha = 1.0
-                    }
-                } else {
-                    self?.attendButton.alpha = 1.0
-                }
-                
                 self?.update()
             })
         })
@@ -219,6 +212,10 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
         for button in [author, attended1, attended2, attended3, attended4] {
             button.layer.cornerRadius = button.bounds.width / 2
         }
+    }
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
     func update() {
@@ -237,6 +234,8 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
         self.distance.text = distanceBetween > 0 ? "\(distanceStr)km" : nil
 
         CLLocation(latitude: self.event.location.latitude, longitude: self.event.location.longitude).getLocationString(nil, button: location, timezoneCompletion: nil)
+
+        updateAttendUI()
     }
     
     func attendTitle(isJoined: Bool) -> String {
@@ -244,42 +243,36 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
     }
     
     @IBAction func attend(sender: UIButton) {
-        guard let currentUserID = ParseHelper.sharedInstance.currentUser?.objectId else {
+        guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as? BlurryAlertViewController else {
             return
         }
-        
-        let isJoined = event.attendeeIDs.contains(currentUserID)
 
-        if isJoined {
-            ParseHelper.changeStateOfEvent(event, toJoined: false, completion: { result, error in
-                if (error != nil) {
-                    MessageToUser.showDefaultErrorMessage(NSLocalizedString("Error occurred in changing your status in current event.", comment: ""))
-                }
-            })
+        ParseHelper.changeStateOfEvent(event,
+                                       toJoined: attendState == .Join,
+                                       completion: nil)
 
-            attendButton.setTitle(NSLocalizedString("Join", comment: ""), forState: .Normal)
-        } else {
-            attendButton.hidden = true
-
-            let requestACL = ObjectACL()
-            requestACL.publicWriteAccess = true
-            requestACL.publicReadAccess = true
-            let request = Request()
-            request.event = event
-            request.attendee = ParseHelper.sharedInstance.currentUser!
-            request.ACL = requestACL
-            ParseHelper.saveObject(request, completion: nil)
-
-            guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as? BlurryAlertViewController else {
-                return
-            }
-
+        if attendState == .Join {
             blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
-            blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
-            blurryAlertViewController.aboutText = "Your request has been sent."
-            blurryAlertViewController.messageText = "We will notify you of the outcome."
+            blurryAlertViewController.modalPresentationStyle = .CurrentContext
+
+            blurryAlertViewController.aboutText = NSLocalizedString("Your request has been sent.", comment: "")
+            blurryAlertViewController.messageText = NSLocalizedString("We will notify you of the outcome.", comment: "")
+
             self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
         }
+
+        switch attendState {
+        case .Pending:
+            attendState = .Leave
+        case .Leave:
+            attendState = .Join
+        case .Join:
+            attendState = .Pending
+        default:
+            break
+        }
+
+        //TODO: Update ListEventsVC
     }
     
     @IBAction func chat(sender: AnyObject) {
@@ -398,13 +391,47 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
         
         navigationController?.pushViewController(userProfileViewController, animated: true)
     }
+
+    //MARK: - Setup UI
+    func updateAttendUI() {
+        guard let currentUserID = ParseHelper.sharedInstance.currentUser?.objectId,
+            groupID = event.objectId else {
+                return
+        }
+
+        let isAttendedToGroup = event.attendeeIDs.contains(currentUserID)
+
+        if ParseHelper.sharedInstance.currentUser == event.owner {
+            attendState = .Hidden
+        } else if ParseHelper.sharedInstance.currentUser?.pendingGroupIDs.contains(groupID) == true {
+            attendState = .Pending
+        } else if isAttendedToGroup {
+            attendState = .Leave
+        } else {
+            attendState = .Join
+        }
+
+        descr.hidden = !isAttendedToGroup
+    }
+
+    //MARK: - EventChangeDelegate
     
     func eventCreated(event:Event) {
+        handleEventUpdate(event)
+    }
+
+    func eventChanged(event: Event) {
+        handleEventUpdate(event)
+    }
+
+    func eventRemoved(event: Event) {
+        delegate?.eventRemoved(event)
+    }
+
+    func handleEventUpdate(event: Event) {
         self.event = event
         update()
-        if self.delegate != nil {
-            delegate.eventChanged(event)
-        }
+        delegate?.eventChanged(event)
     }
     
     func editEvent() {

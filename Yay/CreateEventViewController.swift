@@ -9,10 +9,6 @@
 import UIKit
 import MapKit
 
-protocol EventCreationDelegate : NSObjectProtocol {
-    func eventCreated(event:Event)
-}
-
 class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate, CategoryPickerDelegate, ChooseEventPictureDelegate, WriteAboutDelegate, UIPopoverPresentationControllerDelegate {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
@@ -27,7 +23,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
     var chosenDate:NSDate?
     var chosenCategories:[Category]! = []
     var chosenPhoto: File?
-    var delegate:EventCreationDelegate!
+    var delegate:EventChangeDelegate!
     var timeZone:NSTimeZone!
     var attendeesButtons:[UIButton]!=[]
     var descriptionText:String!=""
@@ -375,6 +371,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
 
                     ParseHelper.saveObject(self.event!, completion: { (result, error) in
                         if (self.isEditMode) {
+                            self.delegate?.eventChanged(self.event!)
                             self.navigationController?.popViewControllerAnimated(true)
                         } else {
                             self.resetContent()

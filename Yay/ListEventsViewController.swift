@@ -224,8 +224,12 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
                 }
             })
         }
+
+        guard let eventID = event.objectId else {
+            return cell
+        }
         
-        if attendeeButtons.count > attendeeIDs.count && event.owner!.objectId != ParseHelper.sharedInstance.currentUser?.objectId && attendeeIDs.count < (event.limit-1) && !allAttendeeIDsWithoutOwner.contains(ParseHelper.sharedInstance.currentUser!.objectId!)
+        if (attendeeButtons.count > attendeeIDs.count && event.owner!.objectId != ParseHelper.sharedInstance.currentUser?.objectId && attendeeIDs.count < (event.limit-1) && !allAttendeeIDsWithoutOwner.contains(ParseHelper.sharedInstance.currentUser!.objectId!)) && ParseHelper.sharedInstance.currentUser?.pendingEventIDs.contains(eventID) != true
         {
             let attendeeButton = attendeeButtons[attendeeIDs.count]
             attendeeButton.removeTarget(nil, action: nil, forControlEvents: .AllEvents)
@@ -247,6 +251,12 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
     }
     
     override func eventChanged(event:Event) {
+        guard let index = eventsData.indexOf(event) else {
+            return
+        }
+
+        eventsData[index] = event
+        
         events.reloadData()
     }
     
@@ -258,37 +268,18 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
     @IBAction func join(sender: UIButton) {
         sender.hidden = true
 
-        let event:Event! = eventsData[sender.tag]
-        if let user = ParseHelper.sharedInstance.currentUser {
-            ParseHelper.fetchObject(event, completion: {
-                (result, error) in
-                
-                let requestACL = ObjectACL()
-                requestACL.publicWriteAccess = true
-                requestACL.publicReadAccess = true
-                let request = Request()
-                request.event = event
-                request.attendee = user
-                request.ACL = requestACL
-                ParseHelper.saveObject(request, completion: nil)
+        ParseHelper.changeStateOfEvent(eventsData[sender.tag], toJoined: true, completion: nil)
 
-                guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as? BlurryAlertViewController else {
-                    return
-                }
-
-                blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
-                blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
-                blurryAlertViewController.aboutText = "Your request has been sent."
-                blurryAlertViewController.messageText = "We will notify you of the outcome."
-                self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
-            })
-        } else {
-            guard let vc = UIStoryboard.auth()?.instantiateViewControllerWithIdentifier("LoginViewController") as? LoginViewController else {
-                return
-            }
-
-            presentViewController(vc, animated: true, completion: nil)
+        guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as? BlurryAlertViewController else {
+            return
         }
+
+        blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
+        blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
+        blurryAlertViewController.aboutText = "Your request has been sent."
+        blurryAlertViewController.messageText = "We will notify you of the outcome."
+
+        self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
     }
     
     @IBAction func authorProfile(sender: AnyObject) {

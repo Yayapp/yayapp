@@ -17,4 +17,12 @@ class RequestTableViewCell: UITableViewCell {
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var accept: UIButton!
     @IBOutlet weak var decline: UIButton!
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        avatar.image = nil
+        eventName.text = nil
+        name.text = nil
+    }
 }
