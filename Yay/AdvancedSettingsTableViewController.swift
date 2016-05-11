@@ -36,8 +36,11 @@ class AdvancedSettingsTableViewController: UITableViewController {
         blurryAlertViewController.aboutText = "Are you sure you want to delete your profile?"
         blurryAlertViewController.messageText = ""
 
+        let tabbarController = self.tabBarController
         blurryAlertViewController.onUserLoggedOut = { [weak self] error in
             if error == nil {
+                NSNotificationCenter.defaultCenter().postNotificationName(Constants.userDidLogoutNotification, object: nil)
+                
                 let defaults = NSUserDefaults.standardUserDefaults()
                 defaults.setBool(false, forKey: "hasPermission")
                 defaults.synchronize()
@@ -48,8 +51,9 @@ class AdvancedSettingsTableViewController: UITableViewController {
                 }
 
                 self?.navigationController?.popToRootViewControllerAnimated(false)
+                tabbarController?.selectedIndex = 0
+                
                 appDelegate.window?.rootViewController = startViewController
-                self?.tabBarController?.selectedIndex = 0
                 appDelegate.window?.makeKeyAndVisible()
             } else {
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)

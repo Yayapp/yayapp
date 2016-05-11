@@ -175,7 +175,8 @@ class ParseHelper {
     class func getUpcomingPastEvents(user: User, upcoming:Bool, block:EventsResultBlock?) {
         let today = NSDate()
 
-        guard let calendar = ParseHelper.gregorianUTCCalendar else {
+        guard let calendar = ParseHelper.gregorianUTCCalendar,
+        let currentUserID = PFUser.currentUser()?.objectId else {
             block?(nil, nil)
 
             return
@@ -184,7 +185,7 @@ class ParseHelper {
         let startOfToday = today.startOfDay(calendar)
 
         let query = PFQuery(className: eventParseClassName)
-        query.whereKey("attendees", equalTo: PFUser(withoutDataUsingUser: user))
+        query.whereKey("attendeeIDs", equalTo: currentUserID)
         query.orderByDescending("startDate")
 
         if upcoming {
@@ -215,11 +216,20 @@ class ParseHelper {
     }
     
     class func getUserCategories(user: User, block:CategoriesResultBlock?) {
+        guard let currentUser = PFUser.currentUser(),
+            let currentUserID = PFUser.currentUser()?.objectId else {
+                block?(nil, nil)
+
+            return
+        }
         
-        let query = PFQuery(className: categoryParseClassName)
-        query.whereKey("attendees", equalTo: PFUser(withoutDataUsingUser: user))
-        
-        query.findObjectsInBackgroundWithBlock {
+        let categoryAttendeeQuery = PFQuery(className: categoryParseClassName)
+        categoryAttendeeQuery.whereKey("attendeeIDs", equalTo: currentUserID)
+
+        let categoryOwnerQuery = PFQuery(className: categoryParseClassName)
+        categoryOwnerQuery.whereKey("owner", equalTo: currentUser)
+
+        PFQuery.orQueryWithSubqueries([categoryAttendeeQuery, categoryOwnerQuery]).findObjectsInBackgroundWithBlock {
             objects, error in
             
             if error == nil {
@@ -328,8 +338,14 @@ class ParseHelper {
     }
     
     class func getConversations(user: User, block:EventsResultBlock?) {
+        guard let currentUserID = PFUser.currentUser()?.objectId else {
+            block?(nil, nil)
+
+            return
+        }
+
         let query = PFQuery(className: eventParseClassName)
-        query.whereKey("attendees", equalTo:PFUser(withoutDataUsingUser: user))
+        query.whereKey("attendeeIDs", equalTo:currentUserID)
         query.orderByDescending("startDate")
         query.findObjectsInBackgroundWithBlock {
             objects, error in
@@ -693,7 +709,7 @@ class ParseHelper {
 
     class func logInWithUsernameInBackground(username: String, password: String, completion: UserResultBlock?) {
         PFUser.logInWithUsernameInBackground(username.lowercaseString, password: password.lowercaseString) { (parseUser, error) in
-            completion?(User(parseObject: parseUser), error)
+            completion?(parseUser != nil ? User(parseObject: parseUser) : nil, error)
         }
     }
 
