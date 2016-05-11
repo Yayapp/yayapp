@@ -268,8 +268,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
         }
     }
 
-    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle
-    {
+    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
         return .None
     }
     

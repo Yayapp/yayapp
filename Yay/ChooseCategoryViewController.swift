@@ -221,8 +221,8 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
                 currentUser = ParseHelper.sharedInstance.currentUser else {
                     return false
             }
-            
-            return owner.objectId == currentUser.objectId
+
+            return owner == currentUser
         })
     }
     

@@ -64,7 +64,7 @@
                                 </constraints>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HmY-cz-QdU" userLabel="My Button">
-                                <rect key="frame" x="225.5" y="64" width="94.5" height="44"/>
+                                <rect key="frame" x="226" y="64" width="94" height="44"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="My Groups">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -74,7 +74,7 @@
                                 </connections>
                             </button>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t5E-Mc-ZYp" userLabel="My Underline">
-                                <rect key="frame" x="225.5" y="103" width="94.5" height="5"/>
+                                <rect key="frame" x="226" y="103" width="94" height="5"/>
                                 <color key="backgroundColor" red="0.35294117650000001" green="0.74901960779999999" blue="0.3294117647" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="5" id="0Sk-Yr-4sf"/>
@@ -114,14 +114,14 @@
                                 </constraints>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X1e-jO-LxF">
-                                <rect key="frame" x="144" y="103" width="73.5" height="5"/>
+                                <rect key="frame" x="144" y="103" width="74" height="5"/>
                                 <color key="backgroundColor" red="0.35294117650000001" green="0.74901960779999999" blue="0.3294117647" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="5" id="hdk-Tu-N8W"/>
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F3n-4d-ecD">
-                                <rect key="frame" x="144" y="64" width="73.5" height="44"/>
+                                <rect key="frame" x="144" y="64" width="74" height="44"/>
                                 <state key="normal" title="Private">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
