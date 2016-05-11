@@ -39,7 +39,7 @@ extension ReportViewController {
     @IBAction func reportButtonPressed(sender: UIButton) {
         self.onReport?()
         UIAlertController.showSimpleAlertViewWithText("Report was send and will be handled shorty.".localized,
-                                                      title: "Report".localized,
+                                                      title: "Reporte".localized,
                                                       controller: self,
                                                       completion: nil) { alertAction in
                                                         self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
@@ -48,6 +48,13 @@ extension ReportViewController {
 
     @IBAction func blockButtonPressed(sender: UIButton) {
         self.onBlock?()
+        UIAlertController.showSimpleAlertViewWithText("The user was blocked.".localized,
+                                                      title: blockButtonTitle == "Block".localized ? "Blocked".localized : "Unblocked".localized,
+                                                      controller: self,
+                                                      completion: nil) { alertAction in
+                                                        self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+        }
+
     }
 
     @IBAction func cancelButtonPressed(sender: UIButton) {
