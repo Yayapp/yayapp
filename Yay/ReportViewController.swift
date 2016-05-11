@@ -39,7 +39,7 @@ extension ReportViewController {
     @IBAction func reportButtonPressed(sender: UIButton) {
         self.onReport?()
         UIAlertController.showSimpleAlertViewWithText("Report was send and will be handled shorty.".localized,
-                                                      title: "Reporte".localized,
+                                                      title: "Report".localized,
                                                       controller: self,
                                                       completion: nil) { alertAction in
                                                         self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
