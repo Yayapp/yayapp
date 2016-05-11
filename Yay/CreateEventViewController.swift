@@ -373,8 +373,6 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
                         if (self.isEditMode) {
                             self.delegate?.eventChanged(self.event!)
                             self.navigationController?.popViewControllerAnimated(true)
-                        } else {
-                            self.resetContent()
                         }
 
                         self.spinner.stopAnimating()
@@ -386,6 +384,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
                                     shareEventHintVC.onCancelPressed = { [weak self] in
                                         self?.presentedViewController?.dismissViewControllerAnimated(false, completion: nil)
                                         self?.tabBarController?.selectedIndex = 0
+                                        self?.resetContent()
                                     }
 
                                     DataProxy.sharedInstance.needsShowInviteHint = false
@@ -402,6 +401,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
                                 shareItemVC.onCancelPressed = { [weak self] in
                                     self?.presentedViewController?.dismissViewControllerAnimated(false, completion: nil)
                                     self?.tabBarController?.selectedIndex = 0
+                                    self?.resetContent()
                                 }
                                 
                                 self.presentViewController(shareItemVC, animated: true, completion: nil)
