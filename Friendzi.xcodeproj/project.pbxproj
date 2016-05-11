@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04900EC31CE36D36002C4AE2 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04900EC21CE36D36002C4AE2 /* String.swift */; };
+		04900EC61CE36E01002C4AE2 /* UIAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04900EC51CE36E01002C4AE2 /* UIAlertController.swift */; };
 		1F03CD041CCFA56C00C90055 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F03CD031CCFA56C00C90055 /* ImageViewController.swift */; };
 		1FF2492B1CCA23D800654ECC /* Auth.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1FF249271CCA23D800654ECC /* Auth.storyboard */; };
 		1FF2492C1CCA23D800654ECC /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1FF249291CCA23D800654ECC /* LaunchScreen.xib */; };
@@ -130,6 +132,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		04900EC21CE36D36002C4AE2 /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		04900EC51CE36E01002C4AE2 /* UIAlertController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIAlertController.swift; sourceTree = "<group>"; };
 		116D70F35B19AD9546398474 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		1F03CD031CCFA56C00C90055 /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		1FF249281CCA23D800654ECC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Yay/Base.lproj/Auth.storyboard; sourceTree = SOURCE_ROOT; };
@@ -465,6 +469,8 @@
 				3123A4331CB40486000AC147 /* PFObject.swift */,
 				31CEAC9D1CB28C6800A51F8E /* UIStoryboard.swift */,
 				31D94CBE1CAD02FF0099A891 /* NSDate.swift */,
+				04900EC21CE36D36002C4AE2 /* String.swift */,
+				04900EC51CE36E01002C4AE2 /* UIAlertController.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -807,6 +813,7 @@
 			files = (
 				319C8EFC1CDC9B3900307660 /* AttendState.swift in Sources */,
 				99509E8A1B9618FA003BF7CD /* PhotosTableViewController.swift in Sources */,
+				04900EC31CE36D36002C4AE2 /* String.swift in Sources */,
 				31D3751C1CC0F8F5007B7189 /* Request.swift in Sources */,
 				99EC40F81B5D90630093E484 /* Prefs.swift in Sources */,
 				311F6B651CDA271300DFA62E /* ShareEventHintViewController.swift in Sources */,
@@ -865,6 +872,7 @@
 				995032991B56741700D792C5 /* CreateEmailAccountViewController.swift in Sources */,
 				1F03CD041CCFA56C00C90055 /* ImageViewController.swift in Sources */,
 				3160BAA21CAA693400047691 /* README.md in Sources */,
+				04900EC61CE36E01002C4AE2 /* UIAlertController.swift in Sources */,
 				315EE74C1CAE8AFC00BD52CF /* GroupsViewCell.swift in Sources */,
 				9917D9E21B56A94F0081A796 /* MapEventsViewController.swift in Sources */,
 				31D375151CC0F8F5007B7189 /* GeoPoint.swift in Sources */,

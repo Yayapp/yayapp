@@ -35,15 +35,21 @@ class ReportViewController: UIViewController {
 }
 
 extension ReportViewController {
-    
+    //MARK:- IBActions
     @IBAction func reportButtonPressed(sender: UIButton) {
         self.onReport?()
+        UIAlertController.showSimpleAlertViewWithText("Report was send and will be handled shorty.".localized,
+                                                      title: "Report".localized,
+                                                      controller: self,
+                                                      completion: nil) { alertAction in
+                                                        self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+        }
     }
-    
+
     @IBAction func blockButtonPressed(sender: UIButton) {
         self.onBlock?()
     }
-    
+
     @IBAction func cancelButtonPressed(sender: UIButton) {
         self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
     }

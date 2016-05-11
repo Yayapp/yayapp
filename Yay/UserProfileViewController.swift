@@ -220,14 +220,16 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
                     }
                     })
             }
-            
+
             reportViewController.onReport = {
                 let report = Report()
                 report.reportedUser = self.user
                 report.user = currentUser
-                ParseHelper.saveObject(report, completion: nil)
+                ParseHelper.saveObject(report, completion: { success, error in
+                    
+                })
             }
-            
+
             self.presentViewController(reportViewController, animated: true, completion: nil)
         }
     }

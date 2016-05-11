@@ -142,7 +142,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
                 self.name.text = self.event!.name
                 self.descriptionText = self.event!.summary
                 self.descr.setTitle(self.event!.summary, forState: .Normal)
-                self.limitInt = self.event!.limit-1
+                self.limitInt = self.event!.limit - 1
                 let dummyButton:UIButton = UIButton()
                 dummyButton.tag = self.limitInt - 1
                 self.changeLimit(dummyButton)
@@ -403,7 +403,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
                                     self?.tabBarController?.selectedIndex = 0
                                     self?.resetContent()
                                 }
-                                
+
                                 self.presentViewController(shareItemVC, animated: true, completion: nil)
                             }
                         }
