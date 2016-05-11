@@ -66,7 +66,6 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
 
                 guard let user = fetchedUser where error == nil else {
                     MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
-
                     return
                 }
 

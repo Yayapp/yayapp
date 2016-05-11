@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -29,12 +29,12 @@
                                     <navigationItem title="Create Event" id="0oA-R4-RRE"/>
                                 </items>
                             </navigationBar>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="1000" text="Share with any of these groups?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5c7-5u-aqy">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="1000" misplaced="YES" text="Share with any of these groups?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5c7-5u-aqy">
                                 <rect key="frame" x="16" y="84" width="288" height="20"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f0b-ms-kgI" customClass="TTGTextTagCollectionView">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f0b-ms-kgI" customClass="TTGTextTagCollectionView">
                                 <rect key="frame" x="16" y="124" width="288" height="298"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
@@ -167,7 +167,7 @@
                                 </connections>
                             </button>
                             <button contentMode="top" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oqO-s0-a05">
-                                <rect key="frame" x="131" y="76" width="58" height="64"/>
+                                <rect key="frame" x="131" y="75" width="58" height="64"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" button="YES" image="YES"/>
@@ -285,7 +285,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tfh-Y7-Mcb">
-                                <rect key="frame" x="0.0" y="147" width="320" height="20"/>
+                                <rect key="frame" x="0.0" y="146" width="320" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="jR3-ai-HYa"/>
                                 </constraints>
@@ -316,10 +316,6 @@
                                     <action selector="changeLimit:" destination="QtT-Q2-qgG" eventType="touchUpInside" id="doz-gm-i1Q"/>
                                 </connections>
                             </button>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2bz-g8-7Ii">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.94279943885448925" green="0.94079491582817343" blue="0.94308212799922608" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -329,9 +325,6 @@
                             <constraint firstItem="YLE-cK-5YT" firstAttribute="top" secondItem="eTN-S4-Wt2" secondAttribute="bottom" constant="8" id="3KL-Dp-q5S"/>
                             <constraint firstAttribute="trailing" secondItem="C7x-Rc-Jfd" secondAttribute="trailing" id="3Xu-Uz-NgZ"/>
                             <constraint firstItem="Tfz-zd-m3A" firstAttribute="leading" secondItem="WBH-l0-qV7" secondAttribute="leading" id="5cN-2o-TeK"/>
-                            <constraint firstItem="2bz-g8-7Ii" firstAttribute="width" secondItem="WBH-l0-qV7" secondAttribute="width" id="6N1-Bb-1sU"/>
-                            <constraint firstItem="2bz-g8-7Ii" firstAttribute="centerY" secondItem="WBH-l0-qV7" secondAttribute="centerY" id="6vW-sz-HLZ"/>
-                            <constraint firstItem="oqO-s0-a05" firstAttribute="centerY" secondItem="mLA-BX-NBd" secondAttribute="centerY" constant="1" id="A0u-Yq-fjU"/>
                             <constraint firstItem="eTN-S4-Wt2" firstAttribute="leading" secondItem="WBH-l0-qV7" secondAttribute="leading" id="AqE-FH-yiY"/>
                             <constraint firstAttribute="trailing" secondItem="QvM-Wl-Ox9" secondAttribute="trailing" constant="8" id="C8B-Ai-A7t"/>
                             <constraint firstAttribute="trailing" secondItem="a7S-B7-6oA" secondAttribute="trailing" id="CCF-ri-PWe"/>
@@ -342,10 +335,8 @@
                             <constraint firstItem="oqO-s0-a05" firstAttribute="leading" secondItem="WBH-l0-qV7" secondAttribute="leadingMargin" constant="115" id="If3-Fb-02d"/>
                             <constraint firstAttribute="centerX" secondItem="g8L-xc-rUg" secondAttribute="centerX" id="Jth-IH-tTs"/>
                             <constraint firstItem="3PG-OW-ZM5" firstAttribute="top" secondItem="a7S-B7-6oA" secondAttribute="bottom" constant="8" id="LtT-5u-4Dd"/>
-                            <constraint firstItem="2bz-g8-7Ii" firstAttribute="height" secondItem="WBH-l0-qV7" secondAttribute="height" id="NQc-EH-krY"/>
                             <constraint firstItem="3PG-OW-ZM5" firstAttribute="leading" secondItem="WBH-l0-qV7" secondAttribute="leading" id="PdL-kG-0Fb"/>
                             <constraint firstItem="J58-dS-aOO" firstAttribute="top" secondItem="eTN-S4-Wt2" secondAttribute="bottom" constant="8" id="R4P-Ja-ov5"/>
-                            <constraint firstItem="2bz-g8-7Ii" firstAttribute="centerX" secondItem="WBH-l0-qV7" secondAttribute="centerX" id="R6n-bt-9SP"/>
                             <constraint firstItem="Tfh-Y7-Mcb" firstAttribute="top" secondItem="oqO-s0-a05" secondAttribute="bottom" constant="7" id="Rw6-aM-miF"/>
                             <constraint firstAttribute="trailing" secondItem="eTN-S4-Wt2" secondAttribute="trailing" id="U29-Rh-QdN"/>
                             <constraint firstItem="CHr-AL-yX4" firstAttribute="top" secondItem="etx-9H-B15" secondAttribute="bottom" constant="8" id="U5u-KQ-YZ8"/>
@@ -412,7 +403,6 @@
                         <outlet property="createButton" destination="TTH-R8-LPC" id="hFP-uM-h1K"/>
                         <outlet property="dateTimeButton" destination="a7S-B7-6oA" id="OlE-5X-m2w"/>
                         <outlet property="descr" destination="eTN-S4-Wt2" id="G9g-A1-PaI"/>
-                        <outlet property="dimmingView" destination="2bz-g8-7Ii" id="COD-Pp-dlO"/>
                         <outlet property="eventImage" destination="mLA-BX-NBd" id="Esh-kZ-fkP"/>
                         <outlet property="eventPhoto" destination="oqO-s0-a05" id="6cW-iK-BD3"/>
                         <outlet property="leftNavigationButton" destination="WzO-x2-frO" id="G0U-Oz-XFC"/>

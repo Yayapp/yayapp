@@ -1,4 +1,4 @@
-//
+ //
 //  CreateEventViewController.swift
 //  Yay
 //
@@ -53,7 +53,6 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
     @IBOutlet weak var attendee4: UIButton!
     
     @IBOutlet weak var leftNavigationButton: UIButton!
-    @IBOutlet weak var dimmingView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -91,8 +90,6 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
             return
         }
 
-        dimmingView.hidden = false
-
         let titleImageView = UIImageView(image: UIImage(named: "logoInactive"))
         titleImageView.contentMode = .ScaleAspectFit
         titleImageView.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
@@ -119,7 +116,6 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
 
     func handlePopoverDismiss() {
         presentedViewController?.dismissViewControllerAnimated(true, completion: nil)
-        dimmingView.hidden = true
         navigationItem.titleView = nil
     }
 
@@ -189,7 +185,6 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
 
         vc.categoryDelegate = self
         vc.selectedCategoriesData = chosenCategories
-        
         vc.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
         presentViewController(vc, animated: true, completion: nil)
     }
@@ -199,6 +194,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
     }
 
     func resetContent() {
+        self.createButton.enabled = true
         event = nil
         longitude = 0
         latitude = 0

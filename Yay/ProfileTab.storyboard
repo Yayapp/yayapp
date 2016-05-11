@@ -877,8 +877,8 @@
                                                     <action selector="uploadPhoto:" destination="bq7-5S-Foa" eventType="touchUpInside" id="Xf2-do-oJb"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xjH-qN-bBf">
-                                                <rect key="frame" x="0.0" y="314" width="160.5" height="30"/>
+                                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xjH-qN-bBf">
+                                                <rect key="frame" x="0.0" y="314" width="161" height="30"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="1gb-0X-OE3"/>
