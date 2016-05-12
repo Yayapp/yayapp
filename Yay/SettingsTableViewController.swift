@@ -10,7 +10,6 @@ import UIKit
 
 class SettingsTableViewController: UITableViewController {
 
-    
     @IBOutlet weak var attAccepted: UISwitch!
     
     @IBOutlet weak var newMessage: UISwitch!

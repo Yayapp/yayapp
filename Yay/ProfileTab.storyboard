@@ -425,17 +425,20 @@
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AUf-9X-qXc">
                                     <rect key="frame" x="0.0" y="46" width="320" height="44"/>
-                                    <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="44" id="pvv-Sn-dHy"/>
                                     </constraints>
-                                    <state key="normal" title="Delete Account"/>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                    <state key="normal" title="Delete Account">
+                                        <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    </state>
                                     <connections>
                                         <action selector="deleteProfile" destination="Fc4-v0-8Ox" eventType="touchUpInside" id="mJ8-ml-4Gp"/>
                                     </connections>
                                 </button>
                             </subviews>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstItem="AUf-9X-qXc" firstAttribute="leading" secondItem="QHY-jV-xmx" secondAttribute="leading" id="i5A-xQ-3g2"/>
                                 <constraint firstAttribute="trailing" secondItem="AUf-9X-qXc" secondAttribute="trailing" id="jY6-Zu-Pcf"/>
@@ -476,7 +479,7 @@
                                                 <constraint firstAttribute="bottom" secondItem="a7B-DM-beY" secondAttribute="bottom" constant="12" id="qBy-qA-X54"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
                                             <segue destination="03a-Va-dIs" kind="show" id="MBu-g3-IBH"/>
                                         </connections>
