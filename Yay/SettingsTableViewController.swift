@@ -19,8 +19,10 @@ class SettingsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        SVProgressHUD.show()
         ParseHelper.fetchObject(ParseHelper.sharedInstance.currentUser!, completion: {
             result, error in
+            SVProgressHUD.dismiss()
             if error == nil {
                 
                 self.attAccepted.on = ParseHelper.sharedInstance.currentUser!.attAccepted!
