@@ -14,17 +14,14 @@ class UserProfileViewController: UITableViewController, UIImagePickerControllerD
     var user: User!
     var userID: String?
     var editdone:UIBarButtonItem!
-    var interestsData:[Category]!=[]
+    var interestsData:[Category]! = []
     var blocked = false
     
     @IBOutlet weak var name: UILabel!
-    
     @IBOutlet weak var avatar: UIImageView!
     @IBOutlet weak var eventsCount: UILabel!
-    
     @IBOutlet weak var about: UILabel!
     @IBOutlet weak var rankIcon: UIImageView!
-
     @IBOutlet weak var interestsCollection: TTGTextTagCollectionView!
     
     override func viewDidLoad() {

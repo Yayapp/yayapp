@@ -6,24 +6,77 @@
 //  Copyright © 2016 KrazyLabs LLC. All rights reserved.
 //
 
-import Foundation
 protocol CategoryPickerDelegate : NSObjectProtocol {
     func madeCategoryChoice(categories: [Category])
 }
 
-class CategoryPickerViewController: UIViewController, TTGTextTagCollectionViewDelegate {
-    
-    let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-    
-    var categoryDelegate:CategoryPickerDelegate!
-    var categoriesData:[Category]! = []
-    var selectedCategoriesData:[Category]! = []
-    
+final class CategoryPickerViewController: UIViewController, TTGTextTagCollectionViewDelegate {
+
     @IBOutlet weak var categoriesCollection: TTGTextTagCollectionView!
-    
+
+    private var datasource: [Category]! = []
+
+    var categoryDelegate:CategoryPickerDelegate!
+    var selectedCategoriesData:[Category]! = []
+
     override func viewDidLoad() {
         super.viewDidLoad()
-     
+        tagCollectionViewSetupUI()
+        loadData()
+    }
+}
+
+extension CategoryPickerViewController {
+    //MARK:- Action Buttons
+    @IBAction func doneAction(sender: AnyObject) {
+        categoryDelegate.madeCategoryChoice(selectedCategoriesData)
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+}
+
+extension CategoryPickerViewController {
+    //MARK:- TTGTextTagCollectionViewDelegate 
+    func textTagCollectionView(textTagCollectionView: TTGTextTagCollectionView!, didTapTag tagText: String!, atIndex index: UInt, selected: Bool) {
+        let category = datasource[Int(index)]
+        if (selected){
+            selectedCategoriesData.append(category)
+        } else {
+            selectedCategoriesData = selectedCategoriesData.filter({$0.objectId != category.objectId})
+        }
+    }
+}
+
+private extension CategoryPickerViewController {
+    //MARK:- Api Data Fetchers
+    func loadData() {
+        guard let currentUser = ParseHelper.sharedInstance.currentUser else {
+            return
+        }
+
+        SVProgressHUD.show()
+        ParseHelper.getUserCategoriesForEvent(currentUser, block: {
+            (categoriesList:[Category]?, error:NSError?) in
+            SVProgressHUD.dismiss()
+            if(error == nil) {
+                self.datasource = categoriesList?.filter({ category -> Bool in
+                    category.name != ""
+                })
+
+                for (index, category) in (self.datasource.enumerate()) {
+                    self.categoriesCollection.addTag(category.name)
+                    self.categoriesCollection.setTagAtIndex(UInt(index), selected: self.selectedCategoriesData.contains(category))
+                }
+
+            } else {
+                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+            }
+        })
+    }
+}
+
+private extension CategoryPickerViewController {
+    //MARK:- UI Setup
+    func tagCollectionViewSetupUI() {
         categoriesCollection.delegate = self
         categoriesCollection.tagTextColor = .blackColor()
         categoriesCollection.tagSelectedTextColor = .whiteColor()
@@ -35,47 +88,5 @@ class CategoryPickerViewController: UIViewController, TTGTextTagCollectionViewDe
         categoriesCollection.tagSelectedBorderWidth = 0
         categoriesCollection.horizontalSpacing = 12
         categoriesCollection.verticalSpacing = 12
-
-        guard let currentUser = ParseHelper.sharedInstance.currentUser else {
-            return
-        }
-        
-        SVProgressHUD.show()
-        
-        ParseHelper.getUserCategoriesForEvent(currentUser, block: {
-            (categoriesList:[Category]?, error:NSError?) in
-            if(error == nil) {
-                self.categoriesData = categoriesList!
-
-                for (index, category) in (categoriesList!.enumerate()) {
-                    self.categoriesCollection.addTag(category.name)
-                    if self.selectedCategoriesData.contains(category) {
-                        self.categoriesCollection.setTagAtIndex(UInt(index), selected: true)
-                    }
-                }
-                
-                SVProgressHUD.dismiss()
-            } else {
-                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-            }
-        })
     }
-    
-    
-    func textTagCollectionView(textTagCollectionView: TTGTextTagCollectionView!, didTapTag tagText: String!, atIndex index: UInt, selected: Bool) {
-        let category = categoriesData[Int(index)]
-        if (selected){
-            selectedCategoriesData.append(category)
-        } else {
-            selectedCategoriesData = selectedCategoriesData.filter({$0.objectId != category.objectId})
-        }
-    }
-    
-    
-    
-    @IBAction func doneAction(sender: AnyObject) {
-        categoryDelegate.madeCategoryChoice(selectedCategoriesData)
-        dismissViewControllerAnimated(true, completion: nil)
-    }
-    
 }
