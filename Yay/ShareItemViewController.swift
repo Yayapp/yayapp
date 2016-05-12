@@ -136,12 +136,14 @@ class ShareItemViewController: UIViewController, MFMessageComposeViewControllerD
         if let item = item where item is Event {
             branchUniversalObject.addMetadataKey("type", value: "event")
         }
-
+        
         let linkProperties = BranchLinkProperties()
-
+        
         branchUniversalObject.getShortUrlWithLinkProperties(linkProperties, andCallback: { [weak self] (url: String?, error: NSError?) in
-            completion?(url: url, error: error)
-            self?.generatedShortURL = url
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                completion?(url: url, error: error)
+                self?.generatedShortURL = url
+            })
             })
     }
 
