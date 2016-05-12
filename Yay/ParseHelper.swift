@@ -248,22 +248,54 @@ class ParseHelper {
     }
     
     class func getUserCategoriesForEvent(user: User, block:CategoriesResultBlock?) {
-        let query1 = PFQuery(className: categoryParseClassName)
-        query1.whereKey("isPrivate", equalTo: false)
-
-        let query2 = PFQuery(className: categoryParseClassName)
-        query2.whereKeyDoesNotExist("isPrivate")
-
-        let query = PFQuery.orQueryWithSubqueries([query1, query2])
-        query.findObjectsInBackgroundWithBlock {
-            objects, error in
+        let nearByCategoriesQuery = PFQuery(className: categoryParseClassName)
+        nearByCategoriesQuery.includeKey("owner")
+        nearByCategoriesQuery.whereKey("isPrivate", equalTo: false)
+        
+        if let geoPoint = user.parseObject?.objectForKey("location") as? PFGeoPoint,
+            distance = user.parseObject?.objectForKey("distance") as? Double {
+            nearByCategoriesQuery.whereKey("location",
+                                           nearGeoPoint: geoPoint,
+                                           withinKilometers: distance)
+        }
+        
+        let alwaysVisibleCategoriesQuery = PFQuery(className: categoryParseClassName)
+        alwaysVisibleCategoriesQuery.whereKey("isAlwaysVisible", equalTo: true)
+        
+        guard let currentUserID = user.parseObject?.objectId else {
+            block?(nil, nil)
             
+            return
+        }
+        
+        let categoryAttendeeQuery = PFQuery(className: categoryParseClassName)
+        categoryAttendeeQuery.whereKey("attendeeIDs", equalTo: currentUserID)
+        
+        let categoryOwnerQuery = PFQuery(className: categoryParseClassName)
+        categoryOwnerQuery.whereKey("owner", equalTo: user.parseObject!)
+        
+        let query = PFQuery.orQueryWithSubqueries([categoryAttendeeQuery, categoryOwnerQuery, alwaysVisibleCategoriesQuery])
+        
+        nearByCategoriesQuery.findObjectsInBackgroundWithBlock { nearByCategories, error in
             if error == nil {
-                let array = objects! as NSArray as! [PFObject]
-                let mappedObjects = array.map({ Category(parseObject: $0) }) as? [Category]
-
-                if let objects = mappedObjects {
-                    block!(objects, error)
+                query.findObjectsInBackgroundWithBlock { alwaysVisibleCategories, error in
+                    guard error == nil else {
+                        block?(nil, error)
+                        
+                        return
+                    }
+                    
+                    let nearByCategoriesArray = nearByCategories! as NSArray as! [PFObject]
+                    let alwaysVisibleCategoriesArray = alwaysVisibleCategories! as NSArray as! [PFObject]
+                    
+                    let mappedNearByCategories = nearByCategoriesArray.map({ Category(parseObject: $0) }) as? [Category]
+                    let mappedAlwaysVisibleCateries = alwaysVisibleCategoriesArray.map({ Category(parseObject: $0) }) as? [Category]
+                    
+                    if let mappedNearByCategories = mappedNearByCategories,
+                        mappedAlwaysVisibleCategories = mappedAlwaysVisibleCateries {
+                        let union = Set(mappedNearByCategories).union(Set(mappedAlwaysVisibleCategories))
+                        block?(Array(union), error)
+                    }
                 }
             } else {
                 // Log details of the failure
