@@ -401,7 +401,7 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
 
         let isAttendedToGroup = event.attendeeIDs.contains(currentUserID)
 
-        if ParseHelper.sharedInstance.currentUser == event.owner {
+        if ParseHelper.sharedInstance.currentUser == event.owner || event.attendeeIDs.count >= event.limit {
             attendState = .Hidden
         } else if ParseHelper.sharedInstance.currentUser?.pendingGroupIDs.contains(groupID) == true {
             attendState = .Pending

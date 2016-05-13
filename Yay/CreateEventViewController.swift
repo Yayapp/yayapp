@@ -25,10 +25,24 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
     var chosenPhoto: File?
     var delegate:EventChangeDelegate!
     var timeZone:NSTimeZone!
-    var attendeesButtons:[UIButton]!=[]
     var descriptionText:String!=""
-    
-    var limitInt:Int=1
+
+    let kMinEventAttendees = 2
+    var attendeesLimit: Int {
+        get {
+            var selectedButtons = attendeeButtons.filter({ $0.selected })
+            selectedButtons.sortInPlace({ this, that in
+                return this.tag > that.tag
+            })
+
+            return selectedButtons.first?.tag ?? kMinEventAttendees
+        }
+        set {
+            for button in attendeeButtons {
+                button.selected = button.tag <= newValue
+            }
+        }
+    }
     
     @IBOutlet weak var eventImage: UIImageView!
     @IBOutlet weak var pickCategory: UIButton!
@@ -44,13 +58,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
     
     @IBOutlet weak var author: UIButton!
     
-    @IBOutlet weak var attendee1: UIButton!
-    
-    @IBOutlet weak var attendee2: UIButton!
-    
-    @IBOutlet weak var attendee3: UIButton!
-    
-    @IBOutlet weak var attendee4: UIButton!
+    @IBOutlet var attendeeButtons: [UIButton]!
     
     @IBOutlet weak var leftNavigationButton: UIButton!
     
@@ -61,8 +69,6 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
                                                          selector: #selector(CreateEventViewController.handleUserLogout),
                                                          name: Constants.userDidLogoutNotification,
                                                          object: nil)
-
-        attendeesButtons = [attendee1, attendee2, attendee3, attendee4]
         
         pickCategory.layer.borderColor = UIColor.whiteColor().CGColor
         name.delegate = self
@@ -138,10 +144,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
                 self.name.text = self.event!.name
                 self.descriptionText = self.event!.summary
                 self.descr.setTitle(self.event!.summary, forState: .Normal)
-                self.limitInt = self.event!.limit - 1
-                let dummyButton:UIButton = UIButton()
-                dummyButton.tag = self.limitInt - 1
-                self.changeLimit(dummyButton)
+                self.attendeesLimit = self.event?.attendeeIDs.count ?? self.kMinEventAttendees
                 self.madeCategoryChoice(self.event!.categories)
                 self.madeEventPictureChoice(self.event!.photo, pickedPhoto: nil)
                 self.madeDateTimeChoice(self.event!.startDate)
@@ -210,8 +213,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
         descr.setTitle(NSLocalizedString("Add Description", comment: ""), forState: .Normal)
 
         name.text = nil
-        limitInt = 0
-        updateLimitButtonsUI()
+        attendeesLimit = kMinEventAttendees
     }
 
     func madeDateTimeChoice(date: NSDate){
@@ -273,21 +275,14 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
    
-    @IBAction func changeLimit(sender: AnyObject) {
-        limitInt = sender.tag
+    @IBAction func changeLimit(sender: UIButton) {
+        if let event = event
+            where sender.tag < event.attendeeIDs.count {
+            return
+        }
 
-        updateLimitButtonsUI()
-    }
-
-    func updateLimitButtonsUI() {
-        for(_, attendeeButton) in attendeesButtons.enumerate(){
-            var buttonImage:UIImage
-            if(limitInt < attendeeButton.tag){
-                buttonImage = UIImage(named: "accept")!
-            } else {
-                buttonImage = UIImage(named: "searchingicon")!
-            }
-            attendeeButton.setImage(buttonImage, forState: .Normal)
+        for button in attendeeButtons {
+            button.selected = button.tag <= sender.tag
         }
     }
     
@@ -352,7 +347,7 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
             self.event!.categories = chosenCategories // Unable to save a PFObject with a relation to a cycle.
             self.event!.startDate = chosenDate!
             self.event!.photo = chosenPhoto!
-            self.event!.limit = (limitInt+1)
+            self.event!.limit = self.attendeesLimit
             self.event!.owner = ParseHelper.sharedInstance.currentUser!
             self.event!.location = GeoPoint(latitude: latitude!, longitude: longitude!)
             self.event!.timeZone = timeZone!.name

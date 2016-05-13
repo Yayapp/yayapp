@@ -229,7 +229,7 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
             return cell
         }
         
-        if (attendeeButtons.count > attendeeIDs.count && event.owner!.objectId != ParseHelper.sharedInstance.currentUser?.objectId && attendeeIDs.count < (event.limit-1) && !allAttendeeIDsWithoutOwner.contains(ParseHelper.sharedInstance.currentUser!.objectId!)) && ParseHelper.sharedInstance.currentUser?.pendingEventIDs.contains(eventID) != true
+        if (attendeeButtons.count > attendeeIDs.count && event.owner!.objectId != ParseHelper.sharedInstance.currentUser?.objectId && attendeeIDs.count < event.limit && !allAttendeeIDsWithoutOwner.contains(ParseHelper.sharedInstance.currentUser!.objectId!)) && ParseHelper.sharedInstance.currentUser?.pendingEventIDs.contains(eventID) != true
         {
             let attendeeButton = attendeeButtons[attendeeIDs.count]
             attendeeButton.removeTarget(nil, action: nil, forControlEvents: .AllEvents)
