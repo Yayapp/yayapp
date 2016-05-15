@@ -7,6 +7,8 @@
 //
 import UIKit
 
+//TODO: - Move to proper extensions.
+
 extension String {
     func MD5() -> String {
         let data = (self as NSString).dataUsingEncoding(NSUTF8StringEncoding)

@@ -6,6 +6,7 @@
 //  Copyright © 2016 KrazyLabs LLC. All rights reserved.
 //
 
+//TODO: - Move it to UIView extension
 import UIKit
 
 class TriangleView: UIView {
