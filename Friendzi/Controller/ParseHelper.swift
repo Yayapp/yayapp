@@ -8,6 +8,7 @@
 
 import Foundation
 
+//TODO:- Move it to Global Constants
 typealias RequestsResultBlock = ([Request]?, NSError?) -> ()
 typealias EventsResultBlock = ([Event]?, NSError?) -> ()
 typealias MessagesResultBlock = ([Message]?, NSError?) -> ()
@@ -21,9 +22,17 @@ typealias UserResultBlock = (User?, NSError?) -> ()
 typealias UsersResultBlock = ([User]?, NSError?) -> ()
 typealias GeoPointResultBlock = (GeoPoint?, NSError?) -> ()
 
-class ParseHelper {
-    static let sharedInstance = ParseHelper()
+final class ParseHelper {
 
+    private static let eventParseClassName = "Event"
+    private static let blockParseClassName = "Block"
+    private static let categoryParseClassName = "Category"
+    private static let messageParseClassName = "Message"
+    private static let eventPhotoParseClassName = "EventPhoto"
+    private static let reportParseClassName = "Report"
+    private static let requestParseClassName = "Request"
+
+    static let sharedInstance = ParseHelper()
     static let gregorianUTCCalendar: NSCalendar? = {
         guard let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian),
             timeZoneUTC = NSTimeZone(abbreviation: "UTC") else {
@@ -58,14 +67,6 @@ class ParseHelper {
             return nil
         }
     }
-
-    private static let eventParseClassName = "Event"
-    private static let blockParseClassName = "Block"
-    private static let categoryParseClassName = "Category"
-    private static let messageParseClassName = "Message"
-    private static let eventPhotoParseClassName = "EventPhoto"
-    private static let reportParseClassName = "Report"
-    private static let requestParseClassName = "Request"
 
     class func getTodayEvents(user:User?, categories:[Category], block:EventsResultBlock?) {
         let today = NSDate()

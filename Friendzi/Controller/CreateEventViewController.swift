@@ -9,25 +9,34 @@
 import UIKit
 import MapKit
 
-class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate, CategoryPickerDelegate, ChooseEventPictureDelegate, WriteAboutDelegate, UIPopoverPresentationControllerDelegate {
+final class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate, CategoryPickerDelegate, ChooseEventPictureDelegate, WriteAboutDelegate, UIPopoverPresentationControllerDelegate {
 
-    let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-    var calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+    @IBOutlet private weak var eventImage: UIImageView!
+    @IBOutlet private weak var pickCategory: UIButton!
+    @IBOutlet private weak var eventPhoto: UIButton!
+    @IBOutlet private weak var dateTimeButton: UIButton!
+    @IBOutlet private weak var location: UIButton!
+    @IBOutlet private weak var spinner: UIActivityIndicatorView!
+    @IBOutlet private weak var name: UITextField!
+    @IBOutlet private weak var descr: UIButton!
+    @IBOutlet private weak var createButton: UIButton!
+    @IBOutlet private weak var author: UIButton!
+    @IBOutlet private var attendeeButtons: [UIButton]!
+    @IBOutlet private weak var leftNavigationButton: UIButton!
+
+    private let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+    private let dateFormatter = NSDateFormatter()
+    private let kMinEventAttendees = 2
+    private var longitude: Double?
+    private var latitude: Double?
+    private var chosenDate: NSDate?
+    private var chosenCategories: [Category]! = []
+    private var chosenPhoto: File?
+    private var timeZone: NSTimeZone!
+    private var descriptionText: String! = ""
 
     var event:Event?
     var isEditMode = false
-    
-    let dateFormatter = NSDateFormatter()
-    var longitude: Double?
-    var latitude: Double?
-    var chosenDate:NSDate?
-    var chosenCategories:[Category]! = []
-    var chosenPhoto: File?
-    var delegate:EventChangeDelegate!
-    var timeZone:NSTimeZone!
-    var descriptionText:String!=""
-
-    let kMinEventAttendees = 2
     var attendeesLimit: Int {
         get {
             var selectedButtons = attendeeButtons.filter({ $0.selected })
@@ -43,24 +52,8 @@ class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate
             }
         }
     }
-    
-    @IBOutlet weak var eventImage: UIImageView!
-    @IBOutlet weak var pickCategory: UIButton!
-    @IBOutlet weak var eventPhoto: UIButton!
-    @IBOutlet weak var dateTimeButton: UIButton!
-    @IBOutlet weak var location: UIButton!
-    
-    @IBOutlet weak var spinner: UIActivityIndicatorView!
-    @IBOutlet weak var name: UITextField!
-    @IBOutlet weak var descr: UIButton!
 
-    @IBOutlet weak var createButton: UIButton!
-    
-    @IBOutlet weak var author: UIButton!
-    
-    @IBOutlet var attendeeButtons: [UIButton]!
-    
-    @IBOutlet weak var leftNavigationButton: UIButton!
+    weak var delegate:EventChangeDelegate!
     
     override func viewDidLoad() {
         super.viewDidLoad()

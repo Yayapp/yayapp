@@ -12,21 +12,19 @@ protocol ListEventsDelegate : NSObjectProtocol {
     func madeEventChoice(event: Event)
 }
 
-class ListEventsViewController: EventsViewController, UITableViewDataSource, UITableViewDelegate {
+final class ListEventsViewController: EventsViewController, UITableViewDataSource, UITableViewDelegate {
     static let storyboardID = "ListEventsViewController"
-    
-    var eventsFirst:[Event]?
-    var currentTitle:String?
-    let dateFormatter = NSDateFormatter()
-    var currentLocation:CLLocation?
 
-    
     @IBOutlet weak var events: UITableView!
-    
-    
+
+    private let dateFormatter = NSDateFormatter()
+    private var eventsFirst:[Event]?
+    private var currentLocation: CLLocation?
+
+    var currentTitle:String?
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
         NSNotificationCenter.defaultCenter().addObserver(self,
                                                          selector: #selector(ListEventsViewController.handleUserLogout),
                                                          name: Constants.userDidLogoutNotification,
@@ -196,7 +194,7 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
         for (index, attendeeID) in attendeeIDs.enumerate() {
             let attendeeButton = attendeeButtons[index]
 
-            attendeeButton.addTarget(self, action: "attendeeProfile:", forControlEvents: .TouchUpInside)
+            attendeeButton.addTarget(self, action: #selector(ListEventsViewController.attendeeProfile(_:)), forControlEvents: .TouchUpInside)
 
             attendeeButton.tag = indexPath.section
             attendeeButton.titleLabel?.tag = index
@@ -233,7 +231,7 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
         {
             let attendeeButton = attendeeButtons[attendeeIDs.count]
             attendeeButton.removeTarget(nil, action: nil, forControlEvents: .AllEvents)
-            attendeeButton.addTarget(self, action: "join:", forControlEvents: .TouchUpInside)
+            attendeeButton.addTarget(self, action: #selector(ListEventsViewController.join(_:)), forControlEvents: .TouchUpInside)
             attendeeButton.setTitle("JOIN", forState: .Normal)
             attendeeButton.hidden = false
             attendeeButton.tag = indexPath.section

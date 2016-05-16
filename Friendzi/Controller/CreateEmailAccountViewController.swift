@@ -8,57 +8,30 @@
 
 import UIKit
 
-class CreateEmailAccountViewController: UIViewController {
-    @IBOutlet weak var keyboardAvoidingScrollView: TPKeyboardAvoidingScrollView!
+final class CreateEmailAccountViewController: UIViewController {
 
-    let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    @IBOutlet private weak var keyboardAvoidingScrollView: TPKeyboardAvoidingScrollView!
+    @IBOutlet private weak var name: UITextField!
+    @IBOutlet private weak var email: UITextField!
+    @IBOutlet private weak var password1: UITextField!
+    @IBOutlet private weak var password2: UITextField!
+    @IBOutlet private weak var createAccount: UIButton!
+
     var isLogin:Bool! = false
-   
-    @IBOutlet weak var name: UITextField!
-    
-    @IBOutlet weak var email: UITextField!
-    
-    @IBOutlet weak var password1: UITextField!
-    
-    @IBOutlet weak var password2: UITextField!
-    
-    @IBOutlet weak var createAccount: UIButton!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-       
-//        configureTextFields([email, password1, name, password2, password2])
-
-    }
-    
-//    func configureTextFields(textFields:[UITextField]){
-//        
-//        for textField in textFields {
-//            let paddingView = UIView(frame: CGRectMake(0, 0, 15, textField.frame.height))
-//            textField.leftView = paddingView
-//            textField.rightView = paddingView
-//            textField.leftViewMode = UITextFieldViewMode.Always
-//            textField.rightViewMode = UITextFieldViewMode.Always
-//            
-//            textField.delegate = self
-//        }
-//    }
 
     override func prefersStatusBarHidden() -> Bool {
         return true
     }
 
-
     //MARK: - Button Selectors
     @IBAction func createAccount(sender: AnyObject) {
         handleAccountCreation()
     }
-    
+
     @IBAction func close(sender: AnyObject) {
         dismissViewControllerAnimated(true, completion: nil)
     }
-    
-       
+
     func proceed() {
         if let currentInstallation = ParseHelper.sharedInstance.currentInstallation {
             currentInstallation.user = ParseHelper.sharedInstance.currentUser

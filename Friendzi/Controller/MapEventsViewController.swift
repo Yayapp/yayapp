@@ -9,15 +9,14 @@
 import UIKit
 import MapKit
 
-class MapEventsViewController: EventsViewController, MKMapViewDelegate {
-    
-    
-    @IBOutlet weak var mapView: MKMapView!
-    let regionRadius: CLLocationDistance = 1000
-    
+final class MapEventsViewController: EventsViewController, MKMapViewDelegate {
+
+    @IBOutlet private weak var mapView: MKMapView!
+
+    private let regionRadius: CLLocationDistance = 1000
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         NSNotificationCenter.defaultCenter().addObserver(self,
                                                          selector: #selector(MapEventsViewController.handleUserLogout),
                                                          name: Constants.userDidLogoutNotification,
@@ -32,46 +31,39 @@ class MapEventsViewController: EventsViewController, MKMapViewDelegate {
             let coordinateRegion = MKCoordinateRegionMakeWithDistance(center, regionRadius * Double(distance), regionRadius * Double(distance))
             self.mapView.setRegion(coordinateRegion, animated: true)
         }
-        
     }
-    
+
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self,
                                                             name: Constants.userDidLogoutNotification,
                                                             object: nil)
     }
-    
+
     override func reloadAll(events:[Event]) {
         eventsData = events
-        
         for item in eventsData{
-            
-            
             let pointAnnoation = CustomPointAnnotation()
-            
             pointAnnoation.coordinate = CLLocationCoordinate2D(latitude: item.location.latitude, longitude: item.location.longitude)
             pointAnnoation.title = item.name
             pointAnnoation.subtitle = item.summary
             pointAnnoation.event = item
             let annotationView = MKPinAnnotationView(annotation: pointAnnoation, reuseIdentifier: "pin")
             self.mapView.addAnnotation(annotationView.annotation!)
-            
         }
     }
-    
+
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView?{
-        
         var v = mapView.dequeueReusableAnnotationViewWithIdentifier("pin")
         if v == nil {
             v = MKAnnotationView(annotation: annotation, reuseIdentifier: "pin")
             v!.canShowCallout = true
-        }
-        else {
+
+        } else {
             v!.annotation = annotation
         }
-        
+
         let customPointAnnotation = annotation as! CustomPointAnnotation
-        
+
         ParseHelper.getData(customPointAnnotation.event.photo, completion: {
             (data:NSData?, error:NSError?) in
             if(error == nil){
@@ -86,10 +78,10 @@ class MapEventsViewController: EventsViewController, MKMapViewDelegate {
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
         })
-        
+
         return v
     }
-    
+
     func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
         let customPointAnnotation = view.annotation as! CustomPointAnnotation
         delegate!.madeEventChoice(customPointAnnotation.event)

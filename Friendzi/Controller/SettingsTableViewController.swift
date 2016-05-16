@@ -8,16 +8,13 @@
 
 import UIKit
 
-class SettingsTableViewController: UITableViewController {
+final class SettingsTableViewController: UITableViewController {
 
-    @IBOutlet weak var attAccepted: UISwitch!
-    
-    @IBOutlet weak var newMessage: UISwitch!
-    
-    
+    @IBOutlet private weak var attAccepted: UISwitch!
+    @IBOutlet private weak var newMessage: UISwitch!
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
         SVProgressHUD.show()
         ParseHelper.fetchObject(ParseHelper.sharedInstance.currentUser!, completion: {
             result, error in

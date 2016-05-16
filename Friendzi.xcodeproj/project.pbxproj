@@ -30,7 +30,6 @@
 		26ABD5001CE85122000976D6 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4761CE85121000976D6 /* ImageViewController.swift */; };
 		26ABD5011CE85122000976D6 /* InstagramViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4771CE85121000976D6 /* InstagramViewController.swift */; };
 		26ABD5021CE85122000976D6 /* InstructionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4781CE85121000976D6 /* InstructionViewController.swift */; };
-		26ABD5031CE85122000976D6 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4791CE85121000976D6 /* IntroViewController.swift */; };
 		26ABD5041CE85122000976D6 /* ListEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD47A1CE85121000976D6 /* ListEventsViewController.swift */; };
 		26ABD5051CE85122000976D6 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD47B1CE85121000976D6 /* LoginViewController.swift */; };
 		26ABD5061CE85122000976D6 /* MainRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD47C1CE85121000976D6 /* MainRootViewController.swift */; };
@@ -146,7 +145,6 @@
 		26ABD4761CE85121000976D6 /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		26ABD4771CE85121000976D6 /* InstagramViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstagramViewController.swift; sourceTree = "<group>"; };
 		26ABD4781CE85121000976D6 /* InstructionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstructionViewController.swift; sourceTree = "<group>"; };
-		26ABD4791CE85121000976D6 /* IntroViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
 		26ABD47A1CE85121000976D6 /* ListEventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListEventsViewController.swift; sourceTree = "<group>"; };
 		26ABD47B1CE85121000976D6 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		26ABD47C1CE85121000976D6 /* MainRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainRootViewController.swift; sourceTree = "<group>"; };
@@ -320,7 +318,6 @@
 				26ABD4761CE85121000976D6 /* ImageViewController.swift */,
 				26ABD4771CE85121000976D6 /* InstagramViewController.swift */,
 				26ABD4781CE85121000976D6 /* InstructionViewController.swift */,
-				26ABD4791CE85121000976D6 /* IntroViewController.swift */,
 				26ABD47A1CE85121000976D6 /* ListEventsViewController.swift */,
 				26ABD47B1CE85121000976D6 /* LoginViewController.swift */,
 				26ABD47C1CE85121000976D6 /* MainRootViewController.swift */,
@@ -740,7 +737,6 @@
 			files = (
 				26ABD52B1CE85122000976D6 /* Prefs.swift in Sources */,
 				26ABD5071CE85122000976D6 /* MapEventsViewController.swift in Sources */,
-				26ABD5031CE85122000976D6 /* IntroViewController.swift in Sources */,
 				26ABD5171CE85122000976D6 /* StartViewController.swift in Sources */,
 				26ABD5231CE85122000976D6 /* PFUser.swift in Sources */,
 				26ABD55D1CE8529E000976D6 /* DataProxy.swift in Sources */,

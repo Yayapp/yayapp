@@ -8,22 +8,20 @@
 
 import UIKit
 
-class LoginViewController: UIViewController, InstagramDelegate {
+final class LoginViewController: UIViewController, InstagramDelegate {
 
-    let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-    var isLogin:Bool! = false
-    
-    @IBOutlet weak var signIn: UIButton!
-    @IBOutlet weak var forgotPassword: UIButton!
-    @IBOutlet weak var password: UITextField!
-    @IBOutlet weak var email: UITextField!
-    @IBOutlet weak var textLabel: UILabel!
-    @IBOutlet weak var createEmailAccount: UIButton!
-    
-    @IBOutlet weak var orLabelBottomToEmailTextField: NSLayoutConstraint!
-    @IBOutlet weak var orLabelBottomToEmailButton: NSLayoutConstraint!
+    @IBOutlet private weak var signIn: UIButton!
+    @IBOutlet private weak var forgotPassword: UIButton!
+    @IBOutlet private weak var password: UITextField!
+    @IBOutlet private weak var email: UITextField!
+    @IBOutlet private weak var textLabel: UILabel!
+    @IBOutlet private weak var createEmailAccount: UIButton!
+    @IBOutlet private weak var orLabelBottomToEmailTextField: NSLayoutConstraint!
+    @IBOutlet private weak var orLabelBottomToEmailButton: NSLayoutConstraint!
 
-    lazy var forgotPasswordAlert: UIAlertController = {
+    private let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+
+    private lazy var forgotPasswordAlert: UIAlertController = {
         var tField: UITextField!
         let alert = UIAlertController(title: "Reset password", message: nil, preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "Reset", style: UIAlertActionStyle.Default, handler: {
@@ -52,6 +50,8 @@ class LoginViewController: UIViewController, InstagramDelegate {
 
         return alert
     }()
+
+    var isLogin: Bool! = false
 
     override func viewDidLoad() {
         super.viewDidLoad()

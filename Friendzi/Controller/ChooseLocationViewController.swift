@@ -13,17 +13,19 @@ protocol ChooseLocationDelegate : NSObjectProtocol {
     func madeLocationChoice(coordinates: CLLocationCoordinate2D)
 }
 
-class ChooseLocationViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UISearchBarDelegate {
+final class ChooseLocationViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UISearchBarDelegate {
     static let storyboardID = "ChooseLocationViewController"
     
-    @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var mapView: MKMapView!
-    var lat: CLLocationDegrees?
-    var lon: CLLocationDegrees?
-    let locationManager = CLLocationManager()
-    var delegate: ChooseLocationDelegate!
-    var touchMapCoordinate: CLLocationCoordinate2D!
-    
+    @IBOutlet private weak var searchBar: UISearchBar!
+    @IBOutlet private weak var mapView: MKMapView!
+
+    private var lat: CLLocationDegrees?
+    private var lon: CLLocationDegrees?
+    private let locationManager = CLLocationManager()
+    private var touchMapCoordinate: CLLocationCoordinate2D!
+
+    weak var delegate: ChooseLocationDelegate!
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -33,7 +35,7 @@ class ChooseLocationViewController: UIViewController, CLLocationManagerDelegate,
         mapView.showsUserLocation = true
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         
-        let longPressRecogniser = UILongPressGestureRecognizer(target: self, action: "handleLongPress:")
+        let longPressRecogniser = UILongPressGestureRecognizer(target: self, action: #selector(ChooseLocationViewController.handleLongPress(_:)))
         
         longPressRecogniser.minimumPressDuration = 1.0
         mapView.addGestureRecognizer(longPressRecogniser)

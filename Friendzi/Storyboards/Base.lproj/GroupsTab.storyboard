@@ -47,7 +47,7 @@
                                         <constraint firstItem="Spd-ue-zSc" firstAttribute="top" secondItem="R2a-EE-Bri" secondAttribute="top" constant="3" id="hZ8-Bl-Ufa"/>
                                     </constraints>
                                     <connections>
-                                        <outlet property="name" destination="Spd-ue-zSc" id="FDD-qT-Ob2"/>
+                                        <outlet property="nameLabel" destination="Spd-ue-zSc" id="6hd-PZ-RYE"/>
                                     </connections>
                                 </collectionReusableView>
                                 <userDefinedRuntimeAttributes>

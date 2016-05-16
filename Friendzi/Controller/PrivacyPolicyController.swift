@@ -8,11 +8,10 @@
 
 import UIKit
 
-class PrivacyPolicyController: UIViewController {
+final class PrivacyPolicyController: UIViewController {
 
-    let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-    
-    @IBOutlet weak var webView: UIWebView!
+    @IBOutlet private weak var webView: UIWebView!
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -21,10 +20,8 @@ class PrivacyPolicyController: UIViewController {
         }
     }
 
-
     @IBAction func close(sender: AnyObject) {
         dismissViewControllerAnimated(true, completion: {
         })
     }
-
 }

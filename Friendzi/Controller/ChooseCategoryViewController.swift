@@ -8,25 +8,23 @@
 
 import UIKit
 
-class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UISearchBarDelegate, GroupCreationDelegate, GroupChangeDelegate {
+final class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UISearchBarDelegate, GroupCreationDelegate, GroupChangeDelegate {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
-    @IBOutlet weak var allButton: UIButton!
-    @IBOutlet weak var publicButton: UIButton!
-    @IBOutlet weak var privateButton: UIButton!
+    @IBOutlet private weak var allButton: UIButton!
+    @IBOutlet private weak var publicButton: UIButton!
+    @IBOutlet private weak var privateButton: UIButton!
     @IBOutlet private weak var myGroupsButton: UIButton?
     
-    @IBOutlet weak var allUnderline: UIView!
-    @IBOutlet weak var publicUnderline: UIView!
-    @IBOutlet weak var privateUnderline: UIView!
+    @IBOutlet private weak var allUnderline: UIView!
+    @IBOutlet private weak var publicUnderline: UIView!
+    @IBOutlet private weak var privateUnderline: UIView!
     @IBOutlet private var myGroupsUnderline: UIView?
   
-    @IBOutlet weak var navBar: UINavigationBar!
-    
-    @IBOutlet weak var categories: UICollectionView!
-    
-    @IBOutlet weak var filterContainer: UIImageView!
+    @IBOutlet private weak var navBar: UINavigationBar!
+    @IBOutlet private weak var categories: UICollectionView!
+    @IBOutlet private weak var filterContainer: UIImageView!
 
     lazy var searchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
@@ -143,7 +141,7 @@ class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, 
         }
 
         if selectedCategoryType == .All {
-            categoryHeader.name.text = indexPath.section == 0 ? NSLocalizedString("Public Groups", comment: "") : NSLocalizedString("Private Groups", comment: "")
+            categoryHeader.name = indexPath.section == 0 ? NSLocalizedString("Public Groups", comment: "") : NSLocalizedString("Private Groups", comment: "")
         }
 
         return categoryHeader

@@ -9,14 +9,24 @@
 import Foundation
 import UIKit
 
-class CategoryHeader: UICollectionReusableView {
+//TODO:- Move to view
+final class CategoryHeader: UICollectionReusableView {
     static let reuseIdentifier = "CategoryHeader"
     
-    @IBOutlet weak var name: UILabel!
+    @IBOutlet private weak var nameLabel: UILabel!
+
+    var name: String? {
+        didSet {
+            guard let name = name else {
+                return
+            }
+            nameLabel.text = name
+        }
+    }
 
     override func prepareForReuse() {
         super.prepareForReuse()
 
-        name.text = nil
+        nameLabel.text = ""
     }
 }

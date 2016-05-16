@@ -2,8 +2,9 @@
 /**
  * Created by Developer on 29.05.2014.
  */
-class MessageToUser {
 
+//TODO:- Move it to extension
+final class MessageToUser {
     static func showMessage(title:String, textId:String!) {
         let alert = UIAlertView()
         alert.title = title
@@ -19,7 +20,7 @@ class MessageToUser {
         alert.addButtonWithTitle("OK")
         alert.show()
     }
-    
+
     static func showDefaultErrorMessage(textId:String!, delegate:UIAlertViewDelegate) {
         let alert = UIAlertView()
         alert.title = "Ooops"
@@ -28,5 +29,4 @@ class MessageToUser {
         alert.delegate = delegate
         alert.show()
     }
-
 }

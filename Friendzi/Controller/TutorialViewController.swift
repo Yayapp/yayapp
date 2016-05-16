@@ -8,26 +8,20 @@
 
 import UIKit
 
-class TutorialViewController: UIViewController {
-    
-//    var hints:[String]!
-    var pageIndex : Int = 0
+final class TutorialViewController: UIViewController {
 
-    @IBOutlet weak var tutorialImage: UIImageView!
-    @IBOutlet weak var tuorialButton: UIButton!
-    
-    let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-    
+    @IBOutlet private weak var tutorialImage: UIImageView!
+    @IBOutlet private weak var tuorialButton: UIButton!
+
+    private var pageIndex : Int = 0
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        tutorialImage.image = UIImage(named: "tut_\(pageIndex+1)")
-        
+        tutorialImage.image = UIImage(named: "tut_\(pageIndex + 1)")
     }
 
-    
     @IBAction func skip(sender: AnyObject) {
         parentViewController!.dismissViewControllerAnimated(true, completion: {
-            })
+        })
     }
-
 }

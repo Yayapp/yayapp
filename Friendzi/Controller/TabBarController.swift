@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TabBarController: UITabBarController {
+final class TabBarController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,9 +20,5 @@ class TabBarController: UITabBarController {
         let profileController = UIStoryboard(name: "ProfileTab", bundle: nil).instantiateViewControllerWithIdentifier("profileNavigationController")
 
         viewControllers = [eventsController, groupsController,createEventController, notificationsController, profileController]
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
     }
 }

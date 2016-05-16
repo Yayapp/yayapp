@@ -10,12 +10,11 @@ import UIKit
 
 class RangeViewController: UIViewController {
 
-    @IBOutlet weak var rangeText: UILabel!
-    
-    @IBOutlet weak var rangeSelector: UISlider!
-    
-    var currentValue:Int!
-    
+    @IBOutlet private weak var rangeText: UILabel!
+    @IBOutlet private weak var rangeSelector: UISlider!
+
+    private var currentValue: Int!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         currentValue = ParseHelper.sharedInstance.currentUser?.distance
@@ -24,22 +23,14 @@ class RangeViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
     @IBAction func sliderValueChanged(sender: UISlider) {
         currentValue = Int(sender.value)
         rangeText.text = "\(Int(currentValue))KM"
     }
+
     @IBAction func doneAction(sender: AnyObject) {
         ParseHelper.sharedInstance.currentUser?.distance = currentValue
         ParseHelper.saveObject(ParseHelper.sharedInstance.currentUser, completion: nil)
-
         navigationController?.popViewControllerAnimated(true)
     }
-
-    
-
 }

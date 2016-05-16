@@ -8,11 +8,10 @@
 
 import UIKit
 
-class TermsController: UIViewController {
-    
-    let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-    
-    @IBOutlet weak var webView: UIWebView!
+final class TermsController: UIViewController {
+
+    @IBOutlet private weak var webView: UIWebView!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -20,8 +19,7 @@ class TermsController: UIViewController {
             webView.loadRequest(NSURLRequest(URL: path))
         }
     }
-   
-    
+
     @IBAction func close(sender: AnyObject) {
         dismissViewControllerAnimated(true, completion: {
         })

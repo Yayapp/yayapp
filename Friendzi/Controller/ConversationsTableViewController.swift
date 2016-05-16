@@ -8,12 +8,12 @@
 
 import UIKit
 
-class ConversationsTableViewController: UITableViewController {
-    
-    var events:[Event] = []
-    
-    @IBOutlet weak var emptyView: UIView!
-    
+final class ConversationsTableViewController: UITableViewController {
+
+    @IBOutlet private weak var emptyView: UIView!
+
+    private var events:[Event] = []
+
     override func viewDidLoad() {
         super.viewDidLoad()
 

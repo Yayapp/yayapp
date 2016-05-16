@@ -9,51 +9,38 @@
 import UIKit
 import MessageUI
 
-class EventDetailsViewController: UIViewController, MFMailComposeViewControllerDelegate, EventChangeDelegate {
-    
-    let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-    
+final class EventDetailsViewController: UIViewController, MFMailComposeViewControllerDelegate, EventChangeDelegate {
+
+    @IBOutlet private weak var eventActionButton: UIButton!
+    @IBOutlet private weak var spinner: UIActivityIndicatorView!
+    @IBOutlet private weak var photo: UIImageView!
+    @IBOutlet private weak var name: UILabel!
+    @IBOutlet private weak var location: UIButton!
+    @IBOutlet private weak var descr: UITextView!
+    @IBOutlet private weak var date: UILabel!
+    @IBOutlet private weak var distance: UILabel!
+    @IBOutlet private weak var chatButton: UIButton!
+    @IBOutlet private weak var detailsButton: UIButton!
+    @IBOutlet private weak var author: UIButton!
+    @IBOutlet private weak var attended1: UIButton!
+    @IBOutlet private weak var attended2: UIButton!
+    @IBOutlet private weak var attended3: UIButton!
+    @IBOutlet private weak var attended4: UIButton!
+    @IBOutlet private weak var detailsUnderline: UIView!
+    @IBOutlet private weak var chatUnderline: UIView!
+    @IBOutlet private weak var messagesContainer: UIView!
+    @IBOutlet private weak var switherPlaceholderTopSpace: NSLayoutConstraint!
+    @IBOutlet private weak var attendButton: UIButton!
+    @IBOutlet private weak var attendButtonHeight: NSLayoutConstraint!
+
+    private let dateFormatter = NSDateFormatter()
+    private var currentLocation:CLLocation!
+    private var attendeeButtons:[UIButton]!
+    private var attendees:[User] = []
+
     var event:Event!
-    let dateFormatter = NSDateFormatter()
-    var currentLocation:CLLocation!
-    var attendeeButtons:[UIButton]!
-    var attendees:[User] = []
-    var delegate:EventChangeDelegate!
-    
-    @IBOutlet weak var eventActionButton: UIButton!
-    @IBOutlet weak var spinner: UIActivityIndicatorView!
-    @IBOutlet weak var photo: UIImageView!
-    @IBOutlet weak var name: UILabel!
-    
-    @IBOutlet weak var location: UIButton!
-    
-    @IBOutlet weak var descr: UITextView!
-    @IBOutlet weak var date: UILabel!
-    
-    @IBOutlet weak var distance: UILabel!
-    
-    @IBOutlet weak var chatButton: UIButton!
-    @IBOutlet weak var detailsButton: UIButton!
-    
-    @IBOutlet weak var author: UIButton!
-    
-    @IBOutlet weak var attended1: UIButton!
-    
-    @IBOutlet weak var attended2: UIButton!
-    
-    @IBOutlet weak var attended3: UIButton!
-    
-    @IBOutlet weak var attended4: UIButton!
-    
-    @IBOutlet weak var detailsUnderline: UIView!
-    
-    @IBOutlet weak var chatUnderline: UIView!
-    
-    @IBOutlet weak var messagesContainer: UIView!
-    @IBOutlet weak var switherPlaceholderTopSpace: NSLayoutConstraint!
-    
-    @IBOutlet weak var attendButton: UIButton!
-    @IBOutlet weak var attendButtonHeight: NSLayoutConstraint!
+
+    weak var delegate:EventChangeDelegate!
 
     private var attendState: AttendState = .Hidden {
         didSet {
@@ -146,7 +133,7 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
 
                 self?.attendees = fetchedUsers
 
-                for var index = 0; index < (fetchedEvent.limit-1); index += 1 {
+                for index in 0 ..< (fetchedEvent.limit-1) {
                     self?.attendeeButtons[index].setImage(UIImage(named: "upload_pic"), forState: .Normal)
                 }
                 let currentLocation = ParseHelper.sharedInstance.currentUser!.location
@@ -181,7 +168,7 @@ class EventDetailsViewController: UIViewController, MFMailComposeViewControllerD
                 for (index, attendee) in attendees.enumerate() {
                     let attendeeButton = self?.attendeeButtons[index]
 
-                    attendeeButton?.addTarget(self, action: "attendeeProfile:", forControlEvents: .TouchUpInside)
+                    attendeeButton?.addTarget(self, action: #selector(EventDetailsViewController.attendeeProfile(_:)), forControlEvents: .TouchUpInside)
                     attendeeButton?.tag = index
 
                     if let attendeeAvatarURLString = attendee.avatar?.url,

@@ -8,27 +8,20 @@
 
 import UIKit
 
-class EditProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate,UIPopoverPresentationControllerDelegate {
-    
-    
-    let picker = UIImagePickerController()
-    var editdone:UIBarButtonItem!
-    var gender:Int!
-    var avatarData:NSData?
+final class EditProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate,UIPopoverPresentationControllerDelegate {
 
+    @IBOutlet private weak var maleButton: UIButton!
+    @IBOutlet private weak var femaleButton: UIButton!
+    @IBOutlet private weak var name: UITextField!
+    @IBOutlet private weak var avatar: UIImageView!
+    @IBOutlet private weak var about: UITextView!
+
+    private let picker = UIImagePickerController()
+    private var editdone: UIBarButtonItem!
+    private var avatarData: NSData?
+    private var gender: Int!
     private var isShowingBioPlaceholder = true
 
-    @IBOutlet weak var maleButton: UIButton!
-    
-    @IBOutlet weak var femaleButton: UIButton!
-    
-
-    @IBOutlet weak var name: UITextField!
-    
-    @IBOutlet weak var avatar: UIImageView!
-    
-    @IBOutlet weak var about: UITextView!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 

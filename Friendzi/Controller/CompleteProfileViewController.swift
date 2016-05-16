@@ -8,26 +8,24 @@
 
 import UIKit
 
-class CompleteProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate {
+final class CompleteProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate {
     static let storyboardID = "completeProfileViewController"
+
+    @IBOutlet private weak var dismissButton: UIButton!
+    @IBOutlet private weak var uploadPhoto: UIButton!
+    @IBOutlet private weak var avatar: UIImageView!
+    @IBOutlet private weak var maleButton: UIButton!
+    @IBOutlet private weak var femaleButton: UIButton!
+    @IBOutlet private weak var genderImage: UIImageView!
+    @IBOutlet private weak var bioField: UITextView!
+    @IBOutlet private weak var nameLabel: UILabel!
+    @IBOutlet private weak var proceed: UIButton!
+
+    private var isShowingBioPlaceholder = true
+    private let picker = UIImagePickerController()
 
     var dismissButtonHidden = true
     var onNextButtonPressed: (() -> Void)?
-
-    private var isShowingBioPlaceholder = true
-    
-    let picker = UIImagePickerController()
-    
-    @IBOutlet weak var dismissButton: UIButton!
-    @IBOutlet weak var uploadPhoto: UIButton!
-    @IBOutlet weak var avatar: UIImageView!
-    @IBOutlet weak var maleButton: UIButton!
-    @IBOutlet weak var femaleButton: UIButton!
-    @IBOutlet weak var genderImage: UIImageView!
-    @IBOutlet weak var bioField: UITextView!
-    @IBOutlet weak var nameLabel: UILabel!
-    
-    @IBOutlet weak var proceed: UIButton!
 
 
     override func viewDidLoad() {
@@ -65,7 +63,8 @@ class CompleteProfileViewController: UIViewController, UIImagePickerControllerDe
     }
 
     @IBAction func dismissButtonPressed(sender: AnyObject) {
-        SVProgressHUD.showWithMaskType(.Gradient)
+        SVProgressHUD.show()
+        SVProgressHUD.setDefaultMaskType(.Gradient)
         ParseHelper.logOutInBackgroundWithBlock({ error in
             SVProgressHUD.dismiss()
             guard error == nil else {

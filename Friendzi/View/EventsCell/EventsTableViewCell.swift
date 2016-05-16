@@ -17,18 +17,13 @@ class EventsTableViewCell: UITableViewCell {
     @IBOutlet weak var location: UILabel!
     @IBOutlet weak var date: UILabel!
     @IBOutlet weak var howFar: UILabel!
-
     @IBOutlet weak var author: UIButton!
-
     @IBOutlet weak var attended1: UIButton!
-
     @IBOutlet weak var attended2: UIButton!
-
     @IBOutlet weak var attended3: UIButton!
-
     @IBOutlet weak var attended4: UIButton!
 
-    var attendeesButtons: [UIButton!]?
+    private var attendeesButtons: [UIButton!]?
 
     override func layoutSubviews() {
         super.layoutSubviews()

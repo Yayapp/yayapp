@@ -8,23 +8,18 @@
 
 import UIKit
 
-class NotificationsController: UIViewController {
+final class NotificationsController: UIViewController {
     
     var currentVC:UIViewController!
     
-    @IBOutlet weak var container: UIView!
-    
-    @IBOutlet weak var recentUnderline: UIView!
-    @IBOutlet weak var chatUnderline: UIView!
-    @IBOutlet weak var requestsUnderline: UIView!
-    
-    @IBOutlet weak var recentButton: UIButton!
-    
-    @IBOutlet weak var chatButton: UIButton!
-    
-    @IBOutlet weak var requestsButton: UIButton!
-    
-    
+    @IBOutlet private weak var container: UIView!
+    @IBOutlet private weak var recentUnderline: UIView!
+    @IBOutlet private weak var chatUnderline: UIView!
+    @IBOutlet private weak var requestsUnderline: UIView!
+    @IBOutlet private weak var recentButton: UIButton!
+    @IBOutlet private weak var chatButton: UIButton!
+    @IBOutlet private weak var requestsButton: UIButton!
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -47,21 +42,19 @@ class NotificationsController: UIViewController {
         if let inActiveVC = inactiveViewController {
             // call before removing child view controller's view from hierarchy
             inActiveVC.willMoveToParentViewController(nil)
-            
             inActiveVC.view.removeFromSuperview()
-            
             // call after removing child view controller's view from hierarchy
             inActiveVC.removeFromParentViewController()
         }
     }
-    
+
     func updateActiveViewController(activeViewController: UIViewController?) {
         if activeViewController != nil {
             addChildViewController(activeViewController!)
             activeViewController!.view.frame = container.bounds
             container.addSubview(activeViewController!.view)
             activeViewController!.didMoveToParentViewController(self)
-            
+
         }
         removeInactiveViewController(currentVC)
         currentVC = activeViewController

@@ -9,12 +9,14 @@
 import UIKit
 import MapKit
 
-class EventFinderViewController: UIViewController, UIAlertViewDelegate, ChooseLocationDelegate {
-    @IBOutlet weak var searchingAnimation: UIImageView!
-    @IBOutlet weak var location: UIButton!
+final class EventFinderViewController: UIViewController, UIAlertViewDelegate, ChooseLocationDelegate {
 
-    let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-    var gotoMainTabBarScreen: (() -> Void)?
+    @IBOutlet private weak var searchingAnimation: UIImageView!
+    @IBOutlet private weak var location: UIButton!
+
+    private let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+
+    private var gotoMainTabBarScreen: (() -> Void)?
 
     override func viewDidLoad() {
         super.viewDidLoad()

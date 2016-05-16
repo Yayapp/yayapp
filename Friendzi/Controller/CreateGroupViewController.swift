@@ -14,40 +14,34 @@ protocol GroupCreationDelegate : NSObjectProtocol {
     func groupCreated(group:Category)
 }
 
-class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate, ChooseEventPictureDelegate, WriteAboutDelegate, UIPopoverPresentationControllerDelegate {
+final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate, ChooseEventPictureDelegate, WriteAboutDelegate, UIPopoverPresentationControllerDelegate {
     
-    let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-    
-    var group:Category?
+    @IBOutlet private weak var eventImage: UIImageView!
+    @IBOutlet private weak var eventPhoto: UIButton!
+    @IBOutlet private weak var location: UIButton!
+    @IBOutlet private weak var spinner: UIActivityIndicatorView!
+    @IBOutlet private weak var name: UITextField!
+    @IBOutlet private weak var descr: UIButton!
+    @IBOutlet private weak var publicButton: UIButton!
+    @IBOutlet private weak var privateButton: UIButton!
+    @IBOutlet private weak var createButton: UIButton!
+
+    private var isPrivate: Bool = false
+    private var longitude: Double?
+    private var latitude: Double?
+    private var chosenPhoto: File?
+    private var descriptionText: String! = ""
+    private var deleteGroupButton: UIBarButtonItem!
+
+    var group: Category?
     var isEditMode = false
 
-    var isPrivate:Bool = false
-    var longitude: Double?
-    var latitude: Double?
-    var chosenPhoto: File?
-    var delegate:GroupCreationDelegate!
-    var descriptionText:String!=""
-    
-    
-    @IBOutlet weak var eventImage: UIImageView!
-    @IBOutlet weak var eventPhoto: UIButton!
-    @IBOutlet weak var location: UIButton!
-    
-    @IBOutlet weak var spinner: UIActivityIndicatorView!
-    @IBOutlet weak var name: UITextField!
-    @IBOutlet weak var descr: UIButton!
-    
-    @IBOutlet weak var publicButton: UIButton!
-    
-    @IBOutlet weak var privateButton: UIButton!
-    
-    @IBOutlet weak var createButton: UIButton!
-    var deleteGroupButton: UIBarButtonItem!
+    weak var delegate:GroupCreationDelegate!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
         name.delegate = self
-        
         if group != nil {
             update()
             title = NSLocalizedString("Edit Group", comment: "")

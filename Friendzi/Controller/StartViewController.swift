@@ -8,15 +8,10 @@
 
 import UIKit
 
-class StartViewController: UIViewController {
+final class StartViewController: UIViewController {
     
-    @IBOutlet weak var dots: UIPageControl!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
- 
-    
+    @IBOutlet private weak var dots: UIPageControl!
+
     @IBAction func login(sender: AnyObject) {
         guard let vc = UIStoryboard.auth()?.instantiateViewControllerWithIdentifier("LoginViewController") as? LoginViewController else {
             return
@@ -25,7 +20,7 @@ class StartViewController: UIViewController {
         vc.isLogin = true
         presentViewController(vc, animated: true, completion: nil)
     }
-    
+
     @IBAction func signup(sender: AnyObject) {
         guard let vc = UIStoryboard.auth()?.instantiateViewControllerWithIdentifier("LoginViewController") as? LoginViewController else {
             return
@@ -33,7 +28,4 @@ class StartViewController: UIViewController {
 
         presentViewController(vc, animated: true, completion: nil)
     }
-   
-    
-   
 }

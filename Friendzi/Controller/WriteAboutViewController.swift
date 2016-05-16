@@ -12,14 +12,13 @@ protocol WriteAboutDelegate : NSObjectProtocol {
     func writeAboutDone(text: String)
 }
 
-class WriteAboutViewController: UIViewController {
-    
-    @IBOutlet weak var text: UITextView!
-    
-    var textAbout:String!
+final class WriteAboutViewController: UIViewController {
 
-    var delegate: WriteAboutDelegate!
-    
+    @IBOutlet private weak var text: UITextView!
+
+    var textAbout:String!
+    weak var delegate: WriteAboutDelegate!
+
     override func viewDidLoad() {
         super.viewDidLoad()
 

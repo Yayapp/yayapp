@@ -12,7 +12,7 @@ protocol CategoryPickerDelegate : NSObjectProtocol {
 
 final class CategoryPickerViewController: UIViewController, TTGTextTagCollectionViewDelegate {
 
-    @IBOutlet weak var categoriesCollection: TTGTextTagCollectionView!
+    @IBOutlet private weak var categoriesCollection: TTGTextTagCollectionView!
 
     private var datasource: [Category]! = []
 

@@ -8,19 +8,15 @@
 
 import UIKit
 
-class RequestsTableViewController: UITableViewController {
+final class RequestsTableViewController: UITableViewController {
 
-    var requests:[Request] = []
-    let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    @IBOutlet private weak var emptyView: UIView!
 
-    @IBOutlet weak var emptyView: UIView!
-    
-    
+    private var requests:[Request] = []
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
         tableView.registerNib(RequestTableViewCell.nib, forCellReuseIdentifier: RequestTableViewCell.reuseIdentifier)
-        
         ParseHelper.getOwnerRequests(ParseHelper.sharedInstance.currentUser!, block: {
             result, error in
             if (error == nil){
@@ -40,11 +36,11 @@ class RequestsTableViewController: UITableViewController {
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
-    
+
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return requests.count
     }
-    
+
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCellWithIdentifier(RequestTableViewCell.reuseIdentifier) as? RequestTableViewCell else {
             return UITableViewCell()
@@ -72,6 +68,7 @@ class RequestsTableViewController: UITableViewController {
                     photoURL = NSURL(string: photoURLString) {
                     cell.avatar.sd_setImageWithURL(photoURL)
                 }
+
             } else {
                 cell.name.text = ""
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
@@ -79,29 +76,25 @@ class RequestsTableViewController: UITableViewController {
         })
         cell.avatar.layer.borderColor = Color.PrimaryActiveColor.CGColor
         cell.accept.tag = indexPath.row;
-        cell.accept.addTarget(self, action: "accept:", forControlEvents: .TouchUpInside)
-        
+        cell.accept.addTarget(self, action: #selector(RequestsTableViewController.accept(_:)), forControlEvents: .TouchUpInside)
         cell.decline.tag = indexPath.row;
-        cell.decline.addTarget(self, action: "decline:", forControlEvents: .TouchUpInside)
-        
+        cell.decline.addTarget(self, action: #selector(RequestsTableViewController.decline(_:)), forControlEvents: .TouchUpInside)
+
         return cell
     }
-    
+
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let request:Request! = requests[indexPath.row]
         guard let userProfileViewController = UIStoryboard.profileTab()?.instantiateViewControllerWithIdentifier("UserProfileViewController") as? UserProfileViewController else {
             return
         }
-        
+
         userProfileViewController.user = request.attendee
-        
         navigationController?.pushViewController(userProfileViewController, animated: true)
     }
     
     @IBAction func accept(sender: AnyObject) {
-        
         let request = requests[sender.tag]
-
         guard let attendeeId = request.attendee.objectId else {
             return
         }
@@ -118,19 +111,16 @@ class RequestsTableViewController: UITableViewController {
                 ParseHelper.declineRequests(request.event!)
                 self.requests = self.requests.filter({$0.event!.objectId != request.event!.objectId})
             }
-//            self.appDelegate.leftViewController.requestsCountLabel.text = "\(self.requests.count)"
             self.tableView.reloadData()
         })
-        
     }
-    
+
     @IBAction func decline(sender: AnyObject) {
         let request = requests[sender.tag]
         request.accepted = false
         ParseHelper.saveObject(request, completion: nil)
         UIApplication.sharedApplication().applicationIconBadgeNumber-=1
         requests.removeAtIndex(sender.tag)
-//        self.appDelegate.leftViewController.requestsCountLabel.text = "\(self.requests.count)"
         tableView.reloadData()
     }
 }

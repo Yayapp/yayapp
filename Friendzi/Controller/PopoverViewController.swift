@@ -11,18 +11,18 @@ import UIKit
 final class PopoverViewController: UIViewController {
     static let storyboardID = "PopoverViewController"
 
+    @IBOutlet private weak var contentView: UIView!
+    @IBOutlet private weak var arrowViewLeadingSpaceConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var textLabel: UILabel!
+    @IBOutlet private weak var submitButton: UIButton!
+    @IBOutlet private weak var skipButton: UIButton!
+
     var arrowViewLeadingSpace: CGFloat?
     var text: String?
     var submitButtonTitle: String?
     var skipButtonHidden: Bool?
     var onSubmitPressed: (() -> ())?
     var onSkipPressed: (() -> ())?
-
-    @IBOutlet private weak var contentView: UIView!
-    @IBOutlet private weak var arrowViewLeadingSpaceConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var textLabel: UILabel!
-    @IBOutlet private weak var submitButton: UIButton!
-    @IBOutlet private weak var skipButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()

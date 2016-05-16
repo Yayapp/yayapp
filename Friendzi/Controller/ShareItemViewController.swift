@@ -9,13 +9,14 @@
 import UIKit
 import MessageUI
 
-class ShareItemViewController: UIViewController, MFMessageComposeViewControllerDelegate, MFMailComposeViewControllerDelegate {
+final class ShareItemViewController: UIViewController, MFMessageComposeViewControllerDelegate, MFMailComposeViewControllerDelegate {
     static let storyboardID = "ShareItemViewController"
 
-    @IBOutlet var contentContainerView: UIView!
-    
+    @IBOutlet private weak var contentContainerView: UIView!
+
+    private var generatedShortURL: String?
+
     var item: Object?
-    var generatedShortURL: String?
     var onCancelPressed: (() -> ())?
 
     override func viewDidLoad() {

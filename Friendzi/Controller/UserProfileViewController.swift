@@ -8,22 +8,23 @@
 
 import UIKit
 
-class UserProfileViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate,   UIPopoverPresentationControllerDelegate, TTGTextTagCollectionViewDelegate {
+final class UserProfileViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate,   UIPopoverPresentationControllerDelegate, TTGTextTagCollectionViewDelegate {
+    
+    @IBOutlet private weak var name: UILabel!
+    @IBOutlet private weak var avatar: UIImageView!
+    @IBOutlet private weak var eventsCount: UILabel!
+    @IBOutlet private weak var about: UILabel!
+    @IBOutlet private weak var rankIcon: UIImageView!
+    @IBOutlet private weak var interestsCollection: TTGTextTagCollectionView!
 
-    let picker = UIImagePickerController()
+    private let picker = UIImagePickerController()
+    private var editdone:UIBarButtonItem!
+    private var interestsData:[Category]! = []
+    private var blocked = false
+
     var user: User!
     var userID: String?
-    var editdone:UIBarButtonItem!
-    var interestsData:[Category]! = []
-    var blocked = false
-    
-    @IBOutlet weak var name: UILabel!
-    @IBOutlet weak var avatar: UIImageView!
-    @IBOutlet weak var eventsCount: UILabel!
-    @IBOutlet weak var about: UILabel!
-    @IBOutlet weak var rankIcon: UIImageView!
-    @IBOutlet weak var interestsCollection: TTGTextTagCollectionView!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 

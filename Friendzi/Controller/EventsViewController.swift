@@ -14,24 +14,19 @@ protocol EventChangeDelegate : NSObjectProtocol {
 }
 
 class EventsViewController: UIViewController, EventChangeDelegate {
-
     var eventsData:[Event]=[]
-    var delegate:ListEventsDelegate?
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
 
-    }
+    weak var delegate:ListEventsDelegate?
 
     func reloadAll(events:[Event]) {
-        
     }
 
-    func eventCreated(event: Event) { }
-    
+    func eventCreated(event: Event) {
+    }
+
     func eventChanged(event:Event) {
     }
-    
+
     func eventRemoved(event:Event) {
     }
 }

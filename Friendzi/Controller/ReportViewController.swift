@@ -8,16 +8,16 @@
 
 import UIKit
 
-class ReportViewController: UIViewController {
+final class ReportViewController: UIViewController {
     static let storyboardID = "reportViewController"
-    
-    @IBOutlet private var contentContainerView: UIView!
-    @IBOutlet private var reportButton: UIButton!
-    @IBOutlet private var blockButton: UIButton!
-    
+
+    @IBOutlet private weak var contentContainerView: UIView!
+    @IBOutlet private weak var reportButton: UIButton!
+    @IBOutlet private weak var blockButton: UIButton!
+
     var reportButtonTitle = "Report"
     var blockButtonTitle = "Block"
-    
+
     var onReport: (() -> Void)?
     var onBlock: (() -> Void)?
     

@@ -8,6 +8,6 @@
 
 import UIKit
 
-class CustomPointAnnotation: MKPointAnnotation {
+final class CustomPointAnnotation: MKPointAnnotation {
    var event:Event!
 }

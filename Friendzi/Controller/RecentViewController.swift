@@ -7,12 +7,10 @@
 //
 
 import Foundation
-class RecentViewController: UITableViewController {
-    
-    var notifications:[Notification] = []
-    let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
- 
-    
+final class RecentViewController: UITableViewController {
+
+    private var notifications:[Notification] = []
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -41,11 +39,11 @@ class RecentViewController: UITableViewController {
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
-    
+
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return notifications.count
     }
-    
+
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCellWithIdentifier(RequestTableViewCell.reuseIdentifier) as? RequestTableViewCell else {
             return UITableViewCell()
@@ -116,8 +114,6 @@ class RecentViewController: UITableViewController {
                 vc.event = (notification as! Message).event
                 navigationController?.pushViewController(vc, animated: true)
             }
-            
-            
         }
     }
     

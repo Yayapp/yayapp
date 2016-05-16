@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MessagesTableViewController: JSQMessagesViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate {
+final class MessagesTableViewController: JSQMessagesViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate {
     static let storyboardID = "MessagesTableViewController"
     
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
@@ -24,13 +24,12 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         picker.delegate = self
-        
+
         self.edgesForExtendedLayout = UIRectEdge.None
         inputToolbar?.contentView?.leftBarButtonItem?.setImage(UIImage(named: "add-photo-vid"), forState: .Normal)
         inputToolbar?.contentView?.leftBarButtonItem?.setImage(UIImage(named: "add-photo-vid"), forState: .Highlighted)
-        
         inputToolbar?.contentView?.layer.borderWidth = 1
         inputToolbar?.contentView?.layer.borderColor = Color.DefaultBorderColor.CGColor
         inputToolbar!.contentView!.textView!.placeHolder = "Message..."
@@ -39,22 +38,18 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
         inputToolbar!.contentView!.textView!.layer.cornerRadius = 0
         inputToolbar?.contentView?.backgroundColor = Color.PrimaryBackgroundColor
         inputToolbar?.contentView?.textView?.frame.size = CGSize(width: (inputToolbar?.contentView?.textView?.frame.width)!,height: (inputToolbar?.contentView?.frame.height)!)
-        
+
         if event != nil {
             UIApplication.sharedApplication().applicationIconBadgeNumber -= Prefs.removeMessage(event!.objectId!)
-            //        self.appDelegate.leftViewController.messagesCountLabel.text = "\(Prefs.getMessagesCount())"
-            
             title = event!.name
+
         } else {
             UIApplication.sharedApplication().applicationIconBadgeNumber -= Prefs.removeMessage(group!.objectId!)
-            //        self.appDelegate.leftViewController.messagesCountLabel.text = "\(Prefs.getMessagesCount())"
-            
             title = group!.name
         }
         
         dateFormatter.dateFormat = "MM/dd/yy h:mm a"
-        
-        
+
         if event != nil {
             ParseHelper.fetchObject(event!, completion: {
             result, error in
@@ -71,6 +66,7 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
                 }
             })
         })
+
         } else {
             ParseHelper.fetchObject(group!, completion: {
                 result, error in
@@ -91,9 +87,7 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
         
         self.senderId = ParseHelper.sharedInstance.currentUser!.objectId;
         self.senderDisplayName = ParseHelper.sharedInstance.currentUser?.name
-        
         self.collectionView!.collectionViewLayout.springinessEnabled = false
-        
     }
     
     func processAttendees(attendeeIDs: [String]) {
@@ -101,15 +95,12 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
             ParseHelper.fetchUser(attendeeID, completion: { fetchedAttendee, error in
                 guard let attendee = fetchedAttendee where error == nil else {
                     self.avatars[attendeeID] = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(named: "upload_pic"), diameter: 45)
-
                     return
                 }
-
                     attendee.getImage({
                         result in
                         guard let result = result else {
                             self.avatars[attendee.objectId!] = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(named: "upload_pic"), diameter: 45)
-
                             return
                         }
                         
@@ -121,9 +112,9 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
     
     func processMessages(result:[Message]){
         for (index,message) in result.enumerate() {
-            
             if message.photo == nil {
                 self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, text: message.text))
+
             } else {
                 let media = JSQPhotoMediaItem()
                 ParseHelper.getData(message.photo!, completion: {
@@ -133,13 +124,11 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
                         self.collectionView!.reloadItemsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)])
                     }
                 })
-                
                 self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, media: media))
             }
             
         }
     }
-    
     
     override func didPressAccessoryButton(sender: UIButton!) {
         let alert = UIAlertController(title: "Choose Option", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
@@ -274,6 +263,7 @@ class MessagesTableViewController: JSQMessagesViewController, UIImagePickerContr
         } else {
             message.group = group!
         }
+
         message.photo = imageFile
         ParseHelper.saveObject(message, completion: {
             result, error in

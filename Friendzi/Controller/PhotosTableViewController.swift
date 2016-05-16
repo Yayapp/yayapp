@@ -12,10 +12,10 @@ protocol ChooseCategoryPhotoDelegate : NSObjectProtocol {
     func madeCategoryPhotoChoice(eventPhoto: EventPhoto)
 }
 
-class PhotosTableViewController: UITableViewController {
+final class PhotosTableViewController: UITableViewController {
 
     var eventPhotos:[EventPhoto] = []
-    var delegate:ChooseCategoryPhotoDelegate!
+    weak var delegate:ChooseCategoryPhotoDelegate!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,6 +50,5 @@ class PhotosTableViewController: UITableViewController {
         
         return cell
     }
-
 }
 

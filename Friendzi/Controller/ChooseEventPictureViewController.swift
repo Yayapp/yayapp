@@ -12,14 +12,15 @@ protocol ChooseEventPictureDelegate : NSObjectProtocol {
     func madeEventPictureChoice(photo: File, pickedPhoto: UIImage?)
 }
 
-class ChooseEventPictureViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, ChooseCategoryPhotoDelegate {
+final class ChooseEventPictureViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, ChooseCategoryPhotoDelegate {
+    
+    @IBOutlet private weak var photos: UITableView!
 
-    let picker = UIImagePickerController()
-    var delegate:ChooseEventPictureDelegate!
-    var contentDataSource = [String : [EventPhoto]]()
-    
-    @IBOutlet weak var photos: UITableView!
-    
+    private let picker = UIImagePickerController()
+    private var contentDataSource = [String : [EventPhoto]]()
+
+    weak var delegate:ChooseEventPictureDelegate!
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -89,7 +90,7 @@ class ChooseEventPictureViewController: UIViewController, UITableViewDataSource,
     }
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return tableView.frame.height/2
+        return tableView.frame.height / 2
     }
 
     func madeCategoryPhotoChoice(eventPhoto: EventPhoto) {

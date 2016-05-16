@@ -13,46 +13,36 @@ protocol GroupChangeDelegate : NSObjectProtocol {
     func groupChanged(group:Category)
     func groupRemoved(group:Category)
 }
-class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerDelegate, GroupCreationDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
-    
-    let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-    
-    var group:Category!
-    var attendees:[User] = []
-    var delegate:GroupChangeDelegate!
-    var currentLocation:CLLocation!
-    var selectedCategoriesData:[Category]! = []
-    
-    var updatedStatusInGroup: (() -> Void)?
+
+final class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerDelegate, GroupCreationDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
     
     @IBOutlet weak var attendeesButtons: UICollectionView!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     @IBOutlet weak var photo: UIImageView!
     @IBOutlet weak var name: UILabel!
-    
     @IBOutlet weak var location: UIButton!
-    
     @IBOutlet weak var attendButton: UIButton!
     @IBOutlet weak var attendButtonHeight: NSLayoutConstraint!
-    
     @IBOutlet weak var distance: UILabel!
-    
     @IBOutlet weak var chatButton: UIButton!
     @IBOutlet weak var detailsButton: UIButton!
-    
     @IBOutlet weak var author: UIButton!
-    
     @IBOutlet weak var detailsUnderline: UIView!
-    
     @IBOutlet weak var chatUnderline: UIView!
-    
     @IBOutlet weak var messagesContainer: UIView!
     @IBOutlet weak var eventsContainer: UIView!
-    
     @IBOutlet weak var members: UILabel!
-    
     @IBOutlet weak var descr: UITextView!
     @IBOutlet weak var switherPlaceholderTopSpace: NSLayoutConstraint!
+
+    private var currentLocation:CLLocation!
+    private var attendees:[User] = []
+
+    var group: Category!
+    var selectedCategoriesData: [Category]! = []
+    var updatedStatusInGroup: (() -> Void)?
+
+    weak var delegate: GroupChangeDelegate!
 
     private var attendState: AttendState = .Hidden {
         didSet {
@@ -123,31 +113,24 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
         members.text = "\(group.attendeeIDs.count) members"
         
         if(ParseHelper.sharedInstance.currentUser?.objectId == group.owner?.objectId) {
-            let editdone = UIBarButtonItem(image:UIImage(named: "edit_icon"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("editGroup:"))
+            let editdone = UIBarButtonItem(image:UIImage(named: "edit_icon"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(GroupDetailsViewController.editGroup(_:)))
             editdone.tintColor = Color.PrimaryActiveColor
             self.navigationItem.setRightBarButtonItem(editdone, animated: false)
             //            attend.setImage(UIImage(named: "cancelevent_button"), forState: .Normal)
         }
 
         ParseHelper.fetchObject(group, completion: { [weak self] fetchedObject, error in
-            guard let fetchedObject = fetchedObject,
-                fetchedGroup = Category(object: fetchedObject),
-                fetchedGroupID = fetchedGroup.objectId,
-                currentUserID = ParseHelper.sharedInstance.currentUser?.objectId
-                where error == nil else {
+            guard let fetchedObject = fetchedObject, fetchedGroup = Category(object: fetchedObject) where error == nil else {
                     MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
-
                     return
             }
 
             self?.group = fetchedGroup
-
             self?.location.hidden = fetchedGroup.location == nil
 
             ParseHelper.fetchUsers(fetchedGroup.attendeeIDs.filter({$0 != fetchedGroup.owner?.objectId}), completion: { (fetchedUsers, error) in
                 guard let fetchedUsers = fetchedUsers where error == nil else {
                     MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
-
                     return
                 }
 
@@ -436,10 +419,8 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
     }
     
     @IBAction func openMapForPlace(sender: AnyObject) {
-        
         let latitute:CLLocationDegrees =  (group.location?.latitude)!
         let longitute:CLLocationDegrees =  (group.location?.longitude)!
-        
         let regionDistance:CLLocationDistance = 10000
         let coordinates = CLLocationCoordinate2DMake(latitute, longitute)
         let regionSpan = MKCoordinateRegionMakeWithDistance(coordinates, regionDistance, regionDistance)
@@ -453,12 +434,12 @@ class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerD
         mapItem.openInMapsWithLaunchOptions(options)
         
     }
-    
+
     @IBAction func reportButtonTapped(sender: AnyObject) {
         guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as? BlurryAlertViewController else {
             return
         }
-        
+
         blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
         blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
         blurryAlertViewController.messageText = "You are about to flag this group for inappropriate content. Are you sure?"

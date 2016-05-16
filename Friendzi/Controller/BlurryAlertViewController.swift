@@ -9,28 +9,27 @@
 import UIKit
 import Darwin
 
-class BlurryAlertViewController: UIViewController {
-    
-    let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-    
+final class BlurryAlertViewController: UIViewController {
+
     static let BUTTON_OK = "okbutton"
     static let BUTTON_DELETE = "deletebutton"
-    
+
+    @IBOutlet private weak var cancel: UIButton!
+    @IBOutlet private weak var cancelButtonPlaceholderView: UIView!
+    @IBOutlet private weak var about: UILabel!
+
+    @IBOutlet private weak var message: UILabel!
+
+    @IBOutlet private weak var centerButton: UIButton!
+
+    private var event: Event?
+
     var aboutText:String! = ""
     var messageText:String! = ""
     var action:String!
-    var event:Event?
     var completion:(()->Void)?
     var onUserLoggedOut:((error :NSError?) -> Void)?
 
-    @IBOutlet weak var cancel: UIButton!
-    @IBOutlet weak var cancelButtonPlaceholderView: UIView!
-    @IBOutlet weak var about: UILabel!
-    
-    @IBOutlet weak var message: UILabel!
-    
-    @IBOutlet weak var centerButton: UIButton!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
