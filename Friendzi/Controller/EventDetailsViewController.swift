@@ -11,54 +11,54 @@ import MessageUI
 
 final class EventDetailsViewController: UIViewController, MFMailComposeViewControllerDelegate, EventChangeDelegate {
 
-    @IBOutlet private weak var eventActionButton: UIButton!
-    @IBOutlet private weak var spinner: UIActivityIndicatorView!
-    @IBOutlet private weak var photo: UIImageView!
-    @IBOutlet private weak var name: UILabel!
-    @IBOutlet private weak var location: UIButton!
-    @IBOutlet private weak var descr: UITextView!
-    @IBOutlet private weak var date: UILabel!
-    @IBOutlet private weak var distance: UILabel!
-    @IBOutlet private weak var chatButton: UIButton!
-    @IBOutlet private weak var detailsButton: UIButton!
-    @IBOutlet private weak var author: UIButton!
-    @IBOutlet private weak var attended1: UIButton!
-    @IBOutlet private weak var attended2: UIButton!
-    @IBOutlet private weak var attended3: UIButton!
-    @IBOutlet private weak var attended4: UIButton!
-    @IBOutlet private weak var detailsUnderline: UIView!
-    @IBOutlet private weak var chatUnderline: UIView!
-    @IBOutlet private weak var messagesContainer: UIView!
-    @IBOutlet private weak var switherPlaceholderTopSpace: NSLayoutConstraint!
-    @IBOutlet private weak var attendButton: UIButton!
-    @IBOutlet private weak var attendButtonHeight: NSLayoutConstraint!
+    @IBOutlet private weak var eventActionButton: UIButton?
+    @IBOutlet private weak var spinner: UIActivityIndicatorView?
+    @IBOutlet private weak var photo: UIImageView?
+    @IBOutlet private weak var name: UILabel?
+    @IBOutlet private weak var location: UIButton?
+    @IBOutlet private weak var descr: UITextView?
+    @IBOutlet private weak var date: UILabel?
+    @IBOutlet private weak var distance: UILabel?
+    @IBOutlet private weak var chatButton: UIButton?
+    @IBOutlet private weak var detailsButton: UIButton?
+    @IBOutlet private weak var author: UIButton?
+    @IBOutlet private weak var attended1: UIButton?
+    @IBOutlet private weak var attended2: UIButton?
+    @IBOutlet private weak var attended3: UIButton?
+    @IBOutlet private weak var attended4: UIButton?
+    @IBOutlet private weak var detailsUnderline: UIView?
+    @IBOutlet private weak var chatUnderline: UIView?
+    @IBOutlet private weak var messagesContainer: UIView?
+    @IBOutlet private weak var switherPlaceholderTopSpace: NSLayoutConstraint?
+    @IBOutlet private weak var attendButton: UIButton?
+    @IBOutlet private weak var attendButtonHeight: NSLayoutConstraint?
 
     private let dateFormatter = NSDateFormatter()
     private var currentLocation:CLLocation!
     private var attendeeButtons:[UIButton]!
     private var attendees:[User] = []
 
-    var event:Event!
+    var event: Event!
 
     weak var delegate:EventChangeDelegate!
 
     private var attendState: AttendState = .Hidden {
         didSet {
-            attendButton.hidden = attendState == .Hidden
-            attendButtonHeight.constant = attendState == .Hidden ? 0 : 35
+            attendButton?.hidden = attendState == .Hidden
+            attendButtonHeight?.constant = attendState == .Hidden ? 0 : 35
 
             switch (attendState) {
             case .Pending:
-                attendButton.setTitle(NSLocalizedString("Pending...", comment: ""), forState: .Normal)
-                attendButton.backgroundColor = .appOrangeColor()
+                attendButton?.setTitle(NSLocalizedString("Pending...", comment: ""), forState: .Normal)
+                attendButton?.backgroundColor = .appOrangeColor()
 
             case .Join:
-                attendButton.setTitle(NSLocalizedString("Join Event", comment: ""), forState: .Normal)
-                attendButton.backgroundColor = .appBlackColor()
+                attendButton?.setTitle(NSLocalizedString("Join Event", comment: ""), forState: .Normal)
+                attendButton?.backgroundColor = .appBlackColor()
 
             case .Leave:
-                attendButton.setTitle(NSLocalizedString("Leave", comment: ""), forState: .Normal)
-                attendButton.backgroundColor = .appBlackColor()
+                attendButton?.setTitle(NSLocalizedString("Leave", comment: ""), forState: .Normal)
+                attendButton?.backgroundColor = .appBlackColor()
 
             default:
                 break
@@ -71,6 +71,10 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        if let attended1 = attended1, attended2 = attended2, attended3 = attended3, attended4 = attended4 {
+            attendeeButtons = [attended1,attended2,attended3,attended4]
+        }
+
         NSNotificationCenter.defaultCenter().addObserver(self,
                                                          selector: #selector(updateAttendUI),
                                                          name: Constants.groupPendingStatusChangedNotification,
@@ -78,14 +82,11 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
 
         attendState = .Hidden
 
-        chatButton.enabled = false
+        chatButton?.enabled = false
+        switherPlaceholderTopSpace?.constant = view.bounds.width / 160 * 91
+        
+        descr?.textContainerInset = UIEdgeInsetsMake(10, 10, 10, 10)
 
-        switherPlaceholderTopSpace.constant = view.bounds.width / 160 * 91
-        
-        descr.textContainerInset = UIEdgeInsetsMake(10, 10, 10, 10)
-        
-        attendeeButtons = [attended1,attended2,attended3,attended4]
-        
         title = event.name
 
         let shareButton = UIBarButtonItem(title: NSLocalizedString("Invite", comment: ""), style: .Plain, target: self, action: #selector(EventDetailsViewController.shareEvent))
@@ -93,15 +94,15 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
         navigationItem.setRightBarButtonItem(shareButton, animated: false)
         
         if ParseHelper.sharedInstance.currentUser?.objectId == event.owner!.objectId {
-            eventActionButton.setImage(UIImage(named: "edit_icon"), forState: .Normal)
-            eventActionButton.tintColor = Color.PrimaryActiveColor
+            eventActionButton?.setImage(UIImage(named: "edit_icon"), forState: .Normal)
+            eventActionButton?.tintColor = Color.PrimaryActiveColor
         } else {
             if let user = ParseHelper.sharedInstance.currentUser {
                 ParseHelper.countReports(event, user: user, completion: { [weak self]
                     count in
                     if count == 0 {
-                        self?.eventActionButton.tintColor = .redColor()
-                        self?.eventActionButton.setImage(UIImage(named: "reporticon"), forState: .Normal)
+                        self?.eventActionButton?.tintColor = .redColor()
+                        self?.eventActionButton?.setImage(UIImage(named: "reporticon"), forState: .Normal)
                     }
                 })
             } else {
@@ -150,14 +151,14 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
 
                     if let avatarURLString = fetchedOwner.avatar?.url,
                         avatarURL = NSURL(string: avatarURLString) {
-                        self?.author.sd_setImageWithURL(avatarURL, forState: .Normal, completed: { (_, error, _, _) in
+                        self?.author?.sd_setImageWithURL(avatarURL, forState: .Normal, completed: { (_, error, _, _) in
                             guard error == nil else {
                                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
 
                                 return
                             }
 
-                            self?.author.layer.cornerRadius = (self?.author.frame.width)! / 2
+                            self?.author?.layer.cornerRadius = self?.author?.frame.width ?? 0 / 2
                         })
                     }
                 })
@@ -182,11 +183,11 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
                     }
                 }
 
-                self?.chatButton.enabled = true
+                self?.chatButton?.enabled = true
 
                 self?.attendedThisEvent = !(fetchedEvent.attendeeIDs.filter({$0 == ParseHelper.sharedInstance.currentUser?.objectId}).count == 0) || ParseHelper.sharedInstance.currentUser?.objectId == fetchedEvent.owner!.objectId
                 
-                self?.chatButton.selected = !(self?.attendedThisEvent ?? false)
+                self?.chatButton?.selected = !(self?.attendedThisEvent ?? false)
                 
                 self?.update()
             })
@@ -197,7 +198,7 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
         super.viewDidLayoutSubviews()
 
         for button in [author, attended1, attended2, attended3, attended4] {
-            button.layer.cornerRadius = button.bounds.width / 2
+            button?.layer.cornerRadius = button?.bounds.width ?? 0 / 2
         }
     }
 
@@ -209,16 +210,16 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
         let distanceBetween: CLLocationDistance = CLLocation(latitude: self.event.location.latitude, longitude: self.event.location.longitude).distanceFromLocation(self.currentLocation)
         let distanceStr = String(format: "%.2f", distanceBetween/1000)
         self.title  = self.event.name
-        self.name.text = self.event.name
-        self.descr.text = self.event.summary
+        self.name?.text = self.event.name
+        self.descr?.text = self.event.summary
 
         if let photoURLString = event.photo.url,
             photoURL = NSURL(string: photoURLString) {
-            photo.sd_setImageWithURL(photoURL)
+            photo?.sd_setImageWithURL(photoURL)
         }
         
-        self.date.text = self.dateFormatter.stringFromDate(self.event.startDate)
-        self.distance.text = distanceBetween > 0 ? "\(distanceStr)km" : nil
+        self.date?.text = self.dateFormatter.stringFromDate(self.event.startDate)
+        self.distance?.text = distanceBetween > 0 ? "\(distanceStr)km" : nil
 
         CLLocation(latitude: self.event.location.latitude, longitude: self.event.location.longitude).getLocationString(nil, button: location, timezoneCompletion: nil)
 
@@ -242,8 +243,8 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
             blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
             blurryAlertViewController.modalPresentationStyle = .CurrentContext
 
-            blurryAlertViewController.aboutText = NSLocalizedString("Your request has been sent.", comment: "")
-            blurryAlertViewController.messageText = NSLocalizedString("We will notify you of the outcome.", comment: "")
+            blurryAlertViewController.aboutText = "Your request has been sent.".localized
+            blurryAlertViewController.messageText = "We will notify you of the outcome.".localized
 
             self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
         }
@@ -288,12 +289,12 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
     @IBAction func switchToDetails(sender: AnyObject) {
         view.endEditing(true)
 
-        chatUnderline.hidden = true
-        detailsUnderline.hidden = false
-        messagesContainer.hidden = true
-        eventActionButton.hidden = false
+        chatUnderline?.hidden = true
+        detailsUnderline?.hidden = false
+        messagesContainer?.hidden = true
+        eventActionButton?.hidden = false
 
-        switherPlaceholderTopSpace.constant = self.view.bounds.width / 160 * 91
+        switherPlaceholderTopSpace?.constant = self.view.bounds.width / 160 * 91
         UIView.animateWithDuration(0.1) {
             self.view.layoutIfNeeded()
         }
@@ -307,12 +308,12 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
             return
         }
 
-        chatUnderline.hidden = false
-        detailsUnderline.hidden = true
-        messagesContainer.hidden = false
-        eventActionButton.hidden = true
+        chatUnderline?.hidden = false
+        detailsUnderline?.hidden = true
+        messagesContainer?.hidden = false
+        eventActionButton?.hidden = true
 
-        switherPlaceholderTopSpace.constant = 0
+        switherPlaceholderTopSpace?.constant = 0
         UIView.animateWithDuration(0.1) {
             self.view.layoutIfNeeded()
         }
@@ -398,7 +399,7 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
             attendState = .Join
         }
 
-        descr.hidden = !isAttendedToGroup
+        descr?.hidden = !isAttendedToGroup
     }
 
     //MARK: - EventChangeDelegate

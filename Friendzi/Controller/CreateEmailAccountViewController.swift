@@ -11,13 +11,13 @@ import UIKit
 final class CreateEmailAccountViewController: UIViewController {
 
     @IBOutlet private weak var keyboardAvoidingScrollView: TPKeyboardAvoidingScrollView!
-    @IBOutlet private weak var name: UITextField!
-    @IBOutlet private weak var email: UITextField!
-    @IBOutlet private weak var password1: UITextField!
-    @IBOutlet private weak var password2: UITextField!
-    @IBOutlet private weak var createAccount: UIButton!
+    @IBOutlet private weak var name: UITextField?
+    @IBOutlet private weak var email: UITextField?
+    @IBOutlet private weak var password1: UITextField?
+    @IBOutlet private weak var password2: UITextField?
+    @IBOutlet private weak var createAccount: UIButton?
 
-    var isLogin:Bool! = false
+    var isLogin = false
 
     override func prefersStatusBarHidden() -> Bool {
         return true
@@ -43,16 +43,21 @@ final class CreateEmailAccountViewController: UIViewController {
 
     func handleAccountCreation() {
         self.view.endEditing(true)
-        if (name.text!.isEmpty || email.text!.isEmpty || password1.text!.isEmpty) {
+        guard let name = name?.text, let email = email?.text, let password = password1?.text, let repeatedPassword = password2?.text else {
             MessageToUser.showDefaultErrorMessage("Please fill all fields to Sign Up.")
-        }  else if (password1.text != password2.text) {
+            return
+        }
+
+        if (name.isEmpty || email.isEmpty || password.isEmpty || repeatedPassword.isEmpty) {
+            MessageToUser.showDefaultErrorMessage("Please fill all fields to Sign Up.")
+        }  else if (password != repeatedPassword) {
             MessageToUser.showDefaultErrorMessage("Passwords are not same.")
-        } else if email.text!.isEmail() == false {
+        } else if email.isEmail() == false {
             MessageToUser.showDefaultErrorMessage("Email is invalid.")
         } else {
 
             let user = User()
-            user.name = name.text
+            user.name = name
             user.distance = 20
             user.gender = 1
             user.attAccepted = true
@@ -60,9 +65,9 @@ final class CreateEmailAccountViewController: UIViewController {
             user.newMessage = true
             user.eventsReminder = true
             user.invites = 5
-            user.password = password2.text
-            user.email = email.text
-            user.username = email.text
+            user.password = password
+            user.email = email
+            user.username = email
 
             SVProgressHUD.show()
             ParseHelper.signUpInBackgroundWithBlock(user, completion: { (succeeded, error) in

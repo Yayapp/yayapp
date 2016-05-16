@@ -9,5 +9,5 @@
 import UIKit
 
 final class CustomPointAnnotation: MKPointAnnotation {
-   var event:Event!
+   var event: Event?
 }

@@ -15,7 +15,7 @@ protocol ListEventsDelegate : NSObjectProtocol {
 final class ListEventsViewController: EventsViewController, UITableViewDataSource, UITableViewDelegate {
     static let storyboardID = "ListEventsViewController"
 
-    @IBOutlet weak var events: UITableView!
+    @IBOutlet private weak var events: UITableView?
 
     private let dateFormatter = NSDateFormatter()
     private var eventsFirst:[Event]?
@@ -56,9 +56,9 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
 
         currentLocation = CLLocation(latitude: currentPFLocation.latitude, longitude: currentPFLocation.longitude)
 
-        events.registerNib(EventsTableViewCell.nib, forCellReuseIdentifier: EventsTableViewCell.reuseIdentifier)
-        events.delegate = self
-        events.dataSource = self
+        events?.registerNib(EventsTableViewCell.nib, forCellReuseIdentifier: EventsTableViewCell.reuseIdentifier)
+        events?.delegate = self
+        events?.dataSource = self
         
         if let events = eventsFirst {
             reloadAll(events)
@@ -131,7 +131,7 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
 
     override func reloadAll(eventsList:[Event]) {
         eventsData = eventsList
-        events.reloadData()
+        events?.reloadData()
     }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -155,38 +155,46 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let cell = events.dequeueReusableCellWithIdentifier(EventsTableViewCell.reuseIdentifier) as! EventsTableViewCell
+        let cell = events?.dequeueReusableCellWithIdentifier(EventsTableViewCell.reuseIdentifier) as! EventsTableViewCell
         let event:Event! = eventsData[indexPath.section]
         let cllocation = CLLocation(latitude: event.location.latitude, longitude: event.location.longitude)
         let distanceBetween: CLLocationDistance = cllocation.distanceFromLocation(currentLocation!)
         let distanceStr = String(format: "%.2f", distanceBetween/1000)
-        let attendeeButtons:[UIButton]! = [cell.attended1, cell.attended2, cell.attended3, cell.attended4]
-        
-        cell.title.text = event.name
+
+        var attendeeButtons: [UIButton] = []
+        if let attendees = cell.attendeesButtons {
+            for attendee in attendees {
+                if let attendee = attendee {
+                    attendeeButtons.append(attendee)
+                }
+            }
+        }
+
+        cell.title?.text = event.name
         
         cllocation.getLocationString(cell.location, button: nil, timezoneCompletion: nil)
 
-        cell.date.text = dateFormatter.stringFromDate(event.startDate)
-        cell.howFar.text = distanceBetween > 0 ? "\(distanceStr)km" : nil
+        cell.date?.text = dateFormatter.stringFromDate(event.startDate)
+        cell.howFar?.text = distanceBetween > 0 ? "\(distanceStr)km" : nil
         
         if let photoURLString = event.photo.url,
             photoURL = NSURL(string: photoURLString) {
-            cell.picture.sd_setImageWithURL(photoURL)
+            cell.picture?.sd_setImageWithURL(photoURL)
         }
 
         ParseHelper.fetchObject(event.owner, completion: { (result, error) in
             if error == nil {
                 if let avatarURLString = event.owner!.avatar?.url,
                     avatarURL = NSURL(string: avatarURLString) {
-                    cell.author.sd_setImageWithURL(avatarURL, forState: .Normal)
+                    cell.author?.sd_setImageWithURL(avatarURL, forState: .Normal)
                 }
             } else {
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
         })
 
-        cell.author.tag = indexPath.section
-        cell.author.addTarget(self, action: #selector(ListEventsViewController.authorProfile(_:)), forControlEvents: .TouchUpInside)
+        cell.author?.tag = indexPath.section
+        cell.author?.addTarget(self, action: #selector(ListEventsViewController.authorProfile(_:)), forControlEvents: .TouchUpInside)
 
         let allAttendeeIDsWithoutOwner = event.attendeeIDs.filter({$0 != event.owner!.objectId})
         let attendeeIDs = allAttendeeIDsWithoutOwner[0..<min(allAttendeeIDsWithoutOwner.count, attendeeButtons.count)]
@@ -255,12 +263,12 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
 
         eventsData[index] = event
         
-        events.reloadData()
+        events?.reloadData()
     }
     
     override func eventRemoved(event:Event) {
         eventsData = eventsData.filter({$0.objectId != event.objectId})
-        events.reloadData()
+        events?.reloadData()
     }
     
     @IBAction func join(sender: UIButton) {
@@ -320,7 +328,7 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
     func handleUserLogout() {
         eventsFirst?.removeAll()
         eventsData.removeAll()
-        events.reloadData()
+        events?.reloadData()
     }
 
     func handleInviteToEvent(notification: NSNotification) {

@@ -22,7 +22,7 @@ final class ChooseLocationViewController: UIViewController, CLLocationManagerDel
     private var lat: CLLocationDegrees?
     private var lon: CLLocationDegrees?
     private let locationManager = CLLocationManager()
-    private var touchMapCoordinate: CLLocationCoordinate2D!
+    private var touchMapCoordinate: CLLocationCoordinate2D?
 
     weak var delegate: ChooseLocationDelegate!
 
@@ -43,8 +43,8 @@ final class ChooseLocationViewController: UIViewController, CLLocationManagerDel
     
     @IBAction func ok(sender: AnyObject) {
         dismissViewControllerAnimated(true, completion: {
-            if self.touchMapCoordinate != nil {
-                self.delegate.madeLocationChoice(self.touchMapCoordinate)
+            if let coordinate = self.touchMapCoordinate {
+                self.delegate.madeLocationChoice(coordinate)
             }
         })
     }
@@ -68,8 +68,10 @@ final class ChooseLocationViewController: UIViewController, CLLocationManagerDel
         touchMapCoordinate = mapView.convertPoint(touchPoint, toCoordinateFromView: mapView)
         
         let annotation = MKPointAnnotation()
-        annotation.coordinate = touchMapCoordinate
-        
+        if let coordinate = self.touchMapCoordinate {
+            annotation.coordinate = coordinate
+        }
+
         mapView.addAnnotation(annotation)
     }
     

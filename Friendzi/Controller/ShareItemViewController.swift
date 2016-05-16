@@ -12,7 +12,7 @@ import MessageUI
 final class ShareItemViewController: UIViewController, MFMessageComposeViewControllerDelegate, MFMailComposeViewControllerDelegate {
     static let storyboardID = "ShareItemViewController"
 
-    @IBOutlet private weak var contentContainerView: UIView!
+    @IBOutlet private weak var contentContainerView: UIView?
 
     private var generatedShortURL: String?
 
@@ -22,10 +22,10 @@ final class ShareItemViewController: UIViewController, MFMessageComposeViewContr
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.contentContainerView.layer.masksToBounds = false
-        self.contentContainerView.layer.shadowOffset = CGSizeMake(0, 0)
-        self.contentContainerView.layer.shadowRadius = 5
-        self.contentContainerView.layer.shadowOpacity = 0.5
+        self.contentContainerView?.layer.masksToBounds = false
+        self.contentContainerView?.layer.shadowOffset = CGSizeMake(0, 0)
+        self.contentContainerView?.layer.shadowRadius = 5
+        self.contentContainerView?.layer.shadowOpacity = 0.5
     }
 
     override func didReceiveMemoryWarning() {

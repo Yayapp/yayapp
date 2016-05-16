@@ -11,9 +11,9 @@ import UIKit
 final class ReportViewController: UIViewController {
     static let storyboardID = "reportViewController"
 
-    @IBOutlet private weak var contentContainerView: UIView!
-    @IBOutlet private weak var reportButton: UIButton!
-    @IBOutlet private weak var blockButton: UIButton!
+    @IBOutlet private weak var contentContainerView: UIView?
+    @IBOutlet private weak var reportButton: UIButton?
+    @IBOutlet private weak var blockButton: UIButton?
 
     var reportButtonTitle = "Report"
     var blockButtonTitle = "Block"
@@ -24,13 +24,13 @@ final class ReportViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.contentContainerView.layer.masksToBounds = false
-        self.contentContainerView.layer.shadowOffset = CGSizeMake(0, 0)
-        self.contentContainerView.layer.shadowRadius = 5
-        self.contentContainerView.layer.shadowOpacity = 0.5
+        self.contentContainerView?.layer.masksToBounds = false
+        self.contentContainerView?.layer.shadowOffset = CGSizeMake(0, 0)
+        self.contentContainerView?.layer.shadowRadius = 5
+        self.contentContainerView?.layer.shadowOpacity = 0.5
         
-        self.reportButton.setTitle(reportButtonTitle, forState: .Normal)
-        self.blockButton.setTitle(blockButtonTitle, forState: .Normal)
+        self.reportButton?.setTitle(reportButtonTitle, forState: .Normal)
+        self.blockButton?.setTitle(blockButtonTitle, forState: .Normal)
     }
 }
 

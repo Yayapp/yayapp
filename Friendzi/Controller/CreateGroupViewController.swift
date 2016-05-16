@@ -16,15 +16,15 @@ protocol GroupCreationDelegate : NSObjectProtocol {
 
 final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate, ChooseEventPictureDelegate, WriteAboutDelegate, UIPopoverPresentationControllerDelegate {
     
-    @IBOutlet private weak var eventImage: UIImageView!
-    @IBOutlet private weak var eventPhoto: UIButton!
-    @IBOutlet private weak var location: UIButton!
-    @IBOutlet private weak var spinner: UIActivityIndicatorView!
-    @IBOutlet private weak var name: UITextField!
-    @IBOutlet private weak var descr: UIButton!
-    @IBOutlet private weak var publicButton: UIButton!
-    @IBOutlet private weak var privateButton: UIButton!
-    @IBOutlet private weak var createButton: UIButton!
+    @IBOutlet private weak var eventImage: UIImageView?
+    @IBOutlet private weak var eventPhoto: UIButton?
+    @IBOutlet private weak var location: UIButton?
+    @IBOutlet private weak var spinner: UIActivityIndicatorView?
+    @IBOutlet private weak var name: UITextField?
+    @IBOutlet private weak var descr: UIButton?
+    @IBOutlet private weak var publicButton: UIButton?
+    @IBOutlet private weak var privateButton: UIButton?
+    @IBOutlet private weak var createButton: UIButton?
 
     private var isPrivate: Bool = false
     private var longitude: Double?
@@ -41,7 +41,7 @@ final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDe
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        name.delegate = self
+        name?.delegate = self
         if group != nil {
             update()
             title = NSLocalizedString("Edit Group", comment: "")
@@ -51,7 +51,7 @@ final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDe
         self.publicAction(true)
 
         let submitButtonTitle = isEditMode ? NSLocalizedString("Save", comment: "") : NSLocalizedString("Create Group & Invite Friends", comment: "")
-        createButton.setTitle(submitButtonTitle, forState: .Normal)
+        createButton?.setTitle(submitButtonTitle, forState: .Normal)
 
         if isEditMode && group?.owner?.objectId == ParseHelper.sharedInstance.currentUser?.objectId {
             deleteGroupButton = UIBarButtonItem(title: NSLocalizedString("Delete", comment: ""),
@@ -69,9 +69,9 @@ final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDe
             result, error in
             if error == nil {
                 self.title  = self.group!.name
-                self.name.text = self.group!.name
+                self.name?.text = self.group!.name
                 self.descriptionText = self.group!.summary
-                self.descr.setTitle(self.group!.summary, forState: .Normal)
+                self.descr?.setTitle(self.group!.summary, forState: .Normal)
                 self.madeEventPictureChoice(self.group!.photo, pickedPhoto: nil)
                 if (self.group!.isPrivate) {
                     self.privateAction(true)
@@ -87,14 +87,14 @@ final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDe
     }
  
     @IBAction func publicAction(sender: AnyObject) {
-        privateButton.backgroundColor = UIColor.whiteColor()
-        publicButton.backgroundColor = Color.PrimaryActiveColor
+        privateButton?.backgroundColor = UIColor.whiteColor()
+        publicButton?.backgroundColor = Color.PrimaryActiveColor
         isPrivate = false
     }
     
     @IBAction func privateAction(sender: AnyObject) {
-        privateButton.backgroundColor = Color.PrimaryActiveColor
-        publicButton.backgroundColor = UIColor.whiteColor()
+        privateButton?.backgroundColor = Color.PrimaryActiveColor
+        publicButton?.backgroundColor = UIColor.whiteColor()
         isPrivate = true
     }
 
@@ -127,13 +127,13 @@ final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDe
     func madeEventPictureChoice(photo: File, pickedPhoto: UIImage?) {
         chosenPhoto = photo
 
-        eventImage.contentMode = .ScaleAspectFill
+        eventImage?.contentMode = .ScaleAspectFill
 
         if pickedPhoto != nil {
-            eventImage.image = pickedPhoto!
+            eventImage?.image = pickedPhoto!
         } else if let photoURLString = photo.url,
             photoURL = NSURL(string: photoURLString) {
-            eventImage.sd_setImageWithURL(photoURL, completed: { (_, error, _, _) in
+            eventImage?.sd_setImageWithURL(photoURL, completed: { (_, error, _, _) in
                 if error != nil {
                     MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                 }
@@ -164,12 +164,16 @@ final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDe
     
     func writeAboutDone(text: String) {
         self.descriptionText = text
-        self.descr.setTitle(text.isEmpty ? NSLocalizedString("Add Description", comment: "") : text, forState: .Normal)
+        self.descr?.setTitle(text.isEmpty ? NSLocalizedString("Add Description", comment: "") : text, forState: .Normal)
     }
     
     @IBAction func create(sender: AnyObject) {
+        guard let name = name?.text else {
+            MessageToUser.showDefaultErrorMessage("Please enter name")
+            return
+        }
         
-        if name.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).isEmpty {
+        if name.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).isEmpty {
             MessageToUser.showDefaultErrorMessage("Please enter name")
         } else if isPrivate && (longitude == nil || latitude == nil) {
             MessageToUser.showDefaultErrorMessage("Please choose location")
@@ -178,8 +182,8 @@ final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDe
         } else if chosenPhoto == nil {
             MessageToUser.showDefaultErrorMessage("Please choose photo")
         } else {
-            spinner.startAnimating()
-            createButton.enabled = false
+            spinner?.startAnimating()
+            createButton?.enabled = false
             
             if !isEditMode {
                 let eventACL = ObjectACL()
@@ -196,13 +200,13 @@ final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDe
                     return
             }
             
-            group.name = name.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+            group.name = name.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
             group.summary = descriptionText.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
             group.owner = currentUser
             group.photo = chosenPhoto!
             group.isPrivate = isPrivate
 
-            if let resizedImage = eventImage.image?.resizedToSize(CGSize(width: 70, height: 70)),
+            if let resizedImage = eventImage?.image?.resizedToSize(CGSize(width: 70, height: 70)),
                 thumbImageData = UIImageJPEGRepresentation(resizedImage, 0.85) {
                 group.photoThumb = File(data: thumbImageData)
             }
@@ -217,8 +221,8 @@ final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDe
                     self.delegate.groupCreated(group)
                     self.navigationController?.popViewControllerAnimated(true)
                 } else {
-                    self.spinner.stopAnimating()
-                    self.createButton.enabled = false
+                    self.spinner?.stopAnimating()
+                    self.createButton?.enabled = false
                 }
             })
         }

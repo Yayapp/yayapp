@@ -10,13 +10,13 @@ import UIKit
 
 final class PrivacyPolicyController: UIViewController {
 
-    @IBOutlet private weak var webView: UIWebView!
+    @IBOutlet private weak var webView: UIWebView?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         if let path = NSBundle.mainBundle().URLForResource("privacyPolicy", withExtension: "html") {
-            webView.loadRequest(NSURLRequest(URL: path))
+            webView?.loadRequest(NSURLRequest(URL: path))
         }
     }
 

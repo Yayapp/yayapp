@@ -11,15 +11,15 @@ import UIKit
 final class CompleteProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate {
     static let storyboardID = "completeProfileViewController"
 
-    @IBOutlet private weak var dismissButton: UIButton!
-    @IBOutlet private weak var uploadPhoto: UIButton!
-    @IBOutlet private weak var avatar: UIImageView!
-    @IBOutlet private weak var maleButton: UIButton!
-    @IBOutlet private weak var femaleButton: UIButton!
-    @IBOutlet private weak var genderImage: UIImageView!
-    @IBOutlet private weak var bioField: UITextView!
-    @IBOutlet private weak var nameLabel: UILabel!
-    @IBOutlet private weak var proceed: UIButton!
+    @IBOutlet private weak var dismissButton: UIButton?
+    @IBOutlet private weak var uploadPhoto: UIButton?
+    @IBOutlet private weak var avatar: UIImageView?
+    @IBOutlet private weak var maleButton: UIButton?
+    @IBOutlet private weak var femaleButton: UIButton?
+    @IBOutlet private weak var genderImage: UIImageView?
+    @IBOutlet private weak var bioField: UITextView?
+    @IBOutlet private weak var nameLabel: UILabel?
+    @IBOutlet private weak var proceed: UIButton?
 
     private var isShowingBioPlaceholder = true
     private let picker = UIImagePickerController()
@@ -33,30 +33,30 @@ final class CompleteProfileViewController: UIViewController, UIImagePickerContro
         picker.delegate = self
 
         if let currentUser = ParseHelper.sharedInstance.currentUser {
-            nameLabel.text = currentUser.name
+            nameLabel?.text = currentUser.name
 
             if let gender = currentUser.gender {
                 if gender == 1 {
-                    maleButton.backgroundColor = Color.GenderActiveColor
-                    femaleButton.backgroundColor = UIColor.whiteColor()
+                    maleButton?.backgroundColor = Color.GenderActiveColor
+                    femaleButton?.backgroundColor = UIColor.whiteColor()
                 } else {
-                    femaleButton.backgroundColor = Color.GenderActiveColor
-                    maleButton.backgroundColor = UIColor.whiteColor()
+                    femaleButton?.backgroundColor = Color.GenderActiveColor
+                    maleButton?.backgroundColor = UIColor.whiteColor()
                 }
             }
 
             if let avatarURLString = currentUser.avatar?.url,
                 avatarURL = NSURL(string: avatarURLString) {
-                avatar.sd_setImageWithURL(avatarURL)
+                avatar?.sd_setImageWithURL(avatarURL)
             }
 
             if let bio = currentUser.about where bio.characters.count > 0 {
                 isShowingBioPlaceholder = false
-                bioField.textColor = .blackColor()
-                bioField.text = bio
+                bioField?.textColor = .blackColor()
+                bioField?.text = bio
             }
 
-            dismissButton.hidden = dismissButtonHidden
+            dismissButton?.hidden = dismissButtonHidden
 
             check()
         }
@@ -111,7 +111,7 @@ final class CompleteProfileViewController: UIViewController, UIImagePickerContro
         let pickedImage:UIImage = (info[UIImagePickerControllerEditedImage] as! UIImage).resizeToDefault()
         let imageData = UIImageJPEGRepresentation(pickedImage, 70)
         let imageFile = File(data: imageData!)!
-        avatar.image = pickedImage
+        avatar?.image = pickedImage
 
         typealias BoolResultBlock = (Bool?, NSError?) -> ()
 
@@ -146,14 +146,14 @@ final class CompleteProfileViewController: UIViewController, UIImagePickerContro
     
     func check(){
         if (ParseHelper.sharedInstance.currentUser?.gender != nil && ParseHelper.sharedInstance.currentUser?.avatar != nil) {
-            proceed.hidden = false
+            proceed?.hidden = false
         }
     }
 
     @IBAction func maleAction(sender: AnyObject) {
-        maleButton.backgroundColor = Color.GenderActiveColor
-        femaleButton.backgroundColor = UIColor.whiteColor()
-        genderImage.image = UIImage(named: "newkid_rank")
+        maleButton?.backgroundColor = Color.GenderActiveColor
+        femaleButton?.backgroundColor = UIColor.whiteColor()
+        genderImage?.image = UIImage(named: "newkid_rank")
 
         if let currentUser = ParseHelper.sharedInstance.currentUser {
             currentUser.gender = 1
@@ -164,9 +164,9 @@ final class CompleteProfileViewController: UIViewController, UIImagePickerContro
     }
 
     @IBAction func femaleAction(sender: AnyObject) {
-        maleButton.backgroundColor = UIColor.whiteColor()
-        femaleButton.backgroundColor = Color.GenderActiveColor
-        genderImage.image = UIImage(named: "newfemale_kid_in_blockrank")
+        maleButton?.backgroundColor = UIColor.whiteColor()
+        femaleButton?.backgroundColor = Color.GenderActiveColor
+        genderImage?.image = UIImage(named: "newfemale_kid_in_blockrank")
 
         if let currentUser = ParseHelper.sharedInstance.currentUser {
             currentUser.gender = 0
@@ -177,9 +177,9 @@ final class CompleteProfileViewController: UIViewController, UIImagePickerContro
     }
     
     @IBAction func proceedAction(sender: AnyObject) {
-        isShowingBioPlaceholder = NSLocalizedString("Add a bio (optional)", comment: "") == bioField.text || bioField.text.characters.count == 0
+        isShowingBioPlaceholder = "Add a bio (optional)".localized == bioField?.text || bioField?.text.characters.count == 0
         if let currentUser = ParseHelper.sharedInstance.currentUser,
-            bio = bioField.text {
+            bio = bioField?.text {
             let aboutWithoutExtraLines = bio.stringByReplacingOccurrencesOfString("\\n+",
                                                                                   withString: "\n",
                                                                                   options: .RegularExpressionSearch,

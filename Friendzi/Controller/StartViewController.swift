@@ -10,7 +10,7 @@ import UIKit
 
 final class StartViewController: UIViewController {
     
-    @IBOutlet private weak var dots: UIPageControl!
+    @IBOutlet private weak var dots: UIPageControl?
 
     @IBAction func login(sender: AnyObject) {
         guard let vc = UIStoryboard.auth()?.instantiateViewControllerWithIdentifier("LoginViewController") as? LoginViewController else {

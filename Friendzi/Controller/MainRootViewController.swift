@@ -11,14 +11,14 @@ import MessageUI
 
 final class MainRootViewController: UIViewController, MFMailComposeViewControllerDelegate, EventChangeDelegate, ListEventsDelegate {
 
-    @IBOutlet weak var today: UIButton!
-    @IBOutlet weak var tomorrow: UIButton!
-    @IBOutlet weak var thisWeek: UIButton!
-    @IBOutlet weak var todayUnderline: UIView!
-    @IBOutlet weak var tomorrowUnderline: UIView!
-    @IBOutlet weak var thisWeekUnderline: UIView!
-    @IBOutlet weak var container: UIView!
-    @IBOutlet weak var createEvent: UIButton!
+    @IBOutlet weak var today: UIButton?
+    @IBOutlet weak var tomorrow: UIButton?
+    @IBOutlet weak var thisWeek: UIButton?
+    @IBOutlet weak var todayUnderline: UIView?
+    @IBOutlet weak var tomorrowUnderline: UIView?
+    @IBOutlet weak var thisWeekUnderline: UIView?
+    @IBOutlet weak var container: UIView?
+    @IBOutlet weak var createEvent: UIButton?
 
     private var rightSwitchBarButtonItem: UIBarButtonItem?
     private var currentVC:EventsViewController!
@@ -34,10 +34,9 @@ final class MainRootViewController: UIViewController, MFMailComposeViewControlle
                                                          name: Constants.userDidLogoutNotification,
                                                          object: nil)
 
-        let image : UIImage = UIImage(named: "logo")!
         let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
         imageView.contentMode = .ScaleAspectFit
-        imageView.image = image
+        imageView.image = UIImage(named: "logo") ?? UIImage()
         self.navigationItem.titleView = imageView
 
         guard let _ = ParseHelper.sharedInstance.currentUser else {
@@ -136,24 +135,24 @@ final class MainRootViewController: UIViewController, MFMailComposeViewControlle
 
     @IBAction func tomorrow(sender: AnyObject) {
         selectedSegment = 1
-        todayUnderline.hidden = true
-        tomorrowUnderline.hidden = false
-        thisWeekUnderline.hidden = true
-        today.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        tomorrow.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
-        thisWeek.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        todayUnderline?.hidden = true
+        tomorrowUnderline?.hidden = false
+        thisWeekUnderline?.hidden = true
+        today?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        tomorrow?.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
+        thisWeek?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
 
         segmentChanged()
     }
 
     @IBAction func thisWeek(sender: AnyObject) {
         selectedSegment = 2
-        todayUnderline.hidden = true
-        tomorrowUnderline.hidden = true
-        thisWeekUnderline.hidden = false
-        today.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        tomorrow.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        thisWeek.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
+        todayUnderline?.hidden = true
+        tomorrowUnderline?.hidden = true
+        thisWeekUnderline?.hidden = false
+        today?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        tomorrow?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        thisWeek?.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
         segmentChanged()
     }
 
@@ -250,8 +249,8 @@ final class MainRootViewController: UIViewController, MFMailComposeViewControlle
     func updateActiveViewController(activeViewController: EventsViewController!) {
         if activeViewController != nil {
             addChildViewController(activeViewController!)
-            activeViewController!.view.frame = container.bounds
-            container.addSubview(activeViewController!.view)
+            activeViewController?.view.frame = container?.bounds ?? CGRect.zero
+            container?.addSubview(activeViewController!.view)
             activeViewController!.didMoveToParentViewController(self)
             
         }
@@ -273,13 +272,13 @@ final class MainRootViewController: UIViewController, MFMailComposeViewControlle
     func setupUIForTodayTab() {
         selectedSegment = 0
 
-        todayUnderline.hidden = false
-        tomorrowUnderline.hidden = true
-        thisWeekUnderline.hidden = true
+        todayUnderline?.hidden = false
+        tomorrowUnderline?.hidden = true
+        thisWeekUnderline?.hidden = true
 
-        today.setTitleColor(Color.PrimaryActiveColor, forState: .Normal)
-        tomorrow.setTitleColor(.blackColor(), forState: .Normal)
-        thisWeek.setTitleColor(.blackColor(), forState: .Normal)
+        today?.setTitleColor(Color.PrimaryActiveColor, forState: .Normal)
+        tomorrow?.setTitleColor(.blackColor(), forState: .Normal)
+        thisWeek?.setTitleColor(.blackColor(), forState: .Normal)
     }
 
     //MARK: - Notification Handlers
@@ -289,7 +288,6 @@ final class MainRootViewController: UIViewController, MFMailComposeViewControlle
         isMapView = false
         eventsData.removeAll()
         chosenCategories.removeAll()
-
         setupUIForTodayTab()
     }
 }

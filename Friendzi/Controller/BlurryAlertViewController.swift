@@ -14,33 +14,33 @@ final class BlurryAlertViewController: UIViewController {
     static let BUTTON_OK = "okbutton"
     static let BUTTON_DELETE = "deletebutton"
 
-    @IBOutlet private weak var cancel: UIButton!
-    @IBOutlet private weak var cancelButtonPlaceholderView: UIView!
-    @IBOutlet private weak var about: UILabel!
-
-    @IBOutlet private weak var message: UILabel!
-
-    @IBOutlet private weak var centerButton: UIButton!
+    @IBOutlet private weak var cancel: UIButton?
+    @IBOutlet private weak var cancelButtonPlaceholderView: UIView?
+    @IBOutlet private weak var about: UILabel?
+    @IBOutlet private weak var message: UILabel?
+    @IBOutlet private weak var centerButton: UIButton?
 
     private var event: Event?
 
-    var aboutText:String! = ""
-    var messageText:String! = ""
-    var action:String!
+    var aboutText: String! = ""
+    var messageText: String! = ""
+    var action: String?
     var completion:(()->Void)?
     var onUserLoggedOut:((error :NSError?) -> Void)?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        cancelButtonPlaceholderView.layer.cornerRadius = cancelButtonPlaceholderView.bounds.width / 2
+        cancelButtonPlaceholderView?.layer.cornerRadius = cancelButtonPlaceholderView?.bounds.width ?? 0 / 2
 
-        about.text = aboutText
-        message.text = messageText
-                
-        centerButton.setImage(UIImage(named: action), forState: .Normal)
-        
-        centerButton.addTarget(self, action: Selector("\(action):"), forControlEvents: UIControlEvents.TouchUpInside)
+        about?.text = aboutText
+        message?.text = messageText
+
+        if let action = action {
+            centerButton?.setImage(UIImage(named: action), forState: .Normal)
+        }
+
+        centerButton?.addTarget(self, action: Selector("\(action):"), forControlEvents: UIControlEvents.TouchUpInside)
         
             self.view.backgroundColor = UIColor.clearColor()
             

@@ -12,13 +12,13 @@ final class NotificationsController: UIViewController {
     
     var currentVC:UIViewController!
     
-    @IBOutlet private weak var container: UIView!
-    @IBOutlet private weak var recentUnderline: UIView!
-    @IBOutlet private weak var chatUnderline: UIView!
-    @IBOutlet private weak var requestsUnderline: UIView!
-    @IBOutlet private weak var recentButton: UIButton!
-    @IBOutlet private weak var chatButton: UIButton!
-    @IBOutlet private weak var requestsButton: UIButton!
+    @IBOutlet private weak var container: UIView?
+    @IBOutlet private weak var recentUnderline: UIView?
+    @IBOutlet private weak var chatUnderline: UIView?
+    @IBOutlet private weak var requestsUnderline: UIView?
+    @IBOutlet private weak var recentButton: UIButton?
+    @IBOutlet private weak var chatButton: UIButton?
+    @IBOutlet private weak var requestsButton: UIButton?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,8 +51,10 @@ final class NotificationsController: UIViewController {
     func updateActiveViewController(activeViewController: UIViewController?) {
         if activeViewController != nil {
             addChildViewController(activeViewController!)
-            activeViewController!.view.frame = container.bounds
-            container.addSubview(activeViewController!.view)
+            activeViewController!.view.frame = container?.bounds ?? CGRect.zero
+            if let view = activeViewController?.view {
+                container?.addSubview(view)
+            }
             activeViewController!.didMoveToParentViewController(self)
 
         }
@@ -66,12 +68,12 @@ final class NotificationsController: UIViewController {
         }
 
         updateActiveViewController(vc)
-        recentUnderline.hidden = false
-        chatUnderline.hidden = true
-        requestsUnderline.hidden = true
-        recentButton.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
-        chatButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        requestsButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        recentUnderline?.hidden = false
+        chatUnderline?.hidden = true
+        requestsUnderline?.hidden = true
+        recentButton?.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
+        chatButton?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        requestsButton?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
     }
     
     @IBAction func chatAction(sender: AnyObject) {
@@ -80,12 +82,12 @@ final class NotificationsController: UIViewController {
         }
 
         updateActiveViewController(vc)
-        recentUnderline.hidden = true
-        chatUnderline.hidden = false
-        requestsUnderline.hidden = true
-        recentButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        chatButton.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
-        requestsButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        recentUnderline?.hidden = true
+        chatUnderline?.hidden = false
+        requestsUnderline?.hidden = true
+        recentButton?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        chatButton?.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
+        requestsButton?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
     }
     
     @IBAction func requestsAction(sender: AnyObject) {
@@ -93,12 +95,12 @@ final class NotificationsController: UIViewController {
             return
         }
         updateActiveViewController(vc)
-        recentUnderline.hidden = true
-        chatUnderline.hidden = true
-        requestsUnderline.hidden = false
-        recentButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        chatButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        requestsButton.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
+        recentUnderline?.hidden = true
+        chatUnderline?.hidden = true
+        requestsUnderline?.hidden = false
+        recentButton?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        chatButton?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        requestsButton?.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
     }
 
     //MARK: - Notification Handlers

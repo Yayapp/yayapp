@@ -32,20 +32,22 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
         inputToolbar?.contentView?.leftBarButtonItem?.setImage(UIImage(named: "add-photo-vid"), forState: .Highlighted)
         inputToolbar?.contentView?.layer.borderWidth = 1
         inputToolbar?.contentView?.layer.borderColor = Color.DefaultBorderColor.CGColor
-        inputToolbar!.contentView!.textView!.placeHolder = "Message..."
-        inputToolbar!.contentView!.textView!.layer.borderWidth = 1
-        inputToolbar?.contentView?.textView!.layer.borderColor = Color.DefaultBorderColor.CGColor
-        inputToolbar!.contentView!.textView!.layer.cornerRadius = 0
+        inputToolbar?.contentView?.textView?.placeHolder = "Message..."
+        inputToolbar?.contentView?.textView?.layer.borderWidth = 1
+        inputToolbar?.contentView?.textView?.layer.borderColor = Color.DefaultBorderColor.CGColor
+        inputToolbar!.contentView?.textView?.layer.cornerRadius = 0
         inputToolbar?.contentView?.backgroundColor = Color.PrimaryBackgroundColor
-        inputToolbar?.contentView?.textView?.frame.size = CGSize(width: (inputToolbar?.contentView?.textView?.frame.width)!,height: (inputToolbar?.contentView?.frame.height)!)
+        if let width = inputToolbar?.contentView?.textView?.frame.width, let height = inputToolbar?.contentView?.frame.height {
+            inputToolbar?.contentView?.textView?.frame.size = CGSize(width: width,height: height)
+        }
 
         if event != nil {
             UIApplication.sharedApplication().applicationIconBadgeNumber -= Prefs.removeMessage(event!.objectId!)
-            title = event!.name
+            title = event?.name
 
         } else {
             UIApplication.sharedApplication().applicationIconBadgeNumber -= Prefs.removeMessage(group!.objectId!)
-            title = group!.name
+            title = group?.name
         }
         
         dateFormatter.dateFormat = "MM/dd/yy h:mm a"

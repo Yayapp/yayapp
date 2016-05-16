@@ -13,20 +13,20 @@ import UIKit
 final class CategoryHeader: UICollectionReusableView {
     static let reuseIdentifier = "CategoryHeader"
     
-    @IBOutlet private weak var nameLabel: UILabel!
+    @IBOutlet private weak var nameLabel: UILabel?
 
     var name: String? {
         didSet {
             guard let name = name else {
                 return
             }
-            nameLabel.text = name
+            nameLabel?.text = name
         }
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
 
-        nameLabel.text = ""
+        nameLabel?.text = ""
     }
 }

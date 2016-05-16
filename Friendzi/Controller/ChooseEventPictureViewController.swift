@@ -14,20 +14,20 @@ protocol ChooseEventPictureDelegate : NSObjectProtocol {
 
 final class ChooseEventPictureViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, ChooseCategoryPhotoDelegate {
     
-    @IBOutlet private weak var photos: UITableView!
+    @IBOutlet private weak var photos: UITableView?
 
     private let picker = UIImagePickerController()
     private var contentDataSource = [String : [EventPhoto]]()
 
-    weak var delegate:ChooseEventPictureDelegate!
+    weak var delegate: ChooseEventPictureDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         picker.delegate = self
-        photos.registerNib(EventPhotoTableViewCell.flatNib, forCellReuseIdentifier: EventPhotoTableViewCell.flatReuseIdentifier)
-        photos.delegate = self
-        photos.dataSource = self
+        photos?.registerNib(EventPhotoTableViewCell.flatNib, forCellReuseIdentifier: EventPhotoTableViewCell.flatReuseIdentifier)
+        photos?.delegate = self
+        photos?.dataSource = self
 
         ParseHelper.getEventPhotos { [weak self] eventPhotos, error in
             guard let eventPhotos = eventPhotos where error == nil else {
@@ -44,7 +44,7 @@ final class ChooseEventPictureViewController: UIViewController, UITableViewDataS
                 }
             }
 
-            self?.photos.reloadData()
+            self?.photos?.reloadData()
         }
     }
 
@@ -55,7 +55,7 @@ final class ChooseEventPictureViewController: UIViewController, UITableViewDataS
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        guard let cell = photos.dequeueReusableCellWithIdentifier(EventPhotoTableViewCell.flatReuseIdentifier, forIndexPath: indexPath) as? EventPhotoTableViewCell else {
+        guard let cell = photos?.dequeueReusableCellWithIdentifier(EventPhotoTableViewCell.flatReuseIdentifier, forIndexPath: indexPath) as? EventPhotoTableViewCell else {
             return UITableViewCell()
         }
 
@@ -94,7 +94,7 @@ final class ChooseEventPictureViewController: UIViewController, UITableViewDataS
     }
 
     func madeCategoryPhotoChoice(eventPhoto: EventPhoto) {
-        delegate.madeEventPictureChoice(eventPhoto.photo, pickedPhoto: nil)
+        delegate?.madeEventPictureChoice(eventPhoto.photo, pickedPhoto: nil)
         self.navigationController?.popViewControllerAnimated(true)
     }
     
@@ -126,7 +126,7 @@ final class ChooseEventPictureViewController: UIViewController, UITableViewDataS
         let pickedImage:UIImage = (info[UIImagePickerControllerEditedImage] as! UIImage).resizeToDefault()
         let imageData = UIImageJPEGRepresentation(pickedImage, 70)
         let imageFile = File(data: imageData!)!
-        delegate.madeEventPictureChoice(imageFile, pickedPhoto: pickedImage)
+        delegate?.madeEventPictureChoice(imageFile, pickedPhoto: pickedImage)
         dismissViewControllerAnimated(true, completion: {
             self.navigationController?.popViewControllerAnimated(true)
         }) //5

@@ -11,8 +11,8 @@ struct Prefs {
 
     static let userDefaults = NSUserDefaults.standardUserDefaults()
 
-    static let tut:String! = "tut"
-    static let messages:String! = "messages"
+    static let tut: String = "tut"
+    static let messages: String = "messages"
     
 
     static func setPref(pref:String!) {

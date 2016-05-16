@@ -7,54 +7,54 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		043660A81CEA21B50046C49A /* AdvancedSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0436607A1CEA21B50046C49A /* AdvancedSettingsTableViewController.swift */; };
+		043660A91CEA21B50046C49A /* BlurryAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0436607B1CEA21B50046C49A /* BlurryAlertViewController.swift */; };
+		043660AA1CEA21B50046C49A /* CategoryHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0436607C1CEA21B50046C49A /* CategoryHeader.swift */; };
+		043660AB1CEA21B50046C49A /* CategoryPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0436607D1CEA21B50046C49A /* CategoryPickerViewController.swift */; };
+		043660AC1CEA21B50046C49A /* ChooseCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0436607E1CEA21B50046C49A /* ChooseCategoryViewController.swift */; };
+		043660AD1CEA21B50046C49A /* ChooseEventPictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0436607F1CEA21B50046C49A /* ChooseEventPictureViewController.swift */; };
+		043660AE1CEA21B50046C49A /* ChooseLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043660801CEA21B50046C49A /* ChooseLocationViewController.swift */; };
+		043660AF1CEA21B50046C49A /* CompleteProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043660811CEA21B50046C49A /* CompleteProfileViewController.swift */; };
+		043660B01CEA21B50046C49A /* ConversationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043660821CEA21B50046C49A /* ConversationsTableViewController.swift */; };
+		043660B11CEA21B50046C49A /* CreateEmailAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043660831CEA21B50046C49A /* CreateEmailAccountViewController.swift */; };
+		043660B21CEA21B50046C49A /* CreateEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043660841CEA21B50046C49A /* CreateEventViewController.swift */; };
+		043660B31CEA21B50046C49A /* CreateGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043660851CEA21B50046C49A /* CreateGroupViewController.swift */; };
+		043660B41CEA21B50046C49A /* CustomPointAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043660861CEA21B50046C49A /* CustomPointAnnotation.swift */; };
+		043660B51CEA21B50046C49A /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043660871CEA21B50046C49A /* EditProfileViewController.swift */; };
+		043660B61CEA21B50046C49A /* EventDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043660881CEA21B50046C49A /* EventDetailsViewController.swift */; };
+		043660B71CEA21B50046C49A /* EventFinderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043660891CEA21B50046C49A /* EventFinderViewController.swift */; };
+		043660B81CEA21B50046C49A /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0436608A1CEA21B50046C49A /* EventsViewController.swift */; };
+		043660B91CEA21B50046C49A /* GroupDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0436608B1CEA21B50046C49A /* GroupDetailsViewController.swift */; };
+		043660BA1CEA21B50046C49A /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0436608C1CEA21B50046C49A /* ImageViewController.swift */; };
+		043660BB1CEA21B50046C49A /* InstagramViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0436608D1CEA21B50046C49A /* InstagramViewController.swift */; };
+		043660BC1CEA21B50046C49A /* InstructionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0436608E1CEA21B50046C49A /* InstructionViewController.swift */; };
+		043660BD1CEA21B50046C49A /* ListEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0436608F1CEA21B50046C49A /* ListEventsViewController.swift */; };
+		043660BE1CEA21B50046C49A /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043660901CEA21B50046C49A /* LoginViewController.swift */; };
+		043660BF1CEA21B50046C49A /* MainRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043660911CEA21B50046C49A /* MainRootViewController.swift */; };
+		043660C01CEA21B50046C49A /* MapEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043660921CEA21B50046C49A /* MapEventsViewController.swift */; };
+		043660C11CEA21B50046C49A /* MessagesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043660931CEA21B50046C49A /* MessagesTableViewController.swift */; };
+		043660C21CEA21B50046C49A /* MessageToUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043660941CEA21B50046C49A /* MessageToUser.swift */; };
+		043660C31CEA21B50046C49A /* NotificationsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043660951CEA21B50046C49A /* NotificationsController.swift */; };
+		043660C41CEA21B50046C49A /* ParseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043660961CEA21B50046C49A /* ParseHelper.swift */; };
+		043660C51CEA21B50046C49A /* PhotosTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043660971CEA21B50046C49A /* PhotosTableViewController.swift */; };
+		043660C61CEA21B50046C49A /* PopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043660981CEA21B50046C49A /* PopoverViewController.swift */; };
+		043660C71CEA21B50046C49A /* PrivacyPolicyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043660991CEA21B50046C49A /* PrivacyPolicyController.swift */; };
+		043660C81CEA21B50046C49A /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0436609A1CEA21B50046C49A /* ProfileViewController.swift */; };
+		043660C91CEA21B50046C49A /* RangeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0436609B1CEA21B50046C49A /* RangeViewController.swift */; };
+		043660CA1CEA21B50046C49A /* RecentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0436609C1CEA21B50046C49A /* RecentViewController.swift */; };
+		043660CB1CEA21B50046C49A /* ReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0436609D1CEA21B50046C49A /* ReportViewController.swift */; };
+		043660CC1CEA21B50046C49A /* RequestsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0436609E1CEA21B50046C49A /* RequestsTableViewController.swift */; };
+		043660CD1CEA21B50046C49A /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0436609F1CEA21B50046C49A /* SettingsTableViewController.swift */; };
+		043660CE1CEA21B50046C49A /* ShareEventHintViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043660A01CEA21B50046C49A /* ShareEventHintViewController.swift */; };
+		043660CF1CEA21B50046C49A /* ShareItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043660A11CEA21B50046C49A /* ShareItemViewController.swift */; };
+		043660D01CEA21B50046C49A /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043660A21CEA21B50046C49A /* StartViewController.swift */; };
+		043660D11CEA21B50046C49A /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043660A31CEA21B50046C49A /* TabBarController.swift */; };
+		043660D21CEA21B50046C49A /* TermsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043660A41CEA21B50046C49A /* TermsController.swift */; };
+		043660D31CEA21B50046C49A /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043660A51CEA21B50046C49A /* TutorialViewController.swift */; };
+		043660D41CEA21B50046C49A /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043660A61CEA21B50046C49A /* UserProfileViewController.swift */; };
+		043660D51CEA21B50046C49A /* WriteAboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043660A71CEA21B50046C49A /* WriteAboutViewController.swift */; };
 		26ABD4EC1CE85122000976D6 /* Popover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4601CE85121000976D6 /* Popover.swift */; };
 		26ABD4ED1CE85122000976D6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 26ABD4621CE85121000976D6 /* Images.xcassets */; };
-		26ABD4EE1CE85122000976D6 /* AdvancedSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4641CE85121000976D6 /* AdvancedSettingsTableViewController.swift */; };
-		26ABD4EF1CE85122000976D6 /* BlurryAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4651CE85121000976D6 /* BlurryAlertViewController.swift */; };
-		26ABD4F01CE85122000976D6 /* CategoryHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4661CE85121000976D6 /* CategoryHeader.swift */; };
-		26ABD4F11CE85122000976D6 /* CategoryPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4671CE85121000976D6 /* CategoryPickerViewController.swift */; };
-		26ABD4F21CE85122000976D6 /* ChooseCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4681CE85121000976D6 /* ChooseCategoryViewController.swift */; };
-		26ABD4F31CE85122000976D6 /* ChooseEventPictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4691CE85121000976D6 /* ChooseEventPictureViewController.swift */; };
-		26ABD4F41CE85122000976D6 /* ChooseLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD46A1CE85121000976D6 /* ChooseLocationViewController.swift */; };
-		26ABD4F51CE85122000976D6 /* CompleteProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD46B1CE85121000976D6 /* CompleteProfileViewController.swift */; };
-		26ABD4F61CE85122000976D6 /* ConversationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD46C1CE85121000976D6 /* ConversationsTableViewController.swift */; };
-		26ABD4F71CE85122000976D6 /* CreateEmailAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD46D1CE85121000976D6 /* CreateEmailAccountViewController.swift */; };
-		26ABD4F81CE85122000976D6 /* CreateEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD46E1CE85121000976D6 /* CreateEventViewController.swift */; };
-		26ABD4F91CE85122000976D6 /* CreateGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD46F1CE85121000976D6 /* CreateGroupViewController.swift */; };
-		26ABD4FA1CE85122000976D6 /* CustomPointAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4701CE85121000976D6 /* CustomPointAnnotation.swift */; };
-		26ABD4FB1CE85122000976D6 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4711CE85121000976D6 /* EditProfileViewController.swift */; };
-		26ABD4FC1CE85122000976D6 /* EventDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4721CE85121000976D6 /* EventDetailsViewController.swift */; };
-		26ABD4FD1CE85122000976D6 /* EventFinderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4731CE85121000976D6 /* EventFinderViewController.swift */; };
-		26ABD4FE1CE85122000976D6 /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4741CE85121000976D6 /* EventsViewController.swift */; };
-		26ABD4FF1CE85122000976D6 /* GroupDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4751CE85121000976D6 /* GroupDetailsViewController.swift */; };
-		26ABD5001CE85122000976D6 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4761CE85121000976D6 /* ImageViewController.swift */; };
-		26ABD5011CE85122000976D6 /* InstagramViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4771CE85121000976D6 /* InstagramViewController.swift */; };
-		26ABD5021CE85122000976D6 /* InstructionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4781CE85121000976D6 /* InstructionViewController.swift */; };
-		26ABD5041CE85122000976D6 /* ListEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD47A1CE85121000976D6 /* ListEventsViewController.swift */; };
-		26ABD5051CE85122000976D6 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD47B1CE85121000976D6 /* LoginViewController.swift */; };
-		26ABD5061CE85122000976D6 /* MainRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD47C1CE85121000976D6 /* MainRootViewController.swift */; };
-		26ABD5071CE85122000976D6 /* MapEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD47D1CE85121000976D6 /* MapEventsViewController.swift */; };
-		26ABD5081CE85122000976D6 /* MessagesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD47E1CE85121000976D6 /* MessagesTableViewController.swift */; };
-		26ABD5091CE85122000976D6 /* MessageToUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD47F1CE85121000976D6 /* MessageToUser.swift */; };
-		26ABD50A1CE85122000976D6 /* NotificationsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4801CE85121000976D6 /* NotificationsController.swift */; };
-		26ABD50B1CE85122000976D6 /* ParseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4811CE85121000976D6 /* ParseHelper.swift */; };
-		26ABD50C1CE85122000976D6 /* PhotosTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4821CE85121000976D6 /* PhotosTableViewController.swift */; };
-		26ABD50D1CE85122000976D6 /* PopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4831CE85121000976D6 /* PopoverViewController.swift */; };
-		26ABD50E1CE85122000976D6 /* PrivacyPolicyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4841CE85121000976D6 /* PrivacyPolicyController.swift */; };
-		26ABD50F1CE85122000976D6 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4851CE85121000976D6 /* ProfileViewController.swift */; };
-		26ABD5101CE85122000976D6 /* RangeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4861CE85121000976D6 /* RangeViewController.swift */; };
-		26ABD5111CE85122000976D6 /* RecentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4871CE85121000976D6 /* RecentViewController.swift */; };
-		26ABD5121CE85122000976D6 /* ReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4881CE85121000976D6 /* ReportViewController.swift */; };
-		26ABD5131CE85122000976D6 /* RequestsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4891CE85121000976D6 /* RequestsTableViewController.swift */; };
-		26ABD5141CE85122000976D6 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD48A1CE85121000976D6 /* SettingsTableViewController.swift */; };
-		26ABD5151CE85122000976D6 /* ShareEventHintViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD48B1CE85121000976D6 /* ShareEventHintViewController.swift */; };
-		26ABD5161CE85122000976D6 /* ShareItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD48C1CE85121000976D6 /* ShareItemViewController.swift */; };
-		26ABD5171CE85122000976D6 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD48D1CE85121000976D6 /* StartViewController.swift */; };
-		26ABD5181CE85122000976D6 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD48E1CE85121000976D6 /* TabBarController.swift */; };
-		26ABD5191CE85122000976D6 /* TermsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD48F1CE85121000976D6 /* TermsController.swift */; };
-		26ABD51A1CE85122000976D6 /* TutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4901CE85121000976D6 /* TutorialViewController.swift */; };
-		26ABD51B1CE85122000976D6 /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4911CE85121000976D6 /* UserProfileViewController.swift */; };
-		26ABD51C1CE85122000976D6 /* WriteAboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4921CE85121000976D6 /* WriteAboutViewController.swift */; };
 		26ABD51D1CE85122000976D6 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4941CE85121000976D6 /* TextField.swift */; };
 		26ABD51E1CE85122000976D6 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4961CE85121000976D6 /* Extensions.swift */; };
 		26ABD51F1CE85122000976D6 /* NSDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26ABD4971CE85121000976D6 /* NSDate.swift */; };
@@ -121,55 +121,55 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0436607A1CEA21B50046C49A /* AdvancedSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdvancedSettingsTableViewController.swift; sourceTree = "<group>"; };
+		0436607B1CEA21B50046C49A /* BlurryAlertViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlurryAlertViewController.swift; sourceTree = "<group>"; };
+		0436607C1CEA21B50046C49A /* CategoryHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryHeader.swift; sourceTree = "<group>"; };
+		0436607D1CEA21B50046C49A /* CategoryPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryPickerViewController.swift; sourceTree = "<group>"; };
+		0436607E1CEA21B50046C49A /* ChooseCategoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseCategoryViewController.swift; sourceTree = "<group>"; };
+		0436607F1CEA21B50046C49A /* ChooseEventPictureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseEventPictureViewController.swift; sourceTree = "<group>"; };
+		043660801CEA21B50046C49A /* ChooseLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseLocationViewController.swift; sourceTree = "<group>"; };
+		043660811CEA21B50046C49A /* CompleteProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompleteProfileViewController.swift; sourceTree = "<group>"; };
+		043660821CEA21B50046C49A /* ConversationsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationsTableViewController.swift; sourceTree = "<group>"; };
+		043660831CEA21B50046C49A /* CreateEmailAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateEmailAccountViewController.swift; sourceTree = "<group>"; };
+		043660841CEA21B50046C49A /* CreateEventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateEventViewController.swift; sourceTree = "<group>"; };
+		043660851CEA21B50046C49A /* CreateGroupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateGroupViewController.swift; sourceTree = "<group>"; };
+		043660861CEA21B50046C49A /* CustomPointAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomPointAnnotation.swift; sourceTree = "<group>"; };
+		043660871CEA21B50046C49A /* EditProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
+		043660881CEA21B50046C49A /* EventDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDetailsViewController.swift; sourceTree = "<group>"; };
+		043660891CEA21B50046C49A /* EventFinderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventFinderViewController.swift; sourceTree = "<group>"; };
+		0436608A1CEA21B50046C49A /* EventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
+		0436608B1CEA21B50046C49A /* GroupDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupDetailsViewController.swift; sourceTree = "<group>"; };
+		0436608C1CEA21B50046C49A /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
+		0436608D1CEA21B50046C49A /* InstagramViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstagramViewController.swift; sourceTree = "<group>"; };
+		0436608E1CEA21B50046C49A /* InstructionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstructionViewController.swift; sourceTree = "<group>"; };
+		0436608F1CEA21B50046C49A /* ListEventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListEventsViewController.swift; sourceTree = "<group>"; };
+		043660901CEA21B50046C49A /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		043660911CEA21B50046C49A /* MainRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainRootViewController.swift; sourceTree = "<group>"; };
+		043660921CEA21B50046C49A /* MapEventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapEventsViewController.swift; sourceTree = "<group>"; };
+		043660931CEA21B50046C49A /* MessagesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesTableViewController.swift; sourceTree = "<group>"; };
+		043660941CEA21B50046C49A /* MessageToUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageToUser.swift; sourceTree = "<group>"; };
+		043660951CEA21B50046C49A /* NotificationsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationsController.swift; sourceTree = "<group>"; };
+		043660961CEA21B50046C49A /* ParseHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseHelper.swift; sourceTree = "<group>"; };
+		043660971CEA21B50046C49A /* PhotosTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosTableViewController.swift; sourceTree = "<group>"; };
+		043660981CEA21B50046C49A /* PopoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopoverViewController.swift; sourceTree = "<group>"; };
+		043660991CEA21B50046C49A /* PrivacyPolicyController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyController.swift; sourceTree = "<group>"; };
+		0436609A1CEA21B50046C49A /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		0436609B1CEA21B50046C49A /* RangeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RangeViewController.swift; sourceTree = "<group>"; };
+		0436609C1CEA21B50046C49A /* RecentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecentViewController.swift; sourceTree = "<group>"; };
+		0436609D1CEA21B50046C49A /* ReportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportViewController.swift; sourceTree = "<group>"; };
+		0436609E1CEA21B50046C49A /* RequestsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestsTableViewController.swift; sourceTree = "<group>"; };
+		0436609F1CEA21B50046C49A /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
+		043660A01CEA21B50046C49A /* ShareEventHintViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareEventHintViewController.swift; sourceTree = "<group>"; };
+		043660A11CEA21B50046C49A /* ShareItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareItemViewController.swift; sourceTree = "<group>"; };
+		043660A21CEA21B50046C49A /* StartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
+		043660A31CEA21B50046C49A /* TabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		043660A41CEA21B50046C49A /* TermsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermsController.swift; sourceTree = "<group>"; };
+		043660A51CEA21B50046C49A /* TutorialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
+		043660A61CEA21B50046C49A /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
+		043660A71CEA21B50046C49A /* WriteAboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WriteAboutViewController.swift; sourceTree = "<group>"; };
 		116D70F35B19AD9546398474 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		26ABD4601CE85121000976D6 /* Popover.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Popover.swift; sourceTree = "<group>"; };
 		26ABD4621CE85121000976D6 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		26ABD4641CE85121000976D6 /* AdvancedSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdvancedSettingsTableViewController.swift; sourceTree = "<group>"; };
-		26ABD4651CE85121000976D6 /* BlurryAlertViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlurryAlertViewController.swift; sourceTree = "<group>"; };
-		26ABD4661CE85121000976D6 /* CategoryHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryHeader.swift; sourceTree = "<group>"; };
-		26ABD4671CE85121000976D6 /* CategoryPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryPickerViewController.swift; sourceTree = "<group>"; };
-		26ABD4681CE85121000976D6 /* ChooseCategoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseCategoryViewController.swift; sourceTree = "<group>"; };
-		26ABD4691CE85121000976D6 /* ChooseEventPictureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseEventPictureViewController.swift; sourceTree = "<group>"; };
-		26ABD46A1CE85121000976D6 /* ChooseLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseLocationViewController.swift; sourceTree = "<group>"; };
-		26ABD46B1CE85121000976D6 /* CompleteProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompleteProfileViewController.swift; sourceTree = "<group>"; };
-		26ABD46C1CE85121000976D6 /* ConversationsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationsTableViewController.swift; sourceTree = "<group>"; };
-		26ABD46D1CE85121000976D6 /* CreateEmailAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateEmailAccountViewController.swift; sourceTree = "<group>"; };
-		26ABD46E1CE85121000976D6 /* CreateEventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateEventViewController.swift; sourceTree = "<group>"; };
-		26ABD46F1CE85121000976D6 /* CreateGroupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateGroupViewController.swift; sourceTree = "<group>"; };
-		26ABD4701CE85121000976D6 /* CustomPointAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomPointAnnotation.swift; sourceTree = "<group>"; };
-		26ABD4711CE85121000976D6 /* EditProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
-		26ABD4721CE85121000976D6 /* EventDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDetailsViewController.swift; sourceTree = "<group>"; };
-		26ABD4731CE85121000976D6 /* EventFinderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventFinderViewController.swift; sourceTree = "<group>"; };
-		26ABD4741CE85121000976D6 /* EventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
-		26ABD4751CE85121000976D6 /* GroupDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupDetailsViewController.swift; sourceTree = "<group>"; };
-		26ABD4761CE85121000976D6 /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
-		26ABD4771CE85121000976D6 /* InstagramViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstagramViewController.swift; sourceTree = "<group>"; };
-		26ABD4781CE85121000976D6 /* InstructionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstructionViewController.swift; sourceTree = "<group>"; };
-		26ABD47A1CE85121000976D6 /* ListEventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListEventsViewController.swift; sourceTree = "<group>"; };
-		26ABD47B1CE85121000976D6 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		26ABD47C1CE85121000976D6 /* MainRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainRootViewController.swift; sourceTree = "<group>"; };
-		26ABD47D1CE85121000976D6 /* MapEventsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapEventsViewController.swift; sourceTree = "<group>"; };
-		26ABD47E1CE85121000976D6 /* MessagesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesTableViewController.swift; sourceTree = "<group>"; };
-		26ABD47F1CE85121000976D6 /* MessageToUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageToUser.swift; sourceTree = "<group>"; };
-		26ABD4801CE85121000976D6 /* NotificationsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationsController.swift; sourceTree = "<group>"; };
-		26ABD4811CE85121000976D6 /* ParseHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseHelper.swift; sourceTree = "<group>"; };
-		26ABD4821CE85121000976D6 /* PhotosTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosTableViewController.swift; sourceTree = "<group>"; };
-		26ABD4831CE85121000976D6 /* PopoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopoverViewController.swift; sourceTree = "<group>"; };
-		26ABD4841CE85121000976D6 /* PrivacyPolicyController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyController.swift; sourceTree = "<group>"; };
-		26ABD4851CE85121000976D6 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
-		26ABD4861CE85121000976D6 /* RangeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RangeViewController.swift; sourceTree = "<group>"; };
-		26ABD4871CE85121000976D6 /* RecentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecentViewController.swift; sourceTree = "<group>"; };
-		26ABD4881CE85121000976D6 /* ReportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportViewController.swift; sourceTree = "<group>"; };
-		26ABD4891CE85121000976D6 /* RequestsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestsTableViewController.swift; sourceTree = "<group>"; };
-		26ABD48A1CE85121000976D6 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
-		26ABD48B1CE85121000976D6 /* ShareEventHintViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareEventHintViewController.swift; sourceTree = "<group>"; };
-		26ABD48C1CE85121000976D6 /* ShareItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareItemViewController.swift; sourceTree = "<group>"; };
-		26ABD48D1CE85121000976D6 /* StartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
-		26ABD48E1CE85121000976D6 /* TabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
-		26ABD48F1CE85121000976D6 /* TermsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermsController.swift; sourceTree = "<group>"; };
-		26ABD4901CE85121000976D6 /* TutorialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialViewController.swift; sourceTree = "<group>"; };
-		26ABD4911CE85121000976D6 /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
-		26ABD4921CE85121000976D6 /* WriteAboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WriteAboutViewController.swift; sourceTree = "<group>"; };
 		26ABD4941CE85121000976D6 /* TextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
 		26ABD4961CE85121000976D6 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		26ABD4971CE85121000976D6 /* NSDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDate.swift; sourceTree = "<group>"; };
@@ -297,52 +297,52 @@
 		26ABD4631CE85121000976D6 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				26ABD4641CE85121000976D6 /* AdvancedSettingsTableViewController.swift */,
-				26ABD4651CE85121000976D6 /* BlurryAlertViewController.swift */,
-				26ABD4661CE85121000976D6 /* CategoryHeader.swift */,
-				26ABD4671CE85121000976D6 /* CategoryPickerViewController.swift */,
-				26ABD4681CE85121000976D6 /* ChooseCategoryViewController.swift */,
-				26ABD4691CE85121000976D6 /* ChooseEventPictureViewController.swift */,
-				26ABD46A1CE85121000976D6 /* ChooseLocationViewController.swift */,
-				26ABD46B1CE85121000976D6 /* CompleteProfileViewController.swift */,
-				26ABD46C1CE85121000976D6 /* ConversationsTableViewController.swift */,
-				26ABD46D1CE85121000976D6 /* CreateEmailAccountViewController.swift */,
-				26ABD46E1CE85121000976D6 /* CreateEventViewController.swift */,
-				26ABD46F1CE85121000976D6 /* CreateGroupViewController.swift */,
-				26ABD4701CE85121000976D6 /* CustomPointAnnotation.swift */,
-				26ABD4711CE85121000976D6 /* EditProfileViewController.swift */,
-				26ABD4721CE85121000976D6 /* EventDetailsViewController.swift */,
-				26ABD4731CE85121000976D6 /* EventFinderViewController.swift */,
-				26ABD4741CE85121000976D6 /* EventsViewController.swift */,
-				26ABD4751CE85121000976D6 /* GroupDetailsViewController.swift */,
-				26ABD4761CE85121000976D6 /* ImageViewController.swift */,
-				26ABD4771CE85121000976D6 /* InstagramViewController.swift */,
-				26ABD4781CE85121000976D6 /* InstructionViewController.swift */,
-				26ABD47A1CE85121000976D6 /* ListEventsViewController.swift */,
-				26ABD47B1CE85121000976D6 /* LoginViewController.swift */,
-				26ABD47C1CE85121000976D6 /* MainRootViewController.swift */,
-				26ABD47D1CE85121000976D6 /* MapEventsViewController.swift */,
-				26ABD47E1CE85121000976D6 /* MessagesTableViewController.swift */,
-				26ABD47F1CE85121000976D6 /* MessageToUser.swift */,
-				26ABD4801CE85121000976D6 /* NotificationsController.swift */,
-				26ABD4811CE85121000976D6 /* ParseHelper.swift */,
-				26ABD4821CE85121000976D6 /* PhotosTableViewController.swift */,
-				26ABD4831CE85121000976D6 /* PopoverViewController.swift */,
-				26ABD4841CE85121000976D6 /* PrivacyPolicyController.swift */,
-				26ABD4851CE85121000976D6 /* ProfileViewController.swift */,
-				26ABD4861CE85121000976D6 /* RangeViewController.swift */,
-				26ABD4871CE85121000976D6 /* RecentViewController.swift */,
-				26ABD4881CE85121000976D6 /* ReportViewController.swift */,
-				26ABD4891CE85121000976D6 /* RequestsTableViewController.swift */,
-				26ABD48A1CE85121000976D6 /* SettingsTableViewController.swift */,
-				26ABD48B1CE85121000976D6 /* ShareEventHintViewController.swift */,
-				26ABD48C1CE85121000976D6 /* ShareItemViewController.swift */,
-				26ABD48D1CE85121000976D6 /* StartViewController.swift */,
-				26ABD48E1CE85121000976D6 /* TabBarController.swift */,
-				26ABD48F1CE85121000976D6 /* TermsController.swift */,
-				26ABD4901CE85121000976D6 /* TutorialViewController.swift */,
-				26ABD4911CE85121000976D6 /* UserProfileViewController.swift */,
-				26ABD4921CE85121000976D6 /* WriteAboutViewController.swift */,
+				0436607A1CEA21B50046C49A /* AdvancedSettingsTableViewController.swift */,
+				0436607B1CEA21B50046C49A /* BlurryAlertViewController.swift */,
+				0436607C1CEA21B50046C49A /* CategoryHeader.swift */,
+				0436607D1CEA21B50046C49A /* CategoryPickerViewController.swift */,
+				0436607E1CEA21B50046C49A /* ChooseCategoryViewController.swift */,
+				0436607F1CEA21B50046C49A /* ChooseEventPictureViewController.swift */,
+				043660801CEA21B50046C49A /* ChooseLocationViewController.swift */,
+				043660811CEA21B50046C49A /* CompleteProfileViewController.swift */,
+				043660821CEA21B50046C49A /* ConversationsTableViewController.swift */,
+				043660831CEA21B50046C49A /* CreateEmailAccountViewController.swift */,
+				043660841CEA21B50046C49A /* CreateEventViewController.swift */,
+				043660851CEA21B50046C49A /* CreateGroupViewController.swift */,
+				043660861CEA21B50046C49A /* CustomPointAnnotation.swift */,
+				043660871CEA21B50046C49A /* EditProfileViewController.swift */,
+				043660881CEA21B50046C49A /* EventDetailsViewController.swift */,
+				043660891CEA21B50046C49A /* EventFinderViewController.swift */,
+				0436608A1CEA21B50046C49A /* EventsViewController.swift */,
+				0436608B1CEA21B50046C49A /* GroupDetailsViewController.swift */,
+				0436608C1CEA21B50046C49A /* ImageViewController.swift */,
+				0436608D1CEA21B50046C49A /* InstagramViewController.swift */,
+				0436608E1CEA21B50046C49A /* InstructionViewController.swift */,
+				0436608F1CEA21B50046C49A /* ListEventsViewController.swift */,
+				043660901CEA21B50046C49A /* LoginViewController.swift */,
+				043660911CEA21B50046C49A /* MainRootViewController.swift */,
+				043660921CEA21B50046C49A /* MapEventsViewController.swift */,
+				043660931CEA21B50046C49A /* MessagesTableViewController.swift */,
+				043660941CEA21B50046C49A /* MessageToUser.swift */,
+				043660951CEA21B50046C49A /* NotificationsController.swift */,
+				043660961CEA21B50046C49A /* ParseHelper.swift */,
+				043660971CEA21B50046C49A /* PhotosTableViewController.swift */,
+				043660981CEA21B50046C49A /* PopoverViewController.swift */,
+				043660991CEA21B50046C49A /* PrivacyPolicyController.swift */,
+				0436609A1CEA21B50046C49A /* ProfileViewController.swift */,
+				0436609B1CEA21B50046C49A /* RangeViewController.swift */,
+				0436609C1CEA21B50046C49A /* RecentViewController.swift */,
+				0436609D1CEA21B50046C49A /* ReportViewController.swift */,
+				0436609E1CEA21B50046C49A /* RequestsTableViewController.swift */,
+				0436609F1CEA21B50046C49A /* SettingsTableViewController.swift */,
+				043660A01CEA21B50046C49A /* ShareEventHintViewController.swift */,
+				043660A11CEA21B50046C49A /* ShareItemViewController.swift */,
+				043660A21CEA21B50046C49A /* StartViewController.swift */,
+				043660A31CEA21B50046C49A /* TabBarController.swift */,
+				043660A41CEA21B50046C49A /* TermsController.swift */,
+				043660A51CEA21B50046C49A /* TutorialViewController.swift */,
+				043660A61CEA21B50046C49A /* UserProfileViewController.swift */,
+				043660A71CEA21B50046C49A /* WriteAboutViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -735,95 +735,95 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				043660BD1CEA21B50046C49A /* ListEventsViewController.swift in Sources */,
 				26ABD52B1CE85122000976D6 /* Prefs.swift in Sources */,
-				26ABD5071CE85122000976D6 /* MapEventsViewController.swift in Sources */,
-				26ABD5171CE85122000976D6 /* StartViewController.swift in Sources */,
+				043660CF1CEA21B50046C49A /* ShareItemViewController.swift in Sources */,
 				26ABD5231CE85122000976D6 /* PFUser.swift in Sources */,
 				26ABD55D1CE8529E000976D6 /* DataProxy.swift in Sources */,
 				26ABD52D1CE85122000976D6 /* Utils.swift in Sources */,
+				043660AA1CEA21B50046C49A /* CategoryHeader.swift in Sources */,
 				26ABD53C1CE85122000976D6 /* Message.swift in Sources */,
-				26ABD5121CE85122000976D6 /* ReportViewController.swift in Sources */,
-				26ABD5041CE85122000976D6 /* ListEventsViewController.swift in Sources */,
-				26ABD4FA1CE85122000976D6 /* CustomPointAnnotation.swift in Sources */,
 				26ABD5581CE85122000976D6 /* RequestTableViewCell.swift in Sources */,
-				26ABD4F61CE85122000976D6 /* ConversationsTableViewController.swift in Sources */,
+				043660D41CEA21B50046C49A /* UserProfileViewController.swift in Sources */,
+				043660C51CEA21B50046C49A /* PhotosTableViewController.swift in Sources */,
 				26ABD5391CE85122000976D6 /* File.swift in Sources */,
 				26ABD5211CE85122000976D6 /* PFGeoPoint.swift in Sources */,
-				26ABD5001CE85122000976D6 /* ImageViewController.swift in Sources */,
-				26ABD5011CE85122000976D6 /* InstagramViewController.swift in Sources */,
+				043660C01CEA21B50046C49A /* MapEventsViewController.swift in Sources */,
 				26ABD5291CE85122000976D6 /* CategoryType.swift in Sources */,
+				043660B61CEA21B50046C49A /* EventDetailsViewController.swift in Sources */,
 				26ABD53F1CE85122000976D6 /* ObjectACL.swift in Sources */,
+				043660D31CEA21B50046C49A /* TutorialViewController.swift in Sources */,
 				26ABD5361CE85122000976D6 /* ConversationParticipant.swift in Sources */,
-				26ABD5111CE85122000976D6 /* RecentViewController.swift in Sources */,
+				043660B11CEA21B50046C49A /* CreateEmailAccountViewController.swift in Sources */,
 				26ABD5381CE85122000976D6 /* EventPhoto.swift in Sources */,
+				043660B41CEA21B50046C49A /* CustomPointAnnotation.swift in Sources */,
 				26ABD5521CE85122000976D6 /* EventPhotoTableViewCell.swift in Sources */,
+				043660B01CEA21B50046C49A /* ConversationsTableViewController.swift in Sources */,
+				043660B91CEA21B50046C49A /* GroupDetailsViewController.swift in Sources */,
+				043660D11CEA21B50046C49A /* TabBarController.swift in Sources */,
 				26ABD53D1CE85122000976D6 /* Notification.swift in Sources */,
-				26ABD50D1CE85122000976D6 /* PopoverViewController.swift in Sources */,
-				26ABD5101CE85122000976D6 /* RangeViewController.swift in Sources */,
-				26ABD4F71CE85122000976D6 /* CreateEmailAccountViewController.swift in Sources */,
 				26ABD5561CE85122000976D6 /* GroupsViewCell.swift in Sources */,
-				26ABD5181CE85122000976D6 /* TabBarController.swift in Sources */,
-				26ABD4EF1CE85122000976D6 /* BlurryAlertViewController.swift in Sources */,
+				043660CE1CEA21B50046C49A /* ShareEventHintViewController.swift in Sources */,
+				043660C41CEA21B50046C49A /* ParseHelper.swift in Sources */,
 				26ABD5221CE85122000976D6 /* PFObject.swift in Sources */,
-				26ABD5081CE85122000976D6 /* MessagesTableViewController.swift in Sources */,
-				26ABD4FC1CE85122000976D6 /* EventDetailsViewController.swift in Sources */,
+				043660AF1CEA21B50046C49A /* CompleteProfileViewController.swift in Sources */,
+				043660D01CEA21B50046C49A /* StartViewController.swift in Sources */,
+				043660C21CEA21B50046C49A /* MessageToUser.swift in Sources */,
+				043660C61CEA21B50046C49A /* PopoverViewController.swift in Sources */,
 				26ABD51D1CE85122000976D6 /* TextField.swift in Sources */,
-				26ABD50E1CE85122000976D6 /* PrivacyPolicyController.swift in Sources */,
+				043660BB1CEA21B50046C49A /* InstagramViewController.swift in Sources */,
 				26ABD55F1CE852B1000976D6 /* Constants.swift in Sources */,
-				26ABD5021CE85122000976D6 /* InstructionViewController.swift in Sources */,
-				26ABD50A1CE85122000976D6 /* NotificationsController.swift in Sources */,
+				043660A91CEA21B50046C49A /* BlurryAlertViewController.swift in Sources */,
+				043660BC1CEA21B50046C49A /* InstructionViewController.swift in Sources */,
+				043660A81CEA21B50046C49A /* AdvancedSettingsTableViewController.swift in Sources */,
 				26ABD5421CE85122000976D6 /* User.swift in Sources */,
-				26ABD4EE1CE85122000976D6 /* AdvancedSettingsTableViewController.swift in Sources */,
+				043660B51CEA21B50046C49A /* EditProfileViewController.swift in Sources */,
 				26ABD5251CE85122000976D6 /* UIAlertController.swift in Sources */,
+				043660B81CEA21B50046C49A /* EventsViewController.swift in Sources */,
 				26ABD5271CE85122000976D6 /* UIImage.swift in Sources */,
-				26ABD4F51CE85122000976D6 /* CompleteProfileViewController.swift in Sources */,
-				26ABD4F01CE85122000976D6 /* CategoryHeader.swift in Sources */,
+				043660CB1CEA21B50046C49A /* ReportViewController.swift in Sources */,
 				26ABD5201CE85122000976D6 /* PFACL.swift in Sources */,
-				26ABD5051CE85122000976D6 /* LoginViewController.swift in Sources */,
-				26ABD4FF1CE85122000976D6 /* GroupDetailsViewController.swift in Sources */,
-				26ABD4F21CE85122000976D6 /* ChooseCategoryViewController.swift in Sources */,
-				26ABD5151CE85122000976D6 /* ShareEventHintViewController.swift in Sources */,
+				043660AD1CEA21B50046C49A /* ChooseEventPictureViewController.swift in Sources */,
 				26ABD5261CE85122000976D6 /* UIColor.swift in Sources */,
+				043660B31CEA21B50046C49A /* CreateGroupViewController.swift in Sources */,
+				043660CC1CEA21B50046C49A /* RequestsTableViewController.swift in Sources */,
+				043660C11CEA21B50046C49A /* MessagesTableViewController.swift in Sources */,
 				26ABD53B1CE85122000976D6 /* Installation.swift in Sources */,
-				26ABD4FB1CE85122000976D6 /* EditProfileViewController.swift in Sources */,
+				043660C91CEA21B50046C49A /* RangeViewController.swift in Sources */,
 				26ABD5351CE85122000976D6 /* Category.swift in Sources */,
 				26ABD5411CE85122000976D6 /* Request.swift in Sources */,
 				26ABD5281CE85122000976D6 /* UIStoryboard.swift in Sources */,
 				26ABD5401CE85122000976D6 /* Report.swift in Sources */,
-				26ABD4F31CE85122000976D6 /* ChooseEventPictureViewController.swift in Sources */,
-				26ABD4F91CE85122000976D6 /* CreateGroupViewController.swift in Sources */,
 				26ABD51F1CE85122000976D6 /* NSDate.swift in Sources */,
-				26ABD51C1CE85122000976D6 /* WriteAboutViewController.swift in Sources */,
-				26ABD5061CE85122000976D6 /* MainRootViewController.swift in Sources */,
 				26ABD5311CE85122000976D6 /* AttendState.swift in Sources */,
-				26ABD50B1CE85122000976D6 /* ParseHelper.swift in Sources */,
 				26ABD54C1CE85122000976D6 /* AppDelegate.swift in Sources */,
-				26ABD4F11CE85122000976D6 /* CategoryPickerViewController.swift in Sources */,
-				26ABD4F41CE85122000976D6 /* ChooseLocationViewController.swift in Sources */,
-				26ABD51A1CE85122000976D6 /* TutorialViewController.swift in Sources */,
 				26ABD4EC1CE85122000976D6 /* Popover.swift in Sources */,
 				26ABD52C1CE85122000976D6 /* Rank.swift in Sources */,
-				26ABD5191CE85122000976D6 /* TermsController.swift in Sources */,
 				26ABD55A1CE85122000976D6 /* TriangleView.swift in Sources */,
-				26ABD4F81CE85122000976D6 /* CreateEventViewController.swift in Sources */,
-				26ABD4FD1CE85122000976D6 /* EventFinderViewController.swift in Sources */,
+				043660CA1CEA21B50046C49A /* RecentViewController.swift in Sources */,
+				043660AE1CEA21B50046C49A /* ChooseLocationViewController.swift in Sources */,
+				043660D51CEA21B50046C49A /* WriteAboutViewController.swift in Sources */,
+				043660BA1CEA21B50046C49A /* ImageViewController.swift in Sources */,
+				043660C71CEA21B50046C49A /* PrivacyPolicyController.swift in Sources */,
 				26ABD52A1CE85122000976D6 /* KeyboardAnimationHelper.swift in Sources */,
 				26ABD5241CE85122000976D6 /* String.swift in Sources */,
+				043660BF1CEA21B50046C49A /* MainRootViewController.swift in Sources */,
+				043660BE1CEA21B50046C49A /* LoginViewController.swift in Sources */,
+				043660B71CEA21B50046C49A /* EventFinderViewController.swift in Sources */,
+				043660AC1CEA21B50046C49A /* ChooseCategoryViewController.swift in Sources */,
 				26ABD54F1CE85122000976D6 /* CategoryCollectionViewCell.swift in Sources */,
-				26ABD5161CE85122000976D6 /* ShareItemViewController.swift in Sources */,
-				26ABD4FE1CE85122000976D6 /* EventsViewController.swift in Sources */,
-				26ABD50F1CE85122000976D6 /* ProfileViewController.swift in Sources */,
+				043660C81CEA21B50046C49A /* ProfileViewController.swift in Sources */,
+				043660CD1CEA21B50046C49A /* SettingsTableViewController.swift in Sources */,
 				26ABD5541CE85122000976D6 /* EventsTableViewCell.swift in Sources */,
+				043660C31CEA21B50046C49A /* NotificationsController.swift in Sources */,
 				26ABD5371CE85122000976D6 /* Event.swift in Sources */,
-				26ABD5141CE85122000976D6 /* SettingsTableViewController.swift in Sources */,
 				26ABD51E1CE85122000976D6 /* Extensions.swift in Sources */,
 				26ABD53A1CE85122000976D6 /* GeoPoint.swift in Sources */,
-				26ABD5131CE85122000976D6 /* RequestsTableViewController.swift in Sources */,
-				26ABD50C1CE85122000976D6 /* PhotosTableViewController.swift in Sources */,
+				043660D21CEA21B50046C49A /* TermsController.swift in Sources */,
 				26ABD53E1CE85122000976D6 /* Object.swift in Sources */,
+				043660AB1CEA21B50046C49A /* CategoryPickerViewController.swift in Sources */,
 				26ABD5341CE85122000976D6 /* Block.swift in Sources */,
-				26ABD5091CE85122000976D6 /* MessageToUser.swift in Sources */,
-				26ABD51B1CE85122000976D6 /* UserProfileViewController.swift in Sources */,
+				043660B21CEA21B50046C49A /* CreateEventViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

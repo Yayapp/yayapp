@@ -27,7 +27,7 @@ final class AdvancedSettingsTableViewController: UITableViewController {
 
         blurryAlertViewController.action = BlurryAlertViewController.BUTTON_DELETE
         blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
-        blurryAlertViewController.aboutText = "Are you sure you want to delete your profile?"
+        blurryAlertViewController.aboutText = "Are you sure you want to delete your profile?".localized
         blurryAlertViewController.messageText = ""
 
         let tabbarController = self.tabBarController

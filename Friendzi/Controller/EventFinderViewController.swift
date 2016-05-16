@@ -11,8 +11,8 @@ import MapKit
 
 final class EventFinderViewController: UIViewController, UIAlertViewDelegate, ChooseLocationDelegate {
 
-    @IBOutlet private weak var searchingAnimation: UIImageView!
-    @IBOutlet private weak var location: UIButton!
+    @IBOutlet private weak var searchingAnimation: UIImageView?
+    @IBOutlet private weak var location: UIButton?
 
     private let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 

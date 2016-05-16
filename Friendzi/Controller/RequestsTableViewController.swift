@@ -10,7 +10,7 @@ import UIKit
 
 final class RequestsTableViewController: UITableViewController {
 
-    @IBOutlet private weak var emptyView: UIView!
+    @IBOutlet private weak var emptyView: UIView?
 
     private var requests:[Request] = []
 
@@ -22,7 +22,7 @@ final class RequestsTableViewController: UITableViewController {
             if (error == nil){
                 self.requests = result!
                 if !self.requests.isEmpty {
-                    self.emptyView.hidden = true
+                    self.emptyView?.hidden = true
                     let tblView =  UIView(frame: CGRectZero)
                     self.tableView.tableFooterView = tblView
                     self.tableView.tableFooterView!.hidden = true

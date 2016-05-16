@@ -10,22 +10,26 @@ import UIKit
 
 class RangeViewController: UIViewController {
 
-    @IBOutlet private weak var rangeText: UILabel!
-    @IBOutlet private weak var rangeSelector: UISlider!
+    @IBOutlet private weak var rangeText: UILabel?
+    @IBOutlet private weak var rangeSelector: UISlider?
 
-    private var currentValue: Int!
+    private var currentValue: Int?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         currentValue = ParseHelper.sharedInstance.currentUser?.distance
-        rangeText.text = "\(currentValue)KM"
-        rangeSelector.value = Float(currentValue)
+        rangeText?.text = "\(currentValue)KM"
+        if let value = currentValue {
+            rangeSelector?.value = Float(value)
+        }
         // Do any additional setup after loading the view.
     }
 
     @IBAction func sliderValueChanged(sender: UISlider) {
         currentValue = Int(sender.value)
-        rangeText.text = "\(Int(currentValue))KM"
+         if let value = currentValue {
+            rangeText?.text = "\(Int(value))KM"
+        }
     }
 
     @IBAction func doneAction(sender: AnyObject) {

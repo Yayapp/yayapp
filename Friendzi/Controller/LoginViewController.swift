@@ -10,14 +10,14 @@ import UIKit
 
 final class LoginViewController: UIViewController, InstagramDelegate {
 
-    @IBOutlet private weak var signIn: UIButton!
-    @IBOutlet private weak var forgotPassword: UIButton!
-    @IBOutlet private weak var password: UITextField!
-    @IBOutlet private weak var email: UITextField!
-    @IBOutlet private weak var textLabel: UILabel!
-    @IBOutlet private weak var createEmailAccount: UIButton!
-    @IBOutlet private weak var orLabelBottomToEmailTextField: NSLayoutConstraint!
-    @IBOutlet private weak var orLabelBottomToEmailButton: NSLayoutConstraint!
+    @IBOutlet private weak var signIn: UIButton?
+    @IBOutlet private weak var forgotPassword: UIButton?
+    @IBOutlet private weak var password: UITextField?
+    @IBOutlet private weak var email: UITextField?
+    @IBOutlet private weak var textLabel: UILabel?
+    @IBOutlet private weak var createEmailAccount: UIButton?
+    @IBOutlet private weak var orLabelBottomToEmailTextField: NSLayoutConstraint?
+    @IBOutlet private weak var orLabelBottomToEmailButton: NSLayoutConstraint?
 
     private let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 
@@ -51,39 +51,21 @@ final class LoginViewController: UIViewController, InstagramDelegate {
         return alert
     }()
 
-    var isLogin: Bool! = false
+    var isLogin = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if (isLogin == true) {
-            NSLayoutConstraint.activateConstraints([orLabelBottomToEmailTextField])
-            NSLayoutConstraint.deactivateConstraints([orLabelBottomToEmailButton])
-
-            textLabel.text = "Sign in with"
-            createEmailAccount.hidden = true
-            signIn.hidden = false
-            email.hidden = false
-            forgotPassword.hidden = false
-            password.hidden = false
-        } else {
-            NSLayoutConstraint.activateConstraints([orLabelBottomToEmailButton])
-            NSLayoutConstraint.deactivateConstraints([orLabelBottomToEmailTextField])
-
-            textLabel.text = "Join with"
-            createEmailAccount.hidden = false
-            signIn.hidden = true
-            email.hidden = true
-            forgotPassword.hidden = true
-            password.hidden = true
-        }
-        
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        setupView()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
+        guard let orLabelBottomToEmailTextField = orLabelBottomToEmailTextField, let orLabelBottomToEmailButton = orLabelBottomToEmailButton else {
+            return
+        }
+
         if (isLogin == true) {
             NSLayoutConstraint.activateConstraints([orLabelBottomToEmailTextField])
             NSLayoutConstraint.deactivateConstraints([orLabelBottomToEmailButton])
@@ -92,7 +74,6 @@ final class LoginViewController: UIViewController, InstagramDelegate {
             NSLayoutConstraint.deactivateConstraints([orLabelBottomToEmailTextField])
         }
     }
-
 
     func proceed(){
         SVProgressHUD.dismiss()
@@ -313,13 +294,18 @@ final class LoginViewController: UIViewController, InstagramDelegate {
     
     @IBAction func signIn(sender: AnyObject) {
         self.view.endEditing(true)
-        if (email.text!.isEmpty || password.text!.isEmpty) {
+        guard let email = email?.text, let password = password?.text else {
             MessageToUser.showDefaultErrorMessage("Please fill all fields to Sign In.")
-        } else if email.text!.isEmail() == false {
+            return
+        }
+
+        if (email.isEmpty || password.isEmpty) {
+            MessageToUser.showDefaultErrorMessage("Please fill all fields to Sign In.")
+        } else if email.isEmail() == false {
             MessageToUser.showDefaultErrorMessage("Email is invalid.")
         } else {
             SVProgressHUD.show()
-            ParseHelper.logInWithUsernameInBackground(email.text!, password:password.text!, completion: { (user: User?, error: NSError?) in
+            ParseHelper.logInWithUsernameInBackground(email, password: password, completion: { (user: User?, error: NSError?) in
                 SVProgressHUD.dismiss()
 
                 if user != nil {
@@ -362,3 +348,36 @@ extension LoginViewController: UITextFieldDelegate {
     }
 }
 
+private extension LoginViewController {
+    //MARK:- UI Setup
+    func setupView() {
+        guard let orLabelBottomToEmailTextField = orLabelBottomToEmailTextField, let orLabelBottomToEmailButton = orLabelBottomToEmailButton else {
+            return
+        }
+
+        if (isLogin == true) {
+
+            NSLayoutConstraint.activateConstraints([orLabelBottomToEmailTextField])
+            NSLayoutConstraint.deactivateConstraints([orLabelBottomToEmailButton])
+
+            textLabel?.text = "Sign in with"
+            createEmailAccount?.hidden = true
+            signIn?.hidden = false
+            email?.hidden = false
+            forgotPassword?.hidden = false
+            password?.hidden = false
+        } else {
+            NSLayoutConstraint.activateConstraints([orLabelBottomToEmailButton])
+            NSLayoutConstraint.deactivateConstraints([orLabelBottomToEmailTextField])
+
+            textLabel?.text = "Join with"
+            createEmailAccount?.hidden = false
+            signIn?.hidden = true
+            email?.hidden = true
+            forgotPassword?.hidden = true
+            password?.hidden = true
+        }
+
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+}

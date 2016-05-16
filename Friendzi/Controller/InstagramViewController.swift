@@ -15,17 +15,17 @@ protocol InstagramDelegate : NSObjectProtocol {
 
 final class InstagramViewController: UIViewController, UIWebViewDelegate {
 
-    @IBOutlet private weak var webView: UIWebView!
+    @IBOutlet private weak var webView: UIWebView?
 
     weak var delegate:InstagramDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        webView.delegate = self
+        webView?.delegate = self
         let requestURL = InstagramEngine.sharedEngine().authorizationURLForScope(InstagramKitLoginScope.Relationships)
         let request = NSURLRequest(URL: requestURL)
-        webView.loadRequest(request)
+        webView?.loadRequest(request)
     }
     
     func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {

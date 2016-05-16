@@ -14,7 +14,7 @@ protocol WriteAboutDelegate : NSObjectProtocol {
 
 final class WriteAboutViewController: UIViewController {
 
-    @IBOutlet private weak var text: UITextView!
+    @IBOutlet private weak var text: UITextView?
 
     var textAbout:String!
     weak var delegate: WriteAboutDelegate!
@@ -27,8 +27,8 @@ final class WriteAboutViewController: UIViewController {
                                                          name: Constants.userDidLogoutNotification,
                                                          object: nil)
 
-        text.text = textAbout
-        text.becomeFirstResponder()
+        text?.text = textAbout
+        text?.becomeFirstResponder()
         
         self.view.backgroundColor = UIColor.clearColor()
         
@@ -48,7 +48,9 @@ final class WriteAboutViewController: UIViewController {
     }
 
     @IBAction func ok(sender: AnyObject) {
-        delegate.writeAboutDone(text.text)
+        if let text = text?.text {
+            delegate?.writeAboutDone(text)
+        }
         dismissViewControllerAnimated(true, completion: nil)
     }
 

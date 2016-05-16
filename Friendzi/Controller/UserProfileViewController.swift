@@ -10,19 +10,19 @@ import UIKit
 
 final class UserProfileViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate,   UIPopoverPresentationControllerDelegate, TTGTextTagCollectionViewDelegate {
     
-    @IBOutlet private weak var name: UILabel!
-    @IBOutlet private weak var avatar: UIImageView!
-    @IBOutlet private weak var eventsCount: UILabel!
-    @IBOutlet private weak var about: UILabel!
-    @IBOutlet private weak var rankIcon: UIImageView!
-    @IBOutlet private weak var interestsCollection: TTGTextTagCollectionView!
+    @IBOutlet private weak var name: UILabel?
+    @IBOutlet private weak var avatar: UIImageView?
+    @IBOutlet private weak var eventsCount: UILabel?
+    @IBOutlet private weak var about: UILabel?
+    @IBOutlet private weak var rankIcon: UIImageView?
+    @IBOutlet private weak var interestsCollection: TTGTextTagCollectionView?
 
     private let picker = UIImagePickerController()
-    private var editdone:UIBarButtonItem!
-    private var interestsData:[Category]! = []
+    private var editdone: UIBarButtonItem?
+    private var interestsData: [Category]! = []
     private var blocked = false
 
-    var user: User!
+    var user: User?
     var userID: String?
 
     override func viewDidLoad() {
@@ -37,18 +37,18 @@ final class UserProfileViewController: UITableViewController, UIImagePickerContr
         tableView.estimatedRowHeight = 100.0
         tableView.rowHeight = UITableViewAutomaticDimension
         
-        interestsCollection.enableTagSelection = false
-        interestsCollection.tagTextColor = UIColor.blackColor()
-        interestsCollection.tagSelectedTextColor = Color.PrimaryActiveColor
-        interestsCollection.tagSelectedBackgroundColor = UIColor.whiteColor()
-        interestsCollection.tagTextFont = UIFont.boldSystemFontOfSize(15)
-        interestsCollection.tagCornerRadius = 10
-        interestsCollection.tagSelectedCornerRadius = 0
-        interestsCollection.tagSelectedBorderWidth = 0
-        interestsCollection.tagBorderColor = UIColor.blackColor()
-        interestsCollection.horizontalSpacing = 12
-        interestsCollection.verticalSpacing = 12
-        interestsCollection.delegate = self
+        interestsCollection?.enableTagSelection = false
+        interestsCollection?.tagTextColor = UIColor.blackColor()
+        interestsCollection?.tagSelectedTextColor = Color.PrimaryActiveColor
+        interestsCollection?.tagSelectedBackgroundColor = UIColor.whiteColor()
+        interestsCollection?.tagTextFont = UIFont.boldSystemFontOfSize(15)
+        interestsCollection?.tagCornerRadius = 10
+        interestsCollection?.tagSelectedCornerRadius = 0
+        interestsCollection?.tagSelectedBorderWidth = 0
+        interestsCollection?.tagBorderColor = UIColor.blackColor()
+        interestsCollection?.horizontalSpacing = 12
+        interestsCollection?.verticalSpacing = 12
+        interestsCollection?.delegate = self
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -78,8 +78,8 @@ final class UserProfileViewController: UITableViewController, UIImagePickerContr
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
 
-        interestsCollection.removeAllTags()
-        interestsCollection.reload()
+        interestsCollection?.removeAllTags()
+        interestsCollection?.reload()
     }
 
     deinit {
@@ -89,9 +89,9 @@ final class UserProfileViewController: UITableViewController, UIImagePickerContr
     }
 
     func setupUIWithUserInfo() {
-        name.text = user.name
+        name?.text = user?.name
 
-        let isCurrentUser = ParseHelper.sharedInstance.currentUser?.objectId == user.objectId
+        let isCurrentUser = ParseHelper.sharedInstance.currentUser?.objectId == user?.objectId
 
         if isCurrentUser {
             editdone = UIBarButtonItem(image:UIImage(named: "user_settings_ico"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(UserProfileViewController.settings(_:)))
@@ -102,21 +102,29 @@ final class UserProfileViewController: UITableViewController, UIImagePickerContr
             tableView.tableFooterView!.hidden = true
             title = "Profile"
         } else {
-            navigationItem.title = user.name
+            navigationItem.title = user?.name
+            guard let currentUser = ParseHelper.sharedInstance.currentUser, let user = user else {
+                return
+            }
 
-            ParseHelper.countBlocks(ParseHelper.sharedInstance.currentUser!, user: user, completion: { [weak self] count in
+            ParseHelper.countBlocks(currentUser, user: user, completion: { [weak self] count in
                 self?.blocked = count > 0
                 self?.editdone = UIBarButtonItem(image:UIImage(named: "reporticon"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(UserProfileViewController.blockUnblock))
                 self?.navigationItem.setRightBarButtonItem(self?.editdone, animated: false)
                 })
         }
 
+        guard let user = user else {
+            return
+        }
         ParseHelper.getUpcomingPastEvents(user, upcoming: false, block: {
             result, error in
             if error == nil {
                 let rank = Rank.getRank(result!.count)
-                self.eventsCount.text = rank.getString(self.user.gender!)
-                self.rankIcon.image = rank.getImage(self.user.gender!)
+                if let gender = self.user?.gender {
+                    self.eventsCount?.text = rank.getString(gender)
+                    self.rankIcon?.image = rank.getImage(gender)
+                }
             } else {
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
@@ -132,16 +140,16 @@ final class UserProfileViewController: UITableViewController, UIImagePickerContr
                 for (_, category) in (categories?.enumerate())! {
                     names.append(" \(category.name) ")
                 }
-                self.interestsCollection.addTags(names)
-                self.interestsCollection.setTagAtIndex(0, selected: true)
+                self.interestsCollection?.addTags(names)
+                self.interestsCollection?.setTagAtIndex(0, selected: true)
             }
         })
 
         if let avatarFile = user.avatar,
             photoURLString = avatarFile.url,
             photoURL = NSURL(string: photoURLString) {
-            avatar.layer.borderColor = UIColor.whiteColor().CGColor
-            avatar.sd_setImageWithURL(photoURL)
+            avatar?.layer.borderColor = UIColor.whiteColor().CGColor
+            avatar?.sd_setImageWithURL(photoURL)
         }
 
 
@@ -157,7 +165,7 @@ final class UserProfileViewController: UITableViewController, UIImagePickerContr
         let myMutableString = NSMutableAttributedString(string: " Bio: "+text, attributes: [NSFontAttributeName:font15])
         myMutableString.addAttribute(NSFontAttributeName, value: font11, range: range)
         myMutableString.addAttribute(NSForegroundColorAttributeName, value: UIColor.blackColor() , range: range)
-        about.attributedText = myMutableString
+        about?.attributedText = myMutableString
         tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: UITableViewRowAnimation.None)
     }
   
@@ -168,12 +176,12 @@ final class UserProfileViewController: UITableViewController, UIImagePickerContr
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if indexPath.row == 1 {
-            return interestsCollection.contentHeight
+            return interestsCollection?.contentHeight ?? 0
         }
 
-        about.sizeToFit()
+        about?.sizeToFit()
 
-        return about.frame.height < 44 ? 44 : about.frame.height + 16
+        return (about?.frame.height ?? 0) < 44 ? 44 : (about?.frame.height ?? 0) + 16
     }
 
     @IBAction func settings(sender: AnyObject) {
@@ -197,8 +205,10 @@ final class UserProfileViewController: UITableViewController, UIImagePickerContr
             reportViewController.onBlock = {
                 if self.blocked {
                     self.blocked = false
-                    
-                    ParseHelper.removeBlocks(currentUser, user: self.user, completion: { [weak self] error in
+                    guard let user = self.user else {
+                        return
+                    }
+                    ParseHelper.removeBlocks(currentUser, user: user, completion: { [weak self] error in
                         if let _ = self where error != nil {
                             MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
                         }})
@@ -241,8 +251,8 @@ final class UserProfileViewController: UITableViewController, UIImagePickerContr
 
         user = nil
         interestsData.removeAll()
-        interestsCollection.removeAllTags()
-        interestsCollection.reload()
+        interestsCollection?.removeAllTags()
+        interestsCollection?.reload()
         blocked = false
         name?.text = nil
         avatar?.image = nil

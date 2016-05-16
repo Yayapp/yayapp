@@ -10,17 +10,18 @@ protocol CategoryPickerDelegate : NSObjectProtocol {
     func madeCategoryChoice(categories: [Category])
 }
 
-final class CategoryPickerViewController: UIViewController, TTGTextTagCollectionViewDelegate {
+final class CategoryPickerViewController: UIViewController {
 
     @IBOutlet private weak var categoriesCollection: TTGTextTagCollectionView!
 
     private var datasource: [Category]! = []
 
-    var categoryDelegate:CategoryPickerDelegate!
     var selectedCategoriesData:[Category]! = []
+    var categoryDelegate: CategoryPickerDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
         tagCollectionViewSetupUI()
         loadData()
     }
@@ -29,12 +30,12 @@ final class CategoryPickerViewController: UIViewController, TTGTextTagCollection
 extension CategoryPickerViewController {
     //MARK:- Action Buttons
     @IBAction func doneAction(sender: AnyObject) {
-        categoryDelegate.madeCategoryChoice(selectedCategoriesData)
+        categoryDelegate?.madeCategoryChoice(selectedCategoriesData)
         dismissViewControllerAnimated(true, completion: nil)
     }
 }
 
-extension CategoryPickerViewController {
+extension CategoryPickerViewController: TTGTextTagCollectionViewDelegate {
     //MARK:- TTGTextTagCollectionViewDelegate 
     func textTagCollectionView(textTagCollectionView: TTGTextTagCollectionView!, didTapTag tagText: String!, atIndex index: UInt, selected: Bool) {
         let category = datasource[Int(index)]

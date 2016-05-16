@@ -12,9 +12,9 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     static let reuseIdentifier = "categoryCollectionViewCell"
     static let nib = UINib(nibName: "CategoryCollectionViewCell", bundle: nil)
 
-    @IBOutlet weak var name: UILabel!
-    @IBOutlet weak var photo: UIImageView!
-    @IBOutlet weak var switched: UISwitch!
+    @IBOutlet weak var name: UILabel?
+    @IBOutlet weak var photo: UIImageView?
+    @IBOutlet weak var switched: UISwitch?
 
     var onSwitchValueChanged:((isOn: Bool) -> Void)?
 
@@ -28,10 +28,10 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        name.text = nil
-        photo.image = nil
-        switched.on = false
-        switched.enabled = true
+        name?.text = nil
+        photo?.image = nil
+        switched?.on = false
+        switched?.enabled = true
     }
 
     @IBAction func switchValueChanged(sender: UISwitch) {

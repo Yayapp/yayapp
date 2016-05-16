@@ -12,19 +12,17 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
-    @IBOutlet private weak var allButton: UIButton!
-    @IBOutlet private weak var publicButton: UIButton!
-    @IBOutlet private weak var privateButton: UIButton!
+    @IBOutlet private weak var allButton: UIButton?
+    @IBOutlet private weak var publicButton: UIButton?
+    @IBOutlet private weak var privateButton: UIButton?
     @IBOutlet private weak var myGroupsButton: UIButton?
-    
-    @IBOutlet private weak var allUnderline: UIView!
-    @IBOutlet private weak var publicUnderline: UIView!
-    @IBOutlet private weak var privateUnderline: UIView!
-    @IBOutlet private var myGroupsUnderline: UIView?
-  
-    @IBOutlet private weak var navBar: UINavigationBar!
-    @IBOutlet private weak var categories: UICollectionView!
-    @IBOutlet private weak var filterContainer: UIImageView!
+    @IBOutlet private weak var allUnderline: UIView?
+    @IBOutlet private weak var publicUnderline: UIView?
+    @IBOutlet private weak var privateUnderline: UIView?
+    @IBOutlet private weak var myGroupsUnderline: UIView?
+    @IBOutlet private weak var navBar: UINavigationBar?
+    @IBOutlet private weak var categories: UICollectionView?
+    @IBOutlet private weak var filterContainer: UIImageView?
 
     lazy var searchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
@@ -54,10 +52,10 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
                                                          name: Constants.groupPendingStatusChangedNotification,
                                                          object: nil)
 
-        categories.registerNib(CategoryCollectionViewCell.nib, forCellWithReuseIdentifier: CategoryCollectionViewCell.reuseIdentifier)
+        categories?.registerNib(CategoryCollectionViewCell.nib, forCellWithReuseIdentifier: CategoryCollectionViewCell.reuseIdentifier)
 
-        categories.delegate = self
-        categories.dataSource = self
+        categories?.delegate = self
+        categories?.dataSource = self
 
         loadContent(needsSelectFirstTab: true)
     }
@@ -106,7 +104,7 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
             if needsSelectFirstTab {
                 self?.allAction(true)
             } else {
-                self?.categories.reloadData()
+                self?.categories?.reloadData()
             }
         })
     }
@@ -153,21 +151,20 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
         }
     
         let category = categoryForIndexPath(indexPath)
-        cell.name.text = category.name
+        cell.name?.text = category.name
         
         if let photoURLString = category.photoThumb.url,
             photoURL = NSURL(string: photoURLString) {
-            cell.photo.sd_setImageWithURL(photoURL)
+            cell.photo?.sd_setImageWithURL(photoURL)
         }
 
-        cell.switched.tag = indexPath.row;
-        
+        cell.switched?.tag = indexPath.row
         cell.onSwitchValueChanged = { [unowned self] isSwitcherOn in
             guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as? BlurryAlertViewController else {
                     return
             }
 
-            cell.switched.onTintColor = category.isPrivate ? .appOrangeColor() : .appGreenColor()
+            cell.switched?.onTintColor = category.isPrivate ? .appOrangeColor() : .appGreenColor()
 
             ParseHelper.changeStateOfCategory(category,
                                               toJoined: isSwitcherOn,
@@ -189,19 +186,20 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
             categoryID = category.objectId {
             let isSwitchOn = category.attendeeIDs.contains(currentUserID) || ParseHelper.sharedInstance.currentUser?.pendingGroupIDs.contains(categoryID) == true
 
-            cell.switched.on = isSwitchOn
+            cell.switched?.on = isSwitchOn
 
             if categoryOwnerId == currentUserID || !category.isPrivate {
-                cell.switched.onTintColor = .appGreenColor()
+                cell.switched?.onTintColor = .appGreenColor()
             } else {
                 if isSwitchOn {
-                    cell.switched.onTintColor = ParseHelper.sharedInstance.currentUser?.pendingGroupIDs.contains(categoryID) == true ? .appOrangeColor() : .appGreenColor()
+                    cell.switched?.onTintColor = ParseHelper.sharedInstance.currentUser?.pendingGroupIDs.contains(categoryID) == true ? .appOrangeColor() : .appGreenColor()
+
                 } else {
-                    cell.switched.onTintColor = category.isPrivate ? .appOrangeColor() : .appGreenColor()
+                    cell.switched?.onTintColor = category.isPrivate ? .appOrangeColor() : .appGreenColor()
                 }
             }
 
-            cell.switched.enabled = categoryOwnerId != currentUserID
+            cell.switched?.enabled = categoryOwnerId != currentUserID
         }
 
         return cell
@@ -231,55 +229,55 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
             selectedCategoriesData = categoriesData.filter({ $0.attendeeIDs.contains(currentUserID) })
         }
         
-        allUnderline.hidden = false
-        publicUnderline.hidden = true
-        privateUnderline.hidden = true
+        allUnderline?.hidden = false
+        publicUnderline?.hidden = true
+        privateUnderline?.hidden = true
         myGroupsUnderline?.hidden = true
         selectedCategoryType = CategoryType.All
-        allButton.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
-        publicButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        privateButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        allButton?.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
+        publicButton?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        privateButton?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         myGroupsButton?.setTitleColor(UIColor.blackColor(), forState: .Normal)
-        categories.reloadData()
+        categories?.reloadData()
     }
     
     @IBAction func publicAction(sender: AnyObject) {
-        allUnderline.hidden = true
-        publicUnderline.hidden = false
-        privateUnderline.hidden = true
+        allUnderline?.hidden = true
+        publicUnderline?.hidden = false
+        privateUnderline?.hidden = true
         myGroupsUnderline?.hidden = true
         selectedCategoryType = CategoryType.Public
-        allButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        publicButton.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
-        privateButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        allButton?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        publicButton?.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
+        privateButton?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         myGroupsButton?.setTitleColor(UIColor.blackColor(), forState: .Normal)
-        categories.reloadData()
+        categories?.reloadData()
     }
     
     @IBAction func privateAction(sender: AnyObject) {
-        allUnderline.hidden = true
-        publicUnderline.hidden = true
-        privateUnderline.hidden = false
+        allUnderline?.hidden = true
+        publicUnderline?.hidden = true
+        privateUnderline?.hidden = false
         myGroupsUnderline?.hidden = true
         selectedCategoryType = CategoryType.Private
-        allButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        publicButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        privateButton.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
+        allButton?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        publicButton?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        privateButton?.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
         myGroupsButton?.setTitleColor(UIColor.blackColor(), forState: .Normal)
-        categories.reloadData()
+        categories?.reloadData()
     }
     
     @IBAction func displayMyGroups(sender: UIButton) {
-        allUnderline.hidden = true
-        publicUnderline.hidden = true
-        privateUnderline.hidden = true
+        allUnderline?.hidden = true
+        publicUnderline?.hidden = true
+        privateUnderline?.hidden = true
         myGroupsUnderline?.hidden = false
         selectedCategoryType = CategoryType.My
-        allButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        publicButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        privateButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        allButton?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        publicButton?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        privateButton?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         myGroupsButton?.setTitleColor(Color.PrimaryActiveColor, forState: .Normal)
-        categories.reloadData()
+        categories?.reloadData()
     }
     
     @IBAction func searchAction(sender: AnyObject) {
@@ -328,7 +326,7 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
             vc.group = categoryForIndexPath(indexPath)
             vc.selectedCategoriesData = selectedCategoriesData
             vc.updatedStatusInGroup = {
-                self.categories.reloadItemsAtIndexPaths([indexPath])
+                self.categories?.reloadItemsAtIndexPaths([indexPath])
             }
         } else if let vc = segue.destinationViewController as? CreateGroupViewController
             where segue.identifier == "create" {
@@ -344,9 +342,6 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
     func groupRemoved(group: Category) {
         loadContent(needsSelectFirstTab: false)
     }
-
-    //MARK: - Segue
-    @IBAction func unwindToChooseCategory(segue: UIStoryboardSegue) { }
 
     //MARK: - Helpers
     func categoryForIndexPath(indexPath: NSIndexPath) -> Category {

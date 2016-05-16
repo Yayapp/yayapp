@@ -11,7 +11,7 @@ import MapKit
 
 final class MapEventsViewController: EventsViewController, MKMapViewDelegate {
 
-    @IBOutlet private weak var mapView: MKMapView!
+    @IBOutlet private weak var mapView: MKMapView?
 
     private let regionRadius: CLLocationDistance = 1000
 
@@ -22,14 +22,14 @@ final class MapEventsViewController: EventsViewController, MKMapViewDelegate {
                                                          name: Constants.userDidLogoutNotification,
                                                          object: nil)
         
-        mapView.delegate = self
+        mapView?.delegate = self
         let user = ParseHelper.sharedInstance.currentUser
         
         if let location = user?.location,
             distance = user?.distance {
             let center:CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: location.latitude , longitude: location.longitude)
             let coordinateRegion = MKCoordinateRegionMakeWithDistance(center, regionRadius * Double(distance), regionRadius * Double(distance))
-            self.mapView.setRegion(coordinateRegion, animated: true)
+            self.mapView?.setRegion(coordinateRegion, animated: true)
         }
     }
 
@@ -48,7 +48,7 @@ final class MapEventsViewController: EventsViewController, MKMapViewDelegate {
             pointAnnoation.subtitle = item.summary
             pointAnnoation.event = item
             let annotationView = MKPinAnnotationView(annotation: pointAnnoation, reuseIdentifier: "pin")
-            self.mapView.addAnnotation(annotationView.annotation!)
+            self.mapView?.addAnnotation(annotationView.annotation!)
         }
     }
 
@@ -63,8 +63,11 @@ final class MapEventsViewController: EventsViewController, MKMapViewDelegate {
         }
 
         let customPointAnnotation = annotation as! CustomPointAnnotation
+        guard let event = customPointAnnotation.event else {
+            return nil
+        }
 
-        ParseHelper.getData(customPointAnnotation.event.photo, completion: {
+        ParseHelper.getData(event.photo, completion: {
             (data:NSData?, error:NSError?) in
             if(error == nil){
                 v!.image = UIImage(data:data!)
@@ -83,8 +86,11 @@ final class MapEventsViewController: EventsViewController, MKMapViewDelegate {
     }
 
     func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
-        let customPointAnnotation = view.annotation as! CustomPointAnnotation
-        delegate!.madeEventChoice(customPointAnnotation.event)
+        guard let customPointAnnotationEvent = (view.annotation as! CustomPointAnnotation).event else {
+            return
+        }
+
+        delegate?.madeEventChoice(customPointAnnotationEvent)
     }
     
     override func eventChanged(event:Event) {
@@ -92,7 +98,10 @@ final class MapEventsViewController: EventsViewController, MKMapViewDelegate {
     }
     
     override func eventRemoved(event:Event) {
-        mapView.removeAnnotations(mapView.annotations)
+        guard let annotation = mapView?.annotations else {
+            return
+        }
+        mapView?.removeAnnotations(annotation)
         eventsData = eventsData.filter({$0.objectId != event.objectId})
         reloadAll(eventsData)
     }

@@ -10,8 +10,8 @@ import UIKit
 
 final class InstructionViewController: UIViewController {
 
-    @IBOutlet private weak var titleLabel: UILabel!
-    @IBOutlet private weak var backimage: UIImageView!
+    @IBOutlet private weak var titleLabel: UILabel?
+    @IBOutlet private weak var backimage: UIImageView?
 
     var titleText : NSAttributedString!
     var imageName:String!
@@ -19,7 +19,7 @@ final class InstructionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        backimage.image = UIImage(named: imageName)
-        titleLabel.attributedText = titleText
+        backimage?.image = UIImage(named: imageName)
+        titleLabel?.attributedText = titleText
     }
 }

@@ -10,16 +10,16 @@ import UIKit
 
 final class EditProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate,UIPopoverPresentationControllerDelegate {
 
-    @IBOutlet private weak var maleButton: UIButton!
-    @IBOutlet private weak var femaleButton: UIButton!
-    @IBOutlet private weak var name: UITextField!
-    @IBOutlet private weak var avatar: UIImageView!
-    @IBOutlet private weak var about: UITextView!
+    @IBOutlet private weak var maleButton: UIButton?
+    @IBOutlet private weak var femaleButton: UIButton?
+    @IBOutlet private weak var name: UITextField?
+    @IBOutlet private weak var avatar: UIImageView?
+    @IBOutlet private weak var about: UITextView?
 
     private let picker = UIImagePickerController()
-    private var editdone: UIBarButtonItem!
+    private var editdone: UIBarButtonItem?
     private var avatarData: NSData?
-    private var gender: Int!
+    private var gender: Int?
     private var isShowingBioPlaceholder = true
 
     override func viewDidLoad() {
@@ -31,7 +31,7 @@ final class EditProfileViewController: UIViewController, UIImagePickerController
 
         picker.delegate = self
         
-        name.text = currentUser.name
+        name?.text = currentUser.name
       
         gender = currentUser.gender
         
@@ -44,14 +44,14 @@ final class EditProfileViewController: UIViewController, UIImagePickerController
         if let avatarFile = ParseHelper.sharedInstance.currentUser?.avatar,
             photoURLString = avatarFile.url,
             photoURL = NSURL(string: photoURLString) {
-            avatar.layer.borderColor = UIColor.whiteColor().CGColor
-            avatar.sd_setImageWithURL(photoURL)
+            avatar?.layer.borderColor = UIColor.whiteColor().CGColor
+            avatar?.sd_setImageWithURL(photoURL)
         }
 
         if let bio = currentUser.about where bio.characters.count > 0 {
             isShowingBioPlaceholder = false
-            about.textColor = .blackColor()
-            about.text = bio
+            about?.textColor = .blackColor()
+            about?.text = bio
         }
     }
     
@@ -87,9 +87,9 @@ final class EditProfileViewController: UIViewController, UIImagePickerController
             ParseHelper.sharedInstance.currentUser!.avatar = imageFile
         }
 
-        ParseHelper.sharedInstance.currentUser?.name = name.text
+        ParseHelper.sharedInstance.currentUser?.name = name?.text
 
-        let aboutWithoutExtraLines = about.text.stringByReplacingOccurrencesOfString("\\n+",
+        let aboutWithoutExtraLines = about?.text.stringByReplacingOccurrencesOfString("\\n+",
                                                                                      withString: "\n",
                                                                                      options: .RegularExpressionSearch,
                                                                                      range:nil)
@@ -108,13 +108,13 @@ final class EditProfileViewController: UIViewController, UIImagePickerController
     }
     
     @IBAction func maleAction(sender: AnyObject) {
-        maleButton.backgroundColor = Color.GenderActiveColor
-        femaleButton.backgroundColor = UIColor.whiteColor()
+        maleButton?.backgroundColor = Color.GenderActiveColor
+        femaleButton?.backgroundColor = UIColor.whiteColor()
         gender = 1
     }
     @IBAction func femaleAction(sender: AnyObject) {
-        maleButton.backgroundColor = UIColor.whiteColor()
-        femaleButton.backgroundColor = Color.GenderActiveColor
+        maleButton?.backgroundColor = UIColor.whiteColor()
+        femaleButton?.backgroundColor = Color.GenderActiveColor
         gender = 0
     }
     
@@ -123,7 +123,7 @@ final class EditProfileViewController: UIViewController, UIImagePickerController
         let pickedImage:UIImage = (info[UIImagePickerControllerEditedImage] as! UIImage).resizeToDefault()
 
         avatarData = UIImageJPEGRepresentation(pickedImage, 70)
-        avatar.image = pickedImage
+        avatar?.image = pickedImage
 
         picker.dismissViewControllerAnimated(true, completion: nil)
     }

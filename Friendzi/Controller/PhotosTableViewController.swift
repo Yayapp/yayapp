@@ -15,7 +15,7 @@ protocol ChooseCategoryPhotoDelegate : NSObjectProtocol {
 final class PhotosTableViewController: UITableViewController {
 
     var eventPhotos:[EventPhoto] = []
-    weak var delegate:ChooseCategoryPhotoDelegate!
+    weak var delegate:ChooseCategoryPhotoDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +32,7 @@ final class PhotosTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        delegate.madeCategoryPhotoChoice((eventPhotos)[indexPath.row])
+        delegate?.madeCategoryPhotoChoice((eventPhotos)[indexPath.row])
         self.navigationController?.popViewControllerAnimated(true)
     }
 

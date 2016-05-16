@@ -10,7 +10,7 @@ import UIKit
 
 final class ConversationsTableViewController: UITableViewController {
 
-    @IBOutlet private weak var emptyView: UIView!
+    @IBOutlet private weak var emptyView: UIView?
 
     private var events:[Event] = []
 
@@ -25,7 +25,7 @@ final class ConversationsTableViewController: UITableViewController {
                 self.events = result!
                 self.tableView.reloadData()
                 if !self.events.isEmpty {
-                    self.emptyView.hidden = true
+                    self.emptyView?.hidden = true
                     let tblView =  UIView(frame: CGRectZero)
                     self.tableView.tableFooterView = tblView
                     self.tableView.tableFooterView!.hidden = true

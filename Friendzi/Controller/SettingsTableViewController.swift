@@ -10,8 +10,8 @@ import UIKit
 
 final class SettingsTableViewController: UITableViewController {
 
-    @IBOutlet private weak var attAccepted: UISwitch!
-    @IBOutlet private weak var newMessage: UISwitch!
+    @IBOutlet private weak var attAccepted: UISwitch?
+    @IBOutlet private weak var newMessage: UISwitch?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,8 +21,8 @@ final class SettingsTableViewController: UITableViewController {
             SVProgressHUD.dismiss()
             if error == nil {
                 
-                self.attAccepted.on = ParseHelper.sharedInstance.currentUser!.attAccepted!
-                self.newMessage.on = ParseHelper.sharedInstance.currentUser!.newMessage!
+                self.attAccepted?.on = ParseHelper.sharedInstance.currentUser!.attAccepted!
+                self.newMessage?.on = ParseHelper.sharedInstance.currentUser!.newMessage!
                 
             } else {
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
@@ -31,12 +31,12 @@ final class SettingsTableViewController: UITableViewController {
     }
 
     @IBAction func attAccepted(sender: AnyObject) {
-        ParseHelper.sharedInstance.currentUser?.attAccepted = attAccepted.on
+        ParseHelper.sharedInstance.currentUser?.attAccepted = attAccepted?.on
         ParseHelper.saveObject(ParseHelper.sharedInstance.currentUser, completion: nil)
     }
     
     @IBAction func newMessage(sender: AnyObject) {
-        ParseHelper.sharedInstance.currentUser?.newMessage = newMessage.on
+        ParseHelper.sharedInstance.currentUser?.newMessage = newMessage?.on
         ParseHelper.saveObject(ParseHelper.sharedInstance.currentUser, completion: nil)
     }
  }

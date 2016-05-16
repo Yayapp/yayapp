@@ -16,29 +16,29 @@ protocol GroupChangeDelegate : NSObjectProtocol {
 
 final class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerDelegate, GroupCreationDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
     
-    @IBOutlet weak var attendeesButtons: UICollectionView!
-    @IBOutlet weak var spinner: UIActivityIndicatorView!
-    @IBOutlet weak var photo: UIImageView!
-    @IBOutlet weak var name: UILabel!
-    @IBOutlet weak var location: UIButton!
-    @IBOutlet weak var attendButton: UIButton!
-    @IBOutlet weak var attendButtonHeight: NSLayoutConstraint!
-    @IBOutlet weak var distance: UILabel!
-    @IBOutlet weak var chatButton: UIButton!
-    @IBOutlet weak var detailsButton: UIButton!
-    @IBOutlet weak var author: UIButton!
-    @IBOutlet weak var detailsUnderline: UIView!
-    @IBOutlet weak var chatUnderline: UIView!
-    @IBOutlet weak var messagesContainer: UIView!
-    @IBOutlet weak var eventsContainer: UIView!
-    @IBOutlet weak var members: UILabel!
-    @IBOutlet weak var descr: UITextView!
-    @IBOutlet weak var switherPlaceholderTopSpace: NSLayoutConstraint!
+    @IBOutlet weak var attendeesButtons: UICollectionView?
+    @IBOutlet weak var spinner: UIActivityIndicatorView?
+    @IBOutlet weak var photo: UIImageView?
+    @IBOutlet weak var name: UILabel?
+    @IBOutlet weak var location: UIButton?
+    @IBOutlet weak var attendButton: UIButton?
+    @IBOutlet weak var attendButtonHeight: NSLayoutConstraint?
+    @IBOutlet weak var distance: UILabel?
+    @IBOutlet weak var chatButton: UIButton?
+    @IBOutlet weak var detailsButton: UIButton?
+    @IBOutlet weak var author: UIButton?
+    @IBOutlet weak var detailsUnderline: UIView?
+    @IBOutlet weak var chatUnderline: UIView?
+    @IBOutlet weak var messagesContainer: UIView?
+    @IBOutlet weak var eventsContainer: UIView?
+    @IBOutlet weak var members: UILabel?
+    @IBOutlet weak var descr: UITextView?
+    @IBOutlet weak var switherPlaceholderTopSpace: NSLayoutConstraint?
 
-    private var currentLocation:CLLocation!
+    private var currentLocation :CLLocation?
     private var attendees:[User] = []
 
-    var group: Category!
+    var group: Category?
     var selectedCategoriesData: [Category]! = []
     var updatedStatusInGroup: (() -> Void)?
 
@@ -46,21 +46,21 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
 
     private var attendState: AttendState = .Hidden {
         didSet {
-            attendButton.hidden = attendState == .Hidden
-            attendButtonHeight.constant = attendState == .Hidden ? 0 : 35
+            attendButton?.hidden = attendState == .Hidden
+            attendButtonHeight?.constant = attendState == .Hidden ? 0 : 35
 
             switch (attendState) {
             case .Pending:
-                attendButton.setTitle(NSLocalizedString("Pending...", comment: ""), forState: .Normal)
-                attendButton.backgroundColor = .appOrangeColor()
+                attendButton?.setTitle(NSLocalizedString("Pending...", comment: ""), forState: .Normal)
+                attendButton?.backgroundColor = .appOrangeColor()
 
             case .Join:
-                attendButton.setTitle(NSLocalizedString("Join Group", comment: ""), forState: .Normal)
-                attendButton.backgroundColor = .appBlackColor()
+                attendButton?.setTitle(NSLocalizedString("Join Group", comment: ""), forState: .Normal)
+                attendButton?.backgroundColor = .appBlackColor()
 
             case .Leave:
-                attendButton.setTitle(NSLocalizedString("Leave", comment: ""), forState: .Normal)
-                attendButton.backgroundColor = .appBlackColor()
+                attendButton?.setTitle(NSLocalizedString("Leave", comment: ""), forState: .Normal)
+                attendButton?.backgroundColor = .appBlackColor()
 
             default:
                 break
@@ -76,16 +76,16 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
                                                          name: Constants.groupPendingStatusChangedNotification,
                                                          object: nil)
 
-        chatButton.enabled = false
+        chatButton?.enabled = false
         attendState = .Hidden
 
-        switherPlaceholderTopSpace.constant = view.bounds.width / 160 * 91
+        switherPlaceholderTopSpace?.constant = view.bounds.width / 160 * 91
         
         if let messagesVC = UIStoryboard.main()?.instantiateViewControllerWithIdentifier(MessagesTableViewController.storyboardID) as? MessagesTableViewController {
             messagesVC.group = group
             addChildViewController(messagesVC)
             messagesVC.didMoveToParentViewController(self)
-            messagesContainer.addSubview(messagesVC.view)
+            messagesContainer?.addSubview(messagesVC.view)
         }
 
         if let eventsListVC = UIStoryboard.main()?.instantiateViewControllerWithIdentifier(ListEventsViewController.storyboardID) as? ListEventsViewController {
@@ -101,18 +101,19 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
 
             addChildViewController(eventsListVC)
             eventsListVC.didMoveToParentViewController(self)
-            eventsContainer.addSubview(eventsListVC.view)
+            eventsContainer?.addSubview(eventsListVC.view)
         }
 
-        attendeesButtons.registerNib(GroupsViewCell.nib, forCellWithReuseIdentifier: GroupsViewCell.reuseIdentifier)
-        attendeesButtons.delegate = self
-        attendeesButtons.dataSource = self
+        attendeesButtons?.registerNib(GroupsViewCell.nib, forCellWithReuseIdentifier: GroupsViewCell.reuseIdentifier)
+        attendeesButtons?.delegate = self
+        attendeesButtons?.dataSource = self
         
-        descr.textContainerInset = UIEdgeInsetsMake(10, 10, 10, 10)
-        
-        members.text = "\(group.attendeeIDs.count) members"
-        
-        if(ParseHelper.sharedInstance.currentUser?.objectId == group.owner?.objectId) {
+        descr?.textContainerInset = UIEdgeInsetsMake(10, 10, 10, 10)
+        if let count = group?.attendeeIDs.count {
+            members?.text = "\(count) members"
+        }
+
+        if(ParseHelper.sharedInstance.currentUser?.objectId == group?.owner?.objectId) {
             let editdone = UIBarButtonItem(image:UIImage(named: "edit_icon"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(GroupDetailsViewController.editGroup(_:)))
             editdone.tintColor = Color.PrimaryActiveColor
             self.navigationItem.setRightBarButtonItem(editdone, animated: false)
@@ -126,7 +127,7 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
             }
 
             self?.group = fetchedGroup
-            self?.location.hidden = fetchedGroup.location == nil
+            self?.location?.hidden = fetchedGroup.location == nil
 
             ParseHelper.fetchUsers(fetchedGroup.attendeeIDs.filter({$0 != fetchedGroup.owner?.objectId}), completion: { (fetchedUsers, error) in
                 guard let fetchedUsers = fetchedUsers where error == nil else {
@@ -135,7 +136,7 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
                 }
 
                 self?.attendees = fetchedUsers
-                self?.attendeesButtons.reloadData()
+                self?.attendeesButtons?.reloadData()
 
                 if ParseHelper.sharedInstance.currentUser == fetchedGroup.owner {
                     self?.attendState = .Hidden
@@ -155,17 +156,17 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
 
                     if let avatarURLString = fetchedOwner.avatar?.url,
                         avatarURL = NSURL(string: avatarURLString) {
-                        self?.author.sd_setImageWithURL(avatarURL, forState: .Normal, completed: { (_, error, _, _) in
+                        self?.author?.sd_setImageWithURL(avatarURL, forState: .Normal, completed: { (_, error, _, _) in
                             if error != nil {
                                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                             }
                         })
                     } else {
-                        self?.author.setImage(UIImage(named: "upload_pic"), forState: .Normal)
+                        self?.author?.setImage(UIImage(named: "upload_pic"), forState: .Normal)
                     }
                 })
 
-                self?.chatButton.enabled = true
+                self?.chatButton?.enabled = true
 
                 self?.update()
             })
@@ -178,22 +179,22 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
     }
 
     func update() {
-        if let locationPF = self.group.location {
-            let distanceBetween: CLLocationDistance = CLLocation(latitude: locationPF.latitude, longitude: locationPF.longitude).distanceFromLocation(self.currentLocation)
+        if let locationPF = self.group?.location, let currentLocation = self.currentLocation {
+            let distanceBetween: CLLocationDistance = CLLocation(latitude: locationPF.latitude, longitude: locationPF.longitude).distanceFromLocation(currentLocation)
             let distanceStr = String(format: "%.2f", distanceBetween/1000)
-            self.distance.text = distanceBetween > 0 ? "\(distanceStr)km" : nil
+            self.distance?.text = distanceBetween > 0 ? "\(distanceStr)km" : nil
             CLLocation(latitude: locationPF.latitude, longitude: locationPF.longitude).getLocationString(nil, button: location, timezoneCompletion: nil)
         } else {
             
         }
-        self.title  = self.group.name
-        self.name.text = self.group.name
-        descr.text = group.summary
+        self.title  = self.group?.name
+        self.name?.text = self.group?.name
+        descr?.text = group?.summary
 
-        if let photoFile = group.owner?.avatar,
+        if let photoFile = group?.owner?.avatar,
             photoURLString = photoFile.url,
             photoURL = NSURL(string: photoURLString) {
-            photo.sd_setImageWithURL(photoURL)
+            photo?.sd_setImageWithURL(photoURL)
         }
 
         updateAttendUI()
@@ -201,23 +202,25 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
 
     func updateAttendUI() {
         guard let currentUserID = ParseHelper.sharedInstance.currentUser?.objectId,
-            groupID = group.objectId else {
+            groupID = group?.objectId else {
                 return
         }
 
-        let isAttendedToGroup = group.attendeeIDs.contains(currentUserID)
+        let isAttendedToGroup = group?.attendeeIDs.contains(currentUserID)
 
-        if ParseHelper.sharedInstance.currentUser == group.owner {
+        if ParseHelper.sharedInstance.currentUser == group?.owner {
             attendState = .Hidden
         } else if ParseHelper.sharedInstance.currentUser?.pendingGroupIDs.contains(groupID) == true {
             attendState = .Pending
-        } else if isAttendedToGroup {
+        } else if isAttendedToGroup ?? false {
             attendState = .Leave
         } else {
             attendState = .Join
         }
 
-        descr.hidden = !isAttendedToGroup
+        if let shouldShow = isAttendedToGroup {
+            descr?.hidden = !shouldShow
+        }
     }
 
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
@@ -236,9 +239,9 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
             if let attendeeAvatar = self.attendees[indexPath.row].avatar,
                 photoURLString = attendeeAvatar.url,
                 photoURL = NSURL(string: photoURLString) {
-                cell.image.sd_setImageWithURL(photoURL)
+                cell.image?.sd_setImageWithURL(photoURL)
             } else {
-                cell.image.image = UIImage(named: "upload_pic")
+                cell.image?.image = UIImage(named: "upload_pic")
             }
 
         return cell
@@ -255,14 +258,16 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
     }
     
     @IBAction func attend(sender: UIButton) {
-        guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as? BlurryAlertViewController else {
+        guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as? BlurryAlertViewController,
+            let group = group else {
             return
         }
 
         if attendState == .Pending || attendState == .Leave {
             attendState = .Join
         } else if attendState == .Join {
-            attendState = group.isPrivate ? .Pending : .Leave
+                attendState = group.isPrivate ? .Pending : .Leave
+
         }
 
         ParseHelper.changeStateOfCategory(group,
@@ -305,12 +310,12 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
     @IBAction func switchToDetails(sender: AnyObject) {
         view.endEditing(true)
 
-        chatUnderline.hidden = true
-        detailsUnderline.hidden = false
-        messagesContainer.hidden = true
-        eventsContainer.hidden = false
+        chatUnderline?.hidden = true
+        detailsUnderline?.hidden = false
+        messagesContainer?.hidden = true
+        eventsContainer?.hidden = false
 
-        switherPlaceholderTopSpace.constant = self.view.bounds.width / 160 * 91
+        switherPlaceholderTopSpace?.constant = self.view.bounds.width / 160 * 91
         UIView.animateWithDuration(0.1) {
             self.view.layoutIfNeeded()
         }
@@ -318,19 +323,19 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
 
     @IBAction func switchToChat(sender: AnyObject) {
         guard let currentUserID = ParseHelper.sharedInstance.currentUser?.objectId
-        where group.attendeeIDs.contains(currentUserID) == true else {
+        where group?.attendeeIDs.contains(currentUserID) == true else {
             MessageToUser.showMessage(NSLocalizedString("Denied", comment: ""),
                                       textId: NSLocalizedString("You must be attended to this group", comment: ""))
 
             return
         }
 
-        chatUnderline.hidden = false
-        detailsUnderline.hidden = true
-        messagesContainer.hidden = false
-        eventsContainer.hidden = true
+        chatUnderline?.hidden = false
+        detailsUnderline?.hidden = true
+        messagesContainer?.hidden = false
+        eventsContainer?.hidden = true
 
-        switherPlaceholderTopSpace.constant = 0
+        switherPlaceholderTopSpace?.constant = 0
         UIView.animateWithDuration(0.1) {
             self.view.layoutIfNeeded()
         }
@@ -358,9 +363,12 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
     func configuredMailComposeViewController() -> MFMailComposeViewController {
         let userName = ParseHelper.sharedInstance.currentUser?.name
         let emailTitle = "\(userName) shared happening from Friendzi app"
-        let messageBody = "Hi, please check this group \"\(group.name)\".\n\nhttp://friendzi.io/"
-        
-        
+        var messageBody = "Hi, please check this group \"Group\".\n\nhttp://friendzi.io/"
+
+        if let group = group {
+            messageBody = "Hi, please check this group \"\(group.name)\".\n\nhttp://friendzi.io/"
+        }
+
         let mailComposerVC = MFMailComposeViewController()
         mailComposerVC.mailComposeDelegate = self
         
@@ -384,7 +392,7 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
             return
         }
 
-        userProfileViewController.user = group.owner
+        userProfileViewController.user = group?.owner
         
         navigationController?.pushViewController(userProfileViewController, animated: true)
     }
@@ -419,8 +427,12 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
     }
     
     @IBAction func openMapForPlace(sender: AnyObject) {
-        let latitute:CLLocationDegrees =  (group.location?.latitude)!
-        let longitute:CLLocationDegrees =  (group.location?.longitude)!
+        guard let mapLatitute = group?.location?.latitude, let mapLongitude = group?.location?.longitude else {
+            return
+        }
+
+        let latitute:CLLocationDegrees = mapLatitute
+        let longitute:CLLocationDegrees = mapLongitude
         let regionDistance:CLLocationDistance = 10000
         let coordinates = CLLocationCoordinate2DMake(latitute, longitute)
         let regionSpan = MKCoordinateRegionMakeWithDistance(coordinates, regionDistance, regionDistance)
@@ -430,7 +442,9 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
         ]
         let placemark = MKPlacemark(coordinate: coordinates, addressDictionary: nil)
         let mapItem = MKMapItem(placemark: placemark)
-        mapItem.name = "\(group.name)"
+        if let name = group?.name {
+            mapItem.name = "\(name)"
+        }
         mapItem.openInMapsWithLaunchOptions(options)
         
     }
