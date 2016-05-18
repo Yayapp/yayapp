@@ -35,7 +35,7 @@ final class ConversationsTableViewController: UITableViewController {
             }
         })
     }
-
+  
     // MARK: - Table view data source
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
@@ -68,8 +68,8 @@ final class ConversationsTableViewController: UITableViewController {
         
         if(segue.identifier == "messages") {
             if let indexPath = sender as? NSIndexPath {
-            let vc = (segue.destinationViewController as! MessagesTableViewController)
-            vc.event = events[indexPath.row]
+            let vc = (segue.destinationViewController as? MessagesTableViewController)
+            vc?.event = events[indexPath.row]
             }
         }
     }

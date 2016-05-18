@@ -74,8 +74,8 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
                 let elementWidth = CGRectGetWidth(view.bounds) / CGFloat(controllersCount)
 
                 popoverController.arrowViewLeadingSpace = elementWidth / 2 - 20
-                popoverController.text = NSLocalizedString("Looks like nothing is happening! We can help with that! Let's see what interest groups you'd like to be a part of, so you can start socializing. ;)", comment: "")
-                popoverController.submitButtonTitle = NSLocalizedString("Next Step (1/4)", comment: "")
+                popoverController.text = "Looks like nothing is happening! We can help with that! Let's see what interest groups you'd like to be a part of, so you can start socializing. ;)".localized
+                popoverController.submitButtonTitle = "Next Step (1/4)".localized
 
                 popoverController.skipButtonHidden = true
                 popoverController.onSubmitPressed = { [weak self] in
@@ -223,7 +223,7 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
                         })
                     } else {
                         attendeeButton.setImage(UIImage(named: "upload_pic"), forState: .Normal)
-                        MessageToUser.showDefaultErrorMessage("Some user has no avatar.")
+                        MessageToUser.showDefaultErrorMessage("Some user has no avatar.".localized)
                     }
                 } else {
                     MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
@@ -240,7 +240,7 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
             let attendeeButton = attendeeButtons[attendeeIDs.count]
             attendeeButton.removeTarget(nil, action: nil, forControlEvents: .AllEvents)
             attendeeButton.addTarget(self, action: #selector(ListEventsViewController.join(_:)), forControlEvents: .TouchUpInside)
-            attendeeButton.setTitle("JOIN", forState: .Normal)
+            attendeeButton.setTitle("JOIN".localized, forState: .Normal)
             attendeeButton.hidden = false
             attendeeButton.tag = indexPath.section
         }
@@ -282,8 +282,8 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
 
         blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
         blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
-        blurryAlertViewController.aboutText = "Your request has been sent."
-        blurryAlertViewController.messageText = "We will notify you of the outcome."
+        blurryAlertViewController.aboutText = "Your request has been sent.".localized
+        blurryAlertViewController.messageText = "We will notify you of the outcome.".localized
 
         self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
     }

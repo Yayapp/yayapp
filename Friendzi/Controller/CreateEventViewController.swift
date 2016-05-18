@@ -101,8 +101,8 @@
             let elementWidth = CGRectGetWidth(view.bounds) / CGFloat(controllersCount)
 
             popoverController.arrowViewLeadingSpace = elementWidth * 3 - (elementWidth / 2) - 20
-            popoverController.text = NSLocalizedString("Want to make something happen? Get a small group together for dinner, a festival, the museum, a show, drinks or a night out on the town?", comment: "")
-            popoverController.submitButtonTitle = NSLocalizedString("Create Event (3/4)", comment: "")
+            popoverController.text = "Want to make something happen? Get a small group together for dinner, a festival, the museum, a show, drinks or a night out on the town?".localized
+            popoverController.submitButtonTitle = "Create Event (3/4)".localized
             popoverController.onSubmitPressed = { [weak self] in
                 self?.handlePopoverDismiss()
             }

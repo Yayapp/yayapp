@@ -153,6 +153,7 @@ final class RecentViewController: UITableViewController {
                 }
                 self.tableView.reloadData()
             })
+        
         } else {
             request.group!.attendeeIDs.append(request.attendee.objectId!)
             ParseHelper.saveObject(request.group!, completion: nil)

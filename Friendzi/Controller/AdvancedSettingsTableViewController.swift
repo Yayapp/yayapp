@@ -43,7 +43,7 @@ final class AdvancedSettingsTableViewController: UITableViewController {
                     appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate else {
                     return
                 }
-
+   
                 self?.navigationController?.popToRootViewControllerAnimated(false)
                 tabbarController?.selectedIndex = 0
                 

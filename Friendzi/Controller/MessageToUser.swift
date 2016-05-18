@@ -9,23 +9,23 @@ final class MessageToUser {
         let alert = UIAlertView()
         alert.title = title
         alert.message = textId
-        alert.addButtonWithTitle("OK")
+        alert.addButtonWithTitle("OK".localized)
         alert.show()
     }
 
     static func showDefaultErrorMessage(textId:String!) {
         let alert = UIAlertView()
-        alert.title = "Ooops"
+        alert.title = "Ooops".localized
         alert.message = textId
-        alert.addButtonWithTitle("OK")
+        alert.addButtonWithTitle("OK".localized)
         alert.show()
     }
 
     static func showDefaultErrorMessage(textId:String!, delegate:UIAlertViewDelegate) {
         let alert = UIAlertView()
-        alert.title = "Ooops"
+        alert.title = "Ooops".localized
         alert.message = textId
-        alert.addButtonWithTitle("OK")
+        alert.addButtonWithTitle("OK".localized)
         alert.delegate = delegate
         alert.show()
     }

@@ -10,7 +10,7 @@ import UIKit
 
 final class CreateEmailAccountViewController: UIViewController {
 
-    @IBOutlet private weak var keyboardAvoidingScrollView: TPKeyboardAvoidingScrollView!
+    @IBOutlet private weak var keyboardAvoidingScrollView: TPKeyboardAvoidingScrollView?
     @IBOutlet private weak var name: UITextField?
     @IBOutlet private weak var email: UITextField?
     @IBOutlet private weak var password1: UITextField?
@@ -44,16 +44,16 @@ final class CreateEmailAccountViewController: UIViewController {
     func handleAccountCreation() {
         self.view.endEditing(true)
         guard let name = name?.text, let email = email?.text, let password = password1?.text, let repeatedPassword = password2?.text else {
-            MessageToUser.showDefaultErrorMessage("Please fill all fields to Sign Up.")
+            MessageToUser.showDefaultErrorMessage("Please fill all fields to Sign Up.".localized)
             return
         }
 
         if (name.isEmpty || email.isEmpty || password.isEmpty || repeatedPassword.isEmpty) {
-            MessageToUser.showDefaultErrorMessage("Please fill all fields to Sign Up.")
+            MessageToUser.showDefaultErrorMessage("Please fill all fields to Sign Up.".localized)
         }  else if (password != repeatedPassword) {
-            MessageToUser.showDefaultErrorMessage("Passwords are not same.")
+            MessageToUser.showDefaultErrorMessage("Passwords are not same.".localized)
         } else if email.isEmail() == false {
-            MessageToUser.showDefaultErrorMessage("Email is invalid.")
+            MessageToUser.showDefaultErrorMessage("Email is invalid.".localized)
         } else {
 
             let user = User()
@@ -95,7 +95,7 @@ extension CreateEmailAccountViewController: UITextFieldDelegate {
         if password2 == textField {
             handleAccountCreation()
         } else {
-            keyboardAvoidingScrollView.focusNextTextField()
+            keyboardAvoidingScrollView?.focusNextTextField()
         }
 
         return true

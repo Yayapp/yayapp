@@ -61,7 +61,7 @@ struct Prefs {
         var count:Int = 0
         if let messagez = userDefaults.dictionaryForKey(messages) as? [String:Int] {
             for number in messagez {
-                count+=number.1
+                count += number.1
             }
         }
         return count

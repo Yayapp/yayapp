@@ -84,8 +84,8 @@ final class CompleteProfileViewController: UIViewController, UIImagePickerContro
     }
 
     @IBAction func uploadPhoto(sender: AnyObject) {
-        let alert = UIAlertController(title: "Choose Option", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
-        alert.addAction(UIAlertAction(title: "Take Photo", style: UIAlertActionStyle.Default, handler: {
+        let alert = UIAlertController(title: "Choose Option".localized, message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
+        alert.addAction(UIAlertAction(title: "Take Photo".localized, style: UIAlertActionStyle.Default, handler: {
             (action: UIAlertAction) in
             self.picker.allowsEditing = true
             self.picker.sourceType = UIImagePickerControllerSourceType.Camera
@@ -94,21 +94,21 @@ final class CompleteProfileViewController: UIViewController, UIImagePickerContro
             self.picker.showsCameraControls = true;
             self.presentViewController(self.picker, animated: true, completion: nil)
         }))
-        alert.addAction(UIAlertAction(title: "From Library", style: UIAlertActionStyle.Default, handler: {
+        alert.addAction(UIAlertAction(title: "From Library".localized, style: UIAlertActionStyle.Default, handler: {
             (action: UIAlertAction) in
-            self.picker.allowsEditing = true //2
-            self.picker.sourceType = .PhotoLibrary //3
+            self.picker.allowsEditing = true
+            self.picker.sourceType = .PhotoLibrary
             self.picker.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
             self.presentViewController(self.picker, animated: true, completion: nil)
         }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel".localized, style: .Cancel, handler: nil))
         presentViewController(alert, animated: true, completion: nil)
     }
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         SVProgressHUD.show()
 
-        let pickedImage:UIImage = (info[UIImagePickerControllerEditedImage] as! UIImage).resizeToDefault()
+        let pickedImage: UIImage = (info[UIImagePickerControllerEditedImage] as! UIImage).resizeToDefault()
         let imageData = UIImageJPEGRepresentation(pickedImage, 70)
         let imageFile = File(data: imageData!)!
         avatar?.image = pickedImage
@@ -138,8 +138,8 @@ final class CompleteProfileViewController: UIViewController, UIImagePickerContro
     }
     
     func noCamera(){
-        let alertVC = UIAlertController(title: "No Camera", message: "Sorry, this device has no camera", preferredStyle: .Alert)
-        let okAction = UIAlertAction(title: "OK", style:.Default, handler: nil)
+        let alertVC = UIAlertController(title: "No Camera".localized, message: "Sorry, this device has no camera".localized, preferredStyle: .Alert)
+        let okAction = UIAlertAction(title: "OK".localized, style:.Default, handler: nil)
         alertVC.addAction(okAction)
         presentViewController(alertVC, animated: true, completion: nil)
     }

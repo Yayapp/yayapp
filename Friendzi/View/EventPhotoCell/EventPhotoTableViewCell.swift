@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EventPhotoTableViewCell: UITableViewCell {
+final class EventPhotoTableViewCell: UITableViewCell {
     static let reuseIdentifier = "eventPhotoTableViewCell"
     static let flatReuseIdentifier = "eventPhotoFlatTableViewCell"
     static let nib = UINib(nibName: "EventPhotoTableViewCell", bundle: nil)

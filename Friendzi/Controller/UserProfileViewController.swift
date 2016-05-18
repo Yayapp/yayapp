@@ -199,7 +199,7 @@ final class UserProfileViewController: UITableViewController, UIImagePickerContr
             reportViewController.modalTransitionStyle = .CrossDissolve
             
             if blocked {
-                reportViewController.blockButtonTitle = NSLocalizedString("Unblock User", comment: "")
+                reportViewController.blockButtonTitle = "Unblock User".localized
             }
             
             reportViewController.onBlock = {
@@ -223,7 +223,7 @@ final class UserProfileViewController: UITableViewController, UIImagePickerContr
                 ParseHelper.saveObject(block, completion: { [weak self] (_, error) in
                     if let weakSelf = self where error != nil {
                         weakSelf.blocked = !weakSelf.blocked
-                        MessageToUser.showDefaultErrorMessage(NSLocalizedString("Something went wrong.", comment: ""))
+                        MessageToUser.showDefaultErrorMessage("Something went wrong.".localized)
                     }
                     })
             }

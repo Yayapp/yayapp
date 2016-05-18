@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CategoryCollectionViewCell: UICollectionViewCell {
+final class CategoryCollectionViewCell: UICollectionViewCell {
     static let reuseIdentifier = "categoryCollectionViewCell"
     static let nib = UINib(nibName: "CategoryCollectionViewCell", bundle: nil)
 

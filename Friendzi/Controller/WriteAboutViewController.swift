@@ -16,8 +16,8 @@ final class WriteAboutViewController: UIViewController {
 
     @IBOutlet private weak var text: UITextView?
 
-    var textAbout:String!
-    weak var delegate: WriteAboutDelegate!
+    var textAbout: String?
+    weak var delegate: WriteAboutDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()

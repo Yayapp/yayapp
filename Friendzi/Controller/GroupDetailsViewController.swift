@@ -117,7 +117,6 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
             let editdone = UIBarButtonItem(image:UIImage(named: "edit_icon"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(GroupDetailsViewController.editGroup(_:)))
             editdone.tintColor = Color.PrimaryActiveColor
             self.navigationItem.setRightBarButtonItem(editdone, animated: false)
-            //            attend.setImage(UIImage(named: "cancelevent_button"), forState: .Normal)
         }
 
         ParseHelper.fetchObject(group, completion: { [weak self] fetchedObject, error in
@@ -379,7 +378,10 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
     }
     
     func showSendMailErrorAlert() {
-        let sendMailErrorAlert = UIAlertView(title: "Could Not Send Email", message: "Your device could not send e-mail.  Please check e-mail configuration and try again.", delegate: self, cancelButtonTitle: "OK")
+        let sendMailErrorAlert = UIAlertView(title: "Could Not Send Email".localized,
+                                             message: "Your device could not send e-mail. Please check e-mail configuration and try again.".localized,
+                                             delegate: self,
+                                             cancelButtonTitle: "OK".localized)
         sendMailErrorAlert.show()
     }
     

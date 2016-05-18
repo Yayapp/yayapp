@@ -358,3 +358,28 @@ class User: Object {
         }
     }
 }
+
+extension User {
+    func getName() -> String {
+        return name!
+    }
+    
+    func getImage(completion: (result: UIImage?) -> Void) {
+        guard let file = self.avatar else {
+            completion(result: nil)
+            
+            return
+        }
+        
+        ParseHelper.getData(file, completion: {
+            result, error in
+            var image:UIImage!
+            if error == nil {
+                image = UIImage(data: result!)
+            } else {
+                image = UIImage(named: "upload_pic")
+            }
+            completion(result: image)
+        })
+    }
+}

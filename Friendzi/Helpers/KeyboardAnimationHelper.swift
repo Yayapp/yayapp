@@ -59,8 +59,7 @@ class KeyboardAnimationHelper: UIViewController, UITextFieldDelegate {
         
         UIView.commitAnimations()
     }
-    
-    
+
     func textDidEndEditing() {
         var viewFrame : CGRect = self.view.frame
         viewFrame.origin.y += animateDistance
@@ -75,6 +74,7 @@ class KeyboardAnimationHelper: UIViewController, UITextFieldDelegate {
         UIView.commitAnimations()
         
     }
+ 
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return false

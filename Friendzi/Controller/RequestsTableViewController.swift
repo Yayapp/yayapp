@@ -74,6 +74,7 @@ final class RequestsTableViewController: UITableViewController {
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
         })
+
         cell.avatar.layer.borderColor = Color.PrimaryActiveColor.CGColor
         cell.accept.tag = indexPath.row;
         cell.accept.addTarget(self, action: #selector(RequestsTableViewController.accept(_:)), forControlEvents: .TouchUpInside)

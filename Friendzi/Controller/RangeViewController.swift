@@ -22,7 +22,6 @@ class RangeViewController: UIViewController {
         if let value = currentValue {
             rangeSelector?.value = Float(value)
         }
-        // Do any additional setup after loading the view.
     }
 
     @IBAction func sliderValueChanged(sender: UISlider) {

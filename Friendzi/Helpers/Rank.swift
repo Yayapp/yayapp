@@ -16,10 +16,13 @@ enum Rank {
         switch self {
         case KID:
             return "New kid on the block"
+            
         case POPULAR:
             return gender == 1 ? "Mr. Popular" : "Mrs. Popular"
+            
         case BUTTERFLY:
             return "Social butterfly"
+            
         case SOCIALITE:
             return "Socialite"
             

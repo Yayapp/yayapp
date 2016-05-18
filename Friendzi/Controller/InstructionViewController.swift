@@ -15,7 +15,7 @@ final class InstructionViewController: UIViewController {
 
     var titleText : NSAttributedString!
     var imageName:String!
-
+ 
     override func viewDidLoad() {
         super.viewDidLoad()
 

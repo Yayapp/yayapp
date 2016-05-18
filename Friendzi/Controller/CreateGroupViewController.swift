@@ -116,8 +116,7 @@ final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDe
         vc.delegate = self
         navigationController?.pushViewController(vc, animated: true)
     }
-    
-    
+
     func madeLocationChoice(coordinates: CLLocationCoordinate2D){
         latitude = coordinates.latitude
         longitude = coordinates.longitude
@@ -229,8 +228,8 @@ final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDe
     }
 
     func deleteGroup() {
-        let deleteGroupAlert = UIAlertController(title: nil, message: NSLocalizedString("Are you sure you want to delete your group?", comment: ""), preferredStyle: .Alert)
-        deleteGroupAlert.addAction(UIAlertAction(title: NSLocalizedString("Delete", comment: ""), style: .Destructive, handler: { [unowned self] _ in
+        let deleteGroupAlert = UIAlertController(title: nil, message: "Are you sure you want to delete your group?".localized, preferredStyle: .Alert)
+        deleteGroupAlert.addAction(UIAlertAction(title: "Delete".localized, style: .Destructive, handler: { [unowned self] _ in
             SVProgressHUD.show()
 
             ParseHelper.deleteObject(self.group, completion: { [weak self] _, error in
@@ -245,7 +244,7 @@ final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDe
                 self?.performSegueWithIdentifier("chooseCategorySegue", sender: self)
                 })
         }))
-        deleteGroupAlert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .Cancel, handler: nil))
+        deleteGroupAlert.addAction(UIAlertAction(title: "Cancel".localized, style: .Cancel, handler: nil))
         presentViewController(deleteGroupAlert, animated: true, completion: nil)
     }
 }

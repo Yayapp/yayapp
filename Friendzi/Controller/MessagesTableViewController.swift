@@ -133,8 +133,8 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
     }
     
     override func didPressAccessoryButton(sender: UIButton!) {
-        let alert = UIAlertController(title: "Choose Option", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
-        alert.addAction(UIAlertAction(title: "Take Photo", style: UIAlertActionStyle.Default, handler: {
+        let alert = UIAlertController(title: "Choose Option".localized, message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
+        alert.addAction(UIAlertAction(title: "Take Photo".localized, style: UIAlertActionStyle.Default, handler: {
             (action: UIAlertAction) in
             self.picker.allowsEditing = true
             self.picker.sourceType = UIImagePickerControllerSourceType.Camera
@@ -142,13 +142,13 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
             self.picker.showsCameraControls = true;
             self.presentViewController(self.picker, animated: true, completion: nil)
         }))
-        alert.addAction(UIAlertAction(title: "From Library", style: UIAlertActionStyle.Default, handler: {
+        alert.addAction(UIAlertAction(title: "From Library".localized, style: UIAlertActionStyle.Default, handler: {
             (action: UIAlertAction) in
-            self.picker.allowsEditing = true //2
-            self.picker.sourceType = .PhotoLibrary //3
+            self.picker.allowsEditing = true
+            self.picker.sourceType = .PhotoLibrary
             self.presentViewController(self.picker, animated: true, completion: nil)
         }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel".localized, style: .Cancel, handler: nil))
         presentViewController(alert, animated: true, completion: nil)
     }
     
@@ -193,7 +193,7 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
                 self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, text: message.text))
                 self.finishSendingMessageAnimated(true)
             } else {
-                MessageToUser.showDefaultErrorMessage("Something went wrong.")
+                MessageToUser.showDefaultErrorMessage("Something went wrong.".localized)
                 self.finishSendingMessageAnimated(true)
             }
         })
@@ -274,7 +274,7 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
                 self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, media: JSQPhotoMediaItem(image: pickedImage)))
                 self.finishSendingMessageAnimated(true)
             } else {
-                MessageToUser.showDefaultErrorMessage("Something went wrong.")
+                MessageToUser.showDefaultErrorMessage("Something went wrong.".localized)
                 self.finishSendingMessageAnimated(true)
             }
         })
@@ -286,8 +286,10 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
     }
     
     func noCamera(){
-        let alertVC = UIAlertController(title: "No Camera", message: "Sorry, this device has no camera", preferredStyle: .Alert)
-        let okAction = UIAlertAction(title: "OK", style:.Default, handler: nil)
+        let alertVC = UIAlertController(title: "No Camera".localized,
+                                        message: "Sorry, this device has no camera".localized,
+                                        preferredStyle: .Alert)
+        let okAction = UIAlertAction(title: "OK".localized, style:.Default, handler: nil)
         alertVC.addAction(okAction)
         presentViewController(alertVC, animated: true, completion: nil)
     }

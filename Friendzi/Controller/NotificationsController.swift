@@ -40,10 +40,8 @@ final class NotificationsController: UIViewController {
 
     func removeInactiveViewController(inactiveViewController: UIViewController?) {
         if let inActiveVC = inactiveViewController {
-            // call before removing child view controller's view from hierarchy
             inActiveVC.willMoveToParentViewController(nil)
             inActiveVC.view.removeFromSuperview()
-            // call after removing child view controller's view from hierarchy
             inActiveVC.removeFromParentViewController()
         }
     }

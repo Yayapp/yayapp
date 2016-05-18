@@ -41,7 +41,7 @@ final class EventFinderViewController: UIViewController, UIAlertViewDelegate, Ch
         ParseHelper.saveObject(ParseHelper.sharedInstance.currentUser!, completion: nil)
         appDelegate.gotoMainTabBarScreen()
     }
-
+ 
     @IBAction func allowAction(sender: AnyObject) {
         ParseHelper.geoPointForCurrentLocationInBackground( {
             (geoPoint: GeoPoint?, error: NSError?) in

@@ -77,14 +77,12 @@ final class ChooseLocationViewController: UIViewController, CLLocationManagerDel
     
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar){
-        //1
         searchBar.resignFirstResponder()
         
         if self.mapView.annotations.count != 0{
             let annotation = self.mapView.annotations[0] 
             self.mapView.removeAnnotation(annotation)
         }
-        //2
         let localSearchRequest = MKLocalSearchRequest()
         localSearchRequest.naturalLanguageQuery = searchBar.text
         let localSearch = MKLocalSearch(request: localSearchRequest)
@@ -95,7 +93,6 @@ final class ChooseLocationViewController: UIViewController, CLLocationManagerDel
                 alert.show()
                 return
             }
-            //3
             let pointAnnotation = MKPointAnnotation()
             pointAnnotation.title = searchBar.text
             pointAnnotation.coordinate = CLLocationCoordinate2D(latitude: localSearchResponse!.boundingRegion.center.latitude, longitude:     localSearchResponse!.boundingRegion.center.longitude)

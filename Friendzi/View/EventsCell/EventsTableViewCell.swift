@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EventsTableViewCell: UITableViewCell {
+final class EventsTableViewCell: UITableViewCell {
     static let reuseIdentifier = "eventsTableViewCell"
     static let nib = UINib(nibName: "EventsTableViewCell", bundle: nil)
 

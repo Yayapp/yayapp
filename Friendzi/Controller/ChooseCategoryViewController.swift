@@ -8,6 +8,10 @@
 
 import UIKit
 
+enum CategoryType {
+    case All, Private, Public, My
+}
+
 final class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UISearchBarDelegate, GroupCreationDelegate, GroupChangeDelegate {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate

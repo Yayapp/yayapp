@@ -21,7 +21,6 @@ final class TutorialViewController: UIViewController {
     }
 
     @IBAction func skip(sender: AnyObject) {
-        parentViewController!.dismissViewControllerAnimated(true, completion: {
-        })
+        parentViewController!.dismissViewControllerAnimated(true, completion: nil)
     }
 }

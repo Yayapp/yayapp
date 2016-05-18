@@ -41,7 +41,7 @@ final class EditProfileViewController: UIViewController, UIImagePickerController
             maleAction(true)
         }
         
-        if let avatarFile = ParseHelper.sharedInstance.currentUser?.avatar,
+         if let avatarFile = ParseHelper.sharedInstance.currentUser?.avatar,
             photoURLString = avatarFile.url,
             photoURL = NSURL(string: photoURLString) {
             avatar?.layer.borderColor = UIColor.whiteColor().CGColor
@@ -54,8 +54,6 @@ final class EditProfileViewController: UIViewController, UIImagePickerController
             about?.text = bio
         }
     }
-    
-   
     
     @IBAction func uploadPhoto(sender: AnyObject) {
         let alert = UIAlertController(title: "Choose Option", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
@@ -127,7 +125,7 @@ final class EditProfileViewController: UIViewController, UIImagePickerController
 
         picker.dismissViewControllerAnimated(true, completion: nil)
     }
-    //What to do if the image picker cancels.
+
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         dismissViewControllerAnimated(true, completion: nil)
     }
@@ -147,7 +145,6 @@ final class EditProfileViewController: UIViewController, UIImagePickerController
     }
 
     //MARK: - UITextViewDelegate
-
     func textViewDidBeginEditing(textView: UITextView) {
         if isShowingBioPlaceholder {
             textView.text = nil
@@ -163,6 +160,7 @@ final class EditProfileViewController: UIViewController, UIImagePickerController
             textView.textColor = .lightGrayColor()
 
             isShowingBioPlaceholder = true
+        
         } else {
             isShowingBioPlaceholder = false
         }

@@ -27,7 +27,7 @@ final class BlurryAlertViewController: UIViewController {
     var action: String?
     var completion:(()->Void)?
     var onUserLoggedOut:((error :NSError?) -> Void)?
-
+ 
     override func viewDidLoad() {
         super.viewDidLoad()
 

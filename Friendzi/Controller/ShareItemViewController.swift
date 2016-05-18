@@ -35,7 +35,7 @@ final class ShareItemViewController: UIViewController, MFMessageComposeViewContr
     //MARK: - Button Selectors
     @IBAction func emailButtonPressed(sender: AnyObject) {
         if !MFMailComposeViewController.canSendMail() {
-            MessageToUser.showDefaultErrorMessage(NSLocalizedString("Can't send mail", comment: ""))
+            MessageToUser.showDefaultErrorMessage("Can't send mail".localized)
 
             return
         }
@@ -66,7 +66,7 @@ final class ShareItemViewController: UIViewController, MFMessageComposeViewContr
 
     @IBAction func smsTextButtonPressed(sender: AnyObject) {
         if !MFMessageComposeViewController.canSendText() {
-            MessageToUser.showDefaultErrorMessage(NSLocalizedString("Can't send message", comment: ""))
+            MessageToUser.showDefaultErrorMessage("Can't send message".localized)
 
             return
         }
@@ -83,15 +83,11 @@ final class ShareItemViewController: UIViewController, MFMessageComposeViewContr
 
             guard let url = url where error == nil else {
                 MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
-
                 return
             }
 
             messageVC.body = url
-
-            self?.presentViewController(messageVC, animated: true, completion: {
-                SVProgressHUD.dismiss()
-            })
+            self?.presentViewController(messageVC, animated: true, completion: nil)
         }
     }
 

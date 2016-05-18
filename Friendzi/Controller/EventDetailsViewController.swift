@@ -49,15 +49,15 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
 
             switch (attendState) {
             case .Pending:
-                attendButton?.setTitle(NSLocalizedString("Pending...", comment: ""), forState: .Normal)
+                attendButton?.setTitle("Pending...".localized, forState: .Normal)
                 attendButton?.backgroundColor = .appOrangeColor()
 
             case .Join:
-                attendButton?.setTitle(NSLocalizedString("Join Event", comment: ""), forState: .Normal)
+                attendButton?.setTitle("Join Event".localized, forState: .Normal)
                 attendButton?.backgroundColor = .appBlackColor()
 
             case .Leave:
-                attendButton?.setTitle(NSLocalizedString("Leave", comment: ""), forState: .Normal)
+                attendButton?.setTitle("Leave".localized, forState: .Normal)
                 attendButton?.backgroundColor = .appBlackColor()
 
             default:
@@ -89,7 +89,7 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
 
         title = event.name
 
-        let shareButton = UIBarButtonItem(title: NSLocalizedString("Invite", comment: ""), style: .Plain, target: self, action: #selector(EventDetailsViewController.shareEvent))
+        let shareButton = UIBarButtonItem(title: "Invite".localized, style: .Plain, target: self, action: #selector(EventDetailsViewController.shareEvent))
         shareButton.tintColor = Color.PrimaryActiveColor
         navigationItem.setRightBarButtonItem(shareButton, animated: false)
         
@@ -125,7 +125,8 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
                 self?.attendState = .Hidden
             }
 
-            ParseHelper.fetchUsers(fetchedEvent.attendeeIDs.filter({$0 != fetchedEvent.owner!.objectId}), completion: { (fetchedUsers, error) in
+            ParseHelper.fetchUsers(fetchedEvent.attendeeIDs.filter({ $0 != fetchedEvent.owner!.objectId }),
+                completion: { fetchedUsers, error in
                 guard let fetchedUsers = fetchedUsers where error == nil else {
                     MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
 
@@ -134,9 +135,10 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
 
                 self?.attendees = fetchedUsers
 
-                for index in 0 ..< (fetchedEvent.limit-1) {
+                for index in 0 ..< (fetchedEvent.limit - 1) {
                     self?.attendeeButtons[index].setImage(UIImage(named: "upload_pic"), forState: .Normal)
                 }
+
                 let currentLocation = ParseHelper.sharedInstance.currentUser!.location
                 self?.currentLocation = CLLocation(latitude: currentLocation!.latitude, longitude: currentLocation!.longitude)
 
@@ -154,7 +156,6 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
                         self?.author?.sd_setImageWithURL(avatarURL, forState: .Normal, completed: { (_, error, _, _) in
                             guard error == nil else {
                                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-
                                 return
                             }
 
@@ -179,7 +180,7 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
                         })
                     } else {
                         attendeeButton?.setImage(UIImage(named: "upload_pic"), forState: .Normal)
-                        MessageToUser.showDefaultErrorMessage("Some user has no avatar.")
+                        MessageToUser.showDefaultErrorMessage("Some user has no avatar.".localized)
                     }
                 }
 
@@ -227,7 +228,7 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
     }
     
     func attendTitle(isJoined: Bool) -> String {
-        return isJoined ? NSLocalizedString("Leave", comment: "") : NSLocalizedString("Join", comment: "")
+        return isJoined ? "Leave".localized : "Join".localized
     }
     
     @IBAction func attend(sender: UIButton) {
@@ -302,8 +303,8 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
 
     @IBAction func switchToChat(sender: AnyObject) {
         guard attendedThisEvent == true else {
-            MessageToUser.showMessage(NSLocalizedString("Denied", comment: ""),
-                                      textId: NSLocalizedString("You must be attended to this event", comment: ""))
+            MessageToUser.showMessage("Denied".localized,
+                                      textId: "You must be attended to this event".localized)
 
             return
         }

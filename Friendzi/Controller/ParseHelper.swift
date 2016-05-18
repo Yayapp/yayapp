@@ -8,20 +8,6 @@
 
 import Foundation
 
-//TODO:- Move it to Global Constants
-typealias RequestsResultBlock = ([Request]?, NSError?) -> ()
-typealias EventsResultBlock = ([Event]?, NSError?) -> ()
-typealias MessagesResultBlock = ([Message]?, NSError?) -> ()
-typealias CategoriesResultBlock = ([Category]?, NSError?) -> ()
-typealias EventPhotosResultBlock = ([EventPhoto]?, NSError?) -> ()
-typealias BoolResultBlock = (Bool?, NSError?) -> ()
-typealias ErrorResultBlock = (NSError?) -> ()
-typealias ObjectResultBlock = (Object?, NSError?) -> ()
-typealias DataResultBlock = (NSData?, NSError?) -> ()
-typealias UserResultBlock = (User?, NSError?) -> ()
-typealias UsersResultBlock = ([User]?, NSError?) -> ()
-typealias GeoPointResultBlock = (GeoPoint?, NSError?) -> ()
-
 final class ParseHelper {
 
     private static let eventParseClassName = "Event"

@@ -23,27 +23,27 @@ final class LoginViewController: UIViewController, InstagramDelegate {
 
     private lazy var forgotPasswordAlert: UIAlertController = {
         var tField: UITextField!
-        let alert = UIAlertController(title: "Reset password", message: nil, preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: "Reset", style: UIAlertActionStyle.Default, handler: {
+        let alert = UIAlertController(title: "Reset password".localized, message: nil, preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "Reset".localized, style: UIAlertActionStyle.Default, handler: {
             (action: UIAlertAction) in
             if (!tField.text!.isEmpty && tField.text!.isEmail()) {
                 ParseHelper.requestPasswordResetForEmail(tField.text!, completion: {
                     result, error in
                     if(error == nil) {
-                        MessageToUser.showMessage("Reset password", textId: "We've sent you password reset instructions. Please check your email.")
+                        MessageToUser.showMessage("Reset password", textId: "We've sent you password reset instructions. Please check your email.".localized)
                     } else {
                         MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                     }
                 })
             } else {
-                MessageToUser.showDefaultErrorMessage("Please enter valid email")
+                MessageToUser.showDefaultErrorMessage("Please enter valid email".localized)
             }
         }))
 
-        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel".localized, style: UIAlertActionStyle.Default, handler: nil))
         alert.addTextFieldWithConfigurationHandler({(textField) in
             tField = textField
-            tField.placeholder = "Email"
+            tField.placeholder = "Email".localized
             tField.delegate = self
         })
         (alert.actions[0] as UIAlertAction).enabled = false
@@ -85,7 +85,7 @@ final class LoginViewController: UIViewController, InstagramDelegate {
         }
 
         if ParseHelper.sharedInstance.currentUser?.location == nil {
-            self.performSegueWithIdentifier("proceed", sender: nil)
+            self.performSegueWithIdentifier("proceed".localized, sender: nil)
         } else {
             self.appDelegate.gotoMainTabBarScreen()
         }
@@ -197,7 +197,6 @@ final class LoginViewController: UIViewController, InstagramDelegate {
                     let url:NSURL = NSURL(string:"https://api.twitter.com/1.1/users/show.json?screen_name=\(PFTwitterUtils.twitter()!.screenName!)")!
                     let request:NSMutableURLRequest = NSMutableURLRequest(URL:url)
                     PFTwitterUtils.twitter()?.signRequest(request)
-                    
                         do {
                             var response:NSURLResponse?
                             let data:NSData = try! NSURLConnection.sendSynchronousRequest(request, returningResponse:&response)
@@ -212,7 +211,7 @@ final class LoginViewController: UIViewController, InstagramDelegate {
                             ParseHelper.sharedInstance.currentUser?.name = result.objectForKey("name") as? String
                             ParseHelper.sharedInstance.currentUser?.about = result.objectForKey("description") as? String
                         } catch {
-                            MessageToUser.showDefaultErrorMessage("Something went wrong")
+                            MessageToUser.showDefaultErrorMessage("Something went wrong".localized)
                         }
                     
                     self.doRegistration()
@@ -249,7 +248,7 @@ final class LoginViewController: UIViewController, InstagramDelegate {
                             pfuser.avatar = File(parseFile: imageFile)
                         }
                     }
-                    
+
                     self.setupDefaults(pfuser)
                     pfuser.name = user.fullName
                     pfuser.about = user.bio
@@ -262,14 +261,14 @@ final class LoginViewController: UIViewController, InstagramDelegate {
                         SVProgressHUD.dismiss()
 
                         if error != nil {
-                            MessageToUser.showDefaultErrorMessage("Something went wrong")
+                            MessageToUser.showDefaultErrorMessage("Something went wrong".localized)
                         } else {
                             self.proceed()
                         }
                     })
                 } else {
                     SVProgressHUD.dismiss()
-                    MessageToUser.showDefaultErrorMessage("Something went wrong")
+                    MessageToUser.showDefaultErrorMessage("Something went wrong".localized)
 
                     return
                 }
@@ -280,7 +279,7 @@ final class LoginViewController: UIViewController, InstagramDelegate {
     }
     
     func instagramFailure() {
-        MessageToUser.showDefaultErrorMessage("Something went wrong")
+        MessageToUser.showDefaultErrorMessage("Something went wrong".localized)
     }
     
     @IBAction func loginEmail(sender: AnyObject) {
@@ -291,18 +290,20 @@ final class LoginViewController: UIViewController, InstagramDelegate {
         vc.isLogin = isLogin
         presentViewController(vc, animated: true, completion: nil)
     }
-    
+
     @IBAction func signIn(sender: AnyObject) {
         self.view.endEditing(true)
         guard let email = email?.text, let password = password?.text else {
-            MessageToUser.showDefaultErrorMessage("Please fill all fields to Sign In.")
+            MessageToUser.showDefaultErrorMessage("Please fill all fields to Sign In.".localized)
             return
         }
 
         if (email.isEmpty || password.isEmpty) {
-            MessageToUser.showDefaultErrorMessage("Please fill all fields to Sign In.")
+            MessageToUser.showDefaultErrorMessage("Please fill all fields to Sign In.".localized)
+       
         } else if email.isEmail() == false {
-            MessageToUser.showDefaultErrorMessage("Email is invalid.")
+            MessageToUser.showDefaultErrorMessage("Email is invalid.".localized)
+        
         } else {
             SVProgressHUD.show()
             ParseHelper.logInWithUsernameInBackground(email, password: password, completion: { (user: User?, error: NSError?) in
@@ -321,7 +322,7 @@ final class LoginViewController: UIViewController, InstagramDelegate {
                     }
                 } else if(error!.code == 101) {
                     SVProgressHUD.dismiss()
-                    MessageToUser.showDefaultErrorMessage("Invalid email or password")
+                    MessageToUser.showDefaultErrorMessage("Invalid email or password".localized)
                 } else {
                     SVProgressHUD.dismiss()
                     MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
@@ -366,6 +367,7 @@ private extension LoginViewController {
             email?.hidden = false
             forgotPassword?.hidden = false
             password?.hidden = false
+       
         } else {
             NSLayoutConstraint.activateConstraints([orLabelBottomToEmailButton])
             NSLayoutConstraint.deactivateConstraints([orLabelBottomToEmailTextField])
