@@ -315,11 +315,7 @@ final class LoginViewController: UIViewController, InstagramDelegate {
                         currentInstallation.user = currentUser
                         ParseHelper.saveObject(ParseHelper.sharedInstance.currentInstallation, completion: nil)
                     }
-                    if user?.location == nil {
-                    self.performSegueWithIdentifier("proceed", sender: nil)
-                    } else {
-                        self.appDelegate.gotoMainTabBarScreen()
-                    }
+                    self.proceed()
                 } else if(error!.code == 101) {
                     SVProgressHUD.dismiss()
                     MessageToUser.showDefaultErrorMessage("Invalid email or password".localized)
