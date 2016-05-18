@@ -57,6 +57,10 @@ class MainRootViewController: UIViewController, MFMailComposeViewControllerDeleg
         if Prefs.getPref(Prefs.tut) == false {
             Prefs.setPref(Prefs.tut)
         }
+
+        if eventsData.isEmpty {
+            today(true)
+        }
     }
 
     deinit {

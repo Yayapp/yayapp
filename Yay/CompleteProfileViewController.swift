@@ -77,10 +77,12 @@ class CompleteProfileViewController: UIViewController, UIImagePickerControllerDe
                 return
             }
 
-            if let window = UIApplication.sharedApplication().delegate?.window {
-                window!.rootViewController = startViewController
-                window!.makeKeyAndVisible()
-            }
+            self.dismissViewControllerAnimated(false, completion: { 
+                if let window = UIApplication.sharedApplication().delegate?.window {
+                    window!.rootViewController = startViewController
+                    window!.makeKeyAndVisible()
+                }
+            })
         })
     }
 

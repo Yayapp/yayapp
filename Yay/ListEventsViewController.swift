@@ -36,23 +36,10 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
                                                          name: Constants.userInvitedToEventNotification,
                                                          object: nil)
 
-        guard let currentUser = ParseHelper.sharedInstance.currentUser
-            where currentUser.avatar != nil && currentUser.gender != nil else {
-                if let completeProfileVC = UIStoryboard(name: "Auth", bundle: nil).instantiateViewControllerWithIdentifier(CompleteProfileViewController.storyboardID) as? CompleteProfileViewController {
-                    completeProfileVC.dismissButtonHidden = false
-                    completeProfileVC.onNextButtonPressed = {
-                        (UIApplication.sharedApplication().delegate as? AppDelegate)?.gotoMainTabBarScreen()
-                    }
-                    presentViewController(completeProfileVC, animated: false, completion: nil)
-                }
-
-                return
-        }
-
         dateFormatter.dateFormat = "EEE dd MMM '@' H:mm"
         title = currentTitle
 
-        guard let currentPFLocation = currentUser.location else {
+        guard let currentPFLocation = ParseHelper.sharedInstance.currentUser?.location else {
             return
         }
 
@@ -69,24 +56,39 @@ class ListEventsViewController: EventsViewController, UITableViewDataSource, UIT
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+    }
+
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+
+        if let currentUser = ParseHelper.sharedInstance.currentUser
+            where currentUser.avatar == nil || currentUser.gender == nil {
+            if let completeProfileVC = UIStoryboard(name: "Auth", bundle: nil).instantiateViewControllerWithIdentifier(CompleteProfileViewController.storyboardID) as? CompleteProfileViewController {
+                completeProfileVC.dismissButtonHidden = false
+                completeProfileVC.onNextButtonPressed = {
+                    (UIApplication.sharedApplication().delegate as? AppDelegate)?.gotoMainTabBarScreen()
+                }
+                presentViewController(completeProfileVC, animated: true, completion: nil)
+            }
+        }
 
         if let popoverController = storyboard?.instantiateViewControllerWithIdentifier(PopoverViewController.storyboardID) as? PopoverViewController,
             let controllersCount = tabBarController?.viewControllers?.count
             where DataProxy.sharedInstance.needsShowEventsListTabHint {
-                let elementWidth = CGRectGetWidth(view.bounds) / CGFloat(controllersCount)
+            let elementWidth = CGRectGetWidth(view.bounds) / CGFloat(controllersCount)
 
-                popoverController.arrowViewLeadingSpace = elementWidth / 2 - 20
-                popoverController.text = NSLocalizedString("Looks like nothing is happening! We can help with that! Let's see what interest groups you'd like to be a part of, so you can start socializing. ;)", comment: "")
-                popoverController.submitButtonTitle = NSLocalizedString("Next Step (1/4)", comment: "")
+            popoverController.arrowViewLeadingSpace = elementWidth / 2 - 20
+            popoverController.text = NSLocalizedString("Looks like nothing is happening! We can help with that! Let's see what interest groups you'd like to be a part of, so you can start socializing. ;)", comment: "")
+            popoverController.submitButtonTitle = NSLocalizedString("Next Step (1/4)", comment: "")
 
-                popoverController.skipButtonHidden = true
-                popoverController.onSubmitPressed = { [weak self] in
-                    self?.presentedViewController?.dismissViewControllerAnimated(false, completion: nil)
-                    self?.tabBarController?.selectedIndex = 1
-                }
+            popoverController.skipButtonHidden = true
+            popoverController.onSubmitPressed = { [weak self] in
+                self?.presentedViewController?.dismissViewControllerAnimated(false, completion: nil)
+                self?.tabBarController?.selectedIndex = 1
+            }
 
-                DataProxy.sharedInstance.needsShowEventsListTabHint = false
-                presentViewController(popoverController, animated: false, completion: nil)
+            DataProxy.sharedInstance.needsShowEventsListTabHint = false
+            presentViewController(popoverController, animated: false, completion: nil)
         }
 
         guard let invitedEventID = DataProxy.sharedInstance.invitedEventID else {
