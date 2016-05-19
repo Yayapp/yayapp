@@ -79,6 +79,7 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
                                                          object: nil)
 
         chatButton?.enabled = false
+        
         attendState = .Hidden
 
         switherPlaceholderTopSpace?.constant = view.bounds.width / 160 * 91

@@ -189,6 +189,18 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
         })
     }
 
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        for button in attendeeButtons {
+            button.layer.cornerRadius = button.bounds.height / 2
+        }
+    }
+
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        author?.layer.cornerRadius = (author?.bounds.height ?? 0) / 2
+    }
+
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
