@@ -40,7 +40,7 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
 
     var event: Event!
 
-    weak var delegate:EventChangeDelegate!
+    weak var delegate: EventChangeDelegate!
 
     private var attendState: AttendState = .Hidden {
         didSet {
@@ -159,7 +159,7 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
                                 return
                             }
 
-                            self?.author?.layer.cornerRadius = self?.author?.frame.width ?? 0 / 2
+//                            self?.author?.layer.cornerRadius = self?.author?.frame.width ?? 0 / 2
                         })
                     }
                 })
@@ -198,9 +198,9 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        for button in [author, attended1, attended2, attended3, attended4] {
-            button?.layer.cornerRadius = button?.bounds.width ?? 0 / 2
-        }
+//        for button in [author, attended1, attended2, attended3, attended4] {
+//            button?.layer.cornerRadius = button?.bounds.width ?? 0 / 2
+//        }
     }
 
     deinit {

@@ -35,12 +35,12 @@ final class EventsTableViewCell: UITableViewCell {
         let attendeesButtons = [author, attended1, attended2, attended3, attended4]
 
         for button in attendeesButtons {
-            button?.setNeedsLayout()
-            button?.layoutIfNeeded()
-            button?.layer.cornerRadius = author?.bounds.width ?? 0 / 2
+            button?.layer.cornerRadius = button?.bounds.width ?? 0 / 2
             button?.imageView?.contentMode = .ScaleAspectFill
             button?.clipsToBounds = true
             button?.backgroundColor = UIColor(red:0.94, green:0.94, blue:0.96, alpha:1.00)
+            button?.setNeedsLayout()
+            button?.layoutIfNeeded()
         }
 
             self.attendeesButtons = attendeesButtons

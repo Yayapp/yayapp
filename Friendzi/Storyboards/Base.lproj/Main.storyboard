@@ -1106,8 +1106,8 @@ Cg
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                             </button>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ra7-mN-VaX">
-                                <rect key="frame" x="138" y="194" width="44" height="44"/>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ra7-mN-VaX">
+                                <rect key="frame" x="138" y="193" width="44" height="45"/>
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="ra7-mN-VaX" secondAttribute="height" multiplier="1:1" id="lXv-e0-PgA"/>
@@ -1318,12 +1318,10 @@ Cg
                             <constraint firstAttribute="trailing" secondItem="hPL-m3-txy" secondAttribute="trailing" constant="8" id="HN1-ht-iap"/>
                             <constraint firstItem="Mvs-4c-gOR" firstAttribute="leading" secondItem="LBN-4i-pIr" secondAttribute="leading" constant="8" id="Hif-eR-qqO"/>
                             <constraint firstItem="F5R-xd-YDh" firstAttribute="top" secondItem="GmR-uJ-kOR" secondAttribute="bottom" id="Hk2-uP-WLv"/>
-                            <constraint firstItem="zvN-A4-CwM" firstAttribute="top" secondItem="ouD-nU-Dfg" secondAttribute="bottom" id="Jdh-3b-SjE"/>
                             <constraint firstItem="BAv-XY-w52" firstAttribute="leading" secondItem="LBN-4i-pIr" secondAttribute="leading" id="KDf-Ut-FSb"/>
                             <constraint firstItem="EG8-iL-yjZ" firstAttribute="width" secondItem="hPL-m3-txy" secondAttribute="width" id="LvJ-G9-VzG"/>
                             <constraint firstItem="qVR-2X-eDz" firstAttribute="leading" secondItem="LBN-4i-pIr" secondAttribute="leading" constant="8" id="Lxb-J9-M32"/>
                             <constraint firstAttribute="trailing" secondItem="GmR-uJ-kOR" secondAttribute="trailing" id="PdS-90-vtP"/>
-                            <constraint firstItem="20q-ON-OK6" firstAttribute="centerY" secondItem="Mvs-4c-gOR" secondAttribute="centerY" id="Qj8-UN-pV9"/>
                             <constraint firstItem="7iH-0f-nt0" firstAttribute="leading" secondItem="qVR-2X-eDz" secondAttribute="trailing" constant="20" id="Sfl-ut-Pl9"/>
                             <constraint firstItem="F5R-xd-YDh" firstAttribute="leading" secondItem="LBN-4i-pIr" secondAttribute="leading" id="Sii-XE-thS"/>
                             <constraint firstAttribute="trailing" secondItem="kI0-dM-TD7" secondAttribute="trailing" constant="8" id="W62-Hs-p5l"/>
@@ -1335,7 +1333,6 @@ Cg
                             <constraint firstItem="20q-ON-OK6" firstAttribute="top" secondItem="kI0-dM-TD7" secondAttribute="bottom" constant="3" id="aBz-EV-KUS"/>
                             <constraint firstItem="qVR-2X-eDz" firstAttribute="width" secondItem="7iH-0f-nt0" secondAttribute="width" id="aMg-RU-yCc"/>
                             <constraint firstAttribute="trailing" secondItem="20q-ON-OK6" secondAttribute="trailing" constant="8" id="cFf-Va-lSX"/>
-                            <constraint firstItem="ouD-nU-Dfg" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="20q-ON-OK6" secondAttribute="trailing" constant="8" id="cx0-8d-kRC"/>
                             <constraint firstAttribute="centerX" secondItem="PS2-WI-8d0" secondAttribute="centerX" id="dmn-3a-vT6"/>
                             <constraint firstAttribute="bottom" secondItem="BAv-XY-w52" secondAttribute="bottom" id="fLa-uH-6Ne"/>
                             <constraint firstAttribute="trailing" secondItem="MoZ-iz-hEA" secondAttribute="trailing" constant="8" id="fis-IV-B4L"/>
@@ -1352,7 +1349,6 @@ Cg
                             <constraint firstItem="ouD-nU-Dfg" firstAttribute="bottom" secondItem="qVR-2X-eDz" secondAttribute="bottom" constant="8" id="tC8-qc-KMU"/>
                             <constraint firstItem="kS5-UQ-0u2" firstAttribute="bottom" secondItem="ouD-nU-Dfg" secondAttribute="bottom" id="tnb-kY-dAn"/>
                             <constraint firstItem="kI0-dM-TD7" firstAttribute="top" secondItem="Mvs-4c-gOR" secondAttribute="bottom" constant="4" id="vf8-XT-9em"/>
-                            <constraint firstItem="MoZ-iz-hEA" firstAttribute="centerY" secondItem="57D-Dh-SKq" secondAttribute="centerY" constant="-20" id="vpS-BV-hyT"/>
                             <constraint firstItem="kS5-UQ-0u2" firstAttribute="trailing" secondItem="ouD-nU-Dfg" secondAttribute="trailing" id="vsp-zS-Ksd"/>
                             <constraint firstItem="ouD-nU-Dfg" firstAttribute="bottom" secondItem="hPL-m3-txy" secondAttribute="bottom" constant="8" id="wYQ-if-bsI"/>
                             <constraint firstItem="ouD-nU-Dfg" firstAttribute="top" secondItem="V8Y-Y7-bHR" secondAttribute="bottom" id="xB4-Ia-iPP"/>
@@ -1361,14 +1357,6 @@ Cg
                             <constraint firstItem="57D-Dh-SKq" firstAttribute="trailing" secondItem="ouD-nU-Dfg" secondAttribute="trailing" constant="-8" id="z8x-K0-sNo"/>
                             <constraint firstItem="zvN-A4-CwM" firstAttribute="leading" secondItem="LBN-4i-pIr" secondAttribute="leading" id="zTg-BX-Qfx"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="cx0-8d-kRC"/>
-                                <exclude reference="Jdh-3b-SjE"/>
-                                <exclude reference="vpS-BV-hyT"/>
-                                <exclude reference="Qj8-UN-pV9"/>
-                            </mask>
-                        </variation>
                     </view>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
@@ -1647,7 +1635,7 @@ Cg
         <image name="topGradient" width="320" height="200"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="T6c-3l-C8Y"/>
+        <segue reference="Uy6-AU-NUG"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
 </document>
