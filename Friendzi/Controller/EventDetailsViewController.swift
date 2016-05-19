@@ -158,8 +158,6 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
                                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                                 return
                             }
-
-//                            self?.author?.layer.cornerRadius = self?.author?.frame.width ?? 0 / 2
                         })
                     }
                 })
@@ -193,14 +191,6 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
                 self?.update()
             })
         })
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-//        for button in [author, attended1, attended2, attended3, attended4] {
-//            button?.layer.cornerRadius = button?.bounds.width ?? 0 / 2
-//        }
     }
 
     deinit {
