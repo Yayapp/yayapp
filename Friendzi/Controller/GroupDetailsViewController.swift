@@ -71,6 +71,8 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.title = ""
+
         NSNotificationCenter.defaultCenter().addObserver(self,
                                                          selector: #selector(updateAttendUI),
                                                          name: Constants.groupPendingStatusChangedNotification,
@@ -186,6 +188,7 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
         } else {
             
         }
+
         self.title  = self.group?.name
         self.name?.text = self.group?.name
         descr?.text = group?.summary

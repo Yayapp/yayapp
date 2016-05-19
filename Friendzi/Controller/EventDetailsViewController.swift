@@ -120,7 +120,6 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
             }
 
             self?.event = fetchedEvent
-            
             if ParseHelper.sharedInstance.currentUser == fetchedEvent.owner {
                 self?.attendState = .Hidden
             }
@@ -164,7 +163,6 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
 
                 let allAttendeesWithoutOwner = fetchedUsers.filter({ $0.objectId != fetchedEvent.owner!.objectId })
                 let attendees = allAttendeesWithoutOwner[0..<min(allAttendeesWithoutOwner.count, self?.attendeeButtons?.count ?? 0)]
-
                 for (index, attendee) in attendees.enumerate() {
                     let attendeeButton = self?.attendeeButtons[index]
 
@@ -176,6 +174,7 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
                         attendeeButton?.sd_setImageWithURL(attendeeAvatarURL, forState: .Normal, completed: { (_, _, _, _) in
                             attendeeButton?.hidden = false
                         })
+
                     } else {
                         attendeeButton?.setImage(UIImage(named: "upload_pic"), forState: .Normal)
                         MessageToUser.showDefaultErrorMessage("Some user has no avatar.".localized)
@@ -183,11 +182,8 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
                 }
 
                 self?.chatButton?.enabled = true
-
                 self?.attendedThisEvent = !(fetchedEvent.attendeeIDs.filter({$0 == ParseHelper.sharedInstance.currentUser?.objectId}).count == 0) || ParseHelper.sharedInstance.currentUser?.objectId == fetchedEvent.owner!.objectId
-                
                 self?.chatButton?.selected = !(self?.attendedThisEvent ?? false)
-                
                 self?.update()
             })
         })
