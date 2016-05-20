@@ -18,7 +18,7 @@ final class ChooseLocationViewController: UIViewController, CLLocationManagerDel
     
     @IBOutlet private weak var searchBar: UISearchBar!
     @IBOutlet private weak var mapView: MKMapView!
-
+ 
     private var lat: CLLocationDegrees?
     private var lon: CLLocationDegrees?
     private let locationManager = CLLocationManager()

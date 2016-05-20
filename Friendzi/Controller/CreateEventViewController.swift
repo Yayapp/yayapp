@@ -23,7 +23,7 @@
     @IBOutlet private weak var author: UIButton?
     @IBOutlet private var attendeeButtons: [UIButton]?
     @IBOutlet private weak var leftNavigationButton: UIButton?
-
+ 
     private let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
     private let dateFormatter = NSDateFormatter()
     private let kMinEventAttendees = 2

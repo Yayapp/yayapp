@@ -24,7 +24,7 @@ final class ProfileViewController: UITableViewController {
             }
         })
     }
-
+ 
     @IBAction func logout(sender: AnyObject) {
         SVProgressHUD.show()
 

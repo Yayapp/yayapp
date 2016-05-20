@@ -25,7 +25,7 @@ final class StartViewController: UIViewController {
         guard let vc = UIStoryboard.auth()?.instantiateViewControllerWithIdentifier("LoginViewController") as? LoginViewController else {
             return
         }
-
+ 
         presentViewController(vc, animated: true, completion: nil)
     }
 }

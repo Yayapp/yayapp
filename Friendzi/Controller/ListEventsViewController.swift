@@ -69,7 +69,7 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
                 presentViewController(completeProfileVC, animated: true, completion: nil)
             }
         }
-
+ 
         if let popoverController = storyboard?.instantiateViewControllerWithIdentifier(PopoverViewController.storyboardID) as? PopoverViewController,
             let controllersCount = tabBarController?.viewControllers?.count
             where DataProxy.sharedInstance.needsShowEventsListTabHint {

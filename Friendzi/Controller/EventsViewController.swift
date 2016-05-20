@@ -20,7 +20,7 @@ class EventsViewController: UIViewController, EventChangeDelegate {
 
     func reloadAll(events:[Event]) {
     }
-
+ 
     func eventCreated(event: Event) {
     }
 
