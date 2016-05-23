@@ -37,11 +37,11 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
     var searchControllerText: String?
     var userDidLogout = false
 
-    var categoriesData:[Category]! = []
-    var privateCategoriesData:[Category]! = []
-    var publicCategoriesData:[Category]! = []
-    var myCategoriesData:[Category]! = []
-    var selectedCategoriesData:[Category]! = []
+    var categoriesData: [Category]! = []
+    var privateCategoriesData: [Category]! = []
+    var publicCategoriesData: [Category]! = []
+    var myCategoriesData: [Category]! = []
+    var selectedCategoriesData: [Category]! = []
     var selectedCategoryType: CategoryType = .All
 
     override func viewDidLoad() {
@@ -94,7 +94,7 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
 
     //MARK: - Content Loading
     func loadContent(needsSelectFirstTab needsSelectFirstTab: Bool) {
-        ParseHelper.getCategories({ [weak self] (categoriesList: [Category]?, error: NSError?) in
+        ParseHelper.getCategories({ [weak self] categoriesList, error in
             guard let _ = ParseHelper.sharedInstance.currentUser where error == nil else {
                 if let error = error {
                     MessageToUser.showDefaultErrorMessage(error.localizedDescription)
@@ -114,7 +114,7 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
     }
 
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-        if selectedCategoryType == CategoryType.All {
+        if selectedCategoryType == .All {
             return 2
         } else {
             return 1
@@ -122,15 +122,18 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
     }
 
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        switch (selectedCategoryType) {
-        case .Private: return privateCategoriesData.count
-        case .Public: return publicCategoriesData.count
-        case .My: return myCategoriesData.count
-        default: if section == 0{
-            return publicCategoriesData.count
-        } else {
+        switch selectedCategoryType {
+        case .Private:
             return privateCategoriesData.count
-            }
+
+        case .Public:
+            return publicCategoriesData.count
+
+        case .My:
+            return myCategoriesData.count
+
+        default:
+            return section == 0 ? publicCategoriesData.count : privateCategoriesData.count
         }
     }
 
@@ -216,9 +219,8 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
     func configureCategories() {
         privateCategoriesData = categoriesData.filter({ $0.isPrivate })
         publicCategoriesData = categoriesData.filter({ !$0.isPrivate })
-        myCategoriesData = categoriesData.filter({ (category) -> Bool in
-            guard let owner = category.owner,
-                currentUser = ParseHelper.sharedInstance.currentUser else {
+        myCategoriesData = categoriesData.filter({ category -> Bool in
+            guard let owner = category.owner, currentUser = ParseHelper.sharedInstance.currentUser else {
                     return false
             }
 
@@ -237,7 +239,7 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
         publicUnderline?.hidden = true
         privateUnderline?.hidden = true
         myGroupsUnderline?.hidden = true
-        selectedCategoryType = CategoryType.All
+        selectedCategoryType = .All
         allButton?.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
         publicButton?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         privateButton?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
@@ -250,7 +252,7 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
         publicUnderline?.hidden = false
         privateUnderline?.hidden = true
         myGroupsUnderline?.hidden = true
-        selectedCategoryType = CategoryType.Public
+        selectedCategoryType = .Public
         allButton?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         publicButton?.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
         privateButton?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
@@ -263,7 +265,7 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
         publicUnderline?.hidden = true
         privateUnderline?.hidden = false
         myGroupsUnderline?.hidden = true
-        selectedCategoryType = CategoryType.Private
+        selectedCategoryType = .Private
         allButton?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         publicButton?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         privateButton?.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
@@ -276,7 +278,7 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
         publicUnderline?.hidden = true
         privateUnderline?.hidden = true
         myGroupsUnderline?.hidden = false
-        selectedCategoryType = CategoryType.My
+        selectedCategoryType = .My
         allButton?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         publicButton?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         privateButton?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
@@ -303,14 +305,16 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
     }
 
     func search(searchText:String){
-        ParseHelper.searchCategories(searchText, block: {
-            (categoriesList: [Category]?, error: NSError?) in
-            if(error == nil) {
-                self.categoriesData = categoriesList!
-                self.allAction(true)
-            } else {
-                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+        ParseHelper.searchCategories(searchText, block: { categoriesList, error in
+            guard let categoriesList = categoriesList else {
+                if let error = error {
+                    MessageToUser.showDefaultErrorMessage(error.localizedDescription)
+                }
+                return
             }
+
+            self.categoriesData = categoriesList
+            self.allAction(true)
         })
     }
 
@@ -332,8 +336,7 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
             vc.updatedStatusInGroup = {
                 self.categories?.reloadItemsAtIndexPaths([indexPath])
             }
-        } else if let vc = segue.destinationViewController as? CreateGroupViewController
-            where segue.identifier == "create" {
+        } else if let vc = segue.destinationViewController as? CreateGroupViewController where segue.identifier == "create" {
             vc.delegate = self
         }
     }

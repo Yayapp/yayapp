@@ -131,7 +131,7 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
             self?.group = fetchedGroup
             self?.location?.hidden = fetchedGroup.location == nil
 
-            ParseHelper.fetchUsers(fetchedGroup.attendeeIDs.filter({$0 != fetchedGroup.owner?.objectId}), completion: { (fetchedUsers, error) in
+            ParseHelper.fetchUsers(fetchedGroup.attendeeIDs.filter({ $0 != fetchedGroup.owner?.objectId }), completion: { fetchedUsers, error in
                 guard let fetchedUsers = fetchedUsers where error == nil else {
                     MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
                     return
