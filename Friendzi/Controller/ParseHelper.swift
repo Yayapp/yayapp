@@ -234,13 +234,17 @@ final class ParseHelper {
         }
     }
     
-    class func getUserCategoriesForEvent(user: User, block:CategoriesResultBlock?) {
+    class func getUserCategoriesForEvent(completion: CategoriesResultBlock?) {
+        guard let currentUserID = PFUser.currentUser()?.objectId, let user = PFUser.currentUser() else {
+            completion?(nil, nil)
+            return
+        }
+
         let nearByCategoriesQuery = PFQuery(className: categoryParseClassName)
         nearByCategoriesQuery.includeKey("owner")
-        nearByCategoriesQuery.whereKey("isPrivate", equalTo: false)
-        
-        if let geoPoint = user.parseObject?.objectForKey("location") as? PFGeoPoint,
-            distance = user.parseObject?.objectForKey("distance") as? Double {
+
+        if let geoPoint = user.objectForKey("location") as? PFGeoPoint,
+            distance = user.objectForKey("distance") as? Double {
             nearByCategoriesQuery.whereKey("location",
                                            nearGeoPoint: geoPoint,
                                            withinKilometers: distance)
@@ -249,25 +253,19 @@ final class ParseHelper {
         let alwaysVisibleCategoriesQuery = PFQuery(className: categoryParseClassName)
         alwaysVisibleCategoriesQuery.whereKey("isAlwaysVisible", equalTo: true)
         
-        guard let currentUserID = user.parseObject?.objectId else {
-            block?(nil, nil)
-            
-            return
-        }
-        
         let categoryAttendeeQuery = PFQuery(className: categoryParseClassName)
         categoryAttendeeQuery.whereKey("attendeeIDs", equalTo: currentUserID)
         
         let categoryOwnerQuery = PFQuery(className: categoryParseClassName)
-        categoryOwnerQuery.whereKey("owner", equalTo: user.parseObject!)
+        categoryOwnerQuery.whereKey("owner", equalTo: user)
         
         let query = PFQuery.orQueryWithSubqueries([categoryAttendeeQuery, categoryOwnerQuery, alwaysVisibleCategoriesQuery])
         
-        nearByCategoriesQuery.findObjectsInBackgroundWithBlock { nearByCategories, error in
+        query.findObjectsInBackgroundWithBlock { nearByCategories, error in
             if error == nil {
                 query.findObjectsInBackgroundWithBlock { alwaysVisibleCategories, error in
                     guard error == nil else {
-                        block?(nil, error)
+                        completion?(nil, error)
                         
                         return
                     }
@@ -281,13 +279,13 @@ final class ParseHelper {
                     if let mappedNearByCategories = mappedNearByCategories,
                         mappedAlwaysVisibleCategories = mappedAlwaysVisibleCateries {
                         let union = Set(mappedNearByCategories).union(Set(mappedAlwaysVisibleCategories))
-                        block?(Array(union), error)
+                        completion?(Array(union), error)
                     }
                 }
             } else {
                 // Log details of the failure
                 print("Error: \(error!) \(error!.userInfo)")
-                block!(nil, error)
+                completion?(nil, error)
             }
         }
     }

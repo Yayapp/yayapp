@@ -50,13 +50,8 @@ extension CategoryPickerViewController: TTGTextTagCollectionViewDelegate {
 private extension CategoryPickerViewController {
     //MARK:- Api Data Fetchers
     func loadData() {
-        guard let currentUser = ParseHelper.sharedInstance.currentUser else {
-            return
-        }
-
         SVProgressHUD.show()
-        ParseHelper.getUserCategoriesForEvent(currentUser, block: {
-            (categoriesList:[Category]?, error:NSError?) in
+        ParseHelper.getUserCategoriesForEvent({ categoriesList, error in
             SVProgressHUD.dismiss()
             if(error == nil) {
                 self.datasource = categoriesList?.filter({ category -> Bool in
