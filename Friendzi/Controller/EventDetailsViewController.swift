@@ -105,8 +105,6 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
                         self?.eventActionButton?.setImage(UIImage(named: "reporticon"), forState: .Normal)
                     }
                 })
-            } else {
-                
             }
         }
 
@@ -351,7 +349,10 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
     }
     
     func showSendMailErrorAlert() {
-        let sendMailErrorAlert = UIAlertView(title: "Could Not Send Email", message: "Your device could not send e-mail.  Please check e-mail configuration and try again.", delegate: self, cancelButtonTitle: "OK")
+        let sendMailErrorAlert = UIAlertView(title: "Could Not Send Email".localized,
+                                             message: "Your device could not send e-mail. Please check e-mail configuration and try again.".localized,
+                                             delegate: self,
+                                             cancelButtonTitle: "OK")
         sendMailErrorAlert.show()
     }
     

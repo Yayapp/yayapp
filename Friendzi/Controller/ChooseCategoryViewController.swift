@@ -15,7 +15,7 @@ enum CategoryType {
 final class ChooseCategoryViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UISearchBarDelegate, GroupCreationDelegate, GroupChangeDelegate {
 
     let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-    
+
     @IBOutlet private weak var allButton: UIButton?
     @IBOutlet private weak var publicButton: UIButton?
     @IBOutlet private weak var privateButton: UIButton?
@@ -73,8 +73,8 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
             let elementWidth = CGRectGetWidth(view.bounds) / CGFloat(controllersCount)
 
             popoverController.arrowViewLeadingSpace = elementWidth * 2 - (elementWidth / 2) - 20
-            popoverController.text = NSLocalizedString("Request to join group that interest you. Don't see anything that you're into?  Then, create your own private group!", comment: "")
-            popoverController.submitButtonTitle = NSLocalizedString("Choose Group (2/4)", comment: "")
+            popoverController.text = "Request to join group that interest you. Don't see anything that you're into?  Then, create your own private group!".localized
+            popoverController.submitButtonTitle = "Choose Group (2/4)".localized
             popoverController.skipButtonHidden = true
             popoverController.onSubmitPressed = { [weak self] in
                 self?.presentedViewController?.dismissViewControllerAnimated(true, completion: nil)
@@ -110,7 +110,7 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
             } else {
                 self?.categories?.reloadData()
             }
-        })
+            })
     }
 
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
@@ -123,14 +123,14 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
 
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch (selectedCategoryType) {
-            case .Private: return privateCategoriesData.count
-            case .Public: return publicCategoriesData.count
-            case .My: return myCategoriesData.count
-            default: if section == 0{
-                        return publicCategoriesData.count
-                    } else {
-                        return privateCategoriesData.count
-                    }
+        case .Private: return privateCategoriesData.count
+        case .Public: return publicCategoriesData.count
+        case .My: return myCategoriesData.count
+        default: if section == 0{
+            return publicCategoriesData.count
+        } else {
+            return privateCategoriesData.count
+            }
         }
     }
 
@@ -143,20 +143,20 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
         }
 
         if selectedCategoryType == .All {
-            categoryHeader.name = indexPath.section == 0 ? NSLocalizedString("Public Groups", comment: "") : NSLocalizedString("Private Groups", comment: "")
+            categoryHeader.name = indexPath.section == 0 ? "Public Groups".localized : "Private Groups".localized
         }
 
         return categoryHeader
     }
-    
+
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCellWithReuseIdentifier(CategoryCollectionViewCell.reuseIdentifier, forIndexPath: indexPath) as? CategoryCollectionViewCell else {
             return UICollectionViewCell()
         }
-    
+
         let category = categoryForIndexPath(indexPath)
         cell.name?.text = category.name
-        
+
         if let photoURLString = category.photoThumb.url,
             photoURL = NSURL(string: photoURLString) {
             cell.photo?.sd_setImageWithURL(photoURL)
@@ -165,7 +165,7 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
         cell.switched?.tag = indexPath.row
         cell.onSwitchValueChanged = { [unowned self] isSwitcherOn in
             guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as? BlurryAlertViewController else {
-                    return
+                return
             }
 
             cell.switched?.onTintColor = category.isPrivate ? .appOrangeColor() : .appGreenColor()
@@ -178,13 +178,13 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
                 blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
                 blurryAlertViewController.modalPresentationStyle = .CurrentContext
 
-                blurryAlertViewController.aboutText = NSLocalizedString("Your request has been sent.", comment: "")
-                blurryAlertViewController.messageText = NSLocalizedString("We will notify you of the outcome.", comment: "")
+                blurryAlertViewController.aboutText = "Your request has been sent.".localized
+                blurryAlertViewController.messageText = "We will notify you of the outcome.".localized
 
                 self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
             }
         }
-        
+
         if let currentUserID = ParseHelper.sharedInstance.currentUser?.objectId,
             let categoryOwnerId = category.owner?.objectId,
             categoryID = category.objectId {
@@ -212,7 +212,7 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         performSegueWithIdentifier("details", sender: indexPath)
     }
-    
+
     func configureCategories() {
         privateCategoriesData = categoriesData.filter({ $0.isPrivate })
         publicCategoriesData = categoriesData.filter({ !$0.isPrivate })
@@ -225,14 +225,14 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
             return owner == currentUser
         })
     }
-    
+
     @IBAction func allAction(sender: AnyObject) {
         configureCategories()
 
         if let currentUserID = ParseHelper.sharedInstance.currentUser?.objectId {
             selectedCategoriesData = categoriesData.filter({ $0.attendeeIDs.contains(currentUserID) })
         }
-        
+
         allUnderline?.hidden = false
         publicUnderline?.hidden = true
         privateUnderline?.hidden = true
@@ -244,7 +244,7 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
         myGroupsButton?.setTitleColor(UIColor.blackColor(), forState: .Normal)
         categories?.reloadData()
     }
-    
+
     @IBAction func publicAction(sender: AnyObject) {
         allUnderline?.hidden = true
         publicUnderline?.hidden = false
@@ -257,7 +257,7 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
         myGroupsButton?.setTitleColor(UIColor.blackColor(), forState: .Normal)
         categories?.reloadData()
     }
-    
+
     @IBAction func privateAction(sender: AnyObject) {
         allUnderline?.hidden = true
         publicUnderline?.hidden = true
@@ -270,7 +270,7 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
         myGroupsButton?.setTitleColor(UIColor.blackColor(), forState: .Normal)
         categories?.reloadData()
     }
-    
+
     @IBAction func displayMyGroups(sender: UIButton) {
         allUnderline?.hidden = true
         publicUnderline?.hidden = true
@@ -283,7 +283,7 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
         myGroupsButton?.setTitleColor(Color.PrimaryActiveColor, forState: .Normal)
         categories?.reloadData()
     }
-    
+
     @IBAction func searchAction(sender: AnyObject) {
         searchController.searchBar.text = searchControllerText
         presentViewController(searchController, animated: true, completion: nil)
@@ -293,11 +293,11 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
         searchControllerText = searchText
         search(searchText)
     }
-    
+
     func searchBar(searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         search(searchBar.text!)
     }
-    
+
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }
@@ -313,17 +313,17 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
             }
         })
     }
-    
+
     func groupCreated(group:Category) {
         categoriesData.append(group)
         allAction(true)
     }
-    
+
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if(segue.identifier == "details") {
             guard let vc = segue.destinationViewController as? GroupDetailsViewController,
                 indexPath = sender as? NSIndexPath else {
-                return
+                    return
             }
 
             vc.delegate = self
@@ -369,7 +369,7 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
     func handleUserLogout() {
         userDidLogout = true
         navigationController?.popToRootViewControllerAnimated(false)
-        
+
         searchController.active = false
         searchControllerText = nil
 
@@ -379,10 +379,10 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
         myCategoriesData.removeAll()
         selectedCategoriesData.removeAll()
         selectedCategoryType = .All
-
+        
         allAction(true)
     }
-
+    
     func handleGroupPendingStatusChange() {
         loadContent(needsSelectFirstTab: false)
     }

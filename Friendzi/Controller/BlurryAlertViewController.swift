@@ -22,8 +22,8 @@ final class BlurryAlertViewController: UIViewController {
     
     private var event: Event?
     
-    var aboutText: String! = ""
-    var messageText: String! = ""
+    var aboutText: String = ""
+    var messageText: String = ""
     var action: String?
     var completion:(()->Void)?
     var onUserLoggedOut:((error :NSError?) -> Void)?
@@ -38,7 +38,10 @@ final class BlurryAlertViewController: UIViewController {
         
         if let action = action {
             centerButton?.setImage(UIImage(named: action), forState: .Normal)
-            centerButton?.addTarget(self, action: Selector(action), forControlEvents: UIControlEvents.TouchUpInside)
+            let selector = action == BlurryAlertViewController.BUTTON_OK ?
+                #selector(BlurryAlertViewController.okbutton(_:)) :
+                #selector(BlurryAlertViewController.deletebutton)
+            centerButton?.addTarget(self, action: selector, forControlEvents: .TouchUpInside)
         }
         
         
@@ -58,10 +61,12 @@ final class BlurryAlertViewController: UIViewController {
         self.dismissViewControllerAnimated(true, completion:nil)
     }
     
-    @IBAction func okbutton(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true, completion:completion)
+    func okbutton(sender: AnyObject) {
+        self.dismissViewControllerAnimated(true, completion: completion ?? nil)
     }
-    
+
+
+
     @IBAction func deletebutton() {
         if event != nil {
             ParseHelper.deleteObject(event, completion: {
