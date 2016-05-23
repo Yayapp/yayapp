@@ -37,9 +37,9 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
         inputToolbar?.contentView?.textView?.layer.borderColor = Color.DefaultBorderColor.CGColor
         inputToolbar!.contentView?.textView?.layer.cornerRadius = 0
         inputToolbar?.contentView?.backgroundColor = Color.PrimaryBackgroundColor
-        if let width = inputToolbar?.contentView?.textView?.frame.width, let height = inputToolbar?.contentView?.frame.height {
-            inputToolbar?.contentView?.textView?.frame.size = CGSize(width: width,height: height)
-        }
+//        if let width = inputToolbar?.contentView?.textView?.frame.width, let height = inputToolbar?.contentView?.frame.height {
+//            inputToolbar?.contentView?.textView?.frame.size = CGSize(width: width,height: height)
+//        }
 
         if event != nil {
             UIApplication.sharedApplication().applicationIconBadgeNumber -= Prefs.removeMessage(event!.objectId!)

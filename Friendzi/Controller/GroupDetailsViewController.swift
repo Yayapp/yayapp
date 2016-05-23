@@ -83,12 +83,18 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
         attendState = .Hidden
 
         switherPlaceholderTopSpace?.constant = view.bounds.width / 160 * 91
-        
-        if let messagesVC = UIStoryboard.main()?.instantiateViewControllerWithIdentifier(MessagesTableViewController.storyboardID) as? MessagesTableViewController {
+
+        if let messagesVC = self.storyboard?.instantiateViewControllerWithIdentifier(MessagesTableViewController.storyboardID) as? MessagesTableViewController {
             messagesVC.group = group
+
             addChildViewController(messagesVC)
-            messagesVC.didMoveToParentViewController(self)
             messagesContainer?.addSubview(messagesVC.view)
+
+            messagesVC.view.translatesAutoresizingMaskIntoConstraints = false
+            messagesContainer?.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[view]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["view" : messagesVC.view]))
+            messagesContainer?.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[view]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["view" : messagesVC.view]))
+
+            messagesVC.didMoveToParentViewController(self)
         }
 
         if let eventsListVC = UIStoryboard.main()?.instantiateViewControllerWithIdentifier(ListEventsViewController.storyboardID) as? ListEventsViewController {
@@ -103,8 +109,13 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
             })
 
             addChildViewController(eventsListVC)
-            eventsListVC.didMoveToParentViewController(self)
             eventsContainer?.addSubview(eventsListVC.view)
+
+            eventsListVC.view.translatesAutoresizingMaskIntoConstraints = false
+            eventsContainer?.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[view]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["view" : eventsListVC.view]))
+            eventsContainer?.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[view]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["view" : eventsListVC.view]))
+
+            eventsListVC.didMoveToParentViewController(self)
         }
 
         attendeesButtons?.registerNib(GroupsViewCell.nib, forCellWithReuseIdentifier: GroupsViewCell.reuseIdentifier)
@@ -282,8 +293,8 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
             blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
             blurryAlertViewController.modalPresentationStyle = .CurrentContext
 
-            blurryAlertViewController.aboutText = NSLocalizedString("Your request has been sent.", comment: "")
-            blurryAlertViewController.messageText = NSLocalizedString("We will notify you of the outcome.", comment: "")
+            blurryAlertViewController.aboutText = "Your request has been sent.".localized
+            blurryAlertViewController.messageText = "We will notify you of the outcome.".localized
 
             self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
         }

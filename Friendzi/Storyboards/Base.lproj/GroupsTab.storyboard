@@ -570,9 +570,6 @@
                                 </collectionViewFlowLayout>
                                 <cells/>
                             </collectionView>
-                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WZk-3I-EFz">
-                                <rect key="frame" x="0.0" y="109" width="320" height="322"/>
-                            </containerView>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bCj-Yf-TAO">
                                 <rect key="frame" x="0.0" y="396" width="320" height="35"/>
                                 <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -592,6 +589,9 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WZk-3I-EFz">
+                                <rect key="frame" x="0.0" y="109" width="320" height="322"/>
+                            </containerView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a3n-sd-izI">
                                 <rect key="frame" x="0.0" y="64" width="320" height="45"/>
                                 <subviews>
@@ -748,6 +748,25 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9ob-oo-n06" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2983" y="-1509"/>
+        </scene>
+        <!--Messages Table View Controller-->
+        <scene sceneID="lrQ-df-IHG">
+            <objects>
+                <viewController storyboardIdentifier="MessagesTableViewController" id="RGJ-Iv-52O" customClass="MessagesTableViewController" customModule="Friendzi" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="j3v-cp-9zt"/>
+                        <viewControllerLayoutGuide type="bottom" id="03G-BE-yRv"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="MzH-Zw-Iet">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vNd-ez-hMJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3436" y="-1509"/>
         </scene>
     </scenes>
     <resources>
