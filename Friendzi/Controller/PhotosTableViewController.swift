@@ -47,7 +47,7 @@ final class PhotosTableViewController: UITableViewController {
             photoURL = NSURL(string: photoURLString) {
             cell.photo?.sd_setImageWithURL(photoURL)
         }
-        
+
         return cell
     }
 }

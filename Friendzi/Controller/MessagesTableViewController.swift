@@ -37,9 +37,6 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
         inputToolbar?.contentView?.textView?.layer.borderColor = Color.DefaultBorderColor.CGColor
         inputToolbar!.contentView?.textView?.layer.cornerRadius = 0
         inputToolbar?.contentView?.backgroundColor = Color.PrimaryBackgroundColor
-//        if let width = inputToolbar?.contentView?.textView?.frame.width, let height = inputToolbar?.contentView?.frame.height {
-//            inputToolbar?.contentView?.textView?.frame.size = CGSize(width: width,height: height)
-//        }
 
         if event != nil {
             UIApplication.sharedApplication().applicationIconBadgeNumber -= Prefs.removeMessage(event!.objectId!)
@@ -186,9 +183,7 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
             message.group = group!
         }
         message.text = text
-
-        ParseHelper.saveObject(message, completion: {
-            result, error in
+        ParseHelper.saveObject(message, completion: { success, error in
             if error == nil {
                 self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, text: message.text))
                 self.finishSendingMessageAnimated(true)
@@ -267,8 +262,9 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
         }
 
         message.photo = imageFile
-        ParseHelper.saveObject(message, completion: {
-            result, error in
+        SVProgressHUD.show()
+        ParseHelper.saveObject(message, completion: { result, error in
+            SVProgressHUD.dismiss()
             if error == nil {
                 JSQSystemSoundPlayer.jsq_playMessageSentSound()
                 self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, media: JSQPhotoMediaItem(image: pickedImage)))
@@ -280,7 +276,7 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
         })
         self.dismissViewControllerAnimated(true, completion: nil)
     }
-    //What to do if the image picker cancels.
+
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         dismissViewControllerAnimated(true, completion: nil)
     }
