@@ -1,0 +1,14 @@
+{
+  "global": {
+    "parseVersion": "1.5.0"
+  },
+  "applications": {
+    "YaYApp": {
+      "applicationId": "u64gQcVtoNGvpS2xq1OniHuumQ5jQJmI3TTbbP1Y",
+      "masterKey": "jGQkRzUPYCM9byXOkrHL8dYNfmqQQv0FsS4Fk2NJ"
+    },
+    "_default": {
+      "link": "YaYApp"
+    }
+  }
+}
