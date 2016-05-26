@@ -121,23 +121,65 @@ Parse.Cloud.afterSave("Block", function(request) {
 
 
 Parse.Cloud.beforeDelete("Event", function(request, response) {
+    Parse.Cloud.useMasterKey();
+    var Event = Parse.Object.extend("Event");
+    var query = new Parse.Query(Event);
+    query.equalTo("objectId", request.object.id);
 
-                         Parse.Cloud.useMasterKey();
-                         var Event = Parse.Object.extend("Event");
-                         var query = new Parse.Query(Event);
-                         query.equalTo("objectId", request.object.id);
+    var Request = Parse.Object.extend("Request");
+    var reqQuery = new Parse.Query(Request);
+    reqQuery.matchesQuery('event', query);
+    reqQuery.find().then(function(results) {
+        console.log()
+        query.find().then(function(event) {
+            if (event !== undefined) {
+                var atendees = event.get("attendeeIDs");
+                atendees.forEach(function (attendeeId) {
 
-                        var Request = Parse.Object.extend("Request");
-                         var reqQuery = new Parse.Query(Request);
-                         reqQuery.matchesQuery('event', query);
-                         reqQuery.find().then(function(results) {
-                                              return Parse.Object.destroyAll(results);
-                                              }).then(function() {
-                                                      response.success("OK")
-                                                      }, function(error) {
-                                                      response.error(error)
-                                                      });
-                         });
+                    var pushQuery = new Parse.Query(Parse.Installation);
+                    //fetch user
+                    var user = new Parse.Object("_User");
+                    user.id = attendeeId;
+                    pushQuery.equalTo('user', user);
+                    var eventName = event.get("name");
+
+                    if (eventName !== undefined) {
+                        console.log(pushQuery);
+                        Parse.Push.send({
+                            where: pushQuery,
+                            data: {
+                                "alert" : eventName + ", " + "has been canceled",
+                                "content-available": 1,
+                                "sound":"layerbell.caf"
+                            },
+                        }, {
+                            success: function (success) {
+                                event.set("notifiedAboutUpcomingEvent", true);
+                                event.save();
+                                console.log(success);
+                            },
+                            error: function (error) {
+                                response.error(error);
+                                console.log(error);
+                            }
+                        });
+                    } else {
+                        //console.log("eventName is undefined");
+                    }
+                });
+                //success in here
+            } else {
+                console.log("event is undefined");
+            }
+        });
+        return Parse.Object.destroyAll(results);
+    }).then(function() {
+        response.success("OK")
+    }, function(error) {
+        response.error(error)
+    });
+});
+
 
 
 Parse.Cloud.beforeDelete(Parse.User, function(request, response) {
