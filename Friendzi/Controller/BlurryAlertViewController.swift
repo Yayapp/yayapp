@@ -31,7 +31,7 @@ final class BlurryAlertViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        cancelButtonPlaceholderView?.layer.cornerRadius = cancelButtonPlaceholderView?.bounds.width ?? 0 / 2
+        cancelButtonPlaceholderView?.layer.cornerRadius = (cancelButtonPlaceholderView?.bounds.width ?? 0) / 2
         
         about?.text = aboutText
         message?.text = messageText
