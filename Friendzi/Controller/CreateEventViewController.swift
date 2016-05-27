@@ -8,9 +8,10 @@
 
  import UIKit
  import MapKit
-import ActionSheetPicker_3_0
- 
- final class CreateEventViewController: KeyboardAnimationHelper, ChooseLocationDelegate, CategoryPickerDelegate, ChooseEventPictureDelegate, WriteAboutDelegate, UIPopoverPresentationControllerDelegate {
+ import ActionSheetPicker_3_0
+ import LocationPicker
+
+ final class CreateEventViewController: KeyboardAnimationHelper, CategoryPickerDelegate, ChooseEventPictureDelegate, WriteAboutDelegate, UIPopoverPresentationControllerDelegate {
 
     @IBOutlet private weak var eventImage: UIImageView?
     @IBOutlet private weak var pickCategory: UIButton?
@@ -24,7 +25,7 @@ import ActionSheetPicker_3_0
     @IBOutlet private weak var author: UIButton?
     @IBOutlet private var attendeeButtons: [UIButton]?
     @IBOutlet private weak var leftNavigationButton: UIButton?
- 
+
     private let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
     private let dateFormatter = NSDateFormatter()
     private let kMinEventAttendees = 2
@@ -56,7 +57,7 @@ import ActionSheetPicker_3_0
         }
     }
 
-    weak var delegate:EventChangeDelegate!
+    weak var delegate: EventChangeDelegate!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -229,7 +230,6 @@ import ActionSheetPicker_3_0
         })
     }
 
-
     func madeCategoryChoice(categories: [Category]) {
         chosenCategories = categories
         if(chosenCategories.count > 0){
@@ -271,6 +271,7 @@ import ActionSheetPicker_3_0
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
+    //MARK:- Action Buttons
     @IBAction func changeLimit(sender: UIButton) {
         if let event = event
             where sender.tag < event.attendeeIDs.count {
@@ -285,13 +286,23 @@ import ActionSheetPicker_3_0
     }
 
     @IBAction func addLocationButtonPressed(sender: AnyObject) {
-        guard let vc = UIStoryboard.main()?.instantiateViewControllerWithIdentifier(ChooseLocationViewController.storyboardID) as? ChooseLocationViewController else {
-            return
+        let locationPicker = LocationPickerViewController()
+        locationPicker.currentLocationButtonBackground = .whiteColor()
+        locationPicker.mapType = .Standard
+        locationPicker.searchBarPlaceholder = "Search by address"
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
+        locationPicker.completion = { location in
+            guard let location = location else {
+                return
+            }
+
+            self.latitude = location.coordinate.latitude
+            self.longitude = location.coordinate.longitude
+            location.location.getLocationString(nil, button: self.location, timezoneCompletion: { timezone in
+                self.timeZone = timezone
+            })
         }
-
-        vc.delegate = self
-
-        presentViewController(vc, animated: true, completion: nil)
+        self.navigationController?.pushViewController(locationPicker, animated: true)
     }
 
     @IBAction func openAboutMeEditor(sender: AnyObject) {
@@ -414,6 +425,7 @@ import ActionSheetPicker_3_0
         }
     }
 
+    //MARK:- Segue Setup
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if(segue.identifier == "category") {
             let vc = (segue.destinationViewController as! CategoryPickerViewController)
