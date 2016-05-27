@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		043792371CF888DF00CA4C5F /* Location.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 043792351CF888DF00CA4C5F /* Location.storyboard */; };
 		045E2EBD1CF604A8000CA08E /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = 045E2EAB1CF604A8000CA08E /* main.js */; };
 		045E2EBE1CF604A8000CA08E /* moment-timezone-with-data.js in Resources */ = {isa = PBXBuildFile; fileRef = 045E2EAC1CF604A8000CA08E /* moment-timezone-with-data.js */; };
 		045E2EBF1CF604A8000CA08E /* moment.js in Resources */ = {isa = PBXBuildFile; fileRef = 045E2EAD1CF604A8000CA08E /* moment.js */; };
@@ -136,7 +135,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		043792361CF888DF00CA4C5F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Location.storyboard; sourceTree = "<group>"; };
 		045E2EAB1CF604A8000CA08E /* main.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = main.js; sourceTree = "<group>"; };
 		045E2EAC1CF604A8000CA08E /* moment-timezone-with-data.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "moment-timezone-with-data.js"; sourceTree = "<group>"; };
 		045E2EAD1CF604A8000CA08E /* moment.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = moment.js; sourceTree = "<group>"; };
@@ -562,7 +560,6 @@
 				659AB9DC1CEEF2A20005C867 /* Main.storyboard */,
 				659AB9DE1CEEF2A20005C867 /* NotificationsTab.storyboard */,
 				659AB9E01CEEF2A20005C867 /* ProfileTab.storyboard */,
-				043792351CF888DF00CA4C5F /* Location.storyboard */,
 			);
 			path = Storyboards;
 			sourceTree = "<group>";
@@ -759,7 +756,6 @@
 				659ABA3E1CEEF2A20005C867 /* Main.strings in Resources */,
 				045E2EC51CF604A8000CA08E /* package.json in Resources */,
 				659ABA541CEEF2A20005C867 /* GroupsTab.storyboard in Resources */,
-				043792371CF888DF00CA4C5F /* Location.storyboard in Resources */,
 				659ABA5E1CEEF2A20005C867 /* EventPhotoFlatTableViewCell.xib in Resources */,
 				045E2EC91CF604A8000CA08E /* index.html in Resources */,
 				045E2EC21CF604A8000CA08E /* header.js in Resources */,
@@ -947,14 +943,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		043792351CF888DF00CA4C5F /* Location.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				043792361CF888DF00CA4C5F /* Base */,
-			);
-			name = Location.storyboard;
-			sourceTree = "<group>";
-		};
 		659AB9B91CEEF2A20005C867 /* Main.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
