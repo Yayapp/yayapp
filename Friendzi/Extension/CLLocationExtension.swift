@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import APTimeZones
 
 extension CLLocation {
     func getLocationString(label:UILabel?, button:UIButton?, timezoneCompletion:((NSTimeZone) -> ())?){

@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import JSQMessagesViewController
+import SVProgressHUD
 
 final class MessagesTableViewController: JSQMessagesViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate {
     static let storyboardID = "MessagesTableViewController"

@@ -9,6 +9,7 @@
 
 import UIKit
 import MapKit
+import SVProgressHUD
 
 protocol GroupCreationDelegate : NSObjectProtocol {
     func groupCreated(group:Category)

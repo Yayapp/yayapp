@@ -7,6 +7,10 @@
 //
 
 import UIKit
+import InstagramKit
+import SVProgressHUD
+import ParseTwitterUtils
+import ParseFacebookUtilsV4
 
 final class LoginViewController: UIViewController, InstagramDelegate {
 

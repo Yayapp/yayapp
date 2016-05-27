@@ -6,6 +6,9 @@
 //  Copyright © 2016 KrazyLabs LLC. All rights reserved.
 //
 
+import TTGTagCollectionView
+import SVProgressHUD
+
 protocol CategoryPickerDelegate : NSObjectProtocol {
     func madeCategoryChoice(categories: [Category])
 }

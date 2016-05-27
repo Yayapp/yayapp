@@ -8,6 +8,7 @@
 
 import UIKit
 import Darwin
+import SVProgressHUD
 
 final class BlurryAlertViewController: UIViewController {
     

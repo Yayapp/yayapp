@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 protocol ListEventsDelegate : NSObjectProtocol {
     func madeEventChoice(event: Event)
