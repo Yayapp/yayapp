@@ -205,7 +205,7 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
         self.name?.text = self.group?.name
         descr?.text = group?.summary
 
-        if let photoFile = group?.owner?.avatar,
+        if let photoFile = group?.photo,
             photoURLString = photoFile.url,
             photoURL = NSURL(string: photoURLString) {
             photo?.sd_setImageWithURL(photoURL)
