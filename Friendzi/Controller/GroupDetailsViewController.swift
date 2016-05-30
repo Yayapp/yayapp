@@ -36,7 +36,13 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
     @IBOutlet weak var switherPlaceholderTopSpace: NSLayoutConstraint?
 
     private var currentLocation :CLLocation?
-    private var attendees:[User] = []
+
+    private var attendees:[User] = [] {
+        didSet {
+            //The ommited member is the group owner
+            members?.text = attendees.count == 0 ? "1 member".localized : "\(attendees.count + 1) members".localized
+        }
+    }
 
     var group: Category?
     var selectedCategoriesData: [Category]! = []
@@ -123,9 +129,6 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
         attendeesButtons?.dataSource = self
         
         descr?.textContainerInset = UIEdgeInsetsMake(10, 10, 10, 10)
-        if let count = group?.attendeeIDs.count {
-            members?.text = "\(count) members"
-        }
 
         if(ParseHelper.sharedInstance.currentUser?.objectId == group?.owner?.objectId) {
             let editdone = UIBarButtonItem(image:UIImage(named: "edit_icon"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(GroupDetailsViewController.editGroup(_:)))
