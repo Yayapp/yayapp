@@ -84,18 +84,19 @@ final class BlurryAlertViewController: UIViewController {
             })
         } else if let currentUser = ParseHelper.sharedInstance.currentUser {
             SVProgressHUD.show()
-            ParseHelper.removeUserEvents(currentUser, block: {
-                result, error in
-                if error == nil {
-                    ParseHelper.deleteObject(currentUser, completion: { [weak self] (_, error) in
-                        SVProgressHUD.dismiss()
-                        self?.dismissViewControllerAnimated(true, completion: {
-                            self?.onUserLoggedOut?(error: error)
-                        })
-                        })
-                } else {
-                    MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-                }
+            ParseHelper.removeUserEvents(currentUser, block: { result, error in
+                ParseHelper.removeUserCategory(currentUser, block: { [weak self] (_, err) in
+                    if error == nil {
+                        ParseHelper.deleteObject(currentUser, completion: { [weak self] (_, error) in
+                            SVProgressHUD.dismiss()
+                            self?.dismissViewControllerAnimated(true, completion: {
+                                self?.onUserLoggedOut?(error: error)
+                            })
+                            })
+                    } else {
+                        MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+                    }
+                })
             })
         }
     }

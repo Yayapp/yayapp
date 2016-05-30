@@ -698,6 +698,26 @@ final class ParseHelper {
         })
     }
 
+    class func removeUserCategory(user: User, block:EventsResultBlock?) {
+        let query = PFQuery(className: categoryParseClassName)
+        query.whereKey("owner", equalTo: PFUser(withoutDataUsingUser: user))
+        query.findObjectsInBackgroundWithBlock({
+            objects, error in
+            if error == nil {
+                let array = objects! as NSArray as! [PFObject]
+                let mappedObjects = array.map({ Event(parseObject: $0) }) as? [Event]
+
+                if let objects = mappedObjects {
+                    for event in objects {
+                        ParseHelper.deleteObject(event, completion: nil)
+                    }
+                }
+                block!(nil, error)
+            }
+
+        })
+    }
+
     class func fetchEvent(eventID: String, completion: ObjectResultBlock?) {
         let query = PFQuery(className: eventParseClassName)
         query.whereKey("objectId", equalTo: eventID)
