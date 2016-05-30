@@ -21,7 +21,6 @@
 #import <GoogleAppIndexing/GoogleAppIndexing.h>
 #import <APTimeZones/APTimeZones.h>
 #import <JSQMessagesViewController/JSQMessages.h>
-#import "Flurry.h"
 #import <TPKeyboardAvoiding/TPKeyboardAvoidingScrollView.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <SDWebImage/UIButton+WebCache.h>
