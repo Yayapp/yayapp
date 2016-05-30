@@ -302,7 +302,7 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
 
     @IBAction func chat(sender: AnyObject) {
         if ParseHelper.sharedInstance.currentUser != nil {
-            if (attendees.count>0) {
+            if (attendees.count > 0) {
                 guard let controller: MessagesTableViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("MessagesTableViewController") as? MessagesTableViewController else {
                     return
                 }
