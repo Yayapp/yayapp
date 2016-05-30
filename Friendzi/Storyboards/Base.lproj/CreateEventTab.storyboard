@@ -144,7 +144,7 @@
                                     <constraint firstAttribute="height" constant="35" id="48i-WO-aSY"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <state key="normal" title="Share with Group">
+                                <state key="normal" title="Share with Groups">
                                     <color key="titleColor" red="0.35294117650000001" green="0.74901960779999999" blue="0.3294117647" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
