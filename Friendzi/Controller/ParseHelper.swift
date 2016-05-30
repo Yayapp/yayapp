@@ -685,7 +685,7 @@ final class ParseHelper {
         })
     }
 
-    class func removeUserEvents(user: User, block:EventsResultBlock?) {
+    class func removeUserEvents(user: User, block: EventsResultBlock?) {
         let query = PFQuery(className: eventParseClassName)
         query.whereKey("owner", equalTo: PFUser(withoutDataUsingUser: user))
         query.findObjectsInBackgroundWithBlock({
@@ -706,23 +706,19 @@ final class ParseHelper {
         })
     }
 
-    class func removeUserCategory(user: User, block:EventsResultBlock?) {
+    class func removeUserCategory(user: User, block: CategoriesResultBlock?) {
         let query = PFQuery(className: categoryParseClassName)
         query.whereKey("owner", equalTo: PFUser(withoutDataUsingUser: user))
-        query.findObjectsInBackgroundWithBlock({
-            objects, error in
-            if error == nil {
-                let array = objects! as NSArray as! [PFObject]
-                let mappedObjects = array.map({ Event(parseObject: $0) }) as? [Event]
-
-                if let objects = mappedObjects {
-                    for event in objects {
-                        ParseHelper.deleteObject(event, completion: nil)
-                    }
-                }
-                block!(nil, error)
+        query.findObjectsInBackgroundWithBlock({ categories, error in
+            guard let categories = categories else {
+                block?(nil, error)
+                return
             }
 
+            let mappedCategories = categories.map({ Category(parseObject: $0) })
+            for event in mappedCategories {
+                ParseHelper.deleteObject(event, completion: nil)
+            }
         })
     }
 

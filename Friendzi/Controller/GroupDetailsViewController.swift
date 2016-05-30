@@ -35,7 +35,7 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
     @IBOutlet weak var descr: UITextView?
     @IBOutlet weak var switherPlaceholderTopSpace: NSLayoutConstraint?
 
-    private var currentLocation :CLLocation?
+    private var currentLocation: CLLocation?
 
     private var attendees:[User] = [] {
         didSet {
