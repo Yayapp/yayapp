@@ -182,29 +182,28 @@ Parse.Cloud.beforeDelete("Event", function(request, response) {
 
 
 Parse.Cloud.beforeDelete(Parse.User, function(request, response) {
+    Parse.Cloud.useMasterKey();
 
-                         Parse.Cloud.useMasterKey();
+    var Event = Parse.Object.extend("Event");
+    var query = new Parse.Query(Event);
+    query.equalTo("attendeeIDs", Parse.User.current().id)
+    query.include("attendeeIDs")
+    query.each(function (event) {
+        event.remove("attendeeIDs", Parse.User.current().id);
+        event.save();
+    });
 
-                         var Event = Parse.Object.extend("Event");
-                         var query = new Parse.Query(Event);
-                         query.equalTo("attendeeIDs", Parse.User.current().id)
-                         query.include("attendeeIDs")
-                         query.each(function (event) {
-                                    event.remove("attendeeIDs", Parse.User.current().id);
-                                    event.save();
-                                    })
-
-                         var Request = Parse.Object.extend("Request");
-                         var reqQuery = new Parse.Query(Request);
-                         reqQuery.equalTo("attendee", Parse.User.current())
-                         reqQuery.find().then(function(results) {
-                                              return Parse.Object.destroyAll(results);
-                                              }).then(function() {
-                                                      response.success("OK")
-                                                      }, function(error) {
-                                                      response.error(error)
-                                                      });
-                         });
+    var Request = Parse.Object.extend("Request");
+    var reqQuery = new Parse.Query(Request);
+    reqQuery.equalTo("attendee", Parse.User.current())
+    reqQuery.find().then(function(results) {
+        return Parse.Object.destroyAll(results);
+    }).then(function() {
+        response.success("OK")
+    }, function(error) {
+        response.error(error)
+    });
+});
 
 Parse.Cloud.beforeSave("Report", function(request, response) {
     var reportedUser = request.object.get("reportedUser")

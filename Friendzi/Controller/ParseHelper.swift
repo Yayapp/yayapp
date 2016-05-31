@@ -719,6 +719,7 @@ final class ParseHelper {
             for event in mappedCategories {
                 ParseHelper.deleteObject(event, completion: nil)
             }
+            block?(nil, error)
         })
     }
 
