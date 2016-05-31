@@ -1,12 +1,4 @@
-
 var moment = require('cloud/moment-timezone-with-data.js');
-
-// Use Parse.Cloud.define to define as many cloud functions as you want.
-// For example:
-//Parse.Cloud.define("hello", function(request, response) {
-//  response.success("Hello world!");
-//});
-
 
 Parse.Cloud.job("incomingEventNotification", function (request, response) {
     Parse.Cloud.useMasterKey();
@@ -93,6 +85,35 @@ Parse.Cloud.job("removePastRequests", function(request, status) {
                                              // Error
                                              });
                 });
+
+Parse.Cloud.afterSave("Event", function(request) {
+    Parse.Cloud.useMasterKey();
+    var attendees = request.object.get('attendeeIDs');
+    var eventName = request.object.get('name');
+    if (attendees !== undefined && eventName !== undefined ) {
+        var pushQuery = new Parse.Query(Parse.Installation);
+        pushQuery.containedIn('user', attendees);
+        console.log(attendees)
+        console.log(eventName)
+        console.log(pushQuery)
+
+        Parse.Push.send({
+            where: pushQuery,
+            data: {
+                alert: eventName + ", " + "has been updated",
+                "content-available": 1,
+                "sound":"layerbell.caf"
+            }
+        }, {
+            success: function() {
+                console.log("Push was successful");
+            },
+            error: function(error) {
+                console.error(error);
+            }
+        });
+    }
+});
 
 Parse.Cloud.afterSave("Block", function(request) {
                       Parse.Cloud.useMasterKey();
