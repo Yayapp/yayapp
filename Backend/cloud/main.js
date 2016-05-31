@@ -14,7 +14,8 @@ Parse.Cloud.job("incomingEventNotification", function (request, response) {
     var d = new Date();
     var time = (24 * 3600 * 1000);
     var diffDate = new Date(d.getTime() + (time)); // 24hours
-
+    console.log(diffDate)
+    
     var query = new Parse.Query("Event");
     query.greaterThan("limit", 1);
     query.notEqualTo("notifiedAboutUpcomingEvent", true);
@@ -22,45 +23,47 @@ Parse.Cloud.job("incomingEventNotification", function (request, response) {
     query.find().then(function(results) {
         //get the event
         if (results !== undefined) {
+            // console.log(results)
             results.forEach(function (event) {
                 if (event !== undefined) {
                     var atendees = event.get("attendeeIDs");
-                    atendees.forEach(function (attendeeId) {
+                    if (atendees !== undefined) {
+                        atendees.forEach(function (attendeeId) {
+                            var pushQuery = new Parse.Query(Parse.Installation);
+                            //fetch user
+                            var user = new Parse.Object("_User");
+                            user.id = attendeeId;
+                            pushQuery.equalTo('user', user);
+                            var eventName = event.get("name");
 
-                        var pushQuery = new Parse.Query(Parse.Installation);
-                        //fetch user
-                        var user = new Parse.Object("_User");
-                        user.id = attendeeId;
-                        pushQuery.equalTo('user', user);
-                        var eventName = event.get("name");
-
-                        if (eventName !== undefined) {
-                            console.log(pushQuery);
-                            Parse.Push.send({
-                                where: pushQuery,
-                                data: {
-                                    "alert" : eventName + ", " + "starting in 24 hours",
-                                    "content-available": 1,
-                                    "sound":"layerbell.caf"
-                                },
-                            }, {
-                            success: function (success) {
-                                    event.set("notifiedAboutUpcomingEvent", true);
-                                    event.save();
-                                    console.log(success);
-                                },
-                                error: function (error) {
-                                    response.error(error);
-                                    console.log(error);
-                                }
-                            });
-                        } else {
-                            //console.log("eventName is undefined");
-                        }
-                    });
+                            if (eventName !== undefined) {
+                                // console.log(pushQuery);
+                                Parse.Push.send({
+                                    where: pushQuery,
+                                    data: {
+                                        "alert" : eventName + ", " + "starting in 24 hours",
+                                        "content-available": 1,
+                                        "sound":"layerbell.caf"
+                                    },
+                                }, {
+                                    success: function (success) {
+                                        event.set("notifiedAboutUpcomingEvent", true);
+                                        event.save();
+                                        // console.log(success);
+                                    },
+                                    error: function (error) {
+                                        response.error(error);
+                                        // console.log(error);
+                                    }
+                                });
+                            } else {
+                                //console.log("eventName is undefined");
+                            }
+                        });
+                    }
                     //success in here
                 } else {
-                    console.log("event is undefined");
+                    // console.log("event is undefined");
                 }
             });
         } else {
@@ -115,8 +118,6 @@ Parse.Cloud.afterSave("Block", function(request) {
                                                    }, function(error) {
                                                    // Error
                                                    });
-
-
                       });
 
 
@@ -130,7 +131,6 @@ Parse.Cloud.beforeDelete("Event", function(request, response) {
     var reqQuery = new Parse.Query(Request);
     reqQuery.matchesQuery('event', query);
     reqQuery.find().then(function(results) {
-        console.log()
         query.find().then(function(event) {
             if (event !== undefined) {
                 var atendees = event.get("attendeeIDs");
@@ -144,7 +144,6 @@ Parse.Cloud.beforeDelete("Event", function(request, response) {
                     var eventName = event.get("name");
 
                     if (eventName !== undefined) {
-                        console.log(pushQuery);
                         Parse.Push.send({
                             where: pushQuery,
                             data: {
