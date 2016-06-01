@@ -23,7 +23,6 @@ final class RecentViewController: UITableViewController {
         ParseHelper.getRecentRequests(currentUser, block: { [weak self] result, error in
             guard error == nil else {
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
-
                 return
             }
 
@@ -50,12 +49,10 @@ final class RecentViewController: UITableViewController {
         }
 
         let notification:Notification! = notifications[indexPath.row]
-        
         cell.name.text = notification.getTitle()
         cell.eventName.text = notification.getText()
 
-        if let photoURLString = notification.getPhoto().url,
-            photoURL = NSURL(string: photoURLString) {
+        if let photoURLString = notification.getPhoto().url, photoURL = NSURL(string: photoURLString) {
             cell.avatar.sd_setImageWithURL(photoURL)
         }
         
@@ -135,9 +132,7 @@ final class RecentViewController: UITableViewController {
     }
     
     @IBAction func accept(sender: AnyObject) {
-        
         let request = notifications[sender.tag] as! Request
-        
         if (request.event != nil) {
             request.event!.attendeeIDs.append(request.attendee.objectId!)
             ParseHelper.saveObject(request.event, completion: nil)
@@ -153,7 +148,7 @@ final class RecentViewController: UITableViewController {
                 }
                 self.tableView.reloadData()
             })
-        
+
         } else {
             request.group!.attendeeIDs.append(request.attendee.objectId!)
             ParseHelper.saveObject(request.group!, completion: nil)
@@ -167,7 +162,7 @@ final class RecentViewController: UITableViewController {
             })
         }
     }
-    
+
     @IBAction func decline(sender: AnyObject) {
         let request = notifications[sender.tag] as! Request
         request.accepted = false

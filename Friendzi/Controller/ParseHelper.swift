@@ -598,19 +598,15 @@ final class ParseHelper {
     }
 
 
-    class func getRecentRequests(user: User, block:RequestsResultBlock?) {
-
+    class func getRecentRequests(user: User, block: RequestsResultBlock?) {
         let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
-
         let today = NSDate()
-
         let weekEndDay = -7
 
         let dayComponent = NSDateComponents()
         dayComponent.day = weekEndDay
 
         let startDay = calendar!.dateByAddingComponents(dayComponent, toDate: today, options: NSCalendarOptions.MatchFirst)
-        //        let startNextWeek = calendar!.startOfDayForDate(endWeek!)
 
         let queryEvent = PFQuery(className: eventParseClassName)
         queryEvent.whereKey("owner", equalTo: PFUser(withoutDataUsingUser: user))
@@ -643,10 +639,8 @@ final class ParseHelper {
         queryFinal.includeKey("attendee")
         queryFinal.includeKey("event")
         queryFinal.whereKey("objectId", doesNotMatchKey: "objectId", inQuery: ownSentRequestsQuery)
-
-        queryFinal.findObjectsInBackgroundWithBlock {
-            objects, error in
-
+        queryFinal.clearCachedResult()
+        queryFinal.findObjectsInBackgroundWithBlock { objects, error in
             if error == nil {
                 let array = objects! as NSArray as! [PFObject]
                 let mappedObjects = array.map({ Request(parseObject: $0) }) as? [Request]
