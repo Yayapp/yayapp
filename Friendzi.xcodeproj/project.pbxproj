@@ -1061,6 +1061,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = Friendzi;
+				PROVISIONING_PROFILE = "e622fc02-86e5-48bd-880a-2cfd311f7326";
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "Yay-Bridging-Header";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1102,6 +1103,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = Friendzi;
+				PROVISIONING_PROFILE = "e622fc02-86e5-48bd-880a-2cfd311f7326";
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "Yay-Bridging-Header";
 				VALIDATE_PRODUCT = YES;
@@ -1117,8 +1119,8 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Friendzi/Supporting/Friendzi.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Paul Dinulescu (TN7KAKYNS7)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Paul Dinulescu (TN7KAKYNS7)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1157,7 +1159,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.krazylabs.friendzi;
 				PRODUCT_NAME = Friendzi;
-				PROVISIONING_PROFILE = "db27dd28-cd24-4bc7-8733-9af2866abf0e";
+				PROVISIONING_PROFILE = "e622fc02-86e5-48bd-880a-2cfd311f7326";
 				SWIFT_OBJC_BRIDGING_HEADER = "Friendzi/Supporting/Yay-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -1212,7 +1214,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.krazylabs.friendzi;
 				PRODUCT_NAME = Friendzi;
-				PROVISIONING_PROFILE = "db27dd28-cd24-4bc7-8733-9af2866abf0e";
+				PROVISIONING_PROFILE = "e622fc02-86e5-48bd-880a-2cfd311f7326";
 				SWIFT_OBJC_BRIDGING_HEADER = "Friendzi/Supporting/Yay-Bridging-Header.h";
 			};
 			name = Release;

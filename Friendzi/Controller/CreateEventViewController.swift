@@ -224,10 +224,7 @@
     func madeLocationChoice(coordinates: CLLocationCoordinate2D){
         latitude = coordinates.latitude
         longitude = coordinates.longitude
-        CLLocation(latitude: latitude!, longitude: longitude!).getLocationString(nil, button: location, timezoneCompletion: {
-            result in
-            self.timeZone = result
-        })
+        CLLocation(latitude: latitude!, longitude: longitude!).getLocationString(nil, button: location, timezoneCompletion: nil)
     }
 
     func madeCategoryChoice(categories: [Category]) {
@@ -295,12 +292,9 @@
             guard let location = location else {
                 return
             }
-
             self.latitude = location.coordinate.latitude
             self.longitude = location.coordinate.longitude
-            location.location.getLocationString(nil, button: self.location, timezoneCompletion: { timezone in
-                self.timeZone = timezone
-            })
+            location.location.getLocationString(nil, button: self.location, timezoneCompletion: nil)
         }
         self.navigationController?.pushViewController(locationPicker, animated: true)
     }
@@ -369,8 +363,7 @@
                 self.event?.timeZone = timezoneName
             }
 
-            ParseHelper.saveObject(self.event!, completion: {
-                (result, error) in
+            ParseHelper.saveObject(self.event!, completion: { result, error in
                 if error == nil {
                     if (self.event?.attendeeIDs.contains(currentUserID) != true) {
                         self.event?.attendeeIDs.append(currentUserID)
