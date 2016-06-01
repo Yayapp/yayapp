@@ -90,12 +90,10 @@ Parse.Cloud.afterSave("Event", function(request) {
     Parse.Cloud.useMasterKey();
     var attendees = request.object.get('attendeeIDs');
     var eventName = request.object.get('name');
+    console.log(attendees + " ATTENDEES ID");
     if (attendees !== undefined && eventName !== undefined ) {
         var pushQuery = new Parse.Query(Parse.Installation);
         pushQuery.containedIn('user', attendees);
-        console.log(attendees)
-        console.log(eventName)
-        console.log(pushQuery)
 
         Parse.Push.send({
             where: pushQuery,
@@ -109,7 +107,7 @@ Parse.Cloud.afterSave("Event", function(request) {
                 console.log("Push was successful");
             },
             error: function(error) {
-                console.error(error);
+                console.log(error);
             }
         });
     }

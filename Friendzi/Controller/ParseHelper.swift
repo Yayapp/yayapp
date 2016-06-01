@@ -666,9 +666,7 @@ final class ParseHelper {
         let query = PFQuery(className: requestParseClassName)
         query.whereKey("event", equalTo: PFObject(withoutDataWithClassName: eventParseClassName, objectId: event.objectId))
         query.whereKeyDoesNotExist("accepted")
-        query.findObjectsInBackgroundWithBlock({
-            objects, error in
-
+        query.findObjectsInBackgroundWithBlock({ objects, error in
             if error == nil {
                 let array = objects! as NSArray as! [PFObject]
                 let mappedObjects = array.map({ Request(parseObject: $0) }) as? [Request]
@@ -688,9 +686,7 @@ final class ParseHelper {
     class func removeUserEvents(user: User, block: EventsResultBlock?) {
         let query = PFQuery(className: eventParseClassName)
         query.whereKey("owner", equalTo: PFUser(withoutDataUsingUser: user))
-        query.findObjectsInBackgroundWithBlock({
-            objects, error in
-
+        query.findObjectsInBackgroundWithBlock({ objects, error in
             if error == nil {
                 let array = objects! as NSArray as! [PFObject]
                 let mappedObjects = array.map({ Event(parseObject: $0) }) as? [Event]
