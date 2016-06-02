@@ -124,15 +124,23 @@ final class CompleteProfileViewController: UIViewController, UIImagePickerContro
 
         currentUser.avatar = imageFile
 
-        ParseHelper.saveObject(currentUser) { (result, error) in
+        ParseHelper.saveObject(currentUser) { success, error in
             SVProgressHUD.dismiss()
-
-            if error == nil {
-                self.check()
+            guard let success = success where success == true else {
+                if let error = error {
+                    switch error.code {
+                    case 203://Email already taken
+                         MessageToUser.showDefaultErrorMessage("Hi! This email is already registered. Please close the app and login from the account you already registered".localized)
+                    default:
+                         MessageToUser.showDefaultErrorMessage(error.localizedDescription)
+                    }
+                }
                 self.dismissViewControllerAnimated(true, completion: nil)
-            } else {
-                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+                return
             }
+
+            self.check()
+            self.dismissViewControllerAnimated(true, completion: nil)
         }
     }
 

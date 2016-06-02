@@ -54,6 +54,25 @@ final class ParseHelper {
         }
     }
 
+    class func userProfileIsComplete(user: PFUser, completion: (profilePicture: File?, gender: Int?, isComplete: Bool) -> Void) {
+        guard let id = user.objectId else {
+            completion(profilePicture: nil, gender: nil, isComplete: false)
+            return
+        }
+
+        let query = PFQuery(className: "_User")
+        query.whereKey("objectId", equalTo: id)
+        query.getFirstObjectInBackgroundWithBlock { user, error in
+            guard let user = user else {
+                completion(profilePicture: nil, gender: nil, isComplete: false)
+                return
+            }
+
+            let mappedUser = User(parseObject: user)
+            completion(profilePicture: mappedUser?.avatar, gender: mappedUser?.gender, isComplete: mappedUser?.avatar != nil && mappedUser?.gender != nil)
+         }
+    }
+
     class func getTodayEvents(user:User?, categories:[Category], block:EventsResultBlock?) {
         let today = NSDate()
 

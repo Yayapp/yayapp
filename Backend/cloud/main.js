@@ -6,12 +6,12 @@ Parse.Cloud.job("incomingEventNotification", function (request, response) {
     var d = new Date();
     var time = (24 * 3600 * 1000);
     var diffDate = new Date(d.getTime() + (time)); // 24hours
-    console.log(diffDate)
+    console.log(diffDate);
     
     var query = new Parse.Query("Event");
     query.greaterThan("limit", 1);
     query.notEqualTo("notifiedAboutUpcomingEvent", true);
-    query.lessThanOrEqualTo( "startDate", diffDate );
+    query.lessThanOrEqualTo("startDate", diffDate );
     query.find().then(function(results) {
         //get the event
         if (results !== undefined) {
@@ -35,7 +35,7 @@ Parse.Cloud.job("incomingEventNotification", function (request, response) {
                                     data: {
                                         "alert" : eventName + ", " + "starting in 24 hours",
                                         "content-available": 1,
-                                        "sound":"layerbell.caf"
+                                        "sound": "layerbell.caf"
                                     },
                                 }, {
                                     success: function (success) {
