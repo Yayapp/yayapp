@@ -145,14 +145,13 @@ final class LoginViewController: UIViewController, InstagramDelegate {
                     let userProfileRequest = FBSDKGraphRequest(graphPath: "me", parameters: userProfileRequestParams)
                     let graphConnection = FBSDKGraphRequestConnection()
                     graphConnection.addRequest(userProfileRequest, completionHandler: { (connection: FBSDKGraphRequestConnection!, result: AnyObject!, error: NSError!) -> Void in
-
                         if(error != nil){
                             SVProgressHUD.dismiss()
                             print(error)
                         } else {
                             ParseHelper.sharedInstance.currentUser?.email = result.objectForKey("email")! as? String
                             ParseHelper.sharedInstance.currentUser?.name = result.objectForKey("name")! as? String
-                            ParseHelper.sharedInstance.currentUser?.gender = (result.objectForKey("gender ")! as? String)?.lowercaseString == "male" ? 1 : 0
+                            ParseHelper.sharedInstance.currentUser?.gender = (result.objectForKey("gender")! as? String)?.lowercaseString == "male" ? 1 : 0
 
                             let fbUserId = result.objectForKey("id") as! String
                             let url: NSURL = NSURL(string:"https://graph.facebook.com/\(fbUserId)/picture?width=200&height=200")!

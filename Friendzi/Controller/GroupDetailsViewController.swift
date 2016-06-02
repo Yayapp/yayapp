@@ -295,7 +295,6 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
         if attendState == .Pending {
             blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
             blurryAlertViewController.modalPresentationStyle = .CurrentContext
-
             blurryAlertViewController.aboutText = "Your request has been sent.".localized
             blurryAlertViewController.messageText = "We will notify you of the outcome.".localized
 
@@ -323,7 +322,7 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
             presentViewController(vc, animated: true, completion: nil)
         }
     }
-    
+
     @IBAction func switchToDetails(sender: AnyObject) {
         view.endEditing(true)
 
@@ -343,7 +342,7 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
             where (group?.attendeeIDs.contains(currentUserID) == true || groupOwner == currentUserID ) else {
             MessageToUser.showMessage("Denied".localized, textId: "You must be attended to this group".localized)
             return
-        } 
+        }
 
         chatUnderline?.hidden = false
         detailsUnderline?.hidden = true
