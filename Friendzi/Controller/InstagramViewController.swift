@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import InstagramKit
 
 protocol InstagramDelegate : NSObjectProtocol {
     func instagramSuccess(token:String, user:InstagramUser)

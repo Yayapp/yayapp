@@ -7,6 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		045E2EBD1CF604A8000CA08E /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = 045E2EAB1CF604A8000CA08E /* main.js */; };
+		045E2EBE1CF604A8000CA08E /* moment-timezone-with-data.js in Resources */ = {isa = PBXBuildFile; fileRef = 045E2EAC1CF604A8000CA08E /* moment-timezone-with-data.js */; };
+		045E2EBF1CF604A8000CA08E /* moment.js in Resources */ = {isa = PBXBuildFile; fileRef = 045E2EAD1CF604A8000CA08E /* moment.js */; };
+		045E2EC01CF604A8000CA08E /* _t2.js in Resources */ = {isa = PBXBuildFile; fileRef = 045E2EB01CF604A8000CA08E /* _t2.js */; };
+		045E2EC11CF604A8000CA08E /* footer.js in Resources */ = {isa = PBXBuildFile; fileRef = 045E2EB21CF604A8000CA08E /* footer.js */; };
+		045E2EC21CF604A8000CA08E /* header.js in Resources */ = {isa = PBXBuildFile; fileRef = 045E2EB31CF604A8000CA08E /* header.js */; };
+		045E2EC31CF604A8000CA08E /* jsrsasign.js in Resources */ = {isa = PBXBuildFile; fileRef = 045E2EB41CF604A8000CA08E /* jsrsasign.js */; };
+		045E2EC41CF604A8000CA08E /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 045E2EB51CF604A8000CA08E /* Makefile */; };
+		045E2EC51CF604A8000CA08E /* package.json in Resources */ = {isa = PBXBuildFile; fileRef = 045E2EB61CF604A8000CA08E /* package.json */; };
+		045E2EC61CF604A8000CA08E /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 045E2EB71CF604A8000CA08E /* README.md */; };
+		045E2EC71CF604A8000CA08E /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 045E2EB81CF604A8000CA08E /* README.md */; };
+		045E2EC81CF604A8000CA08E /* global.json in Resources */ = {isa = PBXBuildFile; fileRef = 045E2EBA1CF604A8000CA08E /* global.json */; };
+		045E2EC91CF604A8000CA08E /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 045E2EBC1CF604A8000CA08E /* index.html */; };
 		659AB9F91CEEF2A20005C867 /* Popover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659AB96D1CEEF2A20005C867 /* Popover.swift */; };
 		659AB9FA1CEEF2A20005C867 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 659AB96F1CEEF2A20005C867 /* Images.xcassets */; };
 		659AB9FB1CEEF2A20005C867 /* AdvancedSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659AB9711CEEF2A20005C867 /* AdvancedSettingsTableViewController.swift */; };
@@ -118,10 +131,23 @@
 		659ABA651CEEF2A20005C867 /* RequestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659AB9F61CEEF2A20005C867 /* RequestTableViewCell.swift */; };
 		659ABA661CEEF2A20005C867 /* RequestTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 659AB9F71CEEF2A20005C867 /* RequestTableViewCell.xib */; };
 		659ABA671CEEF2A20005C867 /* TriangleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659AB9F81CEEF2A20005C867 /* TriangleView.swift */; };
-		867E5F77511EAE0AA07E0F43 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8B15517F27561DB20B85177 /* libPods.a */; };
+		B5B24CC7C7970E5384310E26 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D40C2C68E4E62A3A274171CC /* Pods.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		045E2EAB1CF604A8000CA08E /* main.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = main.js; sourceTree = "<group>"; };
+		045E2EAC1CF604A8000CA08E /* moment-timezone-with-data.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "moment-timezone-with-data.js"; sourceTree = "<group>"; };
+		045E2EAD1CF604A8000CA08E /* moment.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = moment.js; sourceTree = "<group>"; };
+		045E2EB01CF604A8000CA08E /* _t2.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = _t2.js; sourceTree = "<group>"; };
+		045E2EB21CF604A8000CA08E /* footer.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = footer.js; sourceTree = "<group>"; };
+		045E2EB31CF604A8000CA08E /* header.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = header.js; sourceTree = "<group>"; };
+		045E2EB41CF604A8000CA08E /* jsrsasign.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jsrsasign.js; sourceTree = "<group>"; };
+		045E2EB51CF604A8000CA08E /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		045E2EB61CF604A8000CA08E /* package.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = package.json; sourceTree = "<group>"; };
+		045E2EB71CF604A8000CA08E /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		045E2EB81CF604A8000CA08E /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		045E2EBA1CF604A8000CA08E /* global.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = global.json; sourceTree = "<group>"; };
+		045E2EBC1CF604A8000CA08E /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		116D70F35B19AD9546398474 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		659AB96D1CEEF2A20005C867 /* Popover.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Popover.swift; sourceTree = "<group>"; };
 		659AB96F1CEEF2A20005C867 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -237,7 +263,7 @@
 		659AB9F81CEEF2A20005C867 /* TriangleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TriangleView.swift; sourceTree = "<group>"; };
 		87E5039D1AFE3D9446032CF4 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		9950326B1B564B4400D792C5 /* Friendzi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Friendzi.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		D8B15517F27561DB20B85177 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		D40C2C68E4E62A3A274171CC /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -245,16 +271,85 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				867E5F77511EAE0AA07E0F43 /* libPods.a in Frameworks */,
+				B5B24CC7C7970E5384310E26 /* Pods.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		045E2EA91CF604A8000CA08E /* Backend */ = {
+			isa = PBXGroup;
+			children = (
+				045E2EAA1CF604A8000CA08E /* cloud */,
+				045E2EB91CF604A8000CA08E /* config */,
+				045E2EBB1CF604A8000CA08E /* public */,
+			);
+			path = Backend;
+			sourceTree = "<group>";
+		};
+		045E2EAA1CF604A8000CA08E /* cloud */ = {
+			isa = PBXGroup;
+			children = (
+				045E2EAB1CF604A8000CA08E /* main.js */,
+				045E2EAC1CF604A8000CA08E /* moment-timezone-with-data.js */,
+				045E2EAD1CF604A8000CA08E /* moment.js */,
+				045E2EAE1CF604A8000CA08E /* node_modules */,
+				045E2EB81CF604A8000CA08E /* README.md */,
+			);
+			path = cloud;
+			sourceTree = "<group>";
+		};
+		045E2EAE1CF604A8000CA08E /* node_modules */ = {
+			isa = PBXGroup;
+			children = (
+				045E2EAF1CF604A8000CA08E /* jsrsasign */,
+			);
+			path = node_modules;
+			sourceTree = "<group>";
+		};
+		045E2EAF1CF604A8000CA08E /* jsrsasign */ = {
+			isa = PBXGroup;
+			children = (
+				045E2EB01CF604A8000CA08E /* _t2.js */,
+				045E2EB11CF604A8000CA08E /* lib */,
+				045E2EB51CF604A8000CA08E /* Makefile */,
+				045E2EB61CF604A8000CA08E /* package.json */,
+				045E2EB71CF604A8000CA08E /* README.md */,
+			);
+			path = jsrsasign;
+			sourceTree = "<group>";
+		};
+		045E2EB11CF604A8000CA08E /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				045E2EB21CF604A8000CA08E /* footer.js */,
+				045E2EB31CF604A8000CA08E /* header.js */,
+				045E2EB41CF604A8000CA08E /* jsrsasign.js */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		045E2EB91CF604A8000CA08E /* config */ = {
+			isa = PBXGroup;
+			children = (
+				045E2EBA1CF604A8000CA08E /* global.json */,
+			);
+			path = config;
+			sourceTree = "<group>";
+		};
+		045E2EBB1CF604A8000CA08E /* public */ = {
+			isa = PBXGroup;
+			children = (
+				045E2EBC1CF604A8000CA08E /* index.html */,
+			);
+			path = public;
+			sourceTree = "<group>";
+		};
 		659AB96A1CEEF2A20005C867 /* Friendzi */ = {
 			isa = PBXGroup;
 			children = (
+				045E2EA91CF604A8000CA08E /* Backend */,
 				659AB96B1CEEF2A20005C867 /* 3rdParty */,
 				659AB9701CEEF2A20005C867 /* Controller */,
 				659AB99F1CEEF2A20005C867 /* CustomControls */,
@@ -570,7 +665,7 @@
 		FDEA8E2942B6E4C28740DB53 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D8B15517F27561DB20B85177 /* libPods.a */,
+				D40C2C68E4E62A3A274171CC /* Pods.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -648,24 +743,34 @@
 			buildActionMask = 2147483647;
 			files = (
 				659ABA581CEEF2A20005C867 /* ProfileTab.storyboard in Resources */,
+				045E2EC11CF604A8000CA08E /* footer.js in Resources */,
+				045E2EBE1CF604A8000CA08E /* moment-timezone-with-data.js in Resources */,
 				659ABA661CEEF2A20005C867 /* RequestTableViewCell.xib in Resources */,
+				045E2EBF1CF604A8000CA08E /* moment.js in Resources */,
 				659ABA601CEEF2A20005C867 /* EventPhotoTableViewCell.xib in Resources */,
 				659AB9FA1CEEF2A20005C867 /* Images.xcassets in Resources */,
 				659ABA571CEEF2A20005C867 /* NotificationsTab.storyboard in Resources */,
+				045E2EC31CF604A8000CA08E /* jsrsasign.js in Resources */,
 				659ABA641CEEF2A20005C867 /* GroupsViewCell.xib in Resources */,
 				659ABA561CEEF2A20005C867 /* Main.storyboard in Resources */,
 				659ABA3E1CEEF2A20005C867 /* Main.strings in Resources */,
+				045E2EC51CF604A8000CA08E /* package.json in Resources */,
 				659ABA541CEEF2A20005C867 /* GroupsTab.storyboard in Resources */,
 				659ABA5E1CEEF2A20005C867 /* EventPhotoFlatTableViewCell.xib in Resources */,
+				045E2EC91CF604A8000CA08E /* index.html in Resources */,
+				045E2EC21CF604A8000CA08E /* header.js in Resources */,
 				659ABA5D1CEEF2A20005C867 /* CategoryCollectionViewCell.xib in Resources */,
 				659ABA5B1CEEF2A20005C867 /* Info.plist in Resources */,
 				659ABA511CEEF2A20005C867 /* Auth.storyboard in Resources */,
+				045E2EC81CF604A8000CA08E /* global.json in Resources */,
 				659ABA521CEEF2A20005C867 /* CreateEventTab.storyboard in Resources */,
 				659ABA5A1CEEF2A20005C867 /* Friendzi.entitlements in Resources */,
 				659ABA3F1CEEF2A20005C867 /* privacyPolicy.html in Resources */,
 				659ABA621CEEF2A20005C867 /* EventsTableViewCell.xib in Resources */,
 				659ABA401CEEF2A20005C867 /* termsOfService.html in Resources */,
+				045E2EBD1CF604A8000CA08E /* main.js in Resources */,
 				659ABA551CEEF2A20005C867 /* LaunchScreen.xib in Resources */,
+				045E2EC01CF604A8000CA08E /* _t2.js in Resources */,
 				659ABA531CEEF2A20005C867 /* EventsTab.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -784,6 +889,7 @@
 				659ABA431CEEF2A20005C867 /* Category.swift in Sources */,
 				659ABA1F1CEEF2A20005C867 /* RequestsTableViewController.swift in Sources */,
 				659ABA5F1CEEF2A20005C867 /* EventPhotoTableViewCell.swift in Sources */,
+				045E2EC41CF604A8000CA08E /* Makefile in Sources */,
 				659ABA081CEEF2A20005C867 /* EditProfileViewController.swift in Sources */,
 				659ABA1D1CEEF2A20005C867 /* RecentViewController.swift in Sources */,
 				659ABA241CEEF2A20005C867 /* TabBarController.swift in Sources */,
@@ -795,6 +901,7 @@
 				659ABA391CEEF2A20005C867 /* Constants.swift in Sources */,
 				659ABA341CEEF2A20005C867 /* UIAlertController.swift in Sources */,
 				659ABA3D1CEEF2A20005C867 /* Utils.swift in Sources */,
+				045E2EC71CF604A8000CA08E /* README.md in Sources */,
 				659ABA461CEEF2A20005C867 /* EventPhoto.swift in Sources */,
 				659AB9FE1CEEF2A20005C867 /* CategoryPickerViewController.swift in Sources */,
 				659ABA481CEEF2A20005C867 /* GeoPoint.swift in Sources */,
@@ -803,6 +910,7 @@
 				659ABA231CEEF2A20005C867 /* StartViewController.swift in Sources */,
 				659ABA1C1CEEF2A20005C867 /* RangeViewController.swift in Sources */,
 				659ABA321CEEF2A20005C867 /* PFUser.swift in Sources */,
+				045E2EC61CF604A8000CA08E /* README.md in Sources */,
 				659ABA011CEEF2A20005C867 /* ChooseLocationViewController.swift in Sources */,
 				659ABA1A1CEEF2A20005C867 /* PrivacyPolicyController.swift in Sources */,
 				659ABA301CEEF2A20005C867 /* PFGeoPoint.swift in Sources */,
@@ -953,6 +1061,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = Friendzi;
+				PROVISIONING_PROFILE = "e622fc02-86e5-48bd-880a-2cfd311f7326";
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "Yay-Bridging-Header";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -994,6 +1103,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = Friendzi;
+				PROVISIONING_PROFILE = "e622fc02-86e5-48bd-880a-2cfd311f7326";
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "Yay-Bridging-Header";
 				VALIDATE_PRODUCT = YES;
@@ -1009,8 +1119,8 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Friendzi/Supporting/Friendzi.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Paul Dinulescu (TN7KAKYNS7)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Paul Dinulescu (TN7KAKYNS7)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1049,7 +1159,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.krazylabs.friendzi;
 				PRODUCT_NAME = Friendzi;
-				PROVISIONING_PROFILE = "db27dd28-cd24-4bc7-8733-9af2866abf0e";
+				PROVISIONING_PROFILE = "e622fc02-86e5-48bd-880a-2cfd311f7326";
 				SWIFT_OBJC_BRIDGING_HEADER = "Friendzi/Supporting/Yay-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -1104,7 +1214,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.krazylabs.friendzi;
 				PRODUCT_NAME = Friendzi;
-				PROVISIONING_PROFILE = "db27dd28-cd24-4bc7-8733-9af2866abf0e";
+				PROVISIONING_PROFILE = "e622fc02-86e5-48bd-880a-2cfd311f7326";
 				SWIFT_OBJC_BRIDGING_HEADER = "Friendzi/Supporting/Yay-Bridging-Header.h";
 			};
 			name = Release;

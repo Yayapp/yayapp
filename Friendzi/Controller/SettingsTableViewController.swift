@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 final class SettingsTableViewController: UITableViewController {
 

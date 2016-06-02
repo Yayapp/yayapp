@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import TTGTagCollectionView
+import SVProgressHUD
 
 final class UserProfileViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate,   UIPopoverPresentationControllerDelegate, TTGTextTagCollectionViewDelegate {
     

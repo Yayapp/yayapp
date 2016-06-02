@@ -9,8 +9,8 @@
 import UIKit
 
 final class NotificationsController: UIViewController {
-    
-    var currentVC:UIViewController!
+
+    var currentVC: UIViewController!
     
     @IBOutlet private weak var container: UIView?
     @IBOutlet private weak var recentUnderline: UIView?

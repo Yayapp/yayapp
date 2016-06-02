@@ -18,4 +18,8 @@ extension UIView {
         }
         self.layer.addAnimation(rotateAnimation, forKey: nil)
     }
+
+    func roundView() {
+        self.layer.cornerRadius = self.bounds.height / 2
+    }
 }

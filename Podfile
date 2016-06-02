@@ -1,5 +1,6 @@
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
+use_frameworks!
 
 pod 'MMDrawerController'
 pod 'FBSDKCoreKit'
@@ -25,3 +26,4 @@ pod "Branch"
 pod 'Fabric'
 pod 'Crashlytics'
 pod 'WYPopoverController', :git => 'https://github.com/sammcewan/WYPopoverController.git'
+pod 'LocationPicker'

@@ -35,8 +35,14 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
     @IBOutlet weak var descr: UITextView?
     @IBOutlet weak var switherPlaceholderTopSpace: NSLayoutConstraint?
 
-    private var currentLocation :CLLocation?
-    private var attendees:[User] = []
+    private var currentLocation: CLLocation?
+
+    private var attendees:[User] = [] {
+        didSet {
+            //The ommited member is the group owner
+            members?.text = attendees.count == 0 ? "1 member".localized : "\(attendees.count + 1) members".localized
+        }
+    }
 
     var group: Category?
     var selectedCategoriesData: [Category]! = []
@@ -123,9 +129,6 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
         attendeesButtons?.dataSource = self
         
         descr?.textContainerInset = UIEdgeInsetsMake(10, 10, 10, 10)
-        if let count = group?.attendeeIDs.count {
-            members?.text = "\(count) members"
-        }
 
         if(ParseHelper.sharedInstance.currentUser?.objectId == group?.owner?.objectId) {
             let editdone = UIBarButtonItem(image:UIImage(named: "edit_icon"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(GroupDetailsViewController.editGroup(_:)))
@@ -205,7 +208,7 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
         self.name?.text = self.group?.name
         descr?.text = group?.summary
 
-        if let photoFile = group?.owner?.avatar,
+        if let photoFile = group?.photo,
             photoURLString = photoFile.url,
             photoURL = NSURL(string: photoURLString) {
             photo?.sd_setImageWithURL(photoURL)
@@ -292,7 +295,6 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
         if attendState == .Pending {
             blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
             blurryAlertViewController.modalPresentationStyle = .CurrentContext
-
             blurryAlertViewController.aboutText = "Your request has been sent.".localized
             blurryAlertViewController.messageText = "We will notify you of the outcome.".localized
 
@@ -302,7 +304,7 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
 
     @IBAction func chat(sender: AnyObject) {
         if ParseHelper.sharedInstance.currentUser != nil {
-            if (attendees.count>0) {
+            if (attendees.count > 0) {
                 guard let controller: MessagesTableViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("MessagesTableViewController") as? MessagesTableViewController else {
                     return
                 }
@@ -320,7 +322,7 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
             presentViewController(vc, animated: true, completion: nil)
         }
     }
-    
+
     @IBAction func switchToDetails(sender: AnyObject) {
         view.endEditing(true)
 
@@ -336,11 +338,9 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
     }
 
     @IBAction func switchToChat(sender: AnyObject) {
-        guard let currentUserID = ParseHelper.sharedInstance.currentUser?.objectId
-        where group?.attendeeIDs.contains(currentUserID) == true else {
-            MessageToUser.showMessage(NSLocalizedString("Denied", comment: ""),
-                                      textId: NSLocalizedString("You must be attended to this group", comment: ""))
-
+        guard let currentUserID = ParseHelper.sharedInstance.currentUser?.objectId, let groupOwner = group?.owner?.objectId
+            where (group?.attendeeIDs.contains(currentUserID) == true || groupOwner == currentUserID ) else {
+            MessageToUser.showMessage("Denied".localized, textId: "You must be attended to this group".localized)
             return
         }
 
@@ -348,15 +348,13 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
         detailsUnderline?.hidden = true
         messagesContainer?.hidden = false
         eventsContainer?.hidden = true
-
         switherPlaceholderTopSpace?.constant = 0
+
         UIView.animateWithDuration(0.1) {
             self.view.layoutIfNeeded()
         }
     }
 
-    
-    
     @IBAction func invite(sender: AnyObject) {
         if (ParseHelper.sharedInstance.currentUser != nil) {
             let mailComposeViewController = configuredMailComposeViewController()

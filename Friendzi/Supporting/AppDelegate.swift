@@ -9,6 +9,11 @@
 import UIKit
 import Fabric
 import Crashlytics
+import SVProgressHUD
+import ParseTwitterUtils
+import ParseFacebookUtilsV4
+import Branch
+import Flurry_iOS_SDK
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

@@ -7,6 +7,10 @@
 //
 
 import UIKit
+import InstagramKit
+import SVProgressHUD
+import ParseTwitterUtils
+import ParseFacebookUtilsV4
 
 final class LoginViewController: UIViewController, InstagramDelegate {
 
@@ -130,51 +134,46 @@ final class LoginViewController: UIViewController, InstagramDelegate {
             if error != nil {
                 SVProgressHUD.dismiss()
                 MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
-
                 return
             }
 
             if let user = user {
                 
-                if (FBSDKAccessToken.currentAccessToken() != nil){
+                if (FBSDKAccessToken.currentAccessToken() != nil) {
                     
-                    let userProfileRequestParams = [ "fields" : "id, name, email, picture, about"]
+                    let userProfileRequestParams = [ "fields" : "id, gender, name, email, picture, about"]
                     let userProfileRequest = FBSDKGraphRequest(graphPath: "me", parameters: userProfileRequestParams)
                     let graphConnection = FBSDKGraphRequestConnection()
                     graphConnection.addRequest(userProfileRequest, completionHandler: { (connection: FBSDKGraphRequestConnection!, result: AnyObject!, error: NSError!) -> Void in
-
                         if(error != nil){
                             SVProgressHUD.dismiss()
                             print(error)
-                        }
-                        else {
+                        } else {
                             ParseHelper.sharedInstance.currentUser?.email = result.objectForKey("email")! as? String
                             ParseHelper.sharedInstance.currentUser?.name = result.objectForKey("name")! as? String
-                            
-                            if user.isNew {
-                                DataProxy.sharedInstance.setNeedsShowAllHints(true)
+                            ParseHelper.sharedInstance.currentUser?.gender = (result.objectForKey("gender")! as? String)?.lowercaseString == "male" ? 1 : 0
 
-                                let fbUserId = result.objectForKey("id") as! String
-                                let url:NSURL = NSURL(string:"https://graph.facebook.com/\(fbUserId)/picture?width=200&height=200")!
-              
-                                let URLRequestNeeded = NSURLRequest(URL: url)
-                                NSURLConnection.sendAsynchronousRequest(URLRequestNeeded, queue: NSOperationQueue.mainQueue(), completionHandler: {
-                                    response,data, error in
-                                    if error == nil {
-                                        let picture = PFFile(name: "image.jpg", data: data!)
-                                        ParseHelper.sharedInstance.currentUser!.avatar = File(parseFile: picture!)
-                                        ParseHelper.saveObject(ParseHelper.sharedInstance.currentUser!, completion: nil)
-                                    }
-                                    else {
-                                        SVProgressHUD.dismiss()
-                                        print("Error: \(error!.localizedDescription)")
-                                    }
-                                })
+                            let fbUserId = result.objectForKey("id") as! String
+                            let url: NSURL = NSURL(string:"https://graph.facebook.com/\(fbUserId)/picture?width=200&height=200")!
+                            let URLRequestNeeded = NSURLRequest(URL: url)
+                            NSURLConnection.sendAsynchronousRequest(URLRequestNeeded, queue: NSOperationQueue.mainQueue(), completionHandler: { response, data, error in
+                                if error == nil {
+                                    let picture = PFFile(name: "image.jpg", data: data!)
+                                    ParseHelper.sharedInstance.currentUser!.avatar = File(parseFile: picture!)
+                                    ParseHelper.saveObject(ParseHelper.sharedInstance.currentUser!, completion: nil)
+                                } else {
+                                    SVProgressHUD.dismiss()
+                                    print("Error: \(error!.localizedDescription)")
+                                }
 
-                                self.doRegistration()
-                            } else {
-                                self.proceed()
-                            }
+                                if user.isNew {
+                                    DataProxy.sharedInstance.setNeedsShowAllHints(true)
+                                    self.doRegistration()
+
+                                } else {
+                                    self.proceed()
+                                }
+                            })
                         }
                     })
                     graphConnection.start()

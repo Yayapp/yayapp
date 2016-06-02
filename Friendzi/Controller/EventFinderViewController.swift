@@ -15,12 +15,7 @@ final class EventFinderViewController: UIViewController, UIAlertViewDelegate, Ch
     @IBOutlet private weak var location: UIButton?
 
     private let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-
     private var gotoMainTabBarScreen: (() -> Void)?
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
     
     @IBAction func openLocationPicker(sender: AnyObject) {
         guard let map = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("ChooseLocationViewController") as? ChooseLocationViewController else {
@@ -32,7 +27,7 @@ final class EventFinderViewController: UIViewController, UIAlertViewDelegate, Ch
         map.setEditing (true,animated: true)
         presentViewController(map, animated: true, completion: nil)
     }
-    
+
     func madeLocationChoice(coordinates: CLLocationCoordinate2D){
         CLLocation(latitude: coordinates.latitude, longitude: coordinates.longitude).getLocationString(nil, button: location, timezoneCompletion: nil)
         
@@ -41,7 +36,7 @@ final class EventFinderViewController: UIViewController, UIAlertViewDelegate, Ch
         ParseHelper.saveObject(ParseHelper.sharedInstance.currentUser!, completion: nil)
         appDelegate.gotoMainTabBarScreen()
     }
- 
+
     @IBAction func allowAction(sender: AnyObject) {
         ParseHelper.geoPointForCurrentLocationInBackground( {
             (geoPoint: GeoPoint?, error: NSError?) in
@@ -55,11 +50,9 @@ final class EventFinderViewController: UIViewController, UIAlertViewDelegate, Ch
             }
         })
     }
-    
+
     func alertView(View: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-        
         switch buttonIndex {
-            
         default:
             openLocationPicker(true)
             

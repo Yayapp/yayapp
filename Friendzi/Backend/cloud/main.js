@@ -7,14 +7,77 @@ var moment = require('cloud/moment-timezone-with-data.js');
 //  response.success("Hello world!");
 //});
 
+
+Parse.Cloud.job("incomingEventNotification", function (request, response) {
+    Parse.Cloud.useMasterKey();
+    //date stuff
+    var d = new Date();
+    var time = (24 * 3600 * 1000);
+    var diffDate = new Date(d.getTime() + (time)); // 24hours
+
+    var query = new Parse.Query("Event");
+    query.greaterThan("limit", 1);
+    query.notEqualTo("notifiedAboutUpcomingEvent", true);
+    query.lessThanOrEqualTo( "startDate", diffDate );
+    query.find().then(function(results) {
+        //get the event
+        if (results !== undefined) {
+            results.forEach(function (event) {
+                if (event !== undefined) {
+                    var atendees = event.get("attendeeIDs");
+                    atendees.forEach(function (attendeeId) {
+
+                        var pushQuery = new Parse.Query(Parse.Installation);
+                        //fetch user
+                        var user = new Parse.Object("_User");
+                        user.id = attendeeId;
+                        pushQuery.equalTo('user', user);
+                        var eventName = event.get("name");
+
+                        if (eventName !== undefined) {
+                            console.log(pushQuery);
+                            Parse.Push.send({
+                                where: pushQuery,
+                                data: {
+                                    "alert" : eventName + ", " + "starting in 24 hours",
+                                    "content-available": 1,
+                                    "sound":"layerbell.caf"
+                                },
+                            }, {
+                            success: function (success) {
+                                    event.set("notifiedAboutUpcomingEvent", true);
+                                    event.save();
+                                    console.log(success);
+                                },
+                                error: function (error) {
+                                    response.error(error);
+                                    console.log(error);
+                                }
+                            });
+                        } else {
+                            //console.log("eventName is undefined");
+                        }
+                    });
+                    //success in here
+                } else {
+                    console.log("event is undefined");
+                }
+            });
+        } else {
+            response.error("Querry returned undefined");
+        }
+        response.success("end")
+    });
+});
+
 Parse.Cloud.job("removePastRequests", function(request, status) {
                 // Set up to modify user data
                 Parse.Cloud.useMasterKey();
-                
+
                 var Event = Parse.Object.extend("Event");
                 var query = new Parse.Query(Event);
                 query.lessThanOrEqualTo("startDate", new Date())
-                
+
                 var Request = Parse.Object.extend("Request");
                 var reqQuery = new Parse.Query(Request);
                 reqQuery.matchesQuery('event', query);
@@ -32,11 +95,11 @@ Parse.Cloud.afterSave("Block", function(request) {
                       Parse.Cloud.useMasterKey();
                       var user = request.object.get('user');
                       var owner = request.object.get('owner');
-                      
+
                       var Event = Parse.Object.extend("Event");
                       var query = new Parse.Query(Event);
                       query.equalTo("owner", owner);
-                      
+
                       var Request = Parse.Object.extend("Request");
                       var reqQuery = new Parse.Query(Request);
                       reqQuery.equalTo("attendee", user);
@@ -47,23 +110,23 @@ Parse.Cloud.afterSave("Block", function(request) {
                                                    query.equalTo("attendeeIDs", user.id)
                                                    query.each(function (event) {
                                                               event.remove("attendeeIDs", user.id);
-                                                              event.save();      
+                                                              event.save();
                                                               })
                                                    }, function(error) {
                                                    // Error
                                                    });
-                      
-                      
+
+
                       });
 
 
 Parse.Cloud.beforeDelete("Event", function(request, response) {
-                         
+
                          Parse.Cloud.useMasterKey();
                          var Event = Parse.Object.extend("Event");
                          var query = new Parse.Query(Event);
                          query.equalTo("objectId", request.object.id);
-                         
+
                         var Request = Parse.Object.extend("Request");
                          var reqQuery = new Parse.Query(Request);
                          reqQuery.matchesQuery('event', query);
@@ -78,9 +141,9 @@ Parse.Cloud.beforeDelete("Event", function(request, response) {
 
 
 Parse.Cloud.beforeDelete(Parse.User, function(request, response) {
-                         
+
                          Parse.Cloud.useMasterKey();
-                         
+
                          var Event = Parse.Object.extend("Event");
                          var query = new Parse.Query(Event);
                          query.equalTo("attendeeIDs", Parse.User.current().id)
@@ -89,7 +152,7 @@ Parse.Cloud.beforeDelete(Parse.User, function(request, response) {
                                     event.remove("attendeeIDs", Parse.User.current().id);
                                     event.save();
                                     })
-                         
+
                          var Request = Parse.Object.extend("Request");
                          var reqQuery = new Parse.Query(Request);
                          reqQuery.equalTo("attendee", Parse.User.current())
@@ -133,20 +196,20 @@ Parse.Cloud.afterSave("Report", function(request) {
                                         if (results.length >= 5) {
                                         event.fetch({
                                                     success: function(event) {
-                                                    
+
                                                     var owner = event.get('owner');
-                                                    
+
                                                     var eventName = event.get('name');
-                                                    
+
                                                     event.destroy({});
-                                                    
+
                                                     Parse.Object.destroyAll(results);
-                                                    
-                                                    
+
+
                                                     var pushQuery = new Parse.Query(Parse.Installation);
                                                     pushQuery.equalTo('user', owner);
-                                                    
-                                                    
+
+
                                                     // Send push notification to query
                                                     Parse.Push.send({
                                                                     where: pushQuery,
@@ -167,28 +230,28 @@ Parse.Cloud.afterSave("Report", function(request) {
                                                     }
                                                     });
                                         }
-                                        
+
                                         }).then(function() {
                                                 // Done
                                                 }, function(error) {
                                                 // Error
                                                 });
-                      
+
                       });
 Parse.Cloud.afterSave("Message", function(request) {
-                      
+
                       var message = request.object.get('text');
                       var event = request.object.get('event');
                       var user = request.object.get('user');
                       var image = request.object.get('photo');
-                      
-                      
+
+
                       event.fetch({
                                   success: function(event) {
-                                  
+
                                   user.fetch({
                                              success: function(user) {
-                                             
+
                                              var userName = user.get('name');
                                              var eventName = event.get('name');
                                              var array = [];
@@ -199,28 +262,28 @@ Parse.Cloud.afterSave("Message", function(request) {
                                              } else {
                                              fullMessage = "There is a new photo in conversation \"" + eventName + "\" from " + userName
                                              }
-                                             
+
                                              for (i = 0; i < attendeeIDs.length; i++) {
                                                 if (user.id != attendeeIDs[i]) {
                                                     array[i] = attendeeIDs[i]
                                                 }
                                              }
-                                             
+
                                              var userQuery = new Parse.Query(Parse.User);
                                              userQuery.equalTo('newMessage', true);
                                              userQuery.containedIn('objectId', array);
-                                             
+
                                              var pushQuery = new Parse.Query(Parse.Installation);
                                              pushQuery.matchesQuery('user', userQuery);
-                                             
+
                                              var userQueryN = new Parse.Query(Parse.User);
                                              userQuery.equalTo('newMessage', false)
                                              userQueryN.containedIn('objectId', array);
-                                             
+
                                              var pushQueryN = new Parse.Query(Parse.Installation);
                                              pushQueryN.matchesQuery('user', userQueryN);
-                                             
-                                             
+
+
                                              Parse.Push.send({
                                                              where: pushQueryN,
                                                              data: {
@@ -234,7 +297,7 @@ Parse.Cloud.afterSave("Message", function(request) {
                                                              throw "Got an error " + error.code + " : " + error.message;
                                                              }
                                                              });
-                                             
+
                                              Parse.Push.send({
                                                              where: pushQuery,
                                                              data: {
@@ -250,7 +313,7 @@ Parse.Cloud.afterSave("Message", function(request) {
                                                              throw "Got an error " + error.code + " : " + error.message;
                                                              }
                                                              });
-                                             
+
                                              }});
                                   }});
                       });

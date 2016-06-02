@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import JSQMessagesViewController
+import SVProgressHUD
 
 final class MessagesTableViewController: JSQMessagesViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate {
     static let storyboardID = "MessagesTableViewController"
@@ -128,7 +130,30 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
             
         }
     }
-    
+
+    func loadMessage(id:String) {
+        let message = Message()
+        message.objectId = id
+        ParseHelper.fetchObject(message, completion: {
+            result, error in
+            if error == nil {
+                if message.photo == nil {
+                    self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, text: message.text))
+                    self.finishReceivingMessage()
+                } else {
+                    ParseHelper.getData(message.photo!, completion: {
+                        result, error in
+                        self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, media: JSQPhotoMediaItem(image: UIImage(data: result! ))))
+                        self.finishReceivingMessage()
+                    })
+                }
+
+            } else {
+                self.loadMessage(id)
+            }
+        })
+    }
+
     override func didPressAccessoryButton(sender: UIButton!) {
         let alert = UIAlertController(title: "Choose Option".localized, message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
         alert.addAction(UIAlertAction(title: "Take Photo".localized, style: UIAlertActionStyle.Default, handler: {
@@ -147,29 +172,6 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
         }))
         alert.addAction(UIAlertAction(title: "Cancel".localized, style: .Cancel, handler: nil))
         presentViewController(alert, animated: true, completion: nil)
-    }
-    
-    func loadMessage(id:String) {
-        let message = Message()
-        message.objectId = id
-        ParseHelper.fetchObject(message, completion: {
-            result, error in
-            if error == nil {
-                if message.photo == nil {
-                    self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, text: message.text))
-                    self.finishReceivingMessage()
-                } else {
-                    ParseHelper.getData(message.photo!, completion: {
-                        result, error in
-                        self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, media: JSQPhotoMediaItem(image: UIImage(data: result! ))))
-                        self.finishReceivingMessage()
-                    })
-                }
-                
-            } else {
-                self.loadMessage(id)
-            }
-        })
     }
     
     override func didPressSendButton(button: UIButton, withMessageText text: String, senderId: String, senderDisplayName: String, date: NSDate) {

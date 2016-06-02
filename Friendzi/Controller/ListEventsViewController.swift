@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 protocol ListEventsDelegate : NSObjectProtocol {
     func madeEventChoice(event: Event)
@@ -52,24 +53,10 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
         }
     }
 
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        handleUserAuthentification()
 
-        if let currentUser = ParseHelper.sharedInstance.currentUser
-            where currentUser.avatar == nil || currentUser.gender == nil {
-            if let completeProfileVC = UIStoryboard(name: "Auth", bundle: nil).instantiateViewControllerWithIdentifier(CompleteProfileViewController.storyboardID) as? CompleteProfileViewController {
-                completeProfileVC.dismissButtonHidden = false
-                completeProfileVC.onNextButtonPressed = {
-                    (UIApplication.sharedApplication().delegate as? AppDelegate)?.gotoMainTabBarScreen()
-                }
-                presentViewController(completeProfileVC, animated: true, completion: nil)
-            }
-        }
- 
         if let popoverController = storyboard?.instantiateViewControllerWithIdentifier(PopoverViewController.storyboardID) as? PopoverViewController,
             let controllersCount = tabBarController?.viewControllers?.count
             where DataProxy.sharedInstance.needsShowEventsListTabHint {
@@ -257,7 +244,22 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
             performSegueWithIdentifier("event_details", sender: indexPath)
         }
     }
-    
+
+    func handleUserAuthentification() {
+        if let parseCurrentUser = PFUser.currentUser(), currentUser = ParseHelper.sharedInstance.currentUser where currentUser.avatar == nil || currentUser.gender == nil {
+            ParseHelper.userProfileIsComplete(parseCurrentUser, completion: { avatarFile, gender, isComplete in
+                if let completeProfileVC = UIStoryboard(name: "Auth", bundle: nil).instantiateViewControllerWithIdentifier(CompleteProfileViewController.storyboardID) as? CompleteProfileViewController where !isComplete {
+                    completeProfileVC.dismissButtonHidden = false
+                    completeProfileVC.onNextButtonPressed = {
+                        (UIApplication.sharedApplication().delegate as? AppDelegate)?.gotoMainTabBarScreen()
+                    }
+                    self.presentViewController(completeProfileVC, animated: true, completion: nil)
+
+                }
+            })
+        }
+    }
+
     override func eventChanged(event:Event) {
         guard let index = eventsData.indexOf(event) else {
             return
@@ -316,7 +318,6 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
     }
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
         if(segue.identifier == "event_details") {
             if let indexPath = sender as? NSIndexPath {
                 let vc = (segue.destinationViewController as! EventDetailsViewController)
