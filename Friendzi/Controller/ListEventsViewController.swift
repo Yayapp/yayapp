@@ -145,10 +145,10 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell = events?.dequeueReusableCellWithIdentifier(EventsTableViewCell.reuseIdentifier) as! EventsTableViewCell
-        let event:Event! = eventsData[indexPath.section]
+        let event = eventsData[indexPath.section]
         let cllocation = CLLocation(latitude: event.location.latitude, longitude: event.location.longitude)
         let distanceBetween: CLLocationDistance = cllocation.distanceFromLocation(currentLocation!)
-        let distanceStr = String(format: "%.2f", distanceBetween/1000)
+        let distanceStr = String(format: "%.2f", distanceBetween / 1000)
 
         var attendeeButtons: [UIButton] = []
         if let attendees = cell.attendeesButtons {

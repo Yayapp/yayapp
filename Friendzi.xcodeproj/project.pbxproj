@@ -349,6 +349,7 @@
 		659AB96A1CEEF2A20005C867 /* Friendzi */ = {
 			isa = PBXGroup;
 			children = (
+				659AB9E21CEEF2A20005C867 /* Supporting */,
 				045E2EA91CF604A8000CA08E /* Backend */,
 				659AB96B1CEEF2A20005C867 /* 3rdParty */,
 				659AB9701CEEF2A20005C867 /* Controller */,
@@ -360,7 +361,6 @@
 				659AB9BB1CEEF2A20005C867 /* LocalResources */,
 				659AB9BF1CEEF2A20005C867 /* Model */,
 				659AB9D11CEEF2A20005C867 /* Storyboards */,
-				659AB9E21CEEF2A20005C867 /* Supporting */,
 				659AB9E71CEEF2A20005C867 /* View */,
 			);
 			path = Friendzi;

@@ -34,10 +34,10 @@ final class EventsTableViewCell: UITableViewCell {
         super.prepareForReuse()
 
         picture?.image = nil
-        title?.text = nil
-        location?.text = NSLocalizedString("Loading location...", comment: "")
-        date?.text = nil
-        howFar?.text = nil
+        title?.text = ""
+        location?.text = "Loading location...".localized
+        date?.text = ""
+        howFar?.text = ""
 
         for button in [author, attended1, attended2, attended3, attended4] {
             button?.setImage(nil, forState: .Normal)

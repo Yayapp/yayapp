@@ -51,9 +51,9 @@ final class RequestsTableViewController: UITableViewController {
         ParseHelper.fetchObject(request.event!, completion: {
             result, error in
             if error == nil {
-                cell.eventName.text = request.event!.name
+                cell.eventName?.text = request.event!.name
             } else {
-                cell.eventName.text = ""
+                cell.eventName?.text = ""
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
         })
@@ -61,25 +61,25 @@ final class RequestsTableViewController: UITableViewController {
         ParseHelper.fetchObject(request.attendee, completion: {
             result, error in
             if error == nil {
-                cell.name.text = request.attendee.name
+                cell.name?.text = request.attendee.name
 
                 if let avatarFile = request.attendee.avatar,
                     photoURLString = avatarFile.url,
                     photoURL = NSURL(string: photoURLString) {
-                    cell.avatar.sd_setImageWithURL(photoURL)
+                    cell.avatar?.sd_setImageWithURL(photoURL)
                 }
 
             } else {
-                cell.name.text = ""
+                cell.name?.text = ""
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
         })
 
-        cell.avatar.layer.borderColor = Color.PrimaryActiveColor.CGColor
-        cell.accept.tag = indexPath.row;
-        cell.accept.addTarget(self, action: #selector(RequestsTableViewController.accept(_:)), forControlEvents: .TouchUpInside)
-        cell.decline.tag = indexPath.row;
-        cell.decline.addTarget(self, action: #selector(RequestsTableViewController.decline(_:)), forControlEvents: .TouchUpInside)
+        cell.avatar?.layer.borderColor = Color.PrimaryActiveColor.CGColor
+        cell.accept?.tag = indexPath.row;
+        cell.accept?.addTarget(self, action: #selector(RequestsTableViewController.accept(_:)), forControlEvents: .TouchUpInside)
+        cell.decline?.tag = indexPath.row;
+        cell.decline?.addTarget(self, action: #selector(RequestsTableViewController.decline(_:)), forControlEvents: .TouchUpInside)
 
         return cell
     }

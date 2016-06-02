@@ -12,17 +12,17 @@ class RequestTableViewCell: UITableViewCell {
     static let reuseIdentifier = "requestTableViewCell"
     static let nib = UINib(nibName: "RequestTableViewCell", bundle: nil)
 
-    @IBOutlet weak var avatar: UIImageView!
-    @IBOutlet weak var eventName: UILabel!
-    @IBOutlet weak var name: UILabel!
-    @IBOutlet weak var accept: UIButton!
-    @IBOutlet weak var decline: UIButton!
+    @IBOutlet weak var avatar: UIImageView?
+    @IBOutlet weak var eventName: UILabel?
+    @IBOutlet weak var name: UILabel?
+    @IBOutlet weak var accept: UIButton?
+    @IBOutlet weak var decline: UIButton?
 
     override func prepareForReuse() {
         super.prepareForReuse()
 
-        avatar.image = nil
-        eventName.text = nil
-        name.text = nil
+        avatar?.image = nil
+        eventName?.text = ""
+        name?.text = ""
     }
 }

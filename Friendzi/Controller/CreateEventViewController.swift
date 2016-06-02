@@ -154,7 +154,6 @@
 
     @IBAction func openDateTimePicker(sender: AnyObject) {
         view.endEditing(true)
-
         let datePicker = ActionSheetDatePicker(title: nil, datePickerMode: .DateAndTime, selectedDate: NSDate(), doneBlock: {
             _, value, _ in
             guard let date = value as? NSDate else {
@@ -236,7 +235,6 @@
             }
 
             self.pickCategory?.setTitle(names.joinWithSeparator(", "), forState: .Normal)
-
         } else {
             pickCategory?.setTitle("Share with Group".localized, forState: .Normal)
         }

@@ -34,7 +34,7 @@ final class LoginViewController: UIViewController, InstagramDelegate {
                 ParseHelper.requestPasswordResetForEmail(tField.text!, completion: {
                     result, error in
                     if(error == nil) {
-                        MessageToUser.showMessage("Reset password", textId: "We've sent you password reset instructions. Please check your email.".localized)
+                        MessageToUser.showMessage("Reset password".localized, textId: "We've sent you password reset instructions. Please check your email.".localized)
                     } else {
                         MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
                     }

@@ -18,8 +18,8 @@
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bM8-gu-UG0">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="137"/>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S9w-Ib-8gX">
-                        <rect key="frame" x="8" y="109" width="304" height="21"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S9w-Ib-8gX">
+                        <rect key="frame" x="8" y="108" width="304" height="21"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="S9w-Ib-8gX" secondAttribute="height" multiplier="304:21" id="tur-1Q-MeX"/>
                         </constraints>

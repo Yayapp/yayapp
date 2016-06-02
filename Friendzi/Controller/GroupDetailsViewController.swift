@@ -36,7 +36,6 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
     @IBOutlet weak var switherPlaceholderTopSpace: NSLayoutConstraint?
 
     private var currentLocation: CLLocation?
-
     private var attendees:[User] = [] {
         didSet {
             //The ommited member is the group owner

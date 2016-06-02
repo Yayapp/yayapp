@@ -10,13 +10,14 @@
 import UIKit
 import MapKit
 import SVProgressHUD
- 
+import LocationPicker
+
 protocol GroupCreationDelegate : NSObjectProtocol {
     func groupCreated(group:Category)
 }
 
 final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate, ChooseEventPictureDelegate, WriteAboutDelegate, UIPopoverPresentationControllerDelegate {
-    
+
     @IBOutlet private weak var eventImage: UIImageView?
     @IBOutlet private weak var eventPhoto: UIButton?
     @IBOutlet private weak var location: UIButton?
@@ -64,7 +65,6 @@ final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDe
         }
     }
 
-
     func update() {
         ParseHelper.fetchObject(group!, completion: {
             result, error in
@@ -84,7 +84,6 @@ final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDe
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
         })
-        
     }
  
     @IBAction func publicAction(sender: AnyObject) {
@@ -100,13 +99,20 @@ final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDe
     }
 
     @IBAction func addLocationButtonPressed(sender: AnyObject) {
-        guard let vc = UIStoryboard.main()?.instantiateViewControllerWithIdentifier(ChooseLocationViewController.storyboardID) as? ChooseLocationViewController else {
-            return
+        let locationPicker = LocationPickerViewController()
+        locationPicker.currentLocationButtonBackground = .whiteColor()
+        locationPicker.mapType = .Standard
+        locationPicker.searchBarPlaceholder = "Search by address"
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
+        locationPicker.completion = { location in
+            guard let location = location else {
+                return
+            }
+            self.latitude = location.coordinate.latitude
+            self.longitude = location.coordinate.longitude
+            location.location.getLocationString(nil, button: self.location, timezoneCompletion: nil)
         }
-
-        vc.delegate = self
-
-        presentViewController(vc, animated: true, completion: nil)
+        self.navigationController?.pushViewController(locationPicker, animated: true)
     }
     
     @IBAction func openPhotoPicker(sender: AnyObject) {
@@ -235,7 +241,6 @@ final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDe
 
             ParseHelper.deleteObject(self.group, completion: { [weak self] _, error in
                 SVProgressHUD.dismiss()
-
                 guard error == nil else {
                     MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
 
