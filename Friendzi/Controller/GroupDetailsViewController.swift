@@ -339,27 +339,23 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
     }
 
     @IBAction func switchToChat(sender: AnyObject) {
-        guard let currentUserID = ParseHelper.sharedInstance.currentUser?.objectId
-        where group?.attendeeIDs.contains(currentUserID) == true else {
-            MessageToUser.showMessage(NSLocalizedString("Denied", comment: ""),
-                                      textId: NSLocalizedString("You must be attended to this group", comment: ""))
-
+        guard let currentUserID = ParseHelper.sharedInstance.currentUser?.objectId, let groupOwner = group?.owner?.objectId
+            where (group?.attendeeIDs.contains(currentUserID) == true || groupOwner == currentUserID ) else {
+            MessageToUser.showMessage("Denied".localized, textId: "You must be attended to this group".localized)
             return
-        }
+        }и экс перпедики 
 
         chatUnderline?.hidden = false
         detailsUnderline?.hidden = true
         messagesContainer?.hidden = false
         eventsContainer?.hidden = true
-
         switherPlaceholderTopSpace?.constant = 0
+
         UIView.animateWithDuration(0.1) {
             self.view.layoutIfNeeded()
         }
     }
 
-    
-    
     @IBAction func invite(sender: AnyObject) {
         if (ParseHelper.sharedInstance.currentUser != nil) {
             let mailComposeViewController = configuredMailComposeViewController()
