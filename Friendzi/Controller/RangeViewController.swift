@@ -18,7 +18,7 @@ class RangeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         currentValue = ParseHelper.sharedInstance.currentUser?.distance
-        rangeText?.text = "\(currentValue)KM"
+        rangeText?.text = "\(currentValue ?? 20)KM"
         if let value = currentValue {
             rangeSelector?.value = Float(value)
         }
