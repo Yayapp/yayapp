@@ -343,7 +343,7 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
             where (group?.attendeeIDs.contains(currentUserID) == true || groupOwner == currentUserID ) else {
             MessageToUser.showMessage("Denied".localized, textId: "You must be attended to this group".localized)
             return
-        }и экс перпедики 
+        } 
 
         chatUnderline?.hidden = false
         detailsUnderline?.hidden = true
