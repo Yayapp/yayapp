@@ -22,8 +22,8 @@
                             <imageView userInteractionEnabled="NO" alpha="0.20000000000000001" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background_start2" translatesAutoresizingMaskIntoConstraints="NO" id="cGY-eb-HZV">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qBX-P1-C6L">
-                                <rect key="frame" x="0.0" y="402" width="320" height="50"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qBX-P1-C6L">
+                                <rect key="frame" x="0.0" y="410" width="320" height="50"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="CBO-fA-J7H"/>
@@ -33,8 +33,8 @@
                                     <action selector="signup:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="PPp-eH-JnZ"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ykz-2O-a56">
-                                <rect key="frame" x="0.0" y="296" width="320" height="50"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ykz-2O-a56">
+                                <rect key="frame" x="0.0" y="310" width="320" height="50"/>
                                 <color key="backgroundColor" red="0.35294117650000001" green="0.74901960779999999" blue="0.3294117647" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="MlC-N1-voM"/>
@@ -55,8 +55,8 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="BR1-fQ-CJj">
-                                <rect key="frame" x="85" y="44" width="150" height="30"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="BR1-fQ-CJj">
+                                <rect key="frame" x="85" y="28" width="150" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="BR1-fQ-CJj" secondAttribute="height" multiplier="5:1" id="ojP-3z-j8X"/>
                                 </constraints>
@@ -887,7 +887,7 @@ Cg
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="o2t-vl-ruq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="519" y="409"/>
+            <point key="canvasLocation" x="457" y="451"/>
         </scene>
         <!--Messages Table View Controller-->
         <scene sceneID="O1E-g3-DwG">
@@ -897,7 +897,7 @@ Cg
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="t9O-Oi-BU8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1081" y="440"/>
+            <point key="canvasLocation" x="1081" y="451"/>
         </scene>
         <!--ListEventsViewController-->
         <scene sceneID="naW-HK-daC">
@@ -1000,7 +1000,7 @@ Cg
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9aN-AT-Jy5">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="SJR-n6-att">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="SJR-n6-att">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                     </imageView>
                                 </subviews>
@@ -1635,7 +1635,7 @@ Cg
         <image name="topGradient" width="320" height="200"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Uy6-AU-NUG"/>
+        <segue reference="T6c-3l-C8Y"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
 </document>
