@@ -1130,7 +1130,7 @@ Cg
                                 <constraints>
                                     <constraint firstAttribute="height" constant="25" id="Rwy-yj-12b"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="23"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                                 <size key="shadowOffset" width="0.0" height="0.0"/>
@@ -1148,13 +1148,13 @@ Cg
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="PS2-WI-8d0">
                                 <rect key="frame" x="150" y="274" width="20" height="20"/>
                             </activityIndicatorView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mvs-4c-gOR">
-                                <rect key="frame" x="8" y="99" width="304" height="25"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mvs-4c-gOR">
+                                <rect key="frame" x="8" y="99" width="165" height="25"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="25" id="WGP-f3-r6Q"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="45" id="ysk-4J-rNk"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <state key="normal" title="Loading location...">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -1191,22 +1191,6 @@ Cg
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="20q-ON-OK6">
-                                <rect key="frame" x="8" y="151" width="304" height="20"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="80" id="e66-mE-39x"/>
-                                    <constraint firstAttribute="height" constant="20" id="swV-vd-khX"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                                <size key="shadowOffset" width="0.0" height="0.0"/>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="e66-mE-39x"/>
-                                    </mask>
-                                </variation>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="57D-Dh-SKq">
                                 <rect key="frame" x="282" y="139" width="30" height="34"/>
                                 <connections>
@@ -1324,6 +1308,23 @@ Cg
                                     <action selector="cancelEventButtonTapped:" destination="mnu-Sh-eEp" eventType="touchUpInside" id="ew3-Xo-sD3"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" misplaced="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="20q-ON-OK6">
+                                <rect key="frame" x="173" y="112" width="0.0" height="0.0"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="80" id="e66-mE-39x"/>
+                                    <constraint firstAttribute="height" constant="20" id="swV-vd-khX"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                                <size key="shadowOffset" width="0.0" height="0.0"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="e66-mE-39x"/>
+                                        <exclude reference="swV-vd-khX"/>
+                                    </mask>
+                                </variation>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -1338,9 +1339,11 @@ Cg
                             <constraint firstAttribute="trailing" secondItem="zvN-A4-CwM" secondAttribute="trailing" id="5aV-o0-F2r"/>
                             <constraint firstItem="zvN-A4-CwM" firstAttribute="top" secondItem="V8Y-Y7-bHR" secondAttribute="bottom" id="6RM-DC-n3Q"/>
                             <constraint firstItem="ra7-mN-VaX" firstAttribute="width" secondItem="EG8-iL-yjZ" secondAttribute="width" id="6VV-Cg-R5a"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="20q-ON-OK6" secondAttribute="trailing" constant="8" id="9DG-7t-86E"/>
                             <constraint firstItem="MoZ-iz-hEA" firstAttribute="leading" secondItem="LBN-4i-pIr" secondAttribute="leading" constant="8" id="9pq-wy-0P7"/>
                             <constraint firstItem="20q-ON-OK6" firstAttribute="leading" secondItem="kI0-dM-TD7" secondAttribute="leading" id="AE1-lM-qGJ"/>
                             <constraint firstItem="eYM-BX-sJb" firstAttribute="centerX" secondItem="BAv-XY-w52" secondAttribute="centerX" constant="-60" id="Fnm-Uz-iG4"/>
+                            <constraint firstItem="20q-ON-OK6" firstAttribute="centerY" secondItem="Mvs-4c-gOR" secondAttribute="centerY" id="G0K-E6-B3T"/>
                             <constraint firstAttribute="trailing" secondItem="hPL-m3-txy" secondAttribute="trailing" constant="8" id="HN1-ht-iap"/>
                             <constraint firstItem="Mvs-4c-gOR" firstAttribute="leading" secondItem="LBN-4i-pIr" secondAttribute="leading" constant="8" id="Hif-eR-qqO"/>
                             <constraint firstItem="F5R-xd-YDh" firstAttribute="top" secondItem="GmR-uJ-kOR" secondAttribute="bottom" id="Hk2-uP-WLv"/>
@@ -1372,6 +1375,7 @@ Cg
                             <constraint firstItem="MoZ-iz-hEA" firstAttribute="top" secondItem="V8Y-Y7-bHR" secondAttribute="bottom" constant="8" id="lew-ok-Z4u"/>
                             <constraint firstItem="7iH-0f-nt0" firstAttribute="width" secondItem="ra7-mN-VaX" secondAttribute="width" id="o9o-DE-JFA"/>
                             <constraint firstItem="ra7-mN-VaX" firstAttribute="leading" secondItem="7iH-0f-nt0" secondAttribute="trailing" constant="20" id="oxg-Xj-o6h"/>
+                            <constraint firstItem="20q-ON-OK6" firstAttribute="leading" secondItem="Mvs-4c-gOR" secondAttribute="trailing" id="pGD-rS-LXP"/>
                             <constraint firstItem="BAv-XY-w52" firstAttribute="top" secondItem="zvN-A4-CwM" secondAttribute="bottom" id="pPA-GU-ZJE"/>
                             <constraint firstItem="F5R-xd-YDh" firstAttribute="top" secondItem="eYM-BX-sJb" secondAttribute="bottom" constant="15" id="pc0-ig-7gk"/>
                             <constraint firstAttribute="trailing" secondItem="BAv-XY-w52" secondAttribute="trailing" id="roM-4m-e7n"/>
@@ -1390,6 +1394,10 @@ Cg
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="0bC-Ha-x5w"/>
+                                <exclude reference="AE1-lM-qGJ"/>
+                                <exclude reference="aBz-EV-KUS"/>
+                                <exclude reference="cFf-Va-lSX"/>
                                 <exclude reference="Fnm-Uz-iG4"/>
                             </mask>
                         </variation>

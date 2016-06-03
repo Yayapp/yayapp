@@ -199,7 +199,7 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
         }
         
         self.date?.text = self.dateFormatter.stringFromDate(self.event.startDate)
-        self.distance?.text = distanceBetween > 0 ? "\(distanceStr)km" : nil
+        self.distance?.text = distanceBetween > 0 ? " ●\(distanceStr)km" : nil
 
         CLLocation(latitude: self.event.location.latitude, longitude: self.event.location.longitude).getLocationString(nil, button: location, timezoneCompletion: nil)
 
