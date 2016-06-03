@@ -93,7 +93,7 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
             }
         }
 
-        dateFormatter.dateFormat = "EEE dd MMM 'at' H:mm"
+        dateFormatter.dateFormat = "EEE dd MMM '@' H:mm"
         ParseHelper.fetchEvent(event.objectId!, completion: { [weak self] fetchedEvent, error in
             guard let fetchedEvent = fetchedEvent as? Event where error == nil else {
                 MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
