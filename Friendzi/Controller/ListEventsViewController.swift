@@ -164,7 +164,7 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
         cllocation.getLocationString(cell.location, button: nil, timezoneCompletion: nil)
 
         cell.date?.text = dateFormatter.stringFromDate(event.startDate)
-        cell.howFar?.text = distanceBetween > 0 ? "\(distanceStr)km" : nil
+        cell.howFar?.text = distanceBetween > 0 ? " ● \(distanceStr)km" : nil
         
         if let photoURLString = event.photo.url,
             photoURL = NSURL(string: photoURLString) {
