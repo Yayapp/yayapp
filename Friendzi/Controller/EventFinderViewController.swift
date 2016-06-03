@@ -16,35 +16,34 @@ final class EventFinderViewController: UIViewController, UIAlertViewDelegate, Ch
 
     private let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     private var gotoMainTabBarScreen: (() -> Void)?
-    
+}
+
+ extension EventFinderViewController {
+    //MARK:- Action Buttons
     @IBAction func openLocationPicker(sender: AnyObject) {
         guard let map = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("ChooseLocationViewController") as? ChooseLocationViewController else {
             return
         }
-
         map.delegate = self
         map.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
-        map.setEditing (true,animated: true)
+        map.setEditing (true, animated: true)
         presentViewController(map, animated: true, completion: nil)
     }
 
     func madeLocationChoice(coordinates: CLLocationCoordinate2D){
         CLLocation(latitude: coordinates.latitude, longitude: coordinates.longitude).getLocationString(nil, button: location, timezoneCompletion: nil)
-        
-            ParseHelper.sharedInstance.currentUser!.location = GeoPoint(latitude: coordinates.latitude, longitude: coordinates.longitude)
-
+        ParseHelper.sharedInstance.currentUser!.location = GeoPoint(latitude: coordinates.latitude, longitude: coordinates.longitude)
         ParseHelper.saveObject(ParseHelper.sharedInstance.currentUser!, completion: nil)
         appDelegate.gotoMainTabBarScreen()
     }
 
     @IBAction func allowAction(sender: AnyObject) {
-        ParseHelper.geoPointForCurrentLocationInBackground( {
-            (geoPoint: GeoPoint?, error: NSError?) in
+        ParseHelper.geoPointForCurrentLocationInBackground({ geoPoint, error in
             if (error == nil) {
                 ParseHelper.sharedInstance.currentUser!.location = geoPoint
                 ParseHelper.saveObject(ParseHelper.sharedInstance.currentUser!, completion: nil)
-
                 self.appDelegate.gotoMainTabBarScreen()
+
             } else {
                 MessageToUser.showDefaultErrorMessage("Can't retreive location automatically. Please choose location manually", delegate: self)
             }
@@ -52,11 +51,6 @@ final class EventFinderViewController: UIViewController, UIAlertViewDelegate, Ch
     }
 
     func alertView(View: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-        switch buttonIndex {
-        default:
-            openLocationPicker(true)
-            
-        }
+        openLocationPicker(true)
     }
 }
-

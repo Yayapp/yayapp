@@ -32,6 +32,8 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
     @IBOutlet private weak var switherPlaceholderTopSpace: NSLayoutConstraint?
     @IBOutlet private weak var attendButton: UIButton?
     @IBOutlet private weak var attendButtonHeight: NSLayoutConstraint?
+    @IBOutlet private weak var editEventButton: UIButton?
+    @IBOutlet private weak var cancelEventButton: UIButton?
 
     private let dateFormatter = NSDateFormatter()
     private var currentLocation:CLLocation!
@@ -67,32 +69,15 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
     }
 
     var attendedThisEvent: Bool?
-
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        if let attended1 = attended1, attended2 = attended2, attended3 = attended3, attended4 = attended4 {
-            attendeeButtons = [attended1,attended2,attended3,attended4]
-        }
+        setupUI()
 
         NSNotificationCenter.defaultCenter().addObserver(self,
                                                          selector: #selector(updateAttendUI),
                                                          name: Constants.groupPendingStatusChangedNotification,
                                                          object: nil)
 
-        attendState = .Hidden
-
-        chatButton?.enabled = false
-        switherPlaceholderTopSpace?.constant = view.bounds.width / 160 * 91
-        
-        descr?.textContainerInset = UIEdgeInsetsMake(10, 10, 10, 10)
-
-        title = event.name
-
-        let shareButton = UIBarButtonItem(title: "Invite".localized, style: .Plain, target: self, action: #selector(EventDetailsViewController.shareEvent))
-        shareButton.tintColor = Color.PrimaryActiveColor
-        navigationItem.setRightBarButtonItem(shareButton, animated: false)
-        
         if ParseHelper.sharedInstance.currentUser?.objectId == event.owner!.objectId {
             eventActionButton?.setImage(UIImage(named: "edit_icon"), forState: .Normal)
             eventActionButton?.tintColor = Color.PrimaryActiveColor
@@ -109,7 +94,6 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
         }
 
         dateFormatter.dateFormat = "EEE dd MMM 'at' H:mm"
-
         ParseHelper.fetchEvent(event.objectId!, completion: { [weak self] fetchedEvent, error in
             guard let fetchedEvent = fetchedEvent as? Event where error == nil else {
                 MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
@@ -167,8 +151,7 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
                     attendeeButton?.addTarget(self, action: #selector(EventDetailsViewController.attendeeProfile(_:)), forControlEvents: .TouchUpInside)
                     attendeeButton?.tag = index
 
-                    if let attendeeAvatarURLString = attendee.avatar?.url,
-                        attendeeAvatarURL = NSURL(string: attendeeAvatarURLString) {
+                    if let attendeeAvatarURLString = attendee.avatar?.url, attendeeAvatarURL = NSURL(string: attendeeAvatarURLString) {
                         attendeeButton?.sd_setImageWithURL(attendeeAvatarURL, forState: .Normal, completed: { (_, _, _, _) in
                             attendeeButton?.hidden = false
                         })
@@ -271,7 +254,7 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
             return
         }
 
-        if (attendees.count>0) {
+        if (attendees.count > 0) {
             guard let controller: MessagesTableViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("MessagesTableViewController") as? MessagesTableViewController else {
                 return
             }
@@ -380,28 +363,6 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
         navigationController?.pushViewController(userProfileViewController, animated: true)
     }
 
-    //MARK: - Setup UI
-    func updateAttendUI() {
-        guard let currentUserID = ParseHelper.sharedInstance.currentUser?.objectId,
-            groupID = event.objectId else {
-                return
-        }
-
-        let isAttendedToGroup = event.attendeeIDs.contains(currentUserID)
-
-        if ParseHelper.sharedInstance.currentUser == event.owner || event.attendeeIDs.count >= event.limit {
-            attendState = .Hidden
-        } else if ParseHelper.sharedInstance.currentUser?.pendingGroupIDs.contains(groupID) == true {
-            attendState = .Pending
-        } else if isAttendedToGroup {
-            attendState = .Leave
-        } else {
-            attendState = .Join
-        }
-
-        descr?.hidden = !isAttendedToGroup
-    }
-
     //MARK: - EventChangeDelegate
     
     func eventCreated(event:Event) {
@@ -423,15 +384,7 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
     }
     
     func editEvent() {
-        guard let vc = UIStoryboard.createEventTab()?.instantiateViewControllerWithIdentifier("CreateEventViewController") as? CreateEventViewController,
-            currentUser = ParseHelper.sharedInstance.currentUser else {
-                return
-        }
 
-        vc.isEditMode = event.owner?.objectId == currentUser.objectId
-        vc.event = event
-        vc.delegate = self
-        navigationController?.pushViewController(vc, animated: true)
     }
     
     @IBAction func openMapForPlace(sender: AnyObject) {
@@ -504,5 +457,70 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
         shareItemVC.item = event
 
         presentViewController(shareItemVC, animated: true, completion: nil)
+    }
+}
+
+private extension EventDetailsViewController {
+    //MARK:- Action Buttons
+    @IBAction func editEventButtonTapped(sender: UIButton) {
+        guard let editEventViewController = UIStoryboard.createEventTab()?.instantiateViewControllerWithIdentifier(CreateEventViewController.storyboardId) as? CreateEventViewController,
+            currentUser = ParseHelper.sharedInstance.currentUser else {
+                return
+        }
+
+        editEventViewController.isEditMode = event.owner?.objectId == currentUser.objectId
+        editEventViewController.event = event
+        editEventViewController.delegate = self
+        navigationController?.pushViewController(editEventViewController , animated: true)
+    }
+
+    @IBAction func cancelEventButtonTapped(sender: UIButton) {
+    }
+}
+
+extension EventDetailsViewController {
+    //MARK:- UI Setup 
+    func setupUI() {
+        editEventButton?.layer.borderWidth = 2
+        editEventButton?.layer.cornerRadius = 2
+        editEventButton?.layer.borderColor = UIColor.lightGrayColor().CGColor
+
+        cancelEventButton?.layer.borderWidth = 2
+        cancelEventButton?.layer.cornerRadius = 2
+        cancelEventButton?.layer.borderColor = UIColor.lightGrayColor().CGColor
+
+        if let attended1 = attended1, attended2 = attended2, attended3 = attended3, attended4 = attended4 {
+            attendeeButtons = [attended1,attended2,attended3,attended4]
+        }
+
+        attendState = .Hidden
+        chatButton?.enabled = false
+        switherPlaceholderTopSpace?.constant = view.bounds.width / 160 * 91
+        descr?.textContainerInset = UIEdgeInsetsMake(10, 10, 10, 10)
+        title = event.name
+
+        let shareButton = UIBarButtonItem(title: "Invite".localized, style: .Plain, target: self, action: #selector(EventDetailsViewController.shareEvent))
+        shareButton.tintColor = Color.PrimaryActiveColor
+        navigationItem.setRightBarButtonItem(shareButton, animated: false)
+    }
+
+    func updateAttendUI() {
+        guard let currentUserID = ParseHelper.sharedInstance.currentUser?.objectId,
+            groupID = event.objectId else {
+                return
+        }
+
+        let isAttendedToGroup = event.attendeeIDs.contains(currentUserID)
+        if ParseHelper.sharedInstance.currentUser == event.owner || event.attendeeIDs.count >= event.limit {
+            attendState = .Hidden
+        } else if ParseHelper.sharedInstance.currentUser?.pendingGroupIDs.contains(groupID) == true {
+            attendState = .Pending
+        } else if isAttendedToGroup {
+            attendState = .Leave
+        } else {
+            attendState = .Join
+        }
+
+        descr?.hidden = !isAttendedToGroup
     }
 }

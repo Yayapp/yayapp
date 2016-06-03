@@ -15,7 +15,7 @@ protocol ChooseLocationDelegate : NSObjectProtocol {
 
 final class ChooseLocationViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UISearchBarDelegate {
     static let storyboardID = "ChooseLocationViewController"
-    
+       
     @IBOutlet private weak var searchBar: UISearchBar!
     @IBOutlet private weak var mapView: MKMapView!
  

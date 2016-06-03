@@ -13,6 +13,8 @@
 
  final class CreateEventViewController: KeyboardAnimationHelper, CategoryPickerDelegate, ChooseEventPictureDelegate, WriteAboutDelegate, UIPopoverPresentationControllerDelegate {
 
+    static let storyboardId = "CreateEventViewController"
+
     @IBOutlet private weak var eventImage: UIImageView?
     @IBOutlet private weak var pickCategory: UIButton?
     @IBOutlet private weak var eventPhoto: UIButton?
