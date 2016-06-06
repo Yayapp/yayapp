@@ -8,6 +8,7 @@
 
 import UIKit
 import MessageUI
+import SVProgressHUD
 
 final class EventDetailsViewController: UIViewController, MFMailComposeViewControllerDelegate, EventChangeDelegate {
 
@@ -69,6 +70,7 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
     }
 
     var attendedThisEvent: Bool?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -79,8 +81,9 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
                                                          object: nil)
 
         if ParseHelper.sharedInstance.currentUser?.objectId == event.owner!.objectId {
-            eventActionButton?.setImage(UIImage(named: "edit_icon"), forState: .Normal)
-            eventActionButton?.tintColor = Color.PrimaryActiveColor
+            editEventButton?.hidden = false
+            cancelEventButton?.hidden = false
+
         } else {
             if let user = ParseHelper.sharedInstance.currentUser {
                 ParseHelper.countReports(event, user: user, completion: { [weak self]
@@ -475,6 +478,28 @@ private extension EventDetailsViewController {
     }
 
     @IBAction func cancelEventButtonTapped(sender: UIButton) {
+        let alert = UIAlertController(title: "Cancel Event".localized, message: "".localized, preferredStyle: .ActionSheet)
+        let cancelAction = UIAlertAction(title: "Nope".localized, style: .Cancel, handler: nil)
+        let deleteAction = UIAlertAction(title: "Cancel Event", style: .Destructive) { action in
+            SVProgressHUD.show()
+            ParseHelper.removeUserSingleEvent(self.event, completion: { success, error in
+                SVProgressHUD.dismiss()
+                if success {
+                    self.navigationController?.popViewControllerAnimated(true)
+                }
+
+                if let _ = error {
+                    UIAlertController.showSimpleAlertViewWithText("Can not cancel this event right now. Please try again later".localized,
+                        title: "Oooops".localized,
+                        controller: self,
+                        completion: nil,
+                        alertHandler: nil)
+                }
+            })
+        }
+        alert.addAction(cancelAction)
+        alert.addAction(deleteAction)
+        self.navigationController?.presentViewController(alert, animated: true, completion: nil)
     }
 }
 

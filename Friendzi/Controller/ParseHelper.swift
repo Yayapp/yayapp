@@ -696,6 +696,25 @@ final class ParseHelper {
         })
     }
 
+    class func removeUserSingleEvent(event: Event, completion: (success: Bool, error: NSError?) -> Void) {
+        guard let eventId = event.objectId else {
+            completion(success: false, error: nil)
+            return
+        }
+        let query = PFQuery(className: eventParseClassName)
+        query.whereKey("objectId", equalTo: eventId)
+        query.getFirstObjectInBackgroundWithBlock { event, error in
+            guard let event = event else {
+                completion(success: false, error: error)
+                return
+            }
+
+            event.deleteInBackgroundWithBlock({ success, error in
+                completion(success: success, error: error)
+            })
+        }
+    }
+
     class func removeUserEvents(user: User, block: EventsResultBlock?) {
         let query = PFQuery(className: eventParseClassName)
         query.whereKey("owner", equalTo: PFUser(withoutDataUsingUser: user))
@@ -711,7 +730,6 @@ final class ParseHelper {
                 }
                 block!(nil, error)
             }
-
         })
     }
 
