@@ -11,9 +11,9 @@ import MessageUI
 
 final class MainRootViewController: UIViewController, MFMailComposeViewControllerDelegate, EventChangeDelegate, ListEventsDelegate {
 
-    @IBOutlet weak var today: UIButton?
-    @IBOutlet weak var tomorrow: UIButton?
-    @IBOutlet weak var thisWeek: UIButton?
+    @IBOutlet weak var todayButton: UIButton?
+    @IBOutlet weak var tomorrowButton: UIButton?
+    @IBOutlet weak var thisWeekButton: UIButton?
     @IBOutlet weak var todayUnderline: UIView?
     @IBOutlet weak var tomorrowUnderline: UIView?
     @IBOutlet weak var thisWeekUnderline: UIView?
@@ -43,16 +43,14 @@ final class MainRootViewController: UIViewController, MFMailComposeViewControlle
             return
         }
 
-        today(true)
+        handleTableViewForTodayEvents()
     }
 
     override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+
         if Prefs.getPref(Prefs.tut) == false {
             Prefs.setPref(Prefs.tut)
-        }
-
-        if eventsData.isEmpty {
-            today(true)
         }
     }
 
@@ -132,34 +130,6 @@ final class MainRootViewController: UIViewController, MFMailComposeViewControlle
     func eventRemoved(event: Event) {
     }
 
-    @IBAction func today(sender: AnyObject) {
-        setupUIForTodayTab()
-        segmentChanged()
-    }
-
-    @IBAction func tomorrow(sender: AnyObject) {
-        selectedSegment = 1
-        todayUnderline?.hidden = true
-        tomorrowUnderline?.hidden = false
-        thisWeekUnderline?.hidden = true
-        today?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        tomorrow?.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
-        thisWeek?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-
-        segmentChanged()
-    }
-
-    @IBAction func thisWeek(sender: AnyObject) {
-        selectedSegment = 2
-        todayUnderline?.hidden = true
-        tomorrowUnderline?.hidden = true
-        thisWeekUnderline?.hidden = false
-        today?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        tomorrow?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        thisWeek?.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
-        segmentChanged()
-    }
-
     func showMessages() {
         guard let controller: ConversationsTableViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("ConversationsTableViewController") as? ConversationsTableViewController else {
             return
@@ -199,7 +169,10 @@ final class MainRootViewController: UIViewController, MFMailComposeViewControlle
     }
 
     func showSendMailErrorAlert() {
-        let sendMailErrorAlert = UIAlertView(title: "Could Not Send Email", message: "Your device could not send e-mail.  Please check e-mail configuration and try again.", delegate: self, cancelButtonTitle: "OK")
+        let sendMailErrorAlert = UIAlertView(title: "Could Not Send Email".localized,
+                                             message: "Your device could not send e-mail.  Please check e-mail configuration and try again.".localized,
+                                             delegate: self,
+                                             cancelButtonTitle: "OK")
         sendMailErrorAlert.show()
     }
 
@@ -272,19 +245,6 @@ final class MainRootViewController: UIViewController, MFMailComposeViewControlle
         segmentChanged()
     }
 
-    //MARK: - UI Helpers
-    func setupUIForTodayTab() {
-        selectedSegment = 0
-
-        todayUnderline?.hidden = false
-        tomorrowUnderline?.hidden = true
-        thisWeekUnderline?.hidden = true
-
-        today?.setTitleColor(Color.PrimaryActiveColor, forState: .Normal)
-        tomorrow?.setTitleColor(.blackColor(), forState: .Normal)
-        thisWeek?.setTitleColor(.blackColor(), forState: .Normal)
-    }
-
     //MARK: - Notification Handlers
     func handleUserLogout() {
         navigationController?.popToRootViewControllerAnimated(false)
@@ -292,6 +252,58 @@ final class MainRootViewController: UIViewController, MFMailComposeViewControlle
         isMapView = false
         eventsData.removeAll()
         chosenCategories.removeAll()
-        setupUIForTodayTab()
+        handleTableViewForTodayEvents()
+    }
+}
+
+private extension MainRootViewController {
+    //MARK:- Action Buttons
+    @IBAction func todayEventsButtonTapped(sender: UIButton) {
+        handleTableViewForTodayEvents()
+    }
+
+    @IBAction func tomorrow(sender: UIButton) {
+        handleTableViewForTomorrowEvents()
+    }
+
+    @IBAction func thisWeek(sender: UIButton) {
+        handleTableViewForLaterEvents()
+    }
+}
+
+private extension MainRootViewController {
+    //MARK:- UI Helpers
+    //TODO:- The tab switching process would be better handled if the logic its embeded within an enum. Improves readability and logic handling.
+    func handleTableViewForTodayEvents() {
+        selectedSegment = 0
+        todayUnderline?.hidden = false
+        tomorrowUnderline?.hidden = true
+        thisWeekUnderline?.hidden = true
+        todayButton?.setTitleColor(Color.PrimaryActiveColor, forState: .Normal)
+        tomorrowButton?.setTitleColor(.blackColor(), forState: .Normal)
+        thisWeekButton?.setTitleColor(.blackColor(), forState: .Normal)
+        segmentChanged()
+    }
+
+    func handleTableViewForTomorrowEvents() {
+        selectedSegment = 1
+        todayUnderline?.hidden = true
+        tomorrowUnderline?.hidden = false
+        thisWeekUnderline?.hidden = true
+        todayButton?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        tomorrowButton?.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
+        thisWeekButton?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        segmentChanged()
+    }
+
+    func handleTableViewForLaterEvents() {
+        selectedSegment = 2
+        todayUnderline?.hidden = true
+        tomorrowUnderline?.hidden = true
+        thisWeekUnderline?.hidden = false
+        todayButton?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        tomorrowButton?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        thisWeekButton?.setTitleColor(Color.PrimaryActiveColor, forState: UIControlState.Normal)
+        segmentChanged()
     }
 }

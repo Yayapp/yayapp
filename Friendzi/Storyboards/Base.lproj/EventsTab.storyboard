@@ -40,7 +40,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="today:" destination="oZ6-y1-Cce" eventType="touchUpInside" id="ObY-Pc-vMW"/>
+                                    <action selector="todayEventsButtonTapped:" destination="oZ6-y1-Cce" eventType="touchUpInside" id="Tq0-gm-mHj"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qes-Wv-eyD">
@@ -132,17 +132,16 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="container" destination="Dgr-r1-KUu" id="nVj-Gc-fyL"/>
-                        <outlet property="thisWeek" destination="Qes-Wv-eyD" id="4kb-8p-ud5"/>
                         <outlet property="thisWeekUnderline" destination="yIE-BM-zme" id="8bc-dT-CrT"/>
-                        <outlet property="today" destination="poT-5r-0lO" id="cZs-aN-toM"/>
+                        <outlet property="todayButton" destination="poT-5r-0lO" id="p2g-NW-hzY"/>
                         <outlet property="todayUnderline" destination="W1c-qh-fZm" id="1hl-qa-eIF"/>
-                        <outlet property="tomorrow" destination="6r3-cz-zcJ" id="Pds-qJ-wu0"/>
+                        <outlet property="tomorrowButton" destination="6r3-cz-zcJ" id="SNU-sl-J0e"/>
                         <outlet property="tomorrowUnderline" destination="AqP-TZ-QVM" id="fzi-Mg-JI0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hLN-Y2-Byg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2575" y="-1701"/>
+            <point key="canvasLocation" x="2560" y="-1709"/>
         </scene>
         <!--MainNavigationController-->
         <scene sceneID="gwg-3g-UCN">
