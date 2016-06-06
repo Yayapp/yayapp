@@ -228,7 +228,6 @@ final class ParseHelper {
         guard let currentUser = PFUser.currentUser(),
             let currentUserID = PFUser.currentUser()?.objectId else {
                 block?(nil, nil)
-
                 return
         }
 

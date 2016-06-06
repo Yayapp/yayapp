@@ -303,9 +303,6 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="done"/>
                             </textField>
-                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="Pbu-GI-iAI">
-                                <rect key="frame" x="150" y="230" width="20" height="20"/>
-                            </activityIndicatorView>
                             <button contentMode="top" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8p4-p1-lVB">
                                 <rect key="frame" x="118" y="104" width="84" height="92"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -401,14 +398,12 @@
                             <constraint firstItem="i9h-WN-00Z" firstAttribute="leading" secondItem="1eC-qw-8gH" secondAttribute="leading" id="Gpf-CU-Scq"/>
                             <constraint firstItem="tj9-jR-3UQ" firstAttribute="top" secondItem="j63-il-Zeh" secondAttribute="bottom" constant="8" id="KMo-a6-517"/>
                             <constraint firstItem="j63-il-Zeh" firstAttribute="leading" secondItem="1eC-qw-8gH" secondAttribute="leading" id="Lo4-eO-axP"/>
-                            <constraint firstAttribute="centerX" secondItem="Pbu-GI-iAI" secondAttribute="centerX" id="RlK-3Z-qG0"/>
                             <constraint firstItem="kBa-KL-u34" firstAttribute="leading" secondItem="1eC-qw-8gH" secondAttribute="leading" id="VdK-1Z-iRZ"/>
                             <constraint firstAttribute="trailing" secondItem="j63-il-Zeh" secondAttribute="trailing" id="X5A-35-ldc"/>
                             <constraint firstItem="i9h-WN-00Z" firstAttribute="top" secondItem="tj9-jR-3UQ" secondAttribute="bottom" constant="8" id="Xvz-3a-JLX"/>
                             <constraint firstAttribute="trailing" secondItem="i9h-WN-00Z" secondAttribute="trailing" id="a22-e7-BDd"/>
                             <constraint firstItem="aa6-Sz-Hgc" firstAttribute="width" secondItem="tj9-jR-3UQ" secondAttribute="width" id="bK6-xO-3bO"/>
                             <constraint firstItem="j63-il-Zeh" firstAttribute="top" secondItem="tL9-aq-0oF" secondAttribute="bottom" constant="8" id="bOp-Km-Iy0"/>
-                            <constraint firstAttribute="centerY" secondItem="Pbu-GI-iAI" secondAttribute="centerY" id="btY-Ri-enL"/>
                             <constraint firstAttribute="trailing" secondItem="tj9-jR-3UQ" secondAttribute="trailing" id="cfK-q6-eUf"/>
                             <constraint firstItem="aa6-Sz-Hgc" firstAttribute="leading" secondItem="1eC-qw-8gH" secondAttribute="leading" id="dsV-6a-CII"/>
                             <constraint firstItem="rOf-tc-sZZ" firstAttribute="top" secondItem="i9h-WN-00Z" secondAttribute="bottom" constant="8" id="eBy-0s-HfT"/>
@@ -439,7 +434,6 @@
                         <outlet property="name" destination="j63-il-Zeh" id="VTS-2m-Atj"/>
                         <outlet property="privateButton" destination="tj9-jR-3UQ" id="A4q-JF-fLG"/>
                         <outlet property="publicButton" destination="aa6-Sz-Hgc" id="YLF-Z2-K1R"/>
-                        <outlet property="spinner" destination="Pbu-GI-iAI" id="AYJ-d7-8cD"/>
                         <segue destination="3vG-4K-gdL" kind="unwind" identifier="chooseCategorySegue" unwindAction="unwindToChooseCategory:" id="5hc-sH-XDG"/>
                     </connections>
                 </viewController>
@@ -747,7 +741,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9ob-oo-n06" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2983" y="-1509"/>
+            <point key="canvasLocation" x="2999" y="-1520"/>
         </scene>
         <!--Messages Table View Controller-->
         <scene sceneID="lrQ-df-IHG">

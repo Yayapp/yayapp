@@ -119,8 +119,10 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
     }
 
     override func reloadAll(eventsList:[Event]) {
-        eventsData = eventsList
-        events?.reloadData()
+        if eventsList != eventsData {
+            eventsData = eventsList
+            events?.reloadData()
+        }
     }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {

@@ -10,7 +10,7 @@ import UIKit
 import TTGTagCollectionView
 import SVProgressHUD
 
-final class UserProfileViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate,   UIPopoverPresentationControllerDelegate, TTGTextTagCollectionViewDelegate {
+final class UserProfileViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, TTGTextTagCollectionViewDelegate {
     
     @IBOutlet private weak var name: UILabel?
     @IBOutlet private weak var avatar: UIImageView?
@@ -38,7 +38,7 @@ final class UserProfileViewController: UITableViewController, UIImagePickerContr
 
         tableView.estimatedRowHeight = 100.0
         tableView.rowHeight = UITableViewAutomaticDimension
-        
+
         interestsCollection?.enableTagSelection = false
         interestsCollection?.tagTextColor = UIColor.blackColor()
         interestsCollection?.tagSelectedTextColor = Color.PrimaryActiveColor
@@ -132,9 +132,7 @@ final class UserProfileViewController: UITableViewController, UIImagePickerContr
             }
         })
 
-        ParseHelper.getUserCategories(user, block: {
-            categories, error in
-
+        ParseHelper.getUserCategories(user, block: { categories, error in
             if error == nil {
                 self.interestsData = categories
                 var names:[String] = []
@@ -153,7 +151,6 @@ final class UserProfileViewController: UITableViewController, UIImagePickerContr
             avatar?.layer.borderColor = UIColor.whiteColor().CGColor
             avatar?.sd_setImageWithURL(photoURL)
         }
-
 
         if user.about != nil {
             setAboutMe(user.about!)
@@ -234,9 +231,7 @@ final class UserProfileViewController: UITableViewController, UIImagePickerContr
                 let report = Report()
                 report.reportedUser = self.user
                 report.user = currentUser
-                ParseHelper.saveObject(report, completion: { success, error in
-                    
-                })
+                ParseHelper.saveObject(report, completion: nil)
             }
 
             self.presentViewController(reportViewController, animated: true, completion: nil)

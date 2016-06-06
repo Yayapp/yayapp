@@ -48,7 +48,6 @@ final class MainRootViewController: UIViewController, MFMailComposeViewControlle
 
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        segmentChanged()
         if Prefs.getPref(Prefs.tut) == false {
             Prefs.setPref(Prefs.tut)
         }

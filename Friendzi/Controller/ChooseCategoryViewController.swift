@@ -325,9 +325,8 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if(segue.identifier == "details") {
-            guard let vc = segue.destinationViewController as? GroupDetailsViewController,
-                indexPath = sender as? NSIndexPath else {
-                    return
+            guard let vc = segue.destinationViewController as? GroupDetailsViewController, indexPath = sender as? NSIndexPath else {
+                return
             }
 
             vc.delegate = self

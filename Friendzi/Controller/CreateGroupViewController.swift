@@ -21,7 +21,6 @@ final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDe
     @IBOutlet private weak var eventImage: UIImageView?
     @IBOutlet private weak var eventPhoto: UIButton?
     @IBOutlet private weak var location: UIButton?
-    @IBOutlet private weak var spinner: UIActivityIndicatorView?
     @IBOutlet private weak var name: UITextField?
     @IBOutlet private weak var descr: UIButton?
     @IBOutlet private weak var publicButton: UIButton?
@@ -99,6 +98,8 @@ final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDe
     }
 
     @IBAction func addLocationButtonPressed(sender: AnyObject) {
+        name?.resignFirstResponder()
+
         let locationPicker = LocationPickerViewController()
         locationPicker.currentLocationButtonBackground = .whiteColor()
         locationPicker.mapType = .Standard
@@ -188,9 +189,7 @@ final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDe
         } else if chosenPhoto == nil {
             MessageToUser.showDefaultErrorMessage("Please choose photo")
         } else {
-            spinner?.startAnimating()
-            createButton?.enabled = false
-            
+
             if !isEditMode {
                 let eventACL = ObjectACL()
                 eventACL.publicWriteAccess = true
@@ -221,14 +220,18 @@ final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDe
                 group.location = GeoPoint(latitude: latitude, longitude: longitude)
             }
 
-            ParseHelper.saveObject(group, completion: {
-                (result, error) in
+            SVProgressHUD.show()
+            ParseHelper.saveObject(group, completion: { result, error in
+                SVProgressHUD.dismiss()
                 if error == nil {
                     self.delegate.groupCreated(group)
                     self.navigationController?.popViewControllerAnimated(true)
                 } else {
-                    self.spinner?.stopAnimating()
-                    self.createButton?.enabled = false
+                    UIAlertController.showSimpleAlertViewWithText("Group could not be created at this moment.\n Please try again later".localized,
+                        title: "Oooops".localized,
+                        controller: self,
+                        completion: nil,
+                        alertHandler: nil)
                 }
             })
         }
@@ -238,16 +241,15 @@ final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDe
         let deleteGroupAlert = UIAlertController(title: nil, message: "Are you sure you want to delete your group?".localized, preferredStyle: .Alert)
         deleteGroupAlert.addAction(UIAlertAction(title: "Delete".localized, style: .Destructive, handler: { [unowned self] _ in
             SVProgressHUD.show()
-
             ParseHelper.deleteObject(self.group, completion: { [weak self] _, error in
                 SVProgressHUD.dismiss()
                 guard error == nil else {
                     MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
-
+                    print(error)
                     return
                 }
 
-                self?.performSegueWithIdentifier("chooseCategorySegue", sender: self)
+                self?.navigationController?.popViewControllerAnimated(true)
                 })
         }))
         deleteGroupAlert.addAction(UIAlertAction(title: "Cancel".localized, style: .Cancel, handler: nil))
