@@ -1283,7 +1283,7 @@ Cg
                                     <segue destination="xKi-eZ-Rrf" kind="embed" identifier="chat" id="Uy6-AU-NUG"/>
                                 </connections>
                             </containerView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eYM-BX-sJb">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eYM-BX-sJb">
                                 <rect key="frame" x="46" y="478" width="100" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="1uw-92-IbO"/>
@@ -1296,7 +1296,7 @@ Cg
                                     <action selector="editEventButtonTapped:" destination="mnu-Sh-eEp" eventType="touchUpInside" id="wAo-7P-v5o"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3sB-LJ-0Vy">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3sB-LJ-0Vy">
                                 <rect key="frame" x="159" y="478" width="130" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="130" id="S4w-jK-7r0"/>
