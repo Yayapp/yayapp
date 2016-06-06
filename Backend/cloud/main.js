@@ -464,13 +464,12 @@ Parse.Cloud.afterSave("Request", function(request) {
                         var pushQuery = new Parse.Query(Parse.Installation);
                         pushQuery.equalTo('user', user);
 
-                        var refreshContentKey = isEvent ? "needsRefreshEventsContent" : "needsRefreshGroupsContent"
-
                         Parse.Push.send({
                         where: pushQuery,
                         data: {
-                            refreshContentKey : true,
-                        alert: "Attendance to happening \"" + itemName + "\"" + acceptedState,
+                            "needsRefreshEventsContent" : 1,
+                            "needsRefreshGroupsContent" : 1,
+                        alert: "Attendance to event \"" + itemName + "\" " + acceptedState,
                             "content-available": 1,
                             "sound":"layerbell.caf",
                         }
@@ -490,7 +489,6 @@ Parse.Cloud.afterSave("Request", function(request) {
         }
     })
 })
-
 
 Parse.Cloud.beforeDelete("Request", function(request, response) {
     Parse.Cloud.useMasterKey()

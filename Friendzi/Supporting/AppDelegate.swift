@@ -83,7 +83,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
         completionHandler(UIBackgroundFetchResult.NoData)
-        let success:Bool = false
+        let success: Bool = false
         if let _ = userInfo["event_id"] as? String {
             //                if (centerViewController != nil && centerViewController.viewControllers.last?.isKindOfClass(MessagesTableViewController) == true) {
             //                    let chat = centerViewController.viewControllers.last as! MessagesTableViewController
@@ -121,13 +121,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
 
-        if let needsRefreshGroupsContent = userInfo["needsRefreshGroupsContent"] as? Int
-            where needsRefreshGroupsContent == 1 {
+        if let needsRefreshGroupsContent = userInfo["needsRefreshGroupsContent"] as? Int where needsRefreshGroupsContent == 1 {
             NSNotificationCenter.defaultCenter().postNotificationName(Constants.groupPendingStatusChangedNotification, object: nil)
         }
 
-        if let needsRefreshEventsContent = userInfo["needsRefreshEventsContent"] as? Int
-            where needsRefreshEventsContent == 1 {
+        if let needsRefreshEventsContent = userInfo["needsRefreshEventsContent"] as? Int where needsRefreshEventsContent == 1 {
             NSNotificationCenter.defaultCenter().postNotificationName(Constants.eventPendingStatusChangedNotification, object: nil)
         }
     }
