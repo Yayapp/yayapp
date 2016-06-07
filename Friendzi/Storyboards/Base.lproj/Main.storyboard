@@ -1030,7 +1030,7 @@ Cg
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0sK-IW-vRG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1761" y="1013"/>
+            <point key="canvasLocation" x="1690" y="1050"/>
         </scene>
         <!--EventDetailsViewController-->
         <scene sceneID="cHW-R9-mPy">
