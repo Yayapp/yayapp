@@ -103,13 +103,15 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
 
         if let eventsListVC = UIStoryboard.main()?.instantiateViewControllerWithIdentifier(ListEventsViewController.storyboardID) as? ListEventsViewController {
             eventsListVC.eventsData = []
-            ParseHelper.queryEventsForCategories(ParseHelper.sharedInstance.currentUser!, categories: selectedCategoriesData, block: {
-                result, error in
-                if error == nil {
-                    eventsListVC.reloadAll(result!)
-                } else {
-                    MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+            ParseHelper.queryEventsForCategories(ParseHelper.sharedInstance.currentUser!, categories: selectedCategoriesData, block: { result, error in
+                guard let events = result else {
+                    if let error = error {
+                        MessageToUser.showDefaultErrorMessage(error.localizedDescription)
+                    }
+                    return
                 }
+
+                eventsListVC.reloadAll(events)
             })
 
             addChildViewController(eventsListVC)
@@ -128,7 +130,7 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
 
         descr?.textContainerInset = UIEdgeInsetsMake(10, 10, 10, 10)
 
-        if(ParseHelper.sharedInstance.currentUser?.objectId == group?.owner?.objectId) {
+        if ParseHelper.sharedInstance.currentUser?.objectId == group?.owner?.objectId {
             let editdone = UIBarButtonItem(image:UIImage(named: "edit_icon"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(GroupDetailsViewController.editGroup(_:)))
             editdone.tintColor = Color.PrimaryActiveColor
             self.navigationItem.setRightBarButtonItem(editdone, animated: false)
@@ -245,9 +247,7 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
                 self?.attendState = .Join
             }
 
-            if let shouldShow = isAttendedToGroup {
-                self?.descr?.hidden = !shouldShow
-            }
+            self?.descr?.hidden = isAttendedToGroup ?? false
             })
     }
 
@@ -295,7 +295,6 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
             attendState = .Join
         } else if attendState == .Join {
             attendState = group.isPrivate ? .Pending : .Leave
-
         }
 
         ParseHelper.changeStateOfCategory(group,
