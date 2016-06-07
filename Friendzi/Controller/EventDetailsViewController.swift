@@ -411,12 +411,12 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
         mapItem.openInMapsWithLaunchOptions(options)
         
     }
-    
+
     func reportButtonTapped() {
         guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as? BlurryAlertViewController else {
             return
         }
-        
+
         blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
         blurryAlertViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
         blurryAlertViewController.messageText = "You are about to flag this event for inappropriate content. Are you sure?"

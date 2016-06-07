@@ -128,9 +128,7 @@ final class LoginViewController: UIViewController, InstagramDelegate {
         SVProgressHUD.show()
 
         let permissions:[String] = ["email","user_about_me", "user_relationships", "user_birthday", "user_location"]
-        PFFacebookUtils.logInInBackgroundWithReadPermissions(permissions) {
-            (user: PFUser?, error: NSError?) -> Void in
-            
+        PFFacebookUtils.logInInBackgroundWithReadPermissions(permissions) { user, error in
             if error != nil {
                 SVProgressHUD.dismiss()
                 MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
@@ -157,19 +155,18 @@ final class LoginViewController: UIViewController, InstagramDelegate {
                             let url: NSURL = NSURL(string:"https://graph.facebook.com/\(fbUserId)/picture?width=200&height=200")!
                             let URLRequestNeeded = NSURLRequest(URL: url)
                             NSURLConnection.sendAsynchronousRequest(URLRequestNeeded, queue: NSOperationQueue.mainQueue(), completionHandler: { response, data, error in
+                                SVProgressHUD.dismiss()
                                 if error == nil {
                                     let picture = PFFile(name: "image.jpg", data: data!)
                                     ParseHelper.sharedInstance.currentUser!.avatar = File(parseFile: picture!)
                                     ParseHelper.saveObject(ParseHelper.sharedInstance.currentUser!, completion: nil)
                                 } else {
-                                    SVProgressHUD.dismiss()
                                     print("Error: \(error!.localizedDescription)")
                                 }
 
                                 if user.isNew {
                                     DataProxy.sharedInstance.setNeedsShowAllHints(true)
                                     self.doRegistration()
-
                                 } else {
                                     self.proceed()
                                 }
@@ -179,6 +176,7 @@ final class LoginViewController: UIViewController, InstagramDelegate {
                     graphConnection.start()
                 }
             }
+            SVProgressHUD.dismiss()
         }
     }
 
