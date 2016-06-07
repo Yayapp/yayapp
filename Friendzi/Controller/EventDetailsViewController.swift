@@ -109,16 +109,13 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
                 self?.attendState = .Hidden
             }
 
-            ParseHelper.fetchUsers(fetchedEvent.attendeeIDs.filter({ $0 != fetchedEvent.owner!.objectId }),
-                completion: { fetchedUsers, error in
+            ParseHelper.fetchUsers(fetchedEvent.attendeeIDs.filter({ $0 != fetchedEvent.owner!.objectId }), completion: { fetchedUsers, error in
                 guard let fetchedUsers = fetchedUsers where error == nil else {
                     MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
-
                     return
                 }
-
+                print(fetchedEvent.attendeeIDs.count)
                 self?.attendees = fetchedUsers
-
                 for index in 0 ..< (fetchedEvent.limit - 1) {
                     self?.attendeeButtons[index].setImage(UIImage(named: "upload_pic"), forState: .Normal)
                 }

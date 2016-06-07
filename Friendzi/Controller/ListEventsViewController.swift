@@ -145,7 +145,7 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
+
         let cell = events?.dequeueReusableCellWithIdentifier(EventsTableViewCell.reuseIdentifier) as! EventsTableViewCell
         let event = eventsData[indexPath.section]
         let cllocation = CLLocation(latitude: event.location.latitude, longitude: event.location.longitude)
@@ -164,21 +164,21 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
         cell.title?.text = event.name
         
         cllocation.getLocationString(cell.location, button: nil, timezoneCompletion: nil)
-
         cell.date?.text = dateFormatter.stringFromDate(event.startDate)
         cell.howFar?.text = distanceBetween > 0 ? " ● \(distanceStr)km" : nil
-        
+
         if let photoURLString = event.photo.url,
             photoURL = NSURL(string: photoURLString) {
             cell.picture?.sd_setImageWithURL(photoURL)
         }
 
-        ParseHelper.fetchObject(event.owner, completion: { (result, error) in
+        ParseHelper.fetchObject(event.owner, completion: { result, error in
             if error == nil {
                 if let avatarURLString = event.owner!.avatar?.url,
                     avatarURL = NSURL(string: avatarURLString) {
                     cell.author?.sd_setImageWithURL(avatarURL, forState: .Normal)
                 }
+
             } else {
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
@@ -189,28 +189,25 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
 
         let allAttendeeIDsWithoutOwner = event.attendeeIDs.filter({$0 != event.owner!.objectId})
         let attendeeIDs = allAttendeeIDsWithoutOwner[0..<min(allAttendeeIDsWithoutOwner.count, attendeeButtons.count)]
-        
+
         for (index, attendeeID) in attendeeIDs.enumerate() {
             let attendeeButton = attendeeButtons[index]
 
             attendeeButton.addTarget(self, action: #selector(ListEventsViewController.attendeeProfile(_:)), forControlEvents: .TouchUpInside)
-
             attendeeButton.tag = indexPath.section
             attendeeButton.titleLabel?.tag = index
 
-            ParseHelper.fetchUser(attendeeID, completion: {
-                result, error in
+            ParseHelper.fetchUser(attendeeID, completion: { result, error in
                 if error == nil {
                     if let attendeeAvatarURLString = result!.avatar?.url,
                         attendeeAvatarURL = NSURL(string: attendeeAvatarURLString) {
+                        attendeeButton.imageView?.image = UIImage(named: "upload_pic")
+                        attendeeButton.hidden = false
                         attendeeButton.sd_setImageWithURL(attendeeAvatarURL, forState: .Normal, completed: { (_, error, _, _) in
                             guard error == nil else {
                                 MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
-
                                 return
                             }
-
-                            attendeeButton.hidden = false
                         })
                     } else {
                         attendeeButton.setImage(UIImage(named: "upload_pic"), forState: .Normal)
@@ -228,14 +225,14 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
         
         if (attendeeButtons.count > attendeeIDs.count && event.owner!.objectId != ParseHelper.sharedInstance.currentUser?.objectId && attendeeIDs.count < event.limit && !allAttendeeIDsWithoutOwner.contains(ParseHelper.sharedInstance.currentUser!.objectId!)) && ParseHelper.sharedInstance.currentUser?.pendingEventIDs.contains(eventID) != true
         {
-            let attendeeButton = attendeeButtons[attendeeIDs.count]
+            let attendeeButton = attendeeButtons[attendeeIDs.count + 1]
             attendeeButton.removeTarget(nil, action: nil, forControlEvents: .AllEvents)
             attendeeButton.addTarget(self, action: #selector(ListEventsViewController.join(_:)), forControlEvents: .TouchUpInside)
             attendeeButton.setTitle("JOIN".localized, forState: .Normal)
             attendeeButton.hidden = false
             attendeeButton.tag = indexPath.section
         }
-        
+
         return cell
     }
 
@@ -268,20 +265,17 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
         }
 
         eventsData[index] = event
-        
         events?.reloadData()
     }
-    
+
     override func eventRemoved(event:Event) {
-        eventsData = eventsData.filter({$0.objectId != event.objectId})
+        eventsData = eventsData.filter({ $0.objectId != event.objectId })
         events?.reloadData()
     }
-    
+
     @IBAction func join(sender: UIButton) {
         sender.hidden = true
-
         ParseHelper.changeStateOfEvent(eventsData[sender.tag], toJoined: true, completion: nil)
-
         guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as? BlurryAlertViewController else {
             return
         }
@@ -293,7 +287,7 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
 
         self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
     }
-    
+
     @IBAction func authorProfile(sender: AnyObject) {
         let event:Event! = eventsData[sender.tag]
         guard let userProfileViewController = UIStoryboard.profileTab()?.instantiateViewControllerWithIdentifier("UserProfileViewController") as? UserProfileViewController else {
@@ -301,10 +295,9 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
         }
 
         userProfileViewController.userID = event.owner?.objectId
-        
         navigationController?.pushViewController(userProfileViewController, animated: true)
     }
-    
+
     @IBAction func attendeeProfile(sender: UIButton) {
         let event:Event! = eventsData[sender.tag]
         guard let userProfileViewController = UIStoryboard.profileTab()?.instantiateViewControllerWithIdentifier("UserProfileViewController") as? UserProfileViewController else {
@@ -315,7 +308,6 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
         let attendeeIDs = allAttendeeIDsWithoutOwner[0..<min(allAttendeeIDsWithoutOwner.count, 4)]
 
         userProfileViewController.userID = attendeeIDs[(sender.titleLabel?.tag)!]
-        
         navigationController?.pushViewController(userProfileViewController, animated: true)
     }
 
