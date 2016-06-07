@@ -136,16 +136,15 @@ final class LoginViewController: UIViewController, InstagramDelegate {
             }
 
             if let user = user {
-                
                 if (FBSDKAccessToken.currentAccessToken() != nil) {
-                    
                     let userProfileRequestParams = [ "fields" : "id, gender, name, email, picture, about"]
                     let userProfileRequest = FBSDKGraphRequest(graphPath: "me", parameters: userProfileRequestParams)
                     let graphConnection = FBSDKGraphRequestConnection()
                     graphConnection.addRequest(userProfileRequest, completionHandler: { (connection: FBSDKGraphRequestConnection!, result: AnyObject!, error: NSError!) -> Void in
-                        if(error != nil){
+                        if error != nil {
                             SVProgressHUD.dismiss()
                             print(error)
+
                         } else {
                             ParseHelper.sharedInstance.currentUser?.email = result.objectForKey("email")! as? String
                             ParseHelper.sharedInstance.currentUser?.name = result.objectForKey("name")! as? String
@@ -160,6 +159,7 @@ final class LoginViewController: UIViewController, InstagramDelegate {
                                     let picture = PFFile(name: "image.jpg", data: data!)
                                     ParseHelper.sharedInstance.currentUser!.avatar = File(parseFile: picture!)
                                     ParseHelper.saveObject(ParseHelper.sharedInstance.currentUser!, completion: nil)
+
                                 } else {
                                     print("Error: \(error!.localizedDescription)")
                                 }
@@ -167,6 +167,7 @@ final class LoginViewController: UIViewController, InstagramDelegate {
                                 if user.isNew {
                                     DataProxy.sharedInstance.setNeedsShowAllHints(true)
                                     self.doRegistration()
+
                                 } else {
                                     self.proceed()
                                 }
