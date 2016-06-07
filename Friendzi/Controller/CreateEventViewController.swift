@@ -74,7 +74,6 @@
         dateFormatter.dateFormat = "EEE dd MMM 'at' H:mm"
 
         title = isEditMode ? "Edit Event".localized : "Create Event".localized
-        leftNavigationButton?.setTitle("back".localized, forState: .Normal)
         leftNavigationButton?.hidden = event == nil
         createButton?.setTitle(isEditMode ? "Save".localized : "Create Event & Invite Friends".localized, forState: .Normal)
 

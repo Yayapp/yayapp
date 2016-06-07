@@ -166,7 +166,6 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
                     guard let fetchedObject = result,
                         fetchedOwner = User(object: fetchedObject) where error == nil else {
                             MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
-
                             return
                     }
 
@@ -183,7 +182,6 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
                 })
 
                 self?.chatButton?.enabled = true
-
                 self?.update()
             })
             })
@@ -340,7 +338,6 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
         detailsUnderline?.hidden = false
         messagesContainer?.hidden = true
         eventsContainer?.hidden = false
-
         switherPlaceholderTopSpace?.constant = self.view.bounds.width / 160 * 91
         UIView.animateWithDuration(0.1) {
             self.view.layoutIfNeeded()
