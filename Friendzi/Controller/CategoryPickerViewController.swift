@@ -89,3 +89,10 @@ private extension CategoryPickerViewController {
         categoriesCollection.verticalSpacing = 12
     }
 }
+
+private extension CategoryPickerViewController {
+    //MARK:- Action Buttons
+    @IBAction func backButtonTapped(sender: UIBarButtonItem) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+}

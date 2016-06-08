@@ -26,7 +26,13 @@
                                     <constraint firstAttribute="height" constant="64" id="Vfi-G4-ets"/>
                                 </constraints>
                                 <items>
-                                    <navigationItem title="Create Event" id="0oA-R4-RRE"/>
+                                    <navigationItem title="Create Event" id="0oA-R4-RRE">
+                                        <barButtonItem key="leftBarButtonItem" image="back_button_navBar_pdf" id="BAU-NQ-lva">
+                                            <connections>
+                                                <action selector="backButtonTapped:" destination="Zxp-WD-oOE" id="NRR-9T-Hsg"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
                                 </items>
                             </navigationBar>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="1000" text="Share with any of these groups?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5c7-5u-aqy">
@@ -452,6 +458,7 @@
     <resources>
         <image name="accept" width="37" height="37"/>
         <image name="add-photo" width="84" height="92"/>
+        <image name="back_button_navBar_pdf" width="11" height="18"/>
         <image name="create-event" width="27" height="25"/>
         <image name="searchingicon" width="138" height="138"/>
     </resources>
