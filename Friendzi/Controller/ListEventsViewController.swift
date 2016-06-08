@@ -191,11 +191,13 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
         let attendeeIDs = allAttendeeIDsWithoutOwner[0..<min(allAttendeeIDsWithoutOwner.count, attendeeButtons.count)]
 
         for (index, attendeeID) in attendeeIDs.enumerate() {
-            let attendeeButton = attendeeButtons[index]
+            //Black Magic: "index + 1" because the EventsTableViewCell contains a collection of buttons including the owner of the event, which is
+            //TODO:- Remove logic using tags and replace with enums maybe. This whole method makes the tablview a bit slow and buggy while presenting.
+            let attendeeButton = attendeeButtons[index + 1]
 
             attendeeButton.addTarget(self, action: #selector(ListEventsViewController.attendeeProfile(_:)), forControlEvents: .TouchUpInside)
             attendeeButton.tag = indexPath.section
-            attendeeButton.titleLabel?.tag = index
+            attendeeButton.titleLabel?.tag = index + 1
 
             ParseHelper.fetchUser(attendeeID, completion: { result, error in
                 if error == nil {
