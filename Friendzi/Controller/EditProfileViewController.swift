@@ -30,10 +30,10 @@ final class EditProfileViewController: UIViewController, UIImagePickerController
             return
         }
 
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(EditProfileViewController.handleTextViewPlaceholder), name: UIKeyboardDidShowNotification, object: nil)
+
         picker.delegate = self
-        
         name?.text = currentUser.name
-      
         gender = currentUser.gender
         
         if gender == 0 {
@@ -55,7 +55,12 @@ final class EditProfileViewController: UIViewController, UIImagePickerController
             about?.text = bio
         }
     }
-    
+
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
+    }
+
     @IBAction func uploadPhoto(sender: AnyObject) {
         let alert = UIAlertController(title: "Choose Option", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
         alert.addAction(UIAlertAction(title: "Take Photo", style: UIAlertActionStyle.Default, handler: {
@@ -146,26 +151,25 @@ final class EditProfileViewController: UIViewController, UIImagePickerController
     }
 
     //MARK: - UITextViewDelegate
-    func textViewDidBeginEditing(textView: UITextView) {
-        if isShowingBioPlaceholder {
-            textView.text = nil
-            textView.textColor = .blackColor()
-        }
-
-        textView.becomeFirstResponder()
-    }
-
     func textViewDidEndEditing(textView: UITextView) {
         if textView.text == "" {
-            textView.text = NSLocalizedString("Bio", comment: "")
+            textView.text = "Bio".localized
             textView.textColor = .lightGrayColor()
-
             isShowingBioPlaceholder = true
-        
+
         } else {
             isShowingBioPlaceholder = false
         }
+    }
+}
 
-        textView.resignFirstResponder()
+private extension EditProfileViewController {
+    //MARK:- 
+    @objc
+    func handleTextViewPlaceholder() {
+        if isShowingBioPlaceholder {
+            about?.text = ""
+            about?.textColor = .blackColor()
+        }
     }
 }
