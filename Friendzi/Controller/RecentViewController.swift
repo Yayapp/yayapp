@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import SVProgressHUD
+
 final class RecentViewController: UITableViewController {
 
     private var notifications:[Notification] = []
@@ -137,10 +139,9 @@ final class RecentViewController: UITableViewController {
             request.event!.attendeeIDs.append(request.attendee.objectId!)
             ParseHelper.saveObject(request.event, completion: nil)
             request.accepted = true
-            ParseHelper.saveObject(request, completion: {
-                done in
+            ParseHelper.saveObject(request, completion: { done in
                 self.notifications.removeAtIndex(sender.tag)
-                UIApplication.sharedApplication().applicationIconBadgeNumber-=1
+                UIApplication.sharedApplication().applicationIconBadgeNumber -= 1
                 
                 if(request.event?.attendeeIDs.count >= request.event?.limit) {
                     ParseHelper.declineRequests(request.event!)
@@ -153,11 +154,9 @@ final class RecentViewController: UITableViewController {
             request.group!.attendeeIDs.append(request.attendee.objectId!)
             ParseHelper.saveObject(request.group!, completion: nil)
             request.accepted = true
-            ParseHelper.saveObject(request, completion: {
-                done in
+            ParseHelper.saveObject(request, completion: { done in
                 self.notifications.removeAtIndex(sender.tag)
-                UIApplication.sharedApplication().applicationIconBadgeNumber-=1
-                
+                UIApplication.sharedApplication().applicationIconBadgeNumber -= 1
                 self.tableView.reloadData()
             })
         }
@@ -166,10 +165,22 @@ final class RecentViewController: UITableViewController {
     @IBAction func decline(sender: AnyObject) {
         let request = notifications[sender.tag] as! Request
         request.accepted = false
-        ParseHelper.saveObject(request, completion: nil)
-        UIApplication.sharedApplication().applicationIconBadgeNumber-=1
-        notifications.removeAtIndex(sender.tag)
-        //        self.appDelegate.leftViewController.requestsCountLabel.text = "\(self.requests.count)"
-        tableView.reloadData()
+        SVProgressHUD.show()
+        ParseHelper.saveObject(request) { success, error in
+            SVProgressHUD.dismiss()
+            if let success = success where success == true {
+                UIApplication.sharedApplication().applicationIconBadgeNumber -= 1
+                self.notifications.removeAtIndex(sender.tag)
+                self.tableView.reloadData()
+            } else {
+                if let error = error {
+                    UIAlertController.showSimpleAlertViewWithText(error.localizedDescription,
+                                                                  title: "Error".localized,
+                                                                  controller: self,
+                                                                  completion: nil,
+                                                                  alertHandler: nil)
+                }
+            }
+        }
     }
 }
