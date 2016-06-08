@@ -282,6 +282,7 @@
     }
 
     @IBAction func addLocationButtonPressed(sender: AnyObject) {
+        name?.resignFirstResponder()
         let locationPicker = LocationPickerViewController()
         locationPicker.currentLocationButtonBackground = .whiteColor()
         locationPicker.mapType = .Standard
