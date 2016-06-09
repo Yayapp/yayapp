@@ -268,8 +268,8 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
 
     @IBAction func switchToDetails(sender: AnyObject) {
         view.endEditing(true)
-        editEventButton?.hidden = false
-        cancelEventButton?.hidden = false
+        editEventButton?.hidden = event.owner?.objectId != PFUser.currentUser()?.objectId
+        cancelEventButton?.hidden = event.owner?.objectId != PFUser.currentUser()?.objectId
         chatUnderline?.hidden = true
         detailsUnderline?.hidden = false
         messagesContainer?.hidden = true

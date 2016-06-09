@@ -845,7 +845,7 @@ Cg
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ojs-gv-DaP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-189" y="-286"/>
+            <point key="canvasLocation" x="-199" y="-234"/>
         </scene>
         <!--Messages-->
         <scene sceneID="Pmq-F6-6vp">
@@ -964,7 +964,7 @@ Cg
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bnt-5r-OoI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="164" y="-286"/>
+            <point key="canvasLocation" x="177" y="-234"/>
         </scene>
         <!--Photos Table View Controller-->
         <scene sceneID="sjG-Uf-4hG">
