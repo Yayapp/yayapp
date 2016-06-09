@@ -114,7 +114,7 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
                     MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
                     return
                 }
-                print(fetchedEvent.attendeeIDs.count)
+
                 self?.attendees = fetchedUsers
                 for index in 0 ..< (fetchedEvent.limit - 1) {
                     self?.attendeeButtons[index].setImage(UIImage(named: "upload_pic"), forState: .Normal)

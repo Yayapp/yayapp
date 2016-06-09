@@ -10,8 +10,8 @@ import UIKit
 import MessageUI
 
 protocol GroupChangeDelegate : NSObjectProtocol {
-    func groupChanged(group:Category)
-    func groupRemoved(group:Category)
+    func groupChanged(group: Category)
+    func groupRemoved(group: Category)
 }
 
 final class GroupDetailsViewController: UIViewController, MFMailComposeViewControllerDelegate, GroupCreationDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
@@ -75,29 +75,28 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.title = ""
-
+        self.title = "Group Details".localized
         NSNotificationCenter.defaultCenter().addObserver(self,
                                                          selector: #selector(updateAttendUI),
                                                          name: Constants.groupPendingStatusChangedNotification,
                                                          object: nil)
 
         chatButton?.enabled = false
-
         attendState = .Hidden
-
         switherPlaceholderTopSpace?.constant = view.bounds.width / 160 * 91
-
         if let messagesVC = self.storyboard?.instantiateViewControllerWithIdentifier(MessagesTableViewController.storyboardID) as? MessagesTableViewController {
             messagesVC.group = group
-
             addChildViewController(messagesVC)
             messagesContainer?.addSubview(messagesVC.view)
-
             messagesVC.view.translatesAutoresizingMaskIntoConstraints = false
-            messagesContainer?.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[view]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["view" : messagesVC.view]))
-            messagesContainer?.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[view]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["view" : messagesVC.view]))
-
+            messagesContainer?.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[view]|",
+                options: NSLayoutFormatOptions(rawValue: 0),
+                metrics: nil,
+                views: ["view" : messagesVC.view]))
+            messagesContainer?.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[view]|",
+                options: NSLayoutFormatOptions(rawValue: 0),
+                metrics: nil,
+                views: ["view" : messagesVC.view]))
             messagesVC.didMoveToParentViewController(self)
         }
 
