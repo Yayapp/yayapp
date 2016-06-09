@@ -309,7 +309,7 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
         let allAttendeeIDsWithoutOwner = event.attendeeIDs.filter({ $0 != event.owner!.objectId })
         let attendeeIDs = allAttendeeIDsWithoutOwner[0..<min(allAttendeeIDsWithoutOwner.count, 4)]
 
-        userProfileViewController.userID = attendeeIDs[(sender.titleLabel?.tag)!]
+        userProfileViewController.userID = attendeeIDs[(sender.titleLabel?.tag)! - 1]
         navigationController?.pushViewController(userProfileViewController, animated: true)
     }
 

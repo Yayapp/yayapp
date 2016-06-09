@@ -376,11 +376,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="EUi-hn-LQ1">
-                        <barButtonItem key="leftBarButtonItem" style="plain" id="U0r-p6-LHf">
+                        <barButtonItem key="leftBarButtonItem" title="Item" style="plain" id="U0r-p6-LHf">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="WzO-x2-frO">
                                 <rect key="frame" x="16" y="7" width="71" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="reset"/>
+                                <state key="normal" title="Back"/>
                                 <connections>
                                     <action selector="leftNavigationButtonPressed:" destination="QtT-Q2-qgG" eventType="touchUpInside" id="hGj-24-9sz"/>
                                 </connections>
