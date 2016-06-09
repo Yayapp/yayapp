@@ -140,9 +140,6 @@
                                     <action selector="openDateTimePicker:" destination="QtT-Q2-qgG" eventType="touchUpInside" id="onN-NB-7YJ"/>
                                 </connections>
                             </button>
-                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="g8L-xc-rUg">
-                                <rect key="frame" x="150" y="230" width="20" height="20"/>
-                            </activityIndicatorView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CHr-AL-yX4">
                                 <rect key="frame" x="0.0" y="348" width="320" height="35"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -343,7 +340,6 @@
                             <constraint firstItem="Tfz-zd-m3A" firstAttribute="top" secondItem="eTN-S4-Wt2" secondAttribute="bottom" constant="8" id="GZf-kl-iu9"/>
                             <constraint firstItem="TTH-R8-LPC" firstAttribute="leading" secondItem="WBH-l0-qV7" secondAttribute="leading" id="Hp6-47-ZgE"/>
                             <constraint firstItem="oqO-s0-a05" firstAttribute="leading" secondItem="WBH-l0-qV7" secondAttribute="leadingMargin" constant="115" id="If3-Fb-02d"/>
-                            <constraint firstAttribute="centerX" secondItem="g8L-xc-rUg" secondAttribute="centerX" id="Jth-IH-tTs"/>
                             <constraint firstItem="3PG-OW-ZM5" firstAttribute="top" secondItem="a7S-B7-6oA" secondAttribute="bottom" constant="8" id="LtT-5u-4Dd"/>
                             <constraint firstItem="3PG-OW-ZM5" firstAttribute="leading" secondItem="WBH-l0-qV7" secondAttribute="leading" id="PdL-kG-0Fb"/>
                             <constraint firstItem="J58-dS-aOO" firstAttribute="top" secondItem="eTN-S4-Wt2" secondAttribute="bottom" constant="8" id="R4P-Ja-ov5"/>
@@ -368,7 +364,6 @@
                             <constraint firstItem="QvM-Wl-Ox9" firstAttribute="leading" secondItem="XiO-iK-M18" secondAttribute="trailing" constant="8" id="na3-FY-GCx"/>
                             <constraint firstItem="CHr-AL-yX4" firstAttribute="top" secondItem="QvM-Wl-Ox9" secondAttribute="bottom" constant="8" id="oKC-rD-Et9"/>
                             <constraint firstItem="a7S-B7-6oA" firstAttribute="leading" secondItem="WBH-l0-qV7" secondAttribute="leading" id="qbG-k7-SSu"/>
-                            <constraint firstAttribute="centerY" secondItem="g8L-xc-rUg" secondAttribute="centerY" id="qqz-Ze-gb4"/>
                             <constraint firstItem="oqO-s0-a05" firstAttribute="centerY" secondItem="mLA-BX-NBd" secondAttribute="centerY" id="qsa-ax-hHo"/>
                             <constraint firstItem="oqO-s0-a05" firstAttribute="centerX" secondItem="mLA-BX-NBd" secondAttribute="centerX" id="s9k-sq-8aD"/>
                             <constraint firstItem="CHr-AL-yX4" firstAttribute="top" secondItem="YLE-cK-5YT" secondAttribute="bottom" constant="8" id="tL1-Zz-Yqa"/>
@@ -414,7 +409,6 @@
                         <outlet property="location" destination="3PG-OW-ZM5" id="qa4-6U-qf0"/>
                         <outlet property="name" destination="C7x-Rc-Jfd" id="UG0-TX-QsR"/>
                         <outlet property="pickCategory" destination="CHr-AL-yX4" id="lCz-90-ZB0"/>
-                        <outlet property="spinner" destination="g8L-xc-rUg" id="ktM-Yv-ba1"/>
                         <outletCollection property="attendeeButtons" destination="etx-9H-B15" collectionClass="NSMutableArray" id="p90-9c-ygE"/>
                         <outletCollection property="attendeeButtons" destination="YLE-cK-5YT" collectionClass="NSMutableArray" id="rzl-sI-ov5"/>
                         <outletCollection property="attendeeButtons" destination="XiO-iK-M18" collectionClass="NSMutableArray" id="s0P-wP-BMG"/>

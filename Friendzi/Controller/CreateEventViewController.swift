@@ -10,6 +10,7 @@
  import MapKit
  import ActionSheetPicker_3_0
  import LocationPicker
+ import SVProgressHUD
 
  final class CreateEventViewController: KeyboardAnimationHelper, CategoryPickerDelegate, ChooseEventPictureDelegate, WriteAboutDelegate, UIPopoverPresentationControllerDelegate {
 
@@ -20,7 +21,6 @@
     @IBOutlet private weak var eventPhoto: UIButton?
     @IBOutlet private weak var dateTimeButton: UIButton?
     @IBOutlet private weak var location: UIButton?
-    @IBOutlet private weak var spinner: UIActivityIndicatorView?
     @IBOutlet private weak var name: UITextField?
     @IBOutlet private weak var descr: UIButton?
     @IBOutlet private weak var createButton: UIButton?
@@ -145,7 +145,7 @@
             self.name?.text = fetchedEvent.name
             self.descriptionText = fetchedEvent.summary
             self.descr?.setTitle(fetchedEvent.summary, forState: .Normal)
-            self.attendeesLimit = fetchedEvent.attendeeIDs.count ?? self.kMinEventAttendees
+            self.attendeesLimit = fetchedEvent.limit ?? self.kMinEventAttendees
             self.madeCategoryChoice(fetchedEvent.categories)
             self.madeEventPictureChoice(fetchedEvent.photo, pickedPhoto: nil)
             self.madeDateTimeChoice(fetchedEvent.startDate)
@@ -269,15 +269,11 @@
 
     //MARK:- Action Buttons
     @IBAction func changeLimit(sender: UIButton) {
-        if let event = event
-            where sender.tag < event.attendeeIDs.count {
-            return
-        }
-
         if let buttons = attendeeButtons {
             for button in buttons {
                 button.selected = button.tag <= sender.tag
             }
+            attendeesLimit = sender.tag
         }
     }
 
@@ -334,7 +330,7 @@
         } else if chosenPhoto == nil {
             MessageToUser.showDefaultErrorMessage("Please choose photo")
         } else {
-            spinner?.startAnimating()
+            SVProgressHUD.show()
             createButton?.enabled = false
 
             if event == nil {
@@ -377,7 +373,7 @@
                             }
                         }
 
-                        self.spinner?.stopAnimating()
+                        SVProgressHUD.dismiss()
 
                         if !self.isEditMode {
                             if DataProxy.sharedInstance.needsShowInviteHint {
@@ -411,7 +407,7 @@
                         }
                     })
                 } else {
-                    self.spinner?.stopAnimating()
+                    SVProgressHUD.dismiss()
                     self.createButton?.enabled = false
                 }
             })
