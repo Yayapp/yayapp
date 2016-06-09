@@ -175,8 +175,8 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
     }
     
     override func didPressSendButton(button: UIButton, withMessageText text: String, senderId: String, senderDisplayName: String, date: NSDate) {
+        button.enabled = false
         JSQSystemSoundPlayer.jsq_playMessageSentSound()
-        
         let message: Message = Message()
         message.user = ParseHelper.sharedInstance.currentUser!
         if event != nil {
@@ -184,8 +184,10 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
         } else {
             message.group = group!
         }
+
         message.text = text
         ParseHelper.saveObject(message, completion: { success, error in
+            button.enabled = true
             if error == nil {
                 self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, text: message.text))
                 self.finishSendingMessageAnimated(true)
@@ -194,9 +196,8 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
                 self.finishSendingMessageAnimated(true)
             }
         })
-        
     }
-    
+
     override func collectionView(collectionView:JSQMessagesCollectionView, avatarImageDataForItemAtIndexPath indexPath:NSIndexPath) -> JSQMessageAvatarImageDataSource! {
         let message = self.messages[indexPath.item];
         return avatars[message.senderId]
