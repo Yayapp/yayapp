@@ -16,8 +16,7 @@ final class ProfileViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        ParseHelper.getUpcomingPastEvents(ParseHelper.sharedInstance.currentUser!, upcoming: false, block: {
-            result, error in
+        ParseHelper.getUpcomingPastEvents(ParseHelper.sharedInstance.currentUser!, upcoming: false, block: { result, error in
             if error == nil {
                 self.eventsData = result
             } else {
@@ -31,7 +30,6 @@ final class ProfileViewController: UITableViewController {
 
         ParseHelper.logOutInBackgroundWithBlock({ error in
             SVProgressHUD.dismiss()
-
             guard error == nil else {
                 MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
 

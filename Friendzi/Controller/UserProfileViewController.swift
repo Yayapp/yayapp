@@ -94,7 +94,6 @@ final class UserProfileViewController: UITableViewController, UIImagePickerContr
         name?.text = user?.name
 
         let isCurrentUser = ParseHelper.sharedInstance.currentUser?.objectId == user?.objectId
-
         if isCurrentUser {
             editdone = UIBarButtonItem(image:UIImage(named: "user_settings_ico"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(UserProfileViewController.settings(_:)))
             navigationItem.setRightBarButtonItem(editdone, animated: false)
@@ -119,6 +118,7 @@ final class UserProfileViewController: UITableViewController, UIImagePickerContr
         guard let user = user else {
             return
         }
+
         ParseHelper.getUpcomingPastEvents(user, upcoming: false, block: {
             result, error in
             if error == nil {
@@ -134,14 +134,20 @@ final class UserProfileViewController: UITableViewController, UIImagePickerContr
 
         ParseHelper.getUserCategories(user, block: { categories, error in
             if error == nil {
+                self.interestsData = []
+                self.interestsCollection?.removeAllTags()
+
                 self.interestsData = categories
                 var names:[String] = []
                 names.append("Groups:")
-                for (_, category) in (categories?.enumerate())! {
-                    names.append(" \(category.name) ")
+                if let categories = categories {
+                    for (_, category) in categories.enumerate() {
+                        names.append(" \(category.name) ")
+                    }
+
+                    self.interestsCollection?.addTags(names)
+                    self.interestsCollection?.setTagAtIndex(0, selected: true)
                 }
-                self.interestsCollection?.addTags(names)
-                self.interestsCollection?.setTagAtIndex(0, selected: true)
             }
         })
 
