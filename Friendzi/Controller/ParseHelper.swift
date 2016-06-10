@@ -225,21 +225,20 @@ final class ParseHelper {
     }
 
     class func getUserCategories(user: User, block:CategoriesResultBlock?) {
-        guard let currentUser = PFUser.currentUser(),
-            let currentUserID = PFUser.currentUser()?.objectId else {
-                block?(nil, nil)
+        guard let currentUserID = PFUser.currentUser()?.objectId else {
+            block?(nil, nil)
                 return
         }
+
+        let categoryOwnerUser = PFObject(withoutDataWithClassName: "_User", objectId: user.objectId)
 
         let categoryAttendeeQuery = PFQuery(className: categoryParseClassName)
         categoryAttendeeQuery.whereKey("attendeeIDs", equalTo: currentUserID)
 
         let categoryOwnerQuery = PFQuery(className: categoryParseClassName)
-        categoryOwnerQuery.whereKey("owner", equalTo: currentUser)
+        categoryOwnerQuery.whereKey("owner", equalTo: categoryOwnerUser)
 
-        PFQuery.orQueryWithSubqueries([categoryAttendeeQuery, categoryOwnerQuery]).findObjectsInBackgroundWithBlock {
-            objects, error in
-
+        PFQuery.orQueryWithSubqueries([categoryAttendeeQuery, categoryOwnerQuery]).findObjectsInBackgroundWithBlock { objects, error in
             if error == nil {
                 let array = objects! as NSArray as! [PFObject]
                 let mappedObjects = array.map({ Category(parseObject: $0) }) as? [Category]

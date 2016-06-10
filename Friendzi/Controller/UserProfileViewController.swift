@@ -263,7 +263,6 @@ final class UserProfileViewController: UITableViewController, UIImagePickerContr
         about?.text = nil
         rankIcon?.image = nil
         navigationItem.setRightBarButtonItem(nil, animated: false)
-
         tableView.reloadData()
     }
 }
