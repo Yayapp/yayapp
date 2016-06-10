@@ -65,17 +65,16 @@ final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDe
     }
 
     func update() {
-        ParseHelper.fetchObject(group!, completion: {
-            result, error in
+        ParseHelper.fetchObject(group!, completion: { result, error in
             if error == nil {
                 self.title  = self.group!.name
                 self.name?.text = self.group!.name
                 self.descriptionText = self.group!.summary
                 self.descr?.setTitle(self.group!.summary, forState: .Normal)
                 self.madeEventPictureChoice(self.group!.photo, pickedPhoto: nil)
+                self.madeLocationChoice(CLLocationCoordinate2D(latitude: self.group!.location!.latitude, longitude: self.group!.location!.longitude))
                 if (self.group!.isPrivate) {
                     self.privateAction(true)
-                self.madeLocationChoice(CLLocationCoordinate2D(latitude: self.group!.location!.latitude, longitude: self.group!.location!.longitude))
                 } else {
                     self.publicAction(true)
                 }
