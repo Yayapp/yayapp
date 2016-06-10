@@ -18,11 +18,22 @@ class RequestTableViewCell: UITableViewCell {
     @IBOutlet weak var accept: UIButton?
     @IBOutlet weak var decline: UIButton?
 
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        setupUI()
+    }
     override func prepareForReuse() {
         super.prepareForReuse()
 
         avatar?.image = nil
         eventName?.text = ""
         name?.text = ""
+    }
+}
+
+private extension RequestTableViewCell {
+    //MARK:- UI Setup
+    func setupUI() {
+        decline?.setImage(UIImage(named: "reject_button_selected"), forState: .Selected)
     }
 }
