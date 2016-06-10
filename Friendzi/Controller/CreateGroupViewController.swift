@@ -31,7 +31,7 @@ final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDe
     private var longitude: Double?
     private var latitude: Double?
     private var chosenPhoto: File?
-    private var descriptionText: String! = ""
+    private var descriptionText: String = ""
     private var deleteGroupButton: UIBarButtonItem!
 
     var group: Category?
@@ -45,17 +45,17 @@ final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDe
         name?.delegate = self
         if group != nil {
             update()
-            title = NSLocalizedString("Edit Group", comment: "")
+            title = "Edit Group".localized
         } else {
-            title = NSLocalizedString("Create Group", comment: "")
+            title = "Create Group".localized
         }
         self.publicAction(true)
 
-        let submitButtonTitle = isEditMode ? NSLocalizedString("Save", comment: "") : NSLocalizedString("Create Group & Invite Friends", comment: "")
+        let submitButtonTitle = isEditMode ? "Save".localized : "Create Group & Invite Friends".localized
         createButton?.setTitle(submitButtonTitle, forState: .Normal)
 
         if isEditMode && group?.owner?.objectId == ParseHelper.sharedInstance.currentUser?.objectId {
-            deleteGroupButton = UIBarButtonItem(title: NSLocalizedString("Delete", comment: ""),
+            deleteGroupButton = UIBarButtonItem(title: "Delete".localized,
                                                 style: .Plain,
                                                 target: self,
                                                 action: #selector(CreateGroupViewController.deleteGroup))
@@ -83,13 +83,13 @@ final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDe
             }
         })
     }
- 
+
     @IBAction func publicAction(sender: AnyObject) {
         privateButton?.backgroundColor = UIColor.whiteColor()
         publicButton?.backgroundColor = Color.PrimaryActiveColor
         isPrivate = false
     }
-    
+
     @IBAction func privateAction(sender: AnyObject) {
         privateButton?.backgroundColor = Color.PrimaryActiveColor
         publicButton?.backgroundColor = UIColor.whiteColor()
@@ -102,7 +102,7 @@ final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDe
         let locationPicker = LocationPickerViewController()
         locationPicker.currentLocationButtonBackground = .whiteColor()
         locationPicker.mapType = .Standard
-        locationPicker.searchBarPlaceholder = "Search by address"
+        locationPicker.searchBarPlaceholder = "Search by address".localized
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
         locationPicker.completion = { location in
             guard let location = location else {
@@ -114,7 +114,7 @@ final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDe
         }
         self.navigationController?.pushViewController(locationPicker, animated: true)
     }
-    
+
     @IBAction func openPhotoPicker(sender: AnyObject) {
         guard let vc = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("ChooseEventPictureViewController") as? ChooseEventPictureViewController else {
             return
@@ -129,12 +129,10 @@ final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDe
         longitude = coordinates.longitude
         CLLocation(latitude: latitude!, longitude: longitude!).getLocationString(nil, button: location, timezoneCompletion: nil)
     }
-    
+
     func madeEventPictureChoice(photo: File, pickedPhoto: UIImage?) {
         chosenPhoto = photo
-
         eventImage?.contentMode = .ScaleAspectFill
-
         if pickedPhoto != nil {
             eventImage?.image = pickedPhoto!
         } else if let photoURLString = photo.url,
@@ -146,49 +144,47 @@ final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDe
             })
         }
     }
-    
-    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle
-    {
+
+    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
         return .None
     }
-    
+
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
-    
+
     @IBAction func openAboutMeEditor(sender: AnyObject) {
         guard let vc = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("WriteAboutViewController") as? WriteAboutViewController else {
             return
         }
-        
+
         vc.delegate = self
         vc.textAbout = descriptionText
         vc.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
         presentViewController(vc, animated: true, completion: nil)
     }
-    
+
     func writeAboutDone(text: String) {
         self.descriptionText = text
         self.descr?.setTitle(text.isEmpty ? NSLocalizedString("Add Description", comment: "") : text, forState: .Normal)
     }
-    
+
     @IBAction func create(sender: AnyObject) {
         guard let name = name?.text else {
-            MessageToUser.showDefaultErrorMessage("Please enter name")
+            MessageToUser.showDefaultErrorMessage("Please enter name".localized)
             return
         }
-        
-        if name.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).isEmpty {
-            MessageToUser.showDefaultErrorMessage("Please enter name")
-        } else if isPrivate && (longitude == nil || latitude == nil) {
-            MessageToUser.showDefaultErrorMessage("Please choose location")
-        } else if descriptionText.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).isEmpty {
-            MessageToUser.showDefaultErrorMessage("Please enter description")
-        } else if chosenPhoto == nil {
-            MessageToUser.showDefaultErrorMessage("Please choose photo")
-        } else {
 
+        if name.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).isEmpty {
+            MessageToUser.showDefaultErrorMessage("Please enter name".localized)
+        } else if isPrivate && (longitude == nil || latitude == nil) {
+            MessageToUser.showDefaultErrorMessage("Please choose location".localized)
+        } else if descriptionText.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).isEmpty {
+            MessageToUser.showDefaultErrorMessage("Please enter description".localized)
+        } else if chosenPhoto == nil {
+            MessageToUser.showDefaultErrorMessage("Please choose photo".localized)
+        } else {
             if !isEditMode {
                 let eventACL = ObjectACL()
                 eventACL.publicWriteAccess = true
