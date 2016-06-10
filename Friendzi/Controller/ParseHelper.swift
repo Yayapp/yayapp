@@ -70,7 +70,7 @@ final class ParseHelper {
 
             let mappedUser = User(parseObject: user)
             completion(profilePicture: mappedUser?.avatar, gender: mappedUser?.gender, isComplete: mappedUser?.avatar != nil && mappedUser?.gender != nil)
-         }
+        }
     }
 
     class func getTodayEvents(user:User?, categories:[Category], block:EventsResultBlock?) {
@@ -227,7 +227,7 @@ final class ParseHelper {
     class func getUserCategories(user: User, block:CategoriesResultBlock?) {
         guard let currentUserID = PFUser.currentUser()?.objectId else {
             block?(nil, nil)
-                return
+            return
         }
 
         let categoryOwnerUser = PFObject(withoutDataWithClassName: "_User", objectId: user.objectId)
@@ -898,9 +898,9 @@ final class ParseHelper {
             eventID = event.objectId else {
                 return
         }
-
+        
         var eventAttendeeIDs = event.attendeeIDs
-
+        
         if isJoined && ParseHelper.sharedInstance.currentUser?.pendingEventIDs.contains(eventID) != true {
             ParseHelper.sharedInstance.currentUser?.pendingGroupIDs.append(eventID)
             ParseHelper.requestJoinEvent(event, completion: nil)
