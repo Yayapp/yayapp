@@ -194,7 +194,6 @@
     }
 
     func resetContent() {
-        self.createButton?.enabled = true
         event = nil
         longitude = 0
         latitude = 0
@@ -331,8 +330,6 @@
             MessageToUser.showDefaultErrorMessage("Please choose photo")
         } else {
             SVProgressHUD.show()
-            createButton?.enabled = false
-
             if event == nil {
                 let eventACL = ObjectACL()
                 eventACL.publicWriteAccess = true
@@ -408,7 +405,6 @@
                     })
                 } else {
                     SVProgressHUD.dismiss()
-                    self.createButton?.enabled = false
                 }
             })
         }
