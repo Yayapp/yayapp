@@ -225,16 +225,10 @@ final class ParseHelper {
     }
 
     class func getUserCategories(user: User, block:CategoriesResultBlock?) {
-        guard let currentUserID = PFUser.currentUser()?.objectId else {
-            block?(nil, nil)
-            return
-        }
-
         let categoryOwnerUser = PFObject(withoutDataWithClassName: "_User", objectId: user.objectId)
 
         let categoryAttendeeQuery = PFQuery(className: categoryParseClassName)
-        categoryAttendeeQuery.whereKey("attendeeIDs", equalTo: currentUserID)
-
+        categoryAttendeeQuery.whereKey("attendeeIDs", containedIn: [user.objectId!])
         let categoryOwnerQuery = PFQuery(className: categoryParseClassName)
         categoryOwnerQuery.whereKey("owner", equalTo: categoryOwnerUser)
 
@@ -550,7 +544,6 @@ final class ParseHelper {
             for block in blocks {
                 ParseHelper.deleteObject(block, completion: { (_, error) in
                     blocksCount -= 1
-
                     guard error == nil else {
                         completion(error)
 
@@ -566,7 +559,6 @@ final class ParseHelper {
     }
 
     class func getOwnerRequests(user: User, block:RequestsResultBlock?) {
-
         let query1 = PFQuery(className: eventParseClassName)
         query1.whereKey("owner", equalTo: PFUser(withoutDataUsingUser: user))
         query1.whereKey("startDate", greaterThanOrEqualTo: NSDate())
@@ -613,7 +605,6 @@ final class ParseHelper {
             }
         }
     }
-
 
     class func getRecentRequests(user: User, block: RequestsResultBlock?) {
         let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
