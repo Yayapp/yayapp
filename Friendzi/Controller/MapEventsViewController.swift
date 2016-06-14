@@ -24,7 +24,6 @@ final class MapEventsViewController: EventsViewController, MKMapViewDelegate {
         
         mapView?.delegate = self
         let user = ParseHelper.sharedInstance.currentUser
-        
         if let location = user?.location,
             distance = user?.distance {
             let center:CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: location.latitude , longitude: location.longitude)
@@ -53,36 +52,35 @@ final class MapEventsViewController: EventsViewController, MKMapViewDelegate {
     }
 
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView?{
-        var v = mapView.dequeueReusableAnnotationViewWithIdentifier("pin")
-        if v == nil {
-            v = MKAnnotationView(annotation: annotation, reuseIdentifier: "pin")
-            v!.canShowCallout = true
+        var annotationView = mapView.dequeueReusableAnnotationViewWithIdentifier("pin")
+        if annotationView == nil {
+            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: "pin")
+            annotationView!.canShowCallout = true
 
         } else {
-            v!.annotation = annotation
+            annotationView!.annotation = annotation
         }
-
+        annotationView?.layer.masksToBounds = false
         let customPointAnnotation = annotation as! CustomPointAnnotation
         guard let event = customPointAnnotation.event else {
             return nil
         }
 
-        ParseHelper.getData(event.photo, completion: {
-            (data:NSData?, error:NSError?) in
-            if(error == nil){
-                v!.image = UIImage(data:data!)
-                v!.bounds.size.height = 30
-                v!.bounds.size.width = 30
-                v!.layer.cornerRadius = CGRectGetHeight(v!.bounds) / 2
-                v!.layer.masksToBounds = true
-                v!.layer.borderColor = UIColor(red:0.32, green:0.72, blue:0.29, alpha:1.00).CGColor
-                v!.layer.borderWidth = 1.0
+        ParseHelper.getData(event.photo, completion: { data, error in
+            if error == nil {
+                annotationView!.image = UIImage(data:data!)
+                annotationView!.bounds.size.height = 30
+                annotationView!.bounds.size.width = 30
+                annotationView!.layer.cornerRadius = CGRectGetHeight(annotationView!.bounds) / 2
+                annotationView!.layer.masksToBounds = true
+                annotationView!.layer.borderColor = UIColor(red:0.32, green:0.72, blue:0.29, alpha:1.00).CGColor
+                annotationView!.layer.borderWidth = 1.0
             } else {
                 MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
             }
         })
 
-        return v
+        return annotationView
     }
 
     func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
