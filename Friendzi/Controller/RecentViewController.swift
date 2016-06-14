@@ -134,15 +134,16 @@ final class RecentViewController: UITableViewController {
     }
     
     @IBAction func accept(sender: AnyObject) {
+        SVProgressHUD.show()
         let request = notifications[sender.tag] as! Request
         if (request.event != nil) {
             request.event!.attendeeIDs.append(request.attendee.objectId!)
             ParseHelper.saveObject(request.event, completion: nil)
             request.accepted = true
             ParseHelper.saveObject(request, completion: { done in
+                SVProgressHUD.dismiss()
                 self.notifications.removeAtIndex(sender.tag)
                 UIApplication.sharedApplication().applicationIconBadgeNumber -= 1
-                
                 if(request.event?.attendeeIDs.count >= request.event?.limit) {
                     ParseHelper.declineRequests(request.event!)
                     self.notifications = self.notifications.filter({$0 is Request && ($0 as! Request).event != nil && ($0 as! Request).event?.objectId != request.event?.objectId})
