@@ -56,5 +56,4 @@ final class AdvancedSettingsTableViewController: UITableViewController {
 
         self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
     }
-
 }

@@ -46,18 +46,19 @@ final class RecentViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        //TODO:- The hole logic needs to be refactored
         guard let cell = tableView.dequeueReusableCellWithIdentifier(RequestTableViewCell.reuseIdentifier) as? RequestTableViewCell else {
             return UITableViewCell()
         }
 
-        let notification:Notification! = notifications[indexPath.row]
+        let notification = notifications[indexPath.row]
         cell.name?.text = notification.getTitle()
         cell.eventName?.text = notification.getText()
 
         if let photoURLString = notification.getPhoto().url, photoURL = NSURL(string: photoURLString) {
             cell.avatar?.sd_setImageWithURL(photoURL)
         }
-        
+
         cell.avatar?.layer.borderColor = Color.PrimaryActiveColor.CGColor
 
         if notification is Message {
@@ -65,18 +66,26 @@ final class RecentViewController: UITableViewController {
             let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:#selector(RecentViewController.goToProfile(_:)))
             cell.avatar?.addGestureRecognizer(tapGestureRecognizer)
         }
-        
+
         if let request = notification as? Request {
             if notification.isDecidable() {
-                cell.accept?.hidden = false
-                cell.accept?.setImage(UIImage(named: "createevent_button"), forState: .Normal)
-                cell.accept?.tag = indexPath.row;
-                cell.accept?.addTarget(self, action: #selector(RecentViewController.accept(_:)), forControlEvents: .TouchUpInside)
+                if request.accepted == false {
+                    cell.accept?.hidden = false
+                    cell.accept?.setImage(UIImage(named: "createevent_button"), forState: .Normal)
+                    cell.accept?.tag = indexPath.row
+                    cell.accept?.addTarget(self, action: #selector(RecentViewController.accept(_:)), forControlEvents: .TouchUpInside)
 
-                cell.decline?.hidden = false
-                cell.decline?.setImage(UIImage(named: "cancelevent_button"), forState: .Normal)
-                cell.decline?.tag = indexPath.row;
-                cell.decline?.addTarget(self, action: #selector(RecentViewController.decline(_:)), forControlEvents: .TouchUpInside)
+                    cell.decline?.hidden = false
+                    cell.decline?.setImage(UIImage(named: "cancelevent_button"), forState: .Normal)
+                    cell.decline?.tag = indexPath.row
+                    cell.decline?.addTarget(self, action: #selector(RecentViewController.decline(_:)), forControlEvents: .TouchUpInside)
+                } else {
+                    cell.accept?.hidden = false
+                    cell.accept?.setImage(UIImage(named: "accept"), forState: .Normal)
+                    cell.accept?.tag = indexPath.row
+                    cell.decline?.hidden = true
+                }
+
             } else {
                 cell.decline?.hidden = true
                 cell.accept?.setImage(UIImage(named: request.accepted == true ? "accept" : "requestRejected"), forState: .Normal)
