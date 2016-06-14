@@ -530,22 +530,21 @@ extension EventDetailsViewController {
     }
 
     func updateAttendUI() {
-        guard let currentUserID = ParseHelper.sharedInstance.currentUser?.objectId,
-            groupID = event.objectId else {
+        guard let currentUserID = ParseHelper.sharedInstance.currentUser?.objectId, groupID = event.objectId else {
                 return
         }
 
-        let isAttendedToGroup = event.attendeeIDs.contains(currentUserID)
+        let isAttendedToEvent = event.attendeeIDs.contains(currentUserID)
         if ParseHelper.sharedInstance.currentUser == event.owner || event.attendeeIDs.count >= event.limit {
             attendState = .Hidden
-        } else if ParseHelper.sharedInstance.currentUser?.pendingGroupIDs.contains(groupID) == true {
+        } else if ParseHelper.sharedInstance.currentUser?.pendingEventIDs.contains(groupID) == true {
             attendState = .Pending
-        } else if isAttendedToGroup {
+        } else if isAttendedToEvent {
             attendState = .Leave
         } else {
             attendState = .Join
         }
 
-        descr?.hidden = !isAttendedToGroup
+        descr?.hidden = !isAttendedToEvent
     }
 }
