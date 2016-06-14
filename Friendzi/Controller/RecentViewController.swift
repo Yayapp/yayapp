@@ -170,6 +170,7 @@ final class RecentViewController: UITableViewController {
                 self.notifications.removeAtIndex(sender.tag)
                 UIApplication.sharedApplication().applicationIconBadgeNumber -= 1
                 self.tableView.reloadData()
+                SVProgressHUD.dismiss()
             })
         }
     }
