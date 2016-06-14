@@ -12,8 +12,8 @@ import MapKit
 import SVProgressHUD
 import LocationPicker
 
-protocol GroupCreationDelegate : NSObjectProtocol {
-    func groupCreated(group:Category)
+protocol GroupCreationDelegate: NSObjectProtocol {
+    func groupCreated(group: Category)
 }
 
 final class CreateGroupViewController: KeyboardAnimationHelper, ChooseLocationDelegate, ChooseEventPictureDelegate, WriteAboutDelegate, UIPopoverPresentationControllerDelegate {

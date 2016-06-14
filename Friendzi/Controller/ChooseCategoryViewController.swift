@@ -318,7 +318,20 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
         })
     }
 
-    func groupCreated(group:Category) {
+    func groupCreated(group: Category) {
+        guard let shareItemVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(ShareItemViewController.storyboardID) as? ShareItemViewController else {
+            return
+        }
+
+        shareItemVC.modalPresentationStyle = .OverCurrentContext
+        shareItemVC.modalTransitionStyle = .CrossDissolve
+        shareItemVC.item = group
+        shareItemVC.onCancelPressed = { [weak self] in
+            self?.presentedViewController?.dismissViewControllerAnimated(false, completion: nil)
+            self?.tabBarController?.selectedIndex = 0
+        }
+
+        self.presentViewController(shareItemVC, animated: true, completion: nil)
         categoriesData.append(group)
         allAction(true)
     }
