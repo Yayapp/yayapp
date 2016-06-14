@@ -93,23 +93,23 @@ final class RequestsTableViewController: UITableViewController {
         userProfileViewController.user = request.attendee
         navigationController?.pushViewController(userProfileViewController, animated: true)
     }
-    
+
     @IBAction func accept(sender: AnyObject) {
         let request = requests[sender.tag]
-        guard let attendeeId = request.attendee.objectId else {
+        guard let attendeeId = request.attendee.objectId, let event = request.event else {
             return
         }
 
-        request.event!.attendeeIDs.append(attendeeId)
-        ParseHelper.saveObject(request.event!, completion: nil)
+        request.event?.attendeeIDs.append(attendeeId)
+        ParseHelper.saveObject(event, completion: nil)
         request.accepted = true
         ParseHelper.saveObject(request, completion: { done in
             self.requests.removeAtIndex(sender.tag)
             UIApplication.sharedApplication().applicationIconBadgeNumber -= 1
 
-            if(request.event!.attendeeIDs.count >= request.event!.limit) {
-                ParseHelper.declineRequests(request.event!)
-                self.requests = self.requests.filter({$0.event!.objectId != request.event!.objectId})
+            if event.attendeeIDs.count >= event.limit {
+                ParseHelper.declineRequests(event)
+                self.requests = self.requests.filter({ $0.event?.objectId != request.event?.objectId })
             }
             self.tableView.reloadData()
         })
@@ -119,7 +119,7 @@ final class RequestsTableViewController: UITableViewController {
         let request = requests[sender.tag]
         request.accepted = false
         ParseHelper.saveObject(request, completion: nil)
-        UIApplication.sharedApplication().applicationIconBadgeNumber-=1
+        UIApplication.sharedApplication().applicationIconBadgeNumber -= 1
         requests.removeAtIndex(sender.tag)
         tableView.reloadData()
     }
