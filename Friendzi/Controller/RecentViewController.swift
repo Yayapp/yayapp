@@ -69,7 +69,7 @@ final class RecentViewController: UITableViewController {
 
         if let request = notification as? Request {
             if notification.isDecidable() {
-                if request.accepted == false {
+                if request.accepted == false || request.accepted == nil {
                     cell.accept?.hidden = false
                     cell.accept?.setImage(UIImage(named: "createevent_button"), forState: .Normal)
                     cell.accept?.tag = indexPath.row
@@ -79,6 +79,7 @@ final class RecentViewController: UITableViewController {
                     cell.decline?.setImage(UIImage(named: "cancelevent_button"), forState: .Normal)
                     cell.decline?.tag = indexPath.row
                     cell.decline?.addTarget(self, action: #selector(RecentViewController.decline(_:)), forControlEvents: .TouchUpInside)
+
                 } else {
                     cell.accept?.hidden = false
                     cell.accept?.setImage(UIImage(named: "accept"), forState: .Normal)
@@ -94,7 +95,7 @@ final class RecentViewController: UITableViewController {
 
         return cell
     }
-    
+
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let notification = notifications[indexPath.row]
         if (notification.isSelectable()){
@@ -106,11 +107,12 @@ final class RecentViewController: UITableViewController {
 
                     vc.event = (notification as! Request).event
                     navigationController?.pushViewController(vc, animated: true)
+
                 } else {
                     guard let vc = UIStoryboard.groupsTab()?.instantiateViewControllerWithIdentifier("GroupDetailsViewController") as? GroupDetailsViewController else {
                         return
                     }
-                    
+
                     vc.group = (notification as! Request).group
                     navigationController?.pushViewController(vc, animated: true)
                 }
@@ -131,7 +133,7 @@ final class RecentViewController: UITableViewController {
             return
         }
         
-        if(notifications[sender.tag] is Message){
+        if notifications[sender.tag] is Message {
             let notification = notifications[sender.tag] as! Message
             vc.user = notification.user
             navigationController?.pushViewController(vc, animated: true)
