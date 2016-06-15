@@ -5,9 +5,9 @@ Parse.Cloud.job("incomingEventNotification", function (request, response) {
     //date stuff
     var d = new Date();
     var time = (24 * 3600 * 1000);
-    var diffDate = new Date(d.getTime() + (time)); // 24hours
+    var diffDate = new Date(d.getTime() + (time)); //24hours
     console.log(diffDate);
-    
+
     var query = new Parse.Query("Event");
     query.greaterThan("limit", 1);
     query.notEqualTo("notifiedAboutUpcomingEvent", true);
@@ -198,8 +198,6 @@ Parse.Cloud.beforeDelete("Event", function(request, response) {
     });
 });
 
-
-
 Parse.Cloud.beforeDelete(Parse.User, function(request, response) {
     Parse.Cloud.useMasterKey();
 
@@ -297,6 +295,7 @@ Parse.Cloud.afterSave("Report", function(request) {
                                                 });
 
                       });
+
 Parse.Cloud.afterSave("Message", function(request) {
 
                       var message = request.object.get('text');
@@ -488,7 +487,7 @@ Parse.Cloud.afterSave("Request", function(request) {
             })
         }
     })
-})
+});
 
 Parse.Cloud.beforeDelete("Request", function(request, response) {
     Parse.Cloud.useMasterKey()
@@ -532,4 +531,4 @@ Parse.Cloud.beforeDelete("Request", function(request, response) {
             response.success()
         })
     }, function(error) {response.error(error)})
-})
+});
