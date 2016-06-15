@@ -301,16 +301,17 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
     }
 
     @IBAction func attendeeProfile(sender: UIButton) {
-        let event:Event! = eventsData[sender.tag]
+        let event = eventsData[sender.tag]
         guard let userProfileViewController = UIStoryboard.profileTab()?.instantiateViewControllerWithIdentifier("UserProfileViewController") as? UserProfileViewController else {
             return
         }
 
         let allAttendeeIDsWithoutOwner = event.attendeeIDs.filter({ $0 != event.owner!.objectId })
         let attendeeIDs = allAttendeeIDsWithoutOwner[0..<min(allAttendeeIDsWithoutOwner.count, 4)]
-
-        userProfileViewController.userID = attendeeIDs[(sender.titleLabel?.tag)! - 1]
-        navigationController?.pushViewController(userProfileViewController, animated: true)
+        if let tag = sender.titleLabel?.tag where tag - 1 < attendeeIDs.count {
+            userProfileViewController.userID = attendeeIDs[(sender.titleLabel?.tag)! - 1]
+            navigationController?.pushViewController(userProfileViewController, animated: true)
+        }
     }
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
