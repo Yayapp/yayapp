@@ -675,6 +675,11 @@ final class ParseHelper {
 
                 if let objects = mappedObjects {
                     for request in objects {
+
+                        let installation = PFInstallation.currentInstallation()
+                        installation.badge = UIApplication.sharedApplication().applicationIconBadgeNumber
+                        installation.saveEventually()
+
                         request.accepted = false
                         ParseHelper.deleteObject(request, completion: nil)
                     }

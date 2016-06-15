@@ -130,11 +130,10 @@ final class RecentViewController: UITableViewController {
     }
     
     @IBAction func goToProfile(sender: AnyObject) {
-        
         guard let vc = UIStoryboard.profileTab()?.instantiateViewControllerWithIdentifier("UserProfileViewController") as? UserProfileViewController else {
             return
         }
-        
+
         if notifications[sender.tag] is Message {
             let notification = notifications[sender.tag] as! Message
             vc.user = notification.user
@@ -145,7 +144,7 @@ final class RecentViewController: UITableViewController {
         }
         navigationController?.pushViewController(vc, animated: true)
     }
-    
+
     @IBAction func accept(sender: AnyObject) {
         SVProgressHUD.show()
         let request = notifications[sender.tag] as! Request
@@ -171,6 +170,11 @@ final class RecentViewController: UITableViewController {
             ParseHelper.saveObject(request, completion: { done in
                 self.notifications.removeAtIndex(sender.tag)
                 UIApplication.sharedApplication().applicationIconBadgeNumber -= 1
+                //TODO:- Refactor
+                // This should be refactored! Make a new method in ParseHelpe specificaly for accepting requests
+                let installation = PFInstallation.currentInstallation()
+                installation.badge = UIApplication.sharedApplication().applicationIconBadgeNumber
+                installation.saveEventually()
                 self.tableView.reloadData()
                 SVProgressHUD.dismiss()
             })
