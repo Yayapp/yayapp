@@ -409,11 +409,11 @@ Parse.Cloud.afterSave("Request", function(request) {
             Parse.Push.send({
             where: pushQuery,
             data: {
-            alert: "There is a new attendee to happening \"" + itemName + "\"",
+            alert:
+                "There is a new attendee to happening \"" + itemName + "\"",
                 "content-available": 1,
                 "sound":"layerbell.caf",
-            badge: "Increment",
-                "request_id":request.object.id
+            badge: "Increment"
             }
             }, {
             success: function() {
