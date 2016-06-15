@@ -675,7 +675,6 @@ final class ParseHelper {
 
                 if let objects = mappedObjects {
                     for request in objects {
-                        UIApplication.sharedApplication().applicationIconBadgeNumber-=1
                         request.accepted = false
                         ParseHelper.deleteObject(request, completion: nil)
                     }
