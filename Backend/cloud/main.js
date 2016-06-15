@@ -100,7 +100,8 @@ Parse.Cloud.afterSave("Event", function(request) {
             data: {
                 alert: eventName + ", " + "has been updated",
                 "content-available": 1,
-                "sound":"layerbell.caf"
+                "sound":"layerbell.caf",
+                badge: "Increment"
             }
         }, {
             success: function() {
@@ -471,6 +472,7 @@ Parse.Cloud.afterSave("Request", function(request) {
                         alert: "Attendance to event \"" + itemName + "\" " + acceptedState,
                             "content-available": 1,
                             "sound":"layerbell.caf",
+                            badge: "Increment"
                         }
                         },  {
                         success: function() {

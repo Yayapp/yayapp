@@ -17,16 +17,30 @@ final class SettingsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         SVProgressHUD.show()
-        ParseHelper.fetchObject(ParseHelper.sharedInstance.currentUser!, completion: {
-            result, error in
+        guard let currentUser = ParseHelper.sharedInstance.currentUser else {
+            UIAlertController.showSimpleAlertViewWithText("It seems like you are out of sync. Please log out and log in again".localized,
+                                                          title: "Out of sync".localized,
+                                                          controller: self,
+                                                          completion: nil,
+                                                          alertHandler: nil)
+            return
+        }
+
+        ParseHelper.fetchObject(currentUser, completion: { result, error in
             SVProgressHUD.dismiss()
             if error == nil {
-                
-                self.attAccepted?.on = ParseHelper.sharedInstance.currentUser!.attAccepted!
-                self.newMessage?.on = ParseHelper.sharedInstance.currentUser!.newMessage!
-                
+                if let attAccepted = currentUser.attAccepted {
+                    self.attAccepted?.on = attAccepted
+                }
+
+                if let newMessage = ParseHelper.sharedInstance.currentUser?.newMessage {
+                    self.attAccepted?.on = newMessage
+                }
+
             } else {
-                MessageToUser.showDefaultErrorMessage(error!.localizedDescription)
+                if let error = error {
+                    MessageToUser.showDefaultErrorMessage(error.localizedDescription)
+                }
             }
         })
     }

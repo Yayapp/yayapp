@@ -43,9 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setupParse()
 
         Flurry.startSession("XBT2H8327QRT89B23Y5Q");
-
         PFFacebookUtils.initializeFacebookWithApplicationLaunchOptions(launchOptions)
-
         PFTwitterUtils.initializeWithConsumerKey("bfn0pGQNrS0YfQjDDbETcd3Pg",  consumerSecret:"f06sn7JwkMJrOb6xf3gmZmahy9XWojyJ62CTfoNOcYC0okVIVT")
 
         let rootViewController = self.window!.rootViewController
