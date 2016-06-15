@@ -72,11 +72,13 @@ final class RecentViewController: UITableViewController {
                 if request.accepted == false || request.accepted == nil {
                     cell.accept?.hidden = false
                     cell.accept?.setImage(UIImage(named: "createevent_button"), forState: .Normal)
+                    cell.accept?.setImage(UIImage(named: "accept-before-highlited"), forState: .Highlighted)
                     cell.accept?.tag = indexPath.row
                     cell.accept?.addTarget(self, action: #selector(RecentViewController.accept(_:)), forControlEvents: .TouchUpInside)
 
                     cell.decline?.hidden = false
                     cell.decline?.setImage(UIImage(named: "cancelevent_button"), forState: .Normal)
+                    cell.decline?.setImage(UIImage(named: "reject_button_selected"), forState: .Highlighted)
                     cell.decline?.tag = indexPath.row
                     cell.decline?.addTarget(self, action: #selector(RecentViewController.decline(_:)), forControlEvents: .TouchUpInside)
 
