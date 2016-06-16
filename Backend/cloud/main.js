@@ -68,6 +68,7 @@ Parse.Cloud.job("incomingEventNotification", function (request, response) {
 Parse.Cloud.job("removePastRequests", function(request, status) {
                 // Set up to modify user data
                 Parse.Cloud.useMasterKey();
+                console.log('Remove past request called');
 
                 var Event = Parse.Object.extend("Event");
                 var query = new Parse.Query(Event);
