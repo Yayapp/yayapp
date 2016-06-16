@@ -224,15 +224,24 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
         guard let eventID = event.objectId else {
             return cell
         }
-        
-        if (attendeeButtons.count > attendeeIDs.count && event.owner!.objectId != ParseHelper.sharedInstance.currentUser?.objectId && attendeeIDs.count < event.limit && !allAttendeeIDsWithoutOwner.contains(ParseHelper.sharedInstance.currentUser!.objectId!)) && ParseHelper.sharedInstance.currentUser?.pendingEventIDs.contains(eventID) != true
+
+        if (attendeeButtons.count > attendeeIDs.count
+            && event.owner!.objectId != ParseHelper.sharedInstance.currentUser?.objectId
+            && attendeeIDs.count < event.limit && !allAttendeeIDsWithoutOwner.contains(ParseHelper.sharedInstance.currentUser!.objectId!))
+            && ParseHelper.sharedInstance.currentUser?.pendingEventIDs.contains(eventID) != true
         {
-            let attendeeButton = attendeeButtons[attendeeIDs.count + 1]
-            attendeeButton.removeTarget(nil, action: nil, forControlEvents: .AllEvents)
-            attendeeButton.addTarget(self, action: #selector(ListEventsViewController.join(_:)), forControlEvents: .TouchUpInside)
-            attendeeButton.setTitle("JOIN".localized, forState: .Normal)
-            attendeeButton.hidden = false
-            attendeeButton.tag = indexPath.section
+            if let user = PFUser.currentUser() {
+                ParseHelper.attendeehasRequestedToJoinEvent(user, event: event, completion: { result in
+                    if !result {
+                        let attendeeButton = attendeeButtons[attendeeIDs.count + 1]
+                        attendeeButton.removeTarget(nil, action: nil, forControlEvents: .AllEvents)
+                        attendeeButton.addTarget(self, action: #selector(ListEventsViewController.join(_:)), forControlEvents: .TouchUpInside)
+                        attendeeButton.setTitle("JOIN".localized, forState: .Normal)
+                        attendeeButton.hidden = false
+                        attendeeButton.tag = indexPath.section
+                    }
+                })
+            }
         }
 
         return cell
@@ -277,7 +286,7 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
 
     @IBAction func join(sender: UIButton) {
         sender.hidden = true
-        ParseHelper.changeStateOfEvent(eventsData[sender.tag], toJoined: true, completion: nil)
+        ParseHelper.requestJoinEvent(eventsData[sender.tag], completion: nil)
         guard let blurryAlertViewController = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("BlurryAlertViewController") as? BlurryAlertViewController else {
             return
         }

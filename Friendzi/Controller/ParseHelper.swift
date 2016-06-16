@@ -157,6 +157,21 @@ final class ParseHelper {
         queryEvent(query, block: block)
     }
 
+    class func attendeehasRequestedToJoinEvent(attendee: PFUser, event: Event, completion: (result: Bool) -> Void) {
+        let query = PFQuery(className: requestParseClassName)
+        query.whereKey("attendee", equalTo: attendee)
+        query.whereKey("event", equalTo: PFObject(event: event))
+        query.whereKey("accepted", notEqualTo: true)
+
+        query.getFirstObjectInBackgroundWithBlock { request, error in
+            guard let _ = request else {
+                completion(result: false)
+                return
+            }
+            completion(result: true)
+        }
+    }
+
     class func queryEventsForCategories(user:User!, categories:[Category], block:EventsResultBlock?) {
 
         let query = PFQuery(className: eventParseClassName)

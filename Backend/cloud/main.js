@@ -72,7 +72,7 @@ Parse.Cloud.job("removePastRequests", function(request, status) {
 
                 var Event = Parse.Object.extend("Event");
                 var query = new Parse.Query(Event);
-                query.lessThanOrEqualTo("startDate", new Date())
+                query.lessThanOrEqualTo("startDate", new Date());
 
                 var Request = Parse.Object.extend("Request");
                 var reqQuery = new Parse.Query(Request);
@@ -82,10 +82,12 @@ Parse.Cloud.job("removePastRequests", function(request, status) {
                                      return Parse.Object.destroyAll(results);
                                      }).then(function() {
                                              // Done
+                                             //    status.success('Ok');
                                              }, function(error) {
                                              // Error
+                                                status.error(error);
                                              });
-                });
+})
 
 Parse.Cloud.afterSave("Event", function(request) {
     Parse.Cloud.useMasterKey();
@@ -304,8 +306,7 @@ Parse.Cloud.afterSave("Message", function(request) {
                       var event = request.object.get('event');
                       var user = request.object.get('user');
                       var image = request.object.get('photo');
-
-
+    
                       event.fetch({
                                   success: function(event) {
 
@@ -493,30 +494,30 @@ Parse.Cloud.afterSave("Request", function(request) {
 });
 
 Parse.Cloud.beforeDelete("Request", function(request, response) {
-    Parse.Cloud.useMasterKey()
+    Parse.Cloud.useMasterKey();
 
-    var attendee = request.object.get('attendee')
-    var event = request.object.get('event')
-    var group = request.object.get('group')
+    var attendee = request.object.get('attendee');
+    var event = request.object.get('event');
+    var group = request.object.get('group');
 
-    var requestedItem
-    var isEvent = false
+    var requestedItem;
+    var isEvent = false;
 
     if (event != undefined) {
-        requestedItem = event
+        requestedItem = event;
         isEvent = true
     } else if (group != undefined) {
         requestedItem = group
     } else {
-        console.log("no requested item")
-
+        console.log("no requested item");
         return
     }
 
     attendee.fetch().then(function(attendee) {
-        var pendingEventIDs = attendee.get("pendingEventIDs") == undefined ? [] : attendee.get("pendingEventIDs")
-        var pendingGroupIDs = attendee.get("pendingGroupIDs") == undefined ? [] : attendee.get("pendingGroupIDs")
-        var updatedArray
+        console.log(attendee);
+        var pendingEventIDs = attendee.get("pendingEventIDs") == undefined ? [] : attendee.get("pendingEventIDs");
+        var pendingGroupIDs = attendee.get("pendingGroupIDs") == undefined ? [] : attendee.get("pendingGroupIDs");
+        var updatedArray;
 
         if (isEvent) {
             updatedArray = pendingEventIDs.filter(function(item) {
@@ -528,10 +529,12 @@ Parse.Cloud.beforeDelete("Request", function(request, response) {
             })
         }
 
-        attendee.set(isEvent ? "pendingEventIDs" : "pendingGroupIDs", updatedArray)
+        attendee.set(isEvent ? "pendingEventIDs" : "pendingGroupIDs", updatedArray);
 
         attendee.save().then(function(result) {
             response.success()
         })
-    }, function(error) {response.error(error)})
+    }, function(error) {
+        response.error(error)
+    })
 });
