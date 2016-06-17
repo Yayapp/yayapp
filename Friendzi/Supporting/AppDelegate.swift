@@ -48,7 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let rootViewController = self.window!.rootViewController
         mainStoryBoard = rootViewController?.storyboard
-        mainNavigation = mainStoryBoard.instantiateViewControllerWithIdentifier("mainTabView") as! UITabBarController
+        mainNavigation = mainStoryBoard.instantiateViewControllerWithIdentifier("mainTabView") as? UITabBarController
 
         Flurry.logAllPageViewsForTarget(mainNavigation);
         Flurry.setDebugLogEnabled(true)
