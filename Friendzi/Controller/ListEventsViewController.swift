@@ -231,7 +231,7 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
             && ParseHelper.sharedInstance.currentUser?.pendingEventIDs.contains(eventID) != true
         {
             if let user = PFUser.currentUser() {
-                ParseHelper.attendeehasRequestedToJoinEvent(user, event: event, completion: { result in
+                ParseHelper.attendeeHasRequestedToJoinEvent(user, event: event, completion: { result in
                     if !result {
                         let attendeeButton = attendeeButtons[attendeeIDs.count + 1]
                         attendeeButton.removeTarget(nil, action: nil, forControlEvents: .AllEvents)

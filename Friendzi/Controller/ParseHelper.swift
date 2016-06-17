@@ -157,7 +157,7 @@ final class ParseHelper {
         queryEvent(query, block: block)
     }
 
-    class func attendeehasRequestedToJoinEvent(attendee: PFUser, event: Event, completion: (result: Bool) -> Void) {
+    class func attendeeHasRequestedToJoinEvent(attendee: PFUser, event: Event, completion: (result: Bool) -> Void) {
         let query = PFQuery(className: requestParseClassName)
         query.whereKey("attendee", equalTo: attendee)
         query.whereKey("event", equalTo: PFObject(event: event))
@@ -202,7 +202,6 @@ final class ParseHelper {
         guard let calendar = ParseHelper.gregorianUTCCalendar,
             let currentUserID = PFUser.currentUser()?.objectId else {
                 block?(nil, nil)
-
                 return
         }
 

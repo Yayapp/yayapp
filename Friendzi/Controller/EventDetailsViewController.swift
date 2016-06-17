@@ -41,7 +41,19 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
     private var attendeeButtons:[UIButton]!
     private var attendees:[User] = []
 
-    var event: Event!
+    var event: Event! {
+        didSet {
+            guard let user = PFUser.currentUser() else {
+                return
+            }
+
+            ParseHelper.attendeeHasRequestedToJoinEvent(user, event: event) { result in
+                if result {
+                    self.attendState = .Pending
+                }
+            }
+        }
+    }
 
     weak var delegate: EventChangeDelegate!
 
@@ -202,8 +214,6 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
         self.distance?.text = distanceBetween > 0 ? " ●\(distanceStr)km" : nil
 
         CLLocation(latitude: self.event.location.latitude, longitude: self.event.location.longitude).getLocationString(nil, button: location, timezoneCompletion: nil)
-
-        updateAttendUI()
     }
     
     func attendTitle(isJoined: Bool) -> String {
