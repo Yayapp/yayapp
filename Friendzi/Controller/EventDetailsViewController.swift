@@ -225,17 +225,12 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
             return
         }
 
-        ParseHelper.changeStateOfEvent(event,
-                                       toJoined: attendState == .Join,
-                                       completion: nil)
-
+        ParseHelper.changeStateOfEvent(event, toJoined: attendState == .Join, completion: nil)
         if attendState == .Join {
             blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
             blurryAlertViewController.modalPresentationStyle = .CurrentContext
-
             blurryAlertViewController.aboutText = "Your request has been sent.".localized
             blurryAlertViewController.messageText = "We will notify you of the outcome.".localized
-
             self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
         }
 
@@ -529,6 +524,8 @@ extension EventDetailsViewController {
         }
 
         attendState = .Hidden
+        updateAttendUI()
+
         chatButton?.enabled = false
         switherPlaceholderTopSpace?.constant = view.bounds.width / 160 * 91
         descr?.textContainerInset = UIEdgeInsetsMake(10, 10, 10, 10)

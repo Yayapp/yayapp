@@ -156,7 +156,7 @@ final class RecentViewController: UITableViewController {
                 SVProgressHUD.dismiss()
                 self.notifications.removeAtIndex(sender.tag)
                 UIApplication.sharedApplication().applicationIconBadgeNumber -= 1
-                if(request.event?.attendeeIDs.count >= request.event?.limit) {
+                if request.event?.attendeeIDs.count >= request.event?.limit {
                     ParseHelper.declineRequests(request.event!)
                     self.notifications = self.notifications.filter({$0 is Request && ($0 as! Request).event != nil && ($0 as! Request).event?.objectId != request.event?.objectId})
                 }
