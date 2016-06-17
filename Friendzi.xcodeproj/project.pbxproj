@@ -118,7 +118,6 @@
 		659ABA581CEEF2A20005C867 /* ProfileTab.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 659AB9E01CEEF2A20005C867 /* ProfileTab.storyboard */; };
 		659ABA591CEEF2A20005C867 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659AB9E31CEEF2A20005C867 /* AppDelegate.swift */; };
 		659ABA5A1CEEF2A20005C867 /* Friendzi.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 659AB9E41CEEF2A20005C867 /* Friendzi.entitlements */; };
-		659ABA5B1CEEF2A20005C867 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 659AB9E51CEEF2A20005C867 /* Info.plist */; };
 		659ABA5C1CEEF2A20005C867 /* CategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659AB9E91CEEF2A20005C867 /* CategoryCollectionViewCell.swift */; };
 		659ABA5D1CEEF2A20005C867 /* CategoryCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 659AB9EA1CEEF2A20005C867 /* CategoryCollectionViewCell.xib */; };
 		659ABA5E1CEEF2A20005C867 /* EventPhotoFlatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 659AB9EC1CEEF2A20005C867 /* EventPhotoFlatTableViewCell.xib */; };
@@ -760,7 +759,6 @@
 				045E2EC91CF604A8000CA08E /* index.html in Resources */,
 				045E2EC21CF604A8000CA08E /* header.js in Resources */,
 				659ABA5D1CEEF2A20005C867 /* CategoryCollectionViewCell.xib in Resources */,
-				659ABA5B1CEEF2A20005C867 /* Info.plist in Resources */,
 				659ABA511CEEF2A20005C867 /* Auth.storyboard in Resources */,
 				045E2EC81CF604A8000CA08E /* global.json in Resources */,
 				659ABA521CEEF2A20005C867 /* CreateEventTab.storyboard in Resources */,
@@ -1021,7 +1019,7 @@
 		995032881B564B4400D792C5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1071,7 +1069,7 @@
 		995032891B564B4400D792C5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1114,7 +1112,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 116D70F35B19AD9546398474 /* Pods.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;
@@ -1169,7 +1167,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 87E5039D1AFE3D9446032CF4 /* Pods.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;

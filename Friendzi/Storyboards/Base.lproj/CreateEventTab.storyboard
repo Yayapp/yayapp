@@ -376,7 +376,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="EUi-hn-LQ1">
-                        <barButtonItem key="leftBarButtonItem" title="Item" style="plain" id="U0r-p6-LHf">
+                        <barButtonItem key="leftBarButtonItem" title="Item" style="done" id="U0r-p6-LHf">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="WzO-x2-frO">
                                 <rect key="frame" x="16" y="7" width="71" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -386,7 +386,7 @@
                                 </connections>
                             </button>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="BZY-q5-4Y8">
+                        <barButtonItem key="rightBarButtonItem" style="done" id="BZY-q5-4Y8">
                             <button key="customView" hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="dT2-r4-bqD">
                                 <rect key="frame" x="233" y="7" width="71" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
