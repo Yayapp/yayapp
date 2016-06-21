@@ -109,7 +109,7 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
         }
     }
     
-    func processMessages(result:[Message]){
+    func processMessages(result: [Message]){
         for (index,message) in result.enumerate() {
             if message.photo == nil {
                 if  let senderId = message.user.objectId,
@@ -131,7 +131,6 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
                 })
                 self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, media: media))
             }
-            
         }
     }
 
@@ -210,7 +209,7 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
     override func collectionView(collectionView:JSQMessagesCollectionView, messageDataForItemAtIndexPath indexPath:NSIndexPath) -> JSQMessageData {
         return self.messages[indexPath.item];
     }
-    
+
     override func collectionView(collectionView:JSQMessagesCollectionView, messageBubbleImageDataForItemAtIndexPath indexPath:NSIndexPath) -> JSQMessageBubbleImageDataSource {
         
         let message = messages[indexPath.item]
@@ -219,15 +218,15 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
         }
         return JSQMessagesBubbleImageFactory().incomingMessagesBubbleImageWithColor(UIColor.grayColor())
     }
-    
+
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.messages.count
     }
-    
+
     override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1
     }
-    
+
     override func collectionView(collectionView: JSQMessagesCollectionView!, didTapMessageBubbleAtIndexPath indexPath: NSIndexPath!) {
         let message = messages[indexPath.row]
         

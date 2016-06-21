@@ -34,6 +34,7 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
 
         return searchController
     }()
+
     var searchControllerText: String?
     var userDidLogout = false
 
@@ -297,14 +298,16 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
     }
 
     func searchBar(searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-        search(searchBar.text!)
+        if let text = searchBar.text {
+            search(text)
+        }
     }
 
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }
 
-    func search(searchText:String){
+    func search(searchText: String){
         ParseHelper.searchCategories(searchText, block: { categoriesList, error in
             guard let categoriesList = categoriesList else {
                 if let error = error {

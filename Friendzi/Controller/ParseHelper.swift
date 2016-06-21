@@ -372,8 +372,13 @@ final class ParseHelper {
     class func searchCategories(text:String, block:CategoriesResultBlock?) {
         let query = PFQuery(className: categoryParseClassName)
         query.whereKey("name", matchesRegex: text, modifiers: "i")
-        query.findObjectsInBackgroundWithBlock {
-            objects, error in
+
+        if let geoPoint = PFUser.currentUser()?.objectForKey("location") as? PFGeoPoint,
+            distance = PFUser.currentUser()?.objectForKey("distance") as? Double {
+            query.whereKey("location", nearGeoPoint: geoPoint, withinKilometers: distance)
+        }
+
+        query.findObjectsInBackgroundWithBlock { objects, error in
 
             if error == nil {
                 let array = objects! as NSArray as! [PFObject]
