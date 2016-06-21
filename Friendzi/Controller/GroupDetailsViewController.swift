@@ -43,10 +43,10 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
     }
 
     var group: Category?
-    var selectedCategoriesData: [Category]! = []
+    var selectedCategoriesData: [Category] = []
     var updatedStatusInGroup: (() -> Void)?
 
-    weak var delegate: GroupChangeDelegate!
+    weak var delegate: GroupChangeDelegate?
 
     private var attendState: AttendState = .Hidden {
         didSet {
@@ -102,16 +102,17 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
 
         if let eventsListVC = UIStoryboard.main()?.instantiateViewControllerWithIdentifier(ListEventsViewController.storyboardID) as? ListEventsViewController {
             eventsListVC.eventsData = []
-            ParseHelper.queryEventsForCategories(ParseHelper.sharedInstance.currentUser!, categories: selectedCategoriesData, block: { result, error in
-                guard let events = result else {
-                    if let error = error {
-                        MessageToUser.showDefaultErrorMessage(error.localizedDescription)
+            if let currentUser = ParseHelper.sharedInstance.currentUser {
+                ParseHelper.queryEventsForCategories(currentUser, categories: selectedCategoriesData, block: { result, error in
+                    guard let events = result else {
+                        if let error = error {
+                            MessageToUser.showDefaultErrorMessage(error.localizedDescription)
+                        }
+                        return
                     }
-                    return
-                }
-
-                eventsListVC.reloadAll(events)
-            })
+                    eventsListVC.reloadAll(events)
+                })
+            }
 
             addChildViewController(eventsListVC)
             eventsContainer?.addSubview(eventsListVC.view)
@@ -157,8 +158,9 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
                     self?.attendState = .Hidden
                 }
 
-                let currentLocation = ParseHelper.sharedInstance.currentUser!.location
-                self?.currentLocation = CLLocation(latitude: currentLocation!.latitude, longitude: currentLocation!.longitude)
+                if let currentLocation = ParseHelper.sharedInstance.currentUser?.location {
+                    self?.currentLocation = CLLocation(latitude: currentLocation.latitude, longitude: currentLocation.longitude)
+                }
 
                 ParseHelper.fetchObject(fetchedGroup.owner, completion: {
                     result, error in
@@ -317,7 +319,7 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
                 }
 
                 controller.group = group
-                self.navigationController!.pushViewController(controller, animated: true)
+                self.navigationController?.pushViewController(controller, animated: true)
             } else {
                 MessageToUser.showDefaultErrorMessage("There are no attendees yet.")
             }
@@ -362,7 +364,7 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
     }
 
     @IBAction func invite(sender: AnyObject) {
-        if (ParseHelper.sharedInstance.currentUser != nil) {
+        if ParseHelper.sharedInstance.currentUser != nil {
             let mailComposeViewController = configuredMailComposeViewController()
             if MFMailComposeViewController.canSendMail() {
                 self.presentViewController(mailComposeViewController, animated: true, completion: nil)
@@ -431,9 +433,7 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
     func groupCreated(group:Category) {
         self.group = group
         update()
-        if self.delegate != nil {
-            delegate.groupChanged(group)
-        }
+        delegate?.groupChanged(group)
     }
 
     @IBAction func editGroup(sender: AnyObject) {
@@ -481,7 +481,11 @@ final class GroupDetailsViewController: UIViewController, MFMailComposeViewContr
         blurryAlertViewController.completion = {
             let report = Report()
             report.group = self.group
-            report.user = ParseHelper.sharedInstance.currentUser!
+
+            if let currentUser = ParseHelper.sharedInstance.currentUser {
+                report.user = currentUser
+            }
+
             ParseHelper.saveObject(report, completion: {
                 result, error in
                 if error == nil {
