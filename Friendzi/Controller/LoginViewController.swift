@@ -127,11 +127,16 @@ final class LoginViewController: UIViewController, InstagramDelegate {
     @IBAction func facebookLogin(sender: AnyObject) {
         SVProgressHUD.show()
 
-        let permissions:[String] = ["email","user_about_me", "user_relationships", "user_birthday", "user_location"]
+        let permissions:[String] = ["user_about_me", "user_relationships", "user_birthday", "user_location"]
         PFFacebookUtils.logInInBackgroundWithReadPermissions(permissions) { user, error in
-            if error != nil {
+            if user == nil {
                 SVProgressHUD.dismiss()
-                MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
+                if let error = error {
+                    MessageToUser.showDefaultErrorMessage(error.localizedDescription)
+
+                } else {
+                    MessageToUser.showMessage("Ooooops".localized, textId: "It seems like you are already using this e-mail with another account.".localized)
+                }
                 return
             }
 

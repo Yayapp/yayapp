@@ -37,7 +37,7 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
         inputToolbar?.contentView?.textView?.placeHolder = "Message..."
         inputToolbar?.contentView?.textView?.layer.borderWidth = 1
         inputToolbar?.contentView?.textView?.layer.borderColor = Color.DefaultBorderColor.CGColor
-        inputToolbar!.contentView?.textView?.layer.cornerRadius = 0
+        inputToolbar?.contentView?.textView?.layer.cornerRadius = 0
         inputToolbar?.contentView?.backgroundColor = Color.PrimaryBackgroundColor
 
         if event != nil {
