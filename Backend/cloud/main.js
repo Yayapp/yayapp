@@ -306,77 +306,81 @@ Parse.Cloud.afterSave("Message", function(request) {
                       var event = request.object.get('event');
                       var user = request.object.get('user');
                       var image = request.object.get('photo');
-    
-                      event.fetch({
-                                  success: function(event) {
+                        if (event !== undefined) {
+                            event.fetch({
+                                success: function (event) {
+                                    user.fetch({
+                                        success: function (user) {
 
-                                  user.fetch({
-                                             success: function(user) {
+                                            var userName = user.get('name');
+                                            var eventName = event.get('name');
+                                            var array = [];
+                                            var attendeeIDs = event.get('attendeeIDs')
+                                            var fullMessage = ""
+                                            if (image == null) {
+                                                fullMessage = "There is a new message in conversation \"" + eventName + "\" from " + userName + ": " + message
+                                            } else {
+                                                fullMessage = "There is a new photo in conversation \"" + eventName + "\" from " + userName
+                                            }
 
-                                             var userName = user.get('name');
-                                             var eventName = event.get('name');
-                                             var array = [];
-                                             var attendeeIDs = event.get('attendeeIDs')
-                                             var fullMessage = ""
-                                             if (image == null) {
-                                             fullMessage = "There is a new message in conversation \"" + eventName + "\" from " + userName + ": " + message
-                                             } else {
-                                             fullMessage = "There is a new photo in conversation \"" + eventName + "\" from " + userName
-                                             }
-
-                                             for (i = 0; i < attendeeIDs.length; i++) {
+                                            for (i = 0; i < attendeeIDs.length; i++) {
                                                 if (user.id != attendeeIDs[i]) {
                                                     array[i] = attendeeIDs[i]
                                                 }
-                                             }
+                                            }
 
-                                             var userQuery = new Parse.Query(Parse.User);
-                                             userQuery.equalTo('newMessage', true);
-                                             userQuery.containedIn('objectId', array);
+                                            var userQuery = new Parse.Query(Parse.User);
+                                            userQuery.equalTo('newMessage', true);
+                                            userQuery.containedIn('objectId', array);
 
-                                             var pushQuery = new Parse.Query(Parse.Installation);
-                                             pushQuery.matchesQuery('user', userQuery);
+                                            var pushQuery = new Parse.Query(Parse.Installation);
+                                            pushQuery.matchesQuery('user', userQuery);
 
-                                             var userQueryN = new Parse.Query(Parse.User);
-                                             userQuery.equalTo('newMessage', false)
-                                             userQueryN.containedIn('objectId', array);
+                                            var userQueryN = new Parse.Query(Parse.User);
+                                            userQuery.equalTo('newMessage', false)
+                                            userQueryN.containedIn('objectId', array);
 
-                                             var pushQueryN = new Parse.Query(Parse.Installation);
-                                             pushQueryN.matchesQuery('user', userQueryN);
+                                            var pushQueryN = new Parse.Query(Parse.Installation);
+                                            pushQueryN.matchesQuery('user', userQueryN);
 
 
-                                             Parse.Push.send({
-                                                             where: pushQueryN,
-                                                             data: {
-                                                             "content-available": 1,
-                                                             "event_id": event.id,
-                                                             "id": request.object.id
-                                                             }
-                                                             }, {
-                                                             success: function() {},
-                                                             error: function(error) {
-                                                             throw "Got an error " + error.code + " : " + error.message;
-                                                             }
-                                                             });
+                                            Parse.Push.send({
+                                                where: pushQueryN,
+                                                data: {
+                                                    "content-available": 1,
+                                                    "event_id": event.id,
+                                                    "id": request.object.id
+                                                }
+                                            }, {
+                                                success: function () {
+                                                },
+                                                error: function (error) {
+                                                    throw "Got an error " + error.code + " : " + error.message;
+                                                }
+                                            });
 
-                                             Parse.Push.send({
-                                                             where: pushQuery,
-                                                             data: {
-                                                             "alert": fullMessage,
-                                                             "content-available": 1,
-                                                             "sound":"layerbell.caf",
-                                                             "event_id": event.id,
-                                                             "id": request.object.id
-                                                             }
-                                                             }, {
-                                                             success: function() {},
-                                                             error: function(error) {
-                                                             throw "Got an error " + error.code + " : " + error.message;
-                                                             }
-                                                             });
+                                            Parse.Push.send({
+                                                where: pushQuery,
+                                                data: {
+                                                    "alert": fullMessage,
+                                                    "content-available": 1,
+                                                    "sound": "layerbell.caf",
+                                                    "event_id": event.id,
+                                                    "id": request.object.id
+                                                }
+                                            }, {
+                                                success: function () {
+                                                },
+                                                error: function (error) {
+                                                    throw "Got an error " + error.code + " : " + error.message;
+                                                }
+                                            });
 
-                                             }});
-                                  }});
+                                        }
+                                    });
+                                }
+                            });
+                        }
                       });
 
 Parse.Cloud.afterSave("Request", function(request) {
