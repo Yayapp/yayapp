@@ -69,13 +69,11 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
         })
 
         } else {
-            ParseHelper.fetchObject(group!, completion: {
-                result, error in
+            ParseHelper.fetchObject(group!, completion: { result, error in
                 
                 self.processAttendees(self.group!.attendeeIDs)
                 
-                ParseHelper.getMessages(self.group!, block: {
-                    result, error in
+                ParseHelper.getMessages(self.group!, block: { result, error in
                     if error == nil {
                         self.processMessages(result!)
                         self.finishReceivingMessage()
@@ -114,14 +112,20 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
     func processMessages(result:[Message]){
         for (index,message) in result.enumerate() {
             if message.photo == nil {
-                self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, text: message.text))
+                if  let senderId = message.user.objectId,
+                    let senderName =  message.user.name,
+                    let date = message.createdAt,
+                    let text = message.text {
+
+                    self.messages.append(JSQMessage(senderId: senderId, senderDisplayName: senderName, date: date, text: text))
+                }
 
             } else {
                 let media = JSQPhotoMediaItem()
                 ParseHelper.getData(message.photo!, completion: {
                     result, error in
                     if error == nil {
-                        media.image = UIImage(data: result! )
+                        media.image = UIImage(data: result!)
                         self.collectionView!.reloadItemsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)])
                     }
                 })

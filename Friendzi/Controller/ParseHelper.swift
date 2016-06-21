@@ -457,8 +457,7 @@ final class ParseHelper {
                 let array = objects! as NSArray as! [PFObject]
                 let mappedObjects = array.map({ Message(parseObject: $0) }) as? [Message]
 
-                if let objects = mappedObjects {
-                    block!(objects, error)
+                if let objects = mappedObjects { block!(objects, error)
                 }
             } else {
                 // Log details of the failure
