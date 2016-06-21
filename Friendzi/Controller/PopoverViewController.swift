@@ -29,7 +29,6 @@ final class PopoverViewController: UIViewController {
 
         textLabel.text = text
         submitButton.setTitle(submitButtonTitle, forState: .Normal)
-
         contentView.layer.masksToBounds = false
         contentView.layer.shadowOffset = CGSizeMake(0, 1)
         contentView.layer.shadowRadius = 2
@@ -42,10 +41,6 @@ final class PopoverViewController: UIViewController {
         super.viewDidLayoutSubviews()
 
         arrowViewLeadingSpaceConstraint.constant = arrowViewLeadingSpace ?? 0
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
     }
 
     @IBAction func submitButtonPressed(sender: UIButton) {

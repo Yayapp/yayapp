@@ -67,9 +67,9 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
             popoverController.submitButtonTitle = NSLocalizedString("Next Step (1/4)", comment: "")
 
             popoverController.skipButtonHidden = true
-            popoverController.onSubmitPressed = { [weak self] in
-                self?.presentedViewController?.dismissViewControllerAnimated(false, completion: nil)
-                self?.tabBarController?.selectedIndex = 1
+            popoverController.onSubmitPressed = {
+                self.presentedViewController?.dismissViewControllerAnimated(false, completion: nil)
+                self.tabBarController?.selectedIndex = 1
             }
 
             DataProxy.sharedInstance.needsShowEventsListTabHint = false

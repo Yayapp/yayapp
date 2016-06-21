@@ -192,23 +192,23 @@ final class LoginViewController: UIViewController, InstagramDelegate {
                 if user.isNew {
                     DataProxy.sharedInstance.setNeedsShowAllHints(true)
 
-                    let url:NSURL = NSURL(string:"https://api.twitter.com/1.1/users/show.json?screen_name=\(PFTwitterUtils.twitter()!.screenName!)")!
-                    let request:NSMutableURLRequest = NSMutableURLRequest(URL:url)
+                    let url = NSURL(string:"https://api.twitter.com/1.1/users/show.json?screen_name=\(PFTwitterUtils.twitter()!.screenName!)")!
+                    let request = NSMutableURLRequest(URL: url)
                     PFTwitterUtils.twitter()?.signRequest(request)
                     SVProgressHUD.dismiss()
                         do {
-                            var response:NSURLResponse?
-                            let data:NSData = try! NSURLConnection.sendSynchronousRequest(request, returningResponse:&response)
-                            
-                            let result:NSDictionary = (try! NSJSONSerialization.JSONObjectWithData(data, options:NSJSONReadingOptions.AllowFragments)) as! NSDictionary
-                            let pictureUrl:NSURL = NSURL(string:result.objectForKey("profile_image_url_https") as! String)!
-                            let imageData :NSData =  try NSData(contentsOfURL: pictureUrl, options: NSDataReadingOptions.DataReadingMappedIfSafe)
-                            
-                            let imageFile = PFFile(name: "image.jpg", data: imageData)
+                            var response: NSURLResponse?
+                            let data = try! NSURLConnection.sendSynchronousRequest(request, returningResponse: &response)
+                            let result = (try! NSJSONSerialization.JSONObjectWithData(data, options:NSJSONReadingOptions.AllowFragments)) as? NSDictionary
 
-                            ParseHelper.sharedInstance.currentUser?.avatar = File(parseFile: imageFile!)
-                            ParseHelper.sharedInstance.currentUser?.name = result.objectForKey("name") as? String
-                            ParseHelper.sharedInstance.currentUser?.about = result.objectForKey("description") as? String
+                            if let pictureUrl = result?.objectForKey("profile_image_url_https") as? String, let url = NSURL(string: pictureUrl) {
+                                let imageData =  try NSData(contentsOfURL: url, options: NSDataReadingOptions.DataReadingMappedIfSafe)
+                                let imageFile = PFFile(name: "image.jpg", data: imageData)
+                                ParseHelper.sharedInstance.currentUser?.avatar = File(parseFile: imageFile!)
+                            }
+
+                            ParseHelper.sharedInstance.currentUser?.name = result?.objectForKey("name") as? String
+                            ParseHelper.sharedInstance.currentUser?.about = result?.objectForKey("description") as? String
                         } catch {
                             MessageToUser.showDefaultErrorMessage("Something went wrong".localized)
                         }
