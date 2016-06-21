@@ -146,9 +146,9 @@ final class LoginViewController: UIViewController, InstagramDelegate {
                             print(error)
 
                         } else {
-                            ParseHelper.sharedInstance.currentUser?.email = result.objectForKey("email")! as? String
-                            ParseHelper.sharedInstance.currentUser?.name = result.objectForKey("name")! as? String
-                            ParseHelper.sharedInstance.currentUser?.gender = (result.objectForKey("gender")! as? String)?.lowercaseString == "male" ? 1 : 0
+                            ParseHelper.sharedInstance.currentUser?.email = result.objectForKey("email") as? String
+                            ParseHelper.sharedInstance.currentUser?.name = result.objectForKey("name") as? String
+                            ParseHelper.sharedInstance.currentUser?.gender = (result.objectForKey("gender") as? String)?.lowercaseString == "male" ? 1 : 0
 
                             let fbUserId = result.objectForKey("id") as! String
                             let url: NSURL = NSURL(string:"https://graph.facebook.com/\(fbUserId)/picture?width=200&height=200")!
@@ -182,19 +182,20 @@ final class LoginViewController: UIViewController, InstagramDelegate {
     }
 
     @IBAction func twitterLogin(sender: AnyObject) {
-        PFTwitterUtils.logInWithBlock {
-            (user: PFUser?, error: NSError?) -> Void in
+        SVProgressHUD.show()
+        PFTwitterUtils.logInWithBlock { user, error in
             if error != nil {
+                SVProgressHUD.dismiss()
                 MessageToUser.showDefaultErrorMessage(error?.localizedDescription)
             }
             if let user = user {
-                
                 if user.isNew {
                     DataProxy.sharedInstance.setNeedsShowAllHints(true)
 
                     let url:NSURL = NSURL(string:"https://api.twitter.com/1.1/users/show.json?screen_name=\(PFTwitterUtils.twitter()!.screenName!)")!
                     let request:NSMutableURLRequest = NSMutableURLRequest(URL:url)
                     PFTwitterUtils.twitter()?.signRequest(request)
+                    SVProgressHUD.dismiss()
                         do {
                             var response:NSURLResponse?
                             let data:NSData = try! NSURLConnection.sendSynchronousRequest(request, returningResponse:&response)
@@ -214,12 +215,13 @@ final class LoginViewController: UIViewController, InstagramDelegate {
                     
                     self.doRegistration()
                 } else {
+                    SVProgressHUD.dismiss()
                     self.proceed()
                 }
             }
         }
     }
-//
+
     @IBAction func instagramLogin(sender: AnyObject) {
         guard let instagramView = UIStoryboard.main()?.instantiateViewControllerWithIdentifier("InstagramViewController") as? InstagramViewController else {
             return
