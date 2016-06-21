@@ -129,6 +129,10 @@ final class LoginViewController: UIViewController, InstagramDelegate {
 
         let permissions:[String] = ["user_about_me", "user_relationships", "user_birthday", "user_location"]
         PFFacebookUtils.logInInBackgroundWithReadPermissions(permissions) { user, error in
+            /*
+             Bug in PFFacebookUtils. Parse should return error "email is already taken..."! In some cases it return the right error in some case return code 308,
+             in other rare case returns error == nil user == nil.
+             */
             if user == nil {
                 SVProgressHUD.dismiss()
                 if let error = error {
