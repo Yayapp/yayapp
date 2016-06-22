@@ -797,6 +797,7 @@ final class ParseHelper {
     }
 
     class func logOutInBackgroundWithBlock(completion:ErrorResultBlock?) {
+        UIApplication.sharedApplication().applicationIconBadgeNumber = 0
         PFUser.logOutInBackgroundWithBlock(completion)
     }
 

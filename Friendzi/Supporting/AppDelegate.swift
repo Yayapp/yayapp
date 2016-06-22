@@ -136,6 +136,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidBecomeActive(application: UIApplication) {
+        UIApplication.sharedApplication().applicationIconBadgeNumber = PFInstallation.currentInstallation().badge
         FBSDKAppEvents.activateApp()
     }
 

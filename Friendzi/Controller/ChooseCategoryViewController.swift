@@ -141,7 +141,7 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
     internal func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryViewOfKind(kind,
                                                                            withReuseIdentifier: CategoryHeader.reuseIdentifier,
-                                                                           forIndexPath: indexPath)
+                                                                        forIndexPath: indexPath)
         guard let categoryHeader = header as? CategoryHeader else {
             return header
         }

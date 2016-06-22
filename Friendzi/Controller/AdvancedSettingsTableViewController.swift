@@ -34,7 +34,7 @@ final class AdvancedSettingsTableViewController: UITableViewController {
         blurryAlertViewController.onUserLoggedOut = { [weak self] error in
             if error == nil {
                 NSNotificationCenter.defaultCenter().postNotificationName(Constants.userDidLogoutNotification, object: nil)
-                
+                UIApplication.sharedApplication().applicationIconBadgeNumber = 0
                 let defaults = NSUserDefaults.standardUserDefaults()
                 defaults.setBool(false, forKey: "hasPermission")
                 defaults.synchronize()
