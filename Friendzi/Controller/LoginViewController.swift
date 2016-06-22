@@ -107,9 +107,7 @@ final class LoginViewController: UIViewController, InstagramDelegate {
     }
     
     func doRegistration(){
-        
         setupDefaults(ParseHelper.sharedInstance.currentUser!)
-
         guard let currentUser = ParseHelper.sharedInstance.currentUser else {
             return
         }
@@ -129,10 +127,6 @@ final class LoginViewController: UIViewController, InstagramDelegate {
 
         let permissions:[String] = ["user_about_me", "user_relationships", "user_birthday", "user_location"]
         PFFacebookUtils.logInInBackgroundWithReadPermissions(permissions) { user, error in
-            /*
-             Bug in PFFacebookUtils. Parse should return error "email is already taken..."! In some cases it return the right error in some case return code 308,
-             in other rare case returns error == nil user == nil.
-             */
             if user == nil {
                 SVProgressHUD.dismiss()
                 if let error = error {
@@ -152,41 +146,38 @@ final class LoginViewController: UIViewController, InstagramDelegate {
                     graphConnection.addRequest(userProfileRequest, completionHandler: { (connection: FBSDKGraphRequestConnection!, result: AnyObject!, error: NSError!) -> Void in
                         if error != nil {
                             SVProgressHUD.dismiss()
+                            MessageToUser.showMessage("Ooooops".localized, textId: "Can not login you through facebook right now. Please try again later".localized)
                             print(error)
+                            return
 
                         } else {
-                            ParseHelper.sharedInstance.currentUser?.email = result.objectForKey("email") as? String
-                            ParseHelper.sharedInstance.currentUser?.name = result.objectForKey("name") as? String
-                            ParseHelper.sharedInstance.currentUser?.gender = (result.objectForKey("gender") as? String)?.lowercaseString == "male" ? 1 : 0
-
-                            let fbUserId = result.objectForKey("id") as! String
-                            let url: NSURL = NSURL(string:"https://graph.facebook.com/\(fbUserId)/picture?width=200&height=200")!
-                            let URLRequestNeeded = NSURLRequest(URL: url)
-                            NSURLConnection.sendAsynchronousRequest(URLRequestNeeded, queue: NSOperationQueue.mainQueue(), completionHandler: { response, data, error in
-                                SVProgressHUD.dismiss()
-                                if error == nil {
-                                    let picture = PFFile(name: "image.jpg", data: data!)
-                                    ParseHelper.sharedInstance.currentUser!.avatar = File(parseFile: picture!)
-                                    ParseHelper.saveObject(ParseHelper.sharedInstance.currentUser!, completion: nil)
-
-                                } else {
-                                    print("Error: \(error!.localizedDescription)")
-                                }
-
-                                if user.isNew {
-                                    DataProxy.sharedInstance.setNeedsShowAllHints(true)
-                                    self.doRegistration()
-
-                                } else {
-                                    self.proceed()
-                                }
-                            })
+                            if let facebookUserEmail = result.objectForKey("email") as? String {
+                                let emailCheckQuery = PFQuery(className: "_User")
+                                emailCheckQuery.whereKey("email", equalTo: facebookUserEmail)
+                                emailCheckQuery.findObjectsInBackgroundWithBlock({ objects, error in
+                                    guard let objects = objects else {
+                                        SVProgressHUD.dismiss()
+                                        MessageToUser.showMessage("Ooooops".localized, textId: "Can not login you through facebook right now. Please try again later".localized)
+                                        return
+                                    }
+                                    //found a user that already is using this email address
+                                    if objects.isEmpty == false {
+                                        SVProgressHUD.dismiss()
+                                        MessageToUser.showMessage("Ooooops".localized, textId: "It seems like you are already using this e-mail with another account.".localized)
+                                    } else {
+                                        //no user with this email found. Proceed to login the user
+                                        self.setupUserForFacebook(result, user: user)
+                                    }
+                                })
+                            } else {
+                                // fb user has no email address. Phone or other registration method. Wont interefere with Parse sdk
+                                self.setupUserForFacebook(result, user: user)
+                            }
                         }
                     })
                     graphConnection.start()
                 }
             }
-            SVProgressHUD.dismiss()
         }
     }
 
@@ -386,5 +377,35 @@ private extension LoginViewController {
         }
 
         self.navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+
+    //MARK:- Helpers 
+    func setupUserForFacebook(result: AnyObject, user: PFUser) {
+        ParseHelper.sharedInstance.currentUser?.email = result.objectForKey("email") as? String
+        ParseHelper.sharedInstance.currentUser?.name = result.objectForKey("name") as? String
+        ParseHelper.sharedInstance.currentUser?.gender = (result.objectForKey("gender") as? String)?.lowercaseString == "male" ? 1 : 0
+
+        let fbUserId = result.objectForKey("id") as? String
+        let url: NSURL = NSURL(string:"https://graph.facebook.com/\(fbUserId)/picture?width=200&height=200")!
+        let URLRequestNeeded = NSURLRequest(URL: url)
+        NSURLConnection.sendAsynchronousRequest(URLRequestNeeded, queue: NSOperationQueue.mainQueue(), completionHandler: { response, data, error in
+            SVProgressHUD.dismiss()
+            if error == nil {
+                let picture = PFFile(name: "image.jpg", data: data!)
+                ParseHelper.sharedInstance.currentUser!.avatar = File(parseFile: picture!)
+                ParseHelper.saveObject(ParseHelper.sharedInstance.currentUser!, completion: nil)
+
+            } else {
+                print("Error: \(error!.localizedDescription)")
+            }
+
+            if user.isNew {
+                DataProxy.sharedInstance.setNeedsShowAllHints(true)
+                self.doRegistration()
+
+            } else {
+                self.proceed()
+            }
+        })
     }
 }

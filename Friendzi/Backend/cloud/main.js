@@ -76,7 +76,9 @@ Parse.Cloud.job("removePastRequests", function(request, status) {
     
     var Request = Parse.Object.extend("Request");
     var reqQuery = new Parse.Query(Request);
+    //Delete malformed requests and the one that are already accepted
     reqQuery.doesNotExist('accepted');
+    reqQuery.equalTo('accepted', true);
     reqQuery.find().then(function(results) {
         return Parse.Object.destroyAll(results);
     }).then(function() {
@@ -467,7 +469,6 @@ Parse.Cloud.beforeDelete("Request", function(request, response) {
         }
         
         attendee.set(isEvent ? "pendingEventIDs" : "pendingGroupIDs", updatedArray)
-        3
         attendee.save().then(function(result) {
             response.success()
         })
