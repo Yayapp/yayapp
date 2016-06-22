@@ -66,17 +66,11 @@ Parse.Cloud.job("incomingEventNotification", function (request, response) {
 });
 
 Parse.Cloud.job("removePastRequests", function(request, status) {
-                // Set up to modify user data
                 Parse.Cloud.useMasterKey();
                 console.log('Remove past request called');
 
-                var Event = Parse.Object.extend("Event");
-                var query = new Parse.Query(Event);
-                query.lessThanOrEqualTo("startDate", new Date());
-
                 var Request = Parse.Object.extend("Request");
                 var reqQuery = new Parse.Query(Request);
-                reqQuery.matchesQuery('event', query);
                 reqQuery.doesNotExist('accepted');
                 reqQuery.find().then(function(results) {
                                      return Parse.Object.destroyAll(results);
