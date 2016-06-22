@@ -82,7 +82,7 @@ Parse.Cloud.job("removePastRequests", function(request, status) {
                                      return Parse.Object.destroyAll(results);
                                      }).then(function() {
                                              // Done
-                                             //    status.success('Ok');
+                                                status.success('Ok');
                                              }, function(error) {
                                              // Error
                                                 status.error(error);
