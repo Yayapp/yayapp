@@ -25,7 +25,7 @@ final class EventFinderViewController: UIViewController, UIAlertViewDelegate, Ch
             return
         }
         map.delegate = self
-        map.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
+        map.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
         map.setEditing (true, animated: true)
         presentViewController(map, animated: true, completion: nil)
     }

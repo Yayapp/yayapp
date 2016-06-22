@@ -180,7 +180,7 @@ final class ChooseCategoryViewController: UIViewController, UICollectionViewDele
 
             if category.isPrivate && isSwitcherOn {
                 blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
-                blurryAlertViewController.modalPresentationStyle = .CurrentContext
+                blurryAlertViewController.modalPresentationStyle = .OverCurrentContext
 
                 blurryAlertViewController.aboutText = "Your request has been sent.".localized
                 blurryAlertViewController.messageText = "We will notify you of the outcome.".localized

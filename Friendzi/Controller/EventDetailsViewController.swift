@@ -228,7 +228,7 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
         ParseHelper.changeStateOfEvent(event, toJoined: attendState == .Join, completion: nil)
         if attendState == .Join {
             blurryAlertViewController.action = BlurryAlertViewController.BUTTON_OK
-            blurryAlertViewController.modalPresentationStyle = .CurrentContext
+            blurryAlertViewController.modalPresentationStyle = .OverCurrentContext
             blurryAlertViewController.aboutText = "Your request has been sent.".localized
             blurryAlertViewController.messageText = "We will notify you of the outcome.".localized
             self.presentViewController(blurryAlertViewController, animated: true, completion: nil)
