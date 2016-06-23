@@ -381,7 +381,6 @@ private extension LoginViewController {
 
     //MARK:- Helpers 
     func setupUserForFacebook(result: AnyObject, user: PFUser) {
-        ParseHelper.sharedInstance.currentUser?.email = result.objectForKey("email") as? String
         ParseHelper.sharedInstance.currentUser?.name = result.objectForKey("name") as? String
         ParseHelper.sharedInstance.currentUser?.gender = (result.objectForKey("gender") as? String)?.lowercaseString == "male" ? 1 : 0
 
