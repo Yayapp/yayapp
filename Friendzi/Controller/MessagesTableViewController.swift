@@ -90,6 +90,7 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
                         }
                         
                         self.collectionView.reloadData()
+                        
                     }
                 }
             }
@@ -264,23 +265,24 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
 //            }
 //        })
 //        
-        let name = (ParseHelper.sharedInstance.currentUser?.username)!
-        let id = (ParseHelper.sharedInstance.currentUser?.id)!
-        
-        if chatHead != nil {
+
+        if chatHead != nil, let name = ParseHelper.sharedInstance.currentUser?.username, let id = ParseHelper.sharedInstance.currentUser?.id {
             
             SocketIOManager.sharedInstance.socket.emitWithAck("sendMessageToEvent", ["eventChat_id":self.chatHead, "name":name, "message":text, "image":"", "from":id])(timeoutAfter: 0) {data in
                 print("print this \(self.chatHead)")
                 print("sendEventMessages\(data)")
-                let message = data.first as? [String: AnyObject]
-                let id = message!["from"] as? String
-                let name = message!["name"] as? String
-                let text = message!["message"] as? String
+                guard let message = data.first as? [String: AnyObject] else { return }
                 
-                let responseString = message!["created"] as? String
-                let dFormatter = NSDateFormatter()
-                dFormatter.dateFormat = "yyyy-M-dd ZZZZ"
-                let serverTime = dFormatter.dateFromString(responseString!)
+                let id = message["from"] as? String
+                let name = message["name"] as? String
+                let text = message["message"] as? String
+                
+                var serverTime = NSDate()
+                if let dateString = message["created"] as? String {
+                    if let date = self.dateWebRetFormatter.dateFromString(dateString) {
+                        serverTime = date
+                    }
+                }
                 
                 self.messages.append(JSQMessage(senderId: id, senderDisplayName: name, date: serverTime, text: text))
                 
@@ -383,5 +385,9 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
         let okAction = UIAlertAction(title: "OK".localized, style:.Default, handler: nil)
         alertVC.addAction(okAction)
         presentViewController(alertVC, animated: true, completion: nil)
+    }
+    
+    override func scrollViewDidScroll(scrollView: UIScrollView) {
+        
     }
 }
