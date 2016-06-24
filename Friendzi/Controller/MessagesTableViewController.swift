@@ -68,36 +68,15 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
                         
                     }
                     
-                    SocketIOManager.sharedInstance.socket.emitWithAck("getEventMessages", ["eventChat_id":self.chatHead, "last_message_id":""])(timeoutAfter: 0) {data in
-                        print("getEventMessages\(data)")
-                        guard let oneMessage = data.first as? [String:AnyObject] else { return }
-                        guard let messages = oneMessage["messages"] as? [[String:AnyObject]] else { return }
-                        
-                        for oneData in messages {
-                            
-                            let senderID = oneData["from"] as? String
-                            let name = oneData["name"] as? String
-                            let message = oneData["message"] as? String
-                            
-                            var serverTime = NSDate()
-                            if let dateString = oneData["created"] as? String {
-                                if let date = self.dateWebRetFormatter.dateFromString(dateString) {
-                                    serverTime = date
-                                }
-                            }
-                            
-                            self.messages.append(JSQMessage(senderId: senderID, senderDisplayName: name, date: serverTime, text: message))
-                        }
-                        
-                        self.collectionView.reloadData()
-                        
-                    }
+                    self.getEventMessages(self.chatHead, lastMessageID: "")
                 }
             }
         }
         
         SocketIOManager.sharedInstance.socket.on("newMessage") {data, ack in
             print("newMessage\(data)")
+            
+            
             
         }
 
@@ -110,7 +89,7 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
             title = group?.name
         }
         
-        if event != nil {
+        /*if event != nil {
             ParseHelper.fetchObject(event!, completion: {
             result, error in
             
@@ -141,7 +120,7 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
                     }
                 })
             })
-        }
+        }*/
         
         self.senderId = ParseHelper.sharedInstance.currentUser!.objectId;
         self.senderDisplayName = ParseHelper.sharedInstance.currentUser?.name
@@ -387,7 +366,41 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
         presentViewController(alertVC, animated: true, completion: nil)
     }
     
-    override func scrollViewDidScroll(scrollView: UIScrollView) {
-        
+    func getEventMessages(eventChatID: AnyObject, lastMessageID: AnyObject) {
+        SocketIOManager.sharedInstance.socket.emitWithAck("getEventMessages", ["eventChat_id":eventChatID, "last_message_id":lastMessageID])(timeoutAfter: 0) {data in
+            print("getEventMessages\(data)")
+            
+            guard let oneMessage = data.first as? [String:AnyObject] else { return }
+            guard let messages = oneMessage["messages"] as? [[String:AnyObject]] else { return }
+            
+            for oneData in messages.reverse() {
+                
+                let senderID = oneData["from"] as? String
+                let name = oneData["name"] as? String
+                let message = oneData["message"] as? String
+                
+                var serverTime = NSDate()
+                if let dateString = oneData["created"] as? String {
+                    if let date = self.dateWebRetFormatter.dateFromString(dateString) {
+                        serverTime = date
+                    }
+                }
+                
+                self.messages.append(JSQMessage(senderId: senderID, senderDisplayName: name, date: serverTime, text: message))
+            }
+            
+            self.forceReload()
+            
+            if let hasNext = oneMessage["hasNext"]?.integerValue where hasNext > 0 {
+                if let message = messages.last, let lastMesID = message["id"] {
+                    self.getEventMessages(eventChatID, lastMessageID: lastMesID)
+                }
+            }
+        }
+    }
+    
+    func forceReload() {
+        self.collectionView.reloadData()
+        self.finishReceivingMessage()
     }
 }
