@@ -19,7 +19,7 @@ class SocketIOManager: NSObject {
         let id = ParseHelper.sharedInstance.currentUser?.id ?? ""
         let token = NSUserDefaults.standardUserDefaults().objectForKey("token") as? String ?? ""
 
-        let socket = SocketIOClient(socketURL: NSURL(string: "http://40.69.32.246:3000")!, options: [.Log(true), .ForcePolling(true), .ConnectParams(["id":id, "tag":token])])
+        let socket = SocketIOClient(socketURL: NSURL(string: "http://40.69.32.246:3000")!, options: [.Log(false), .ForcePolling(true), .ConnectParams(["id":id, "tag":token])])
         
         return socket
     }()

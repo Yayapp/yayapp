@@ -300,12 +300,6 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
         detailsUnderline?.hidden = true
         messagesContainer?.hidden = false
         eventActionButton?.hidden = true
-
-        for messageChildContainer in childViewControllers {
-            if let messageChildContainer = messageChildContainer as? MessagesTableViewController {
-                messageChildContainer.forceReload()
-            }
-        }
         
         switherPlaceholderTopSpace?.constant = 0
         UIView.animateWithDuration(0.1) {

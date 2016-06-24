@@ -76,8 +76,21 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
         SocketIOManager.sharedInstance.socket.on("newMessage") {data, ack in
             print("newMessage\(data)")
             
+            guard let newMessage = data.first as? [String:AnyObject] else { return }
             
+            let senderID = newMessage["from"] as? String
+            let name = newMessage["name"] as? String
+            let message = newMessage["message"] as? String
             
+            var serverTime = NSDate()
+            if let dateString = newMessage["created"] as? String {
+                if let date = self.dateWebRetFormatter.dateFromString(dateString) {
+                    serverTime = date
+                }
+            }
+            
+            self.messages.append(JSQMessage(senderId: senderID, senderDisplayName: name, date: serverTime, text: message))
+            self.forceReload()
         }
 
         if event != nil {
@@ -373,7 +386,7 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
             guard let oneMessage = data.first as? [String:AnyObject] else { return }
             guard let messages = oneMessage["messages"] as? [[String:AnyObject]] else { return }
             
-            for oneData in messages.reverse() {
+            for oneData in messages {
                 
                 let senderID = oneData["from"] as? String
                 let name = oneData["name"] as? String
@@ -386,7 +399,8 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
                     }
                 }
                 
-                self.messages.append(JSQMessage(senderId: senderID, senderDisplayName: name, date: serverTime, text: message))
+                let messageObj = JSQMessage(senderId: senderID, senderDisplayName: name, date: serverTime, text: message)
+                self.messages.insert(messageObj, atIndex: 0)
             }
             
             self.forceReload()
@@ -400,7 +414,6 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
     }
     
     func forceReload() {
-        self.collectionView.reloadData()
-        self.finishReceivingMessage()
+        self.finishReceivingMessageAnimated(true)
     }
 }
