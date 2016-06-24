@@ -22,10 +22,23 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
     var messages:[JSQMessage] = []
     
     var avatars:[String:JSQMessagesAvatarImage] = [:]
-    let dateFormatter = NSDateFormatter()
     
     var chatHead : Int!
     
+    private lazy var dateWebRetFormatter: NSDateFormatter = {
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+
+        return dateFormatter
+    }()
+    
+    private lazy var dateNormalFormatter: NSDateFormatter = {
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "MM/dd/yy h:mm a"
+        
+        return dateFormatter
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -42,10 +55,7 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
         inputToolbar?.contentView?.textView?.layer.cornerRadius = 0
         inputToolbar?.contentView?.backgroundColor = Color.PrimaryBackgroundColor
 
-        if event != nil {
-            
-            let id = (event?.objectId)!
-            let owner = (event?.owner?.objectId)!
+        if let id = event?.objectId, let owner = event?.owner?.objectId {
             
             SocketIOManager.sharedInstance.socket.emitWithAck("registerEvent", ["event_id":id, "user_id":owner])(timeoutAfter: 0) {data in
                 print("chatID\(data)")
@@ -60,20 +70,26 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
                     
                     SocketIOManager.sharedInstance.socket.emitWithAck("getEventMessages", ["eventChat_id":self.chatHead, "last_message_id":""])(timeoutAfter: 0) {data in
                         print("getEventMessages\(data)")
-                        let oneMessage = data.first as? [String:AnyObject]
-                        for oneData in (oneMessage!["messages"] as? [[String:AnyObject]])! {
+                        guard let oneMessage = data.first as? [String:AnyObject] else { return }
+                        guard let messages = oneMessage["messages"] as? [[String:AnyObject]] else { return }
+                        
+                        for oneData in messages {
                             
                             let senderID = oneData["from"] as? String
                             let name = oneData["name"] as? String
                             let message = oneData["message"] as? String
                             
-                            let responseString = oneData["created"] as? String
-                            let dFormatter = NSDateFormatter()
-                            dFormatter.dateFormat = "yyyy-M-dd ZZZZ"
-                            let serverTime = dFormatter.dateFromString(responseString!)
+                            var serverTime = NSDate()
+                            if let dateString = oneData["created"] as? String {
+                                if let date = self.dateWebRetFormatter.dateFromString(dateString) {
+                                    serverTime = date
+                                }
+                            }
                             
                             self.messages.append(JSQMessage(senderId: senderID, senderDisplayName: name, date: serverTime, text: message))
                         }
+                        
+                        self.collectionView.reloadData()
                     }
                 }
             }
@@ -93,8 +109,6 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
             title = group?.name
         }
         
-        dateFormatter.dateFormat = "MM/dd/yy h:mm a"
-
         if event != nil {
             ParseHelper.fetchObject(event!, completion: {
             result, error in
