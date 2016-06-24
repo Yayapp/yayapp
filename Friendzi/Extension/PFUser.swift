@@ -84,6 +84,10 @@ extension PFUser {
             self.setObject(eventNearby, forKey: "eventNearby")
         }
 
+        if let eventNearby = user.id {
+            self.setObject(eventNearby, forKey: "id")
+        }
+        
         if let token = user.token {
             self.setObject(token, forKey: "token")
         }

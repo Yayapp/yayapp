@@ -111,6 +111,12 @@ final class RequestsTableViewController: UITableViewController {
                 ParseHelper.declineRequests(event)
                 self.requests = self.requests.filter({ $0.event?.objectId != request.event?.objectId })
             }
+            
+            SocketIOManager.sharedInstance.socket.emitWithAck("addUserToEvent", ["user_id":attendeeId])(timeoutAfter: 0) {data in
+                print("added\(data)")
+                
+            }
+            
             self.tableView.reloadData()
         })
     }

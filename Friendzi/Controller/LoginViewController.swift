@@ -86,6 +86,7 @@ final class LoginViewController: UIViewController, InstagramDelegate {
         currentUser = ParseHelper.sharedInstance.currentUser {
             currentInstallation.user = currentUser
             ParseHelper.saveObject(currentInstallation, completion: nil)
+            
         }
 
         if ParseHelper.sharedInstance.currentUser?.location == nil {
@@ -209,6 +210,8 @@ final class LoginViewController: UIViewController, InstagramDelegate {
 
                             ParseHelper.sharedInstance.currentUser?.name = result?.objectForKey("name") as? String
                             ParseHelper.sharedInstance.currentUser?.about = result?.objectForKey("description") as? String
+                            ParseHelper.sharedInstance.currentUser?.id = result?.objectForKey("id") as? String
+                            
                         } catch {
                             MessageToUser.showDefaultErrorMessage("Something went wrong".localized)
                         }
@@ -383,7 +386,8 @@ private extension LoginViewController {
     func setupUserForFacebook(result: AnyObject, user: PFUser) {
         ParseHelper.sharedInstance.currentUser?.name = result.objectForKey("name") as? String
         ParseHelper.sharedInstance.currentUser?.gender = (result.objectForKey("gender") as? String)?.lowercaseString == "male" ? 1 : 0
-
+        ParseHelper.sharedInstance.currentUser?.id = result.objectForKey("id") as? String
+        
         let fbUserId = result.objectForKey("id") as? String
         let url: NSURL = NSURL(string:"https://graph.facebook.com/\(fbUserId)/picture?width=200&height=200")!
         let URLRequestNeeded = NSURLRequest(URL: url)

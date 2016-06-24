@@ -20,6 +20,10 @@
 		045E2EC71CF604A8000CA08E /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 045E2EB81CF604A8000CA08E /* README.md */; };
 		045E2EC81CF604A8000CA08E /* global.json in Resources */ = {isa = PBXBuildFile; fileRef = 045E2EBA1CF604A8000CA08E /* global.json */; };
 		045E2EC91CF604A8000CA08E /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 045E2EBC1CF604A8000CA08E /* index.html */; };
+		293E093C1D1D267200AA95BC /* WindowsAzureMessaging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 293E093A1D1D267200AA95BC /* WindowsAzureMessaging.framework */; };
+		293E093D1D1D267200AA95BC /* WindowsAzureMobileServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 293E093B1D1D267200AA95BC /* WindowsAzureMobileServices.framework */; };
+		293E09421D1D286300AA95BC /* AppApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293E09411D1D286300AA95BC /* AppApi.swift */; };
+		293E09441D1D298F00AA95BC /* SocketIOManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293E09431D1D298F00AA95BC /* SocketIOManager.swift */; };
 		659AB9F91CEEF2A20005C867 /* Popover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659AB96D1CEEF2A20005C867 /* Popover.swift */; };
 		659AB9FA1CEEF2A20005C867 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 659AB96F1CEEF2A20005C867 /* Images.xcassets */; };
 		659AB9FB1CEEF2A20005C867 /* AdvancedSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659AB9711CEEF2A20005C867 /* AdvancedSettingsTableViewController.swift */; };
@@ -148,6 +152,11 @@
 		045E2EBA1CF604A8000CA08E /* global.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = global.json; sourceTree = "<group>"; };
 		045E2EBC1CF604A8000CA08E /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		116D70F35B19AD9546398474 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		293E093A1D1D267200AA95BC /* WindowsAzureMessaging.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WindowsAzureMessaging.framework; sourceTree = "<group>"; };
+		293E093B1D1D267200AA95BC /* WindowsAzureMobileServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WindowsAzureMobileServices.framework; sourceTree = "<group>"; };
+		293E09401D1D278200AA95BC /* HubInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HubInfo.h; sourceTree = "<group>"; };
+		293E09411D1D286300AA95BC /* AppApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppApi.swift; sourceTree = "<group>"; };
+		293E09431D1D298F00AA95BC /* SocketIOManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocketIOManager.swift; sourceTree = "<group>"; };
 		38EB022BBD4758162C513EC9 /* Pods-Friendzi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Friendzi.release.xcconfig"; path = "Pods/Target Support Files/Pods-Friendzi/Pods-Friendzi.release.xcconfig"; sourceTree = "<group>"; };
 		659AB96D1CEEF2A20005C867 /* Popover.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Popover.swift; sourceTree = "<group>"; };
 		659AB96F1CEEF2A20005C867 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -272,7 +281,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				293E093D1D1D267200AA95BC /* WindowsAzureMobileServices.framework in Frameworks */,
 				A9D5ED4E10A5A980B3069206 /* Pods_Friendzi.framework in Frameworks */,
+				293E093C1D1D267200AA95BC /* WindowsAzureMessaging.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -572,6 +583,9 @@
 				659AB9E41CEEF2A20005C867 /* Friendzi.entitlements */,
 				659AB9E51CEEF2A20005C867 /* Info.plist */,
 				659AB9E61CEEF2A20005C867 /* Yay-Bridging-Header.h */,
+				293E09401D1D278200AA95BC /* HubInfo.h */,
+				293E09411D1D286300AA95BC /* AppApi.swift */,
+				293E09431D1D298F00AA95BC /* SocketIOManager.swift */,
 			);
 			path = Supporting;
 			sourceTree = "<group>";
@@ -668,6 +682,8 @@
 		FDEA8E2942B6E4C28740DB53 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				293E093A1D1D267200AA95BC /* WindowsAzureMessaging.framework */,
+				293E093B1D1D267200AA95BC /* WindowsAzureMobileServices.framework */,
 				D33B526A9797C72C6C68C37C /* Pods_Friendzi.framework */,
 			);
 			name = Frameworks;
@@ -687,6 +703,7 @@
 				341618644D4D29C684606F4E /* [CP] Copy Pods Resources */,
 				9E0C230682806AD0985DA5B1 /* [CP] Embed Pods Frameworks */,
 				3154CE0A1CCF5FD100C34A11 /* ShellScript */,
+				A7D9F9530865100A732FA13E /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -710,9 +727,12 @@
 				TargetAttributes = {
 					9950326A1B564B4400D792C5 = {
 						CreatedOnToolsVersion = 6.4;
-						DevelopmentTeam = PB4MX2E22N;
+						DevelopmentTeam = 3G8XAHXNH6;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Push = {
 								enabled = 1;
 							};
 							com.apple.SafariKeychain = {
@@ -838,6 +858,21 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Friendzi/Pods-Friendzi-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		A7D9F9530865100A732FA13E /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Friendzi/Pods-Friendzi-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -856,6 +891,7 @@
 				659ABA0D1CEEF2A20005C867 /* ImageViewController.swift in Sources */,
 				659ABA4A1CEEF2A20005C867 /* Message.swift in Sources */,
 				659ABA2F1CEEF2A20005C867 /* PFACL.swift in Sources */,
+				293E09421D1D286300AA95BC /* AppApi.swift in Sources */,
 				659ABA0E1CEEF2A20005C867 /* InstagramViewController.swift in Sources */,
 				659ABA041CEEF2A20005C867 /* CreateEmailAccountViewController.swift in Sources */,
 				659ABA361CEEF2A20005C867 /* UIImage.swift in Sources */,
@@ -920,6 +956,7 @@
 				659ABA121CEEF2A20005C867 /* MainRootViewController.swift in Sources */,
 				659ABA371CEEF2A20005C867 /* UIStoryboard.swift in Sources */,
 				659ABA351CEEF2A20005C867 /* UIColor.swift in Sources */,
+				293E09441D1D298F00AA95BC /* SocketIOManager.swift in Sources */,
 				659ABA421CEEF2A20005C867 /* Block.swift in Sources */,
 				659ABA4E1CEEF2A20005C867 /* Report.swift in Sources */,
 				659ABA261CEEF2A20005C867 /* TutorialViewController.swift in Sources */,
@@ -1038,8 +1075,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Paul Dinulescu (TN7KAKYNS7)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Paul Dinulescu (TN7KAKYNS7)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1063,7 +1100,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = Friendzi;
-				PROVISIONING_PROFILE = "e622fc02-86e5-48bd-880a-2cfd311f7326";
+				PROVISIONING_PROFILE = "85220c6a-310e-4d7b-90f0-0a7acda7aaac";
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "Yay-Bridging-Header";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1088,8 +1125,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Paul Dinulescu (3G8XAHXNH6)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Paul Dinulescu (3G8XAHXNH6)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -1105,7 +1142,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = Friendzi;
-				PROVISIONING_PROFILE = "e622fc02-86e5-48bd-880a-2cfd311f7326";
+				PROVISIONING_PROFILE = "f78c3530-4cfd-4b6b-831d-754cc2cad146";
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "Yay-Bridging-Header";
 				VALIDATE_PRODUCT = YES;
@@ -1127,6 +1164,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(PODS_ROOT)/GoogleAppIndexing/Frameworks\"",
+					"$(PROJECT_DIR)",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1161,7 +1199,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.krazylabs.friendzi;
 				PRODUCT_NAME = Friendzi;
-				PROVISIONING_PROFILE = "e622fc02-86e5-48bd-880a-2cfd311f7326";
+				PROVISIONING_PROFILE = "85220c6a-310e-4d7b-90f0-0a7acda7aaac";
 				SWIFT_OBJC_BRIDGING_HEADER = "Friendzi/Supporting/Yay-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -1176,12 +1214,13 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Friendzi/Supporting/Friendzi.entitlements;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Paul Dinulescu (3G8XAHXNH6)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Paul Dinulescu (3G8XAHXNH6)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(PODS_ROOT)/GoogleAppIndexing/Frameworks\"",
+					"$(PROJECT_DIR)",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1216,7 +1255,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.krazylabs.friendzi;
 				PRODUCT_NAME = Friendzi;
-				PROVISIONING_PROFILE = "e622fc02-86e5-48bd-880a-2cfd311f7326";
+				PROVISIONING_PROFILE = "f78c3530-4cfd-4b6b-831d-754cc2cad146";
 				SWIFT_OBJC_BRIDGING_HEADER = "Friendzi/Supporting/Yay-Bridging-Header.h";
 			};
 			name = Release;

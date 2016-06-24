@@ -28,3 +28,6 @@
 #import <Branch/BranchUniversalObject.h>
 #import <Branch/BranchLinkProperties.h>
 #import <WYPopoverController/WYPopoverController.h>
+
+#import <WindowsAzureMessaging/WindowsAzureMessaging.h>
+#import "HubInfo.h"

@@ -33,12 +33,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         SVProgressHUD.setDefaultMaskType(.Gradient)
 
         // Checking if app is running iOS 8
-        if (application.respondsToSelector(#selector(UIApplication.registerForRemoteNotifications))) {
-            // Register device for iOS8
-            let notificationSettings:UIUserNotificationSettings = UIUserNotificationSettings(forTypes: [UIUserNotificationType.Alert, UIUserNotificationType.Badge, UIUserNotificationType.Sound], categories:nil)
-            application.registerUserNotificationSettings(notificationSettings)
-            application.registerForRemoteNotifications()
-        }
+//        if (application.respondsToSelector(#selector(UIApplication.registerForRemoteNotifications))) {
+//            // Register device for iOS8
+//            let notificationSettings:UIUserNotificationSettings = UIUserNotificationSettings(forTypes: [UIUserNotificationType.Alert, UIUserNotificationType.Badge, UIUserNotificationType.Sound], categories:nil)
+//            application.registerUserNotificationSettings(notificationSettings)
+//            application.registerForRemoteNotifications()
+//        }
 
         setupParse()
 
@@ -68,6 +68,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 NSNotificationCenter.defaultCenter().postNotificationName(Constants.userInvitedToEventNotification, object: nil, userInfo: params)
             }
         })
+        
+        let settings = UIUserNotificationSettings(forTypes: [.Alert, .Badge, .Sound], categories: nil)
+        UIApplication.sharedApplication().registerUserNotificationSettings(settings)
+        UIApplication.sharedApplication().registerForRemoteNotifications()
+        
+        
+        let notificationSettings = UIUserNotificationSettings(forTypes: [.Alert, .Badge, .Sound], categories: nil)
+        application.registerForRemoteNotifications()
+        application.registerUserNotificationSettings(notificationSettings)
+
         return true
     }
 
@@ -77,6 +87,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         currentInstallation.setDeviceTokenFromData(deviceToken)
         currentInstallation.channels = ["global"]
         currentInstallation.saveInBackground()
+        
+        let hub = SBNotificationHub.init(connectionString: HUBLISTENACCESS, notificationHubPath: HUBNAME)
+        hub.registerNativeWithDeviceToken(deviceToken, tags: Set(["friendzi-iOS"])) { (error) in
+            
+        }
+        
+        var newToken = deviceToken.description
+        newToken = newToken.stringByReplacingOccurrencesOfString("<", withString: "")
+        newToken = newToken.stringByReplacingOccurrencesOfString(">", withString: "")
+        newToken = newToken.stringByReplacingOccurrencesOfString(" ", withString: "")
+        
+        NSUserDefaults.standardUserDefaults().removeObjectForKey("token")
+        NSUserDefaults.standardUserDefaults().setObject(newToken, forKey: "token")
+        NSUserDefaults.standardUserDefaults().synchronize()
     }
 
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
@@ -155,4 +179,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window!.rootViewController = self.mainNavigation
         self.window!.makeKeyAndVisible()
     }
+    
+    func applicationWillTerminate(application: UIApplication) {
+        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        SocketIOManager.sharedInstance.disconnetConnection()
+    }
+
 }

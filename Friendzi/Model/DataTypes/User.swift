@@ -60,6 +60,23 @@ class User: Object {
         }
     }
 
+    var id: String? {
+        get {
+            guard let parseObject = parseObject where parseObject.dataAvailable else {
+                return nil
+            }
+            
+            return parseObject.objectForKey("id") as? String
+        }
+        set {
+            guard let gender = newValue else {
+                return
+            }
+            
+            parseObject?.setObject(gender, forKey: "id")
+        }
+    }
+    
     var newMessage: Bool? {
         get {
             guard let parseObject = parseObject where parseObject.dataAvailable else {

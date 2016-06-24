@@ -28,4 +28,6 @@ target 'Friendzi' do
     pod 'Crashlytics'
     pod 'WYPopoverController', :git => 'https://github.com/sammcewan/WYPopoverController.git'
     pod 'LocationPicker'
+    pod 'AlamofireImage', '~> 2.0'
+    pod 'Socket.IO-Client-Swift', '~> 5.5.0'
 end

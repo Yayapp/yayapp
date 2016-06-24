@@ -26,6 +26,21 @@ final class ListEventsViewController: EventsViewController, UITableViewDataSourc
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let id  = (ParseHelper.sharedInstance.currentUser?.id!)!
+        let token = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
+        
+        AppAPI.sharedAppAPI.deviceTag(["device_token":token, "user_id":id]) { (returnObject, error) in
+            
+            if error != nil {
+                MessageToUser.showDefaultErrorMessage("There was an error while communicating with the online server. Please try again later.")
+            }else {
+                if SocketIOManager.sharedInstance.socket.status != .Connected {
+                    SocketIOManager.sharedInstance.establishConnection()
+                }
+            }
+        }
+
         NSNotificationCenter.defaultCenter().addObserver(self,
                                                          selector: #selector(ListEventsViewController.handleUserLogout),
                                                          name: Constants.userDidLogoutNotification,

@@ -444,6 +444,7 @@ final class EventDetailsViewController: UIViewController, MFMailComposeViewContr
         if(segue.identifier == "chat") {
             let vc = (segue.destinationViewController as! MessagesTableViewController)
             vc.event = event
+            
         }
     }
 

@@ -24,11 +24,13 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
     var avatars:[String:JSQMessagesAvatarImage] = [:]
     let dateFormatter = NSDateFormatter()
     
+    var chatHead : Int!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         picker.delegate = self
-
+        
         self.edgesForExtendedLayout = UIRectEdge.None
         inputToolbar?.contentView?.leftBarButtonItem?.setImage(UIImage(named: "add-photo-vid"), forState: .Normal)
         inputToolbar?.contentView?.leftBarButtonItem?.setImage(UIImage(named: "add-photo-vid"), forState: .Highlighted)
@@ -39,6 +41,48 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
         inputToolbar?.contentView?.textView?.layer.borderColor = Color.DefaultBorderColor.CGColor
         inputToolbar?.contentView?.textView?.layer.cornerRadius = 0
         inputToolbar?.contentView?.backgroundColor = Color.PrimaryBackgroundColor
+
+        if event != nil {
+            
+            let id = (event?.objectId)!
+            let owner = (event?.owner?.objectId)!
+            
+            SocketIOManager.sharedInstance.socket.emitWithAck("registerEvent", ["event_id":id, "user_id":owner])(timeoutAfter: 0) {data in
+                print("chatID\(data)")
+                
+                if let chatID = data.first as? [String: AnyObject] {
+                    self.chatHead = chatID["eventChat"] as? Int
+                    
+                    SocketIOManager.sharedInstance.socket.emitWithAck("joinEvent", ["eventChat":self.chatHead])(timeoutAfter: 0) {data in
+                        print("joinEvent\(data)")
+                        
+                    }
+                    
+                    SocketIOManager.sharedInstance.socket.emitWithAck("getEventMessages", ["eventChat_id":self.chatHead, "last_message_id":""])(timeoutAfter: 0) {data in
+                        print("getEventMessages\(data)")
+                        let oneMessage = data.first as? [String:AnyObject]
+                        for oneData in (oneMessage!["messages"] as? [[String:AnyObject]])! {
+                            
+                            let senderID = oneData["from"] as? String
+                            let name = oneData["name"] as? String
+                            let message = oneData["message"] as? String
+                            
+                            let responseString = oneData["created"] as? String
+                            let dFormatter = NSDateFormatter()
+                            dFormatter.dateFormat = "yyyy-M-dd ZZZZ"
+                            let serverTime = dFormatter.dateFromString(responseString!)
+                            
+                            self.messages.append(JSQMessage(senderId: senderID, senderDisplayName: name, date: serverTime, text: message))
+                        }
+                    }
+                }
+            }
+        }
+        
+        SocketIOManager.sharedInstance.socket.on("newMessage") {data, ack in
+            print("newMessage\(data)")
+            
+        }
 
         if event != nil {
             UIApplication.sharedApplication().applicationIconBadgeNumber -= Prefs.removeMessage(event!.objectId!)
@@ -89,6 +133,12 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
         self.collectionView!.collectionViewLayout.springinessEnabled = false
     }
     
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(true)
+        
+        SocketIOManager.sharedInstance.socket.emit("leaveEvent", ["eventChat":self.chatHead])
+    }
+    
     func processAttendees(attendeeIDs: [String]) {
         for attendeeID in attendeeIDs {
             ParseHelper.fetchUser(attendeeID, completion: { fetchedAttendee, error in
@@ -117,7 +167,7 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
                     let date = message.createdAt,
                     let text = message.text {
 
-                    self.messages.append(JSQMessage(senderId: senderId, senderDisplayName: senderName, date: date, text: text))
+                    //self.messages.append(JSQMessage(senderId: senderId, senderDisplayName: senderName, date: date, text: text))
                 }
 
             } else {
@@ -129,7 +179,7 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
                         self.collectionView!.reloadItemsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)])
                     }
                 })
-                self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, media: media))
+                //self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, media: media))
             }
         }
     }
@@ -141,12 +191,12 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
             result, error in
             if error == nil {
                 if message.photo == nil {
-                    self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, text: message.text))
+                    //self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, text: message.text))
                     self.finishReceivingMessage()
                 } else {
                     ParseHelper.getData(message.photo!, completion: {
                         result, error in
-                        self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, media: JSQPhotoMediaItem(image: UIImage(data: result! ))))
+                        //self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, media: JSQPhotoMediaItem(image: UIImage(data: result! ))))
                         self.finishReceivingMessage()
                     })
                 }
@@ -181,24 +231,49 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
         button.enabled = false
         JSQSystemSoundPlayer.jsq_playMessageSentSound()
         let message: Message = Message()
-        message.user = ParseHelper.sharedInstance.currentUser!
-        if event != nil {
-            message.event = event!
-        } else {
-            message.group = group!
-        }
+//        message.user = ParseHelper.sharedInstance.currentUser!
+//        if event != nil {
+//            message.event = event!
+//        } else {
+//            message.group = group!
+//        }
 
         message.text = text
-        ParseHelper.saveObject(message, completion: { success, error in
-            button.enabled = true
-            if error == nil {
-                self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, text: message.text))
+//        ParseHelper.saveObject(message, completion: { success, error in
+//            button.enabled = true
+//            if error == nil {
+//                self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, text: message.text))
+//                self.finishSendingMessageAnimated(true)
+//            } else {
+//                MessageToUser.showDefaultErrorMessage("Something went wrong.".localized)
+//                self.finishSendingMessageAnimated(true)
+//            }
+//        })
+//        
+        let name = (ParseHelper.sharedInstance.currentUser?.username)!
+        let id = (ParseHelper.sharedInstance.currentUser?.id)!
+        
+        if chatHead != nil {
+            
+            SocketIOManager.sharedInstance.socket.emitWithAck("sendMessageToEvent", ["eventChat_id":self.chatHead, "name":name, "message":text, "image":"", "from":id])(timeoutAfter: 0) {data in
+                print("print this \(self.chatHead)")
+                print("sendEventMessages\(data)")
+                let message = data.first as? [String: AnyObject]
+                let id = message!["from"] as? String
+                let name = message!["name"] as? String
+                let text = message!["message"] as? String
+                
+                let responseString = message!["created"] as? String
+                let dFormatter = NSDateFormatter()
+                dFormatter.dateFormat = "yyyy-M-dd ZZZZ"
+                let serverTime = dFormatter.dateFromString(responseString!)
+                
+                self.messages.append(JSQMessage(senderId: id, senderDisplayName: name, date: serverTime, text: text))
+                
                 self.finishSendingMessageAnimated(true)
-            } else {
-                MessageToUser.showDefaultErrorMessage("Something went wrong.".localized)
-                self.finishSendingMessageAnimated(true)
+                self.finishReceivingMessage()
             }
-        })
+        }
     }
 
     override func collectionView(collectionView:JSQMessagesCollectionView, avatarImageDataForItemAtIndexPath indexPath:NSIndexPath) -> JSQMessageAvatarImageDataSource! {
@@ -273,7 +348,7 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
             SVProgressHUD.dismiss()
             if error == nil {
                 JSQSystemSoundPlayer.jsq_playMessageSentSound()
-                self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, media: JSQPhotoMediaItem(image: pickedImage)))
+                //self.messages.append(JSQMessage(senderId: message.user.objectId, senderDisplayName: message.user.name, date: message.createdAt, media: JSQPhotoMediaItem(image: pickedImage)))
                 self.finishSendingMessageAnimated(true)
             } else {
                 MessageToUser.showDefaultErrorMessage("Something went wrong.".localized)
