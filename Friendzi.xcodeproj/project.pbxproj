@@ -134,6 +134,7 @@
 		659ABA651CEEF2A20005C867 /* RequestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659AB9F61CEEF2A20005C867 /* RequestTableViewCell.swift */; };
 		659ABA661CEEF2A20005C867 /* RequestTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 659AB9F71CEEF2A20005C867 /* RequestTableViewCell.xib */; };
 		659ABA671CEEF2A20005C867 /* TriangleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659AB9F81CEEF2A20005C867 /* TriangleView.swift */; };
+		7662FD551D1E6F60009232C4 /* ImageCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7662FD541D1E6F60009232C4 /* ImageCacheManager.swift */; };
 		A9D5ED4E10A5A980B3069206 /* Pods_Friendzi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D33B526A9797C72C6C68C37C /* Pods_Friendzi.framework */; };
 /* End PBXBuildFile section */
 
@@ -270,6 +271,7 @@
 		659AB9F61CEEF2A20005C867 /* RequestTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestTableViewCell.swift; sourceTree = "<group>"; };
 		659AB9F71CEEF2A20005C867 /* RequestTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RequestTableViewCell.xib; sourceTree = "<group>"; };
 		659AB9F81CEEF2A20005C867 /* TriangleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TriangleView.swift; sourceTree = "<group>"; };
+		7662FD541D1E6F60009232C4 /* ImageCacheManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCacheManager.swift; sourceTree = "<group>"; };
 		87E5039D1AFE3D9446032CF4 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		9950326B1B564B4400D792C5 /* Friendzi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Friendzi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3967130C26F8C950309EAD1 /* Pods-Friendzi.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Friendzi.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Friendzi/Pods-Friendzi.debug.xcconfig"; sourceTree = "<group>"; };
@@ -497,6 +499,7 @@
 			isa = PBXGroup;
 			children = (
 				659AB9B31CEEF2A20005C867 /* Constants.swift */,
+				7662FD541D1E6F60009232C4 /* ImageCacheManager.swift */,
 				659AB9B41CEEF2A20005C867 /* KeyboardAnimationHelper.swift */,
 				659AB9B51CEEF2A20005C867 /* Prefs.swift */,
 				659AB9B61CEEF2A20005C867 /* Rank.swift */,
@@ -914,6 +917,7 @@
 				659ABA471CEEF2A20005C867 /* File.swift in Sources */,
 				659AB9FD1CEEF2A20005C867 /* CategoryHeader.swift in Sources */,
 				659ABA441CEEF2A20005C867 /* ConversationParticipant.swift in Sources */,
+				7662FD551D1E6F60009232C4 /* ImageCacheManager.swift in Sources */,
 				659ABA4C1CEEF2A20005C867 /* Object.swift in Sources */,
 				659ABA311CEEF2A20005C867 /* PFObject.swift in Sources */,
 				659ABA141CEEF2A20005C867 /* MessagesTableViewController.swift in Sources */,
@@ -1100,7 +1104,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = Friendzi;
-				PROVISIONING_PROFILE = "85220c6a-310e-4d7b-90f0-0a7acda7aaac";
+				PROVISIONING_PROFILE = "a9ebef23-aea1-42e4-8f6c-9641baa2b56c";
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "Yay-Bridging-Header";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1199,7 +1203,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.krazylabs.friendzi;
 				PRODUCT_NAME = Friendzi;
-				PROVISIONING_PROFILE = "85220c6a-310e-4d7b-90f0-0a7acda7aaac";
+				PROVISIONING_PROFILE = "a9ebef23-aea1-42e4-8f6c-9641baa2b56c";
 				SWIFT_OBJC_BRIDGING_HEADER = "Friendzi/Supporting/Yay-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};

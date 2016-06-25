@@ -22,9 +22,7 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
     var group: Category?
     var messages:[JSQMessage] = []
     
-    private var attendeesImageURLArray: [String: NSURL!] = [:]
-
-    //var avatars:[String:JSQMessagesAvatarImage] = [:]
+    var avatars:[String:JSQMessagesAvatarImage] = [:]
     
     var chatHead : Int!
     
@@ -150,22 +148,34 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
     }
     
     func processAttendees(attendeeIDs: [String]) {
-        attendeesImageURLArray = [:]
-        
+
         for attendeeID in attendeeIDs {
             ParseHelper.fetchUser(attendeeID, completion: { fetchedAttendee, error in
+                
                 guard let attendee = fetchedAttendee where error == nil else {
-                    //self.avatars[attendeeID] = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(named: "upload_pic"), diameter: 45)
+                    self.avatars[attendeeID] = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(named: "upload_pic"), diameter: 45)
                     
-                    self.attendeesImageURLArray[attendeeID] = nil
-                    if self.attendeesImageURLArray.count == attendeeIDs.count {
+                    if self.avatars.count == attendeeIDs.count {
                         self.forceReload()
                     }
                     return
                 }
                 
-                self.attendeesImageURLArray[attendeeID] = attendee.avatarImageURL
-                
+                if let avatarImageURL = attendee.avatarImageURL {
+                    ImageCacheManager.sharedManager.downloadImage(avatarImageURL, completion: { (response) in
+                        
+                        if let image = response.result.value {
+                            self.avatars[attendee.objectId!] = JSQMessagesAvatarImageFactory.avatarImageWithImage(image, diameter: 45)
+                        }else{
+                            self.avatars[attendee.objectId!] = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(named: "upload_pic"), diameter: 45)
+                        }
+                        
+                        if self.avatars.count == attendeeIDs.count {
+                            self.forceReload()
+                        }
+                    })
+                }
+
                 /*attendee.getImage({
                     result in
                     guard let result = result else {
@@ -175,10 +185,6 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
                     
                     self.avatars[attendee.objectId!] = JSQMessagesAvatarImageFactory.avatarImageWithImage(result, diameter: 45)
                 })*/
-                
-                if self.attendeesImageURLArray.count == attendeeIDs.count {
-                    self.forceReload()
-                }
             })
         }
     }
@@ -302,29 +308,10 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
     }
 
     // MARK: - JSQ Data Source
-    override func collectionView(collectionView: JSQMessagesCollectionView!, shouldLayoutImageViewForItemAtIndexPath indexPath: NSIndexPath!) -> Bool {
-        
-        return true
-    }
-    
-    override func collectionView(collectionView: JSQMessagesCollectionView!, layoutImageView imageView: UIImageView!, imageViewForItemAtIndexPath indexPath: NSIndexPath!) {
-        
-        let message = self.messages[indexPath.item];
-        if let avatarURL = attendeesImageURLArray[message.senderId] {
-            imageView.af_setImageWithURL(avatarURL)
-        }else{
-            imageView.image = UIImage(named: "upload_pic")
-        }
-        
-        imageView.clipsToBounds = true
-        imageView.contentMode = .ScaleAspectFill
-        imageView.layer.cornerRadius = imageView.frame.height / 2
-    }
-    
-    /*override func collectionView(collectionView:JSQMessagesCollectionView, avatarImageDataForItemAtIndexPath indexPath:NSIndexPath) -> JSQMessageAvatarImageDataSource! {
+    override func collectionView(collectionView:JSQMessagesCollectionView, avatarImageDataForItemAtIndexPath indexPath:NSIndexPath) -> JSQMessageAvatarImageDataSource! {
         let message = self.messages[indexPath.item];
         return avatars[message.senderId]
-    }*/
+    }
     
     override func collectionView(collectionView:JSQMessagesCollectionView, messageDataForItemAtIndexPath indexPath:NSIndexPath) -> JSQMessageData {
         return self.messages[indexPath.item];
