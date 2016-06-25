@@ -9,6 +9,7 @@
 import UIKit
 import JSQMessagesViewController
 import SVProgressHUD
+import AlamofireImage
 
 final class MessagesTableViewController: JSQMessagesViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate {
     static let storyboardID = "MessagesTableViewController"
@@ -284,6 +285,25 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
         }
     }
 
+    // MARK: - JSQ Data Source
+    override func collectionView(collectionView: JSQMessagesCollectionView!, shouldLayoutImageViewForItemAtIndexPath indexPath: NSIndexPath!) -> Bool {
+        
+        return true
+    }
+    
+    override func collectionView(collectionView: JSQMessagesCollectionView!, layoutImageView imageView: UIImageView!, imageViewForItemAtIndexPath indexPath: NSIndexPath!) {
+        
+        if let imageURL = NSURL(string: "http://www.chud.com/wp-content/uploads/2013/08/Avatar-Wallpaper-Neytiri7.jpg") {
+            imageView.af_setImageWithURL(imageURL)
+        }else{
+            imageView.image = nil
+        }
+        
+        imageView.clipsToBounds = true
+        imageView.contentMode = .ScaleAspectFill
+        imageView.layer.cornerRadius = imageView.frame.height / 2
+    }
+    
     override func collectionView(collectionView:JSQMessagesCollectionView, avatarImageDataForItemAtIndexPath indexPath:NSIndexPath) -> JSQMessageAvatarImageDataSource! {
         let message = self.messages[indexPath.item];
         return avatars[message.senderId]
