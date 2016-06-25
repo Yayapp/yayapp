@@ -162,18 +162,35 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
                 }
                 
                 if let avatarImageURL = attendee.avatarImageURL {
-                    ImageCacheManager.sharedManager.downloadImage(avatarImageURL, completion: { (response) in
+                    if let cachedImage = ImageCacheManager.sharedManager.checkForImageContentInCacheStorage(avatarImageURL) {
                         
-                        if let image = response.result.value {
-                            self.avatars[attendee.objectId!] = JSQMessagesAvatarImageFactory.avatarImageWithImage(image, diameter: 45)
-                        }else{
-                            self.avatars[attendee.objectId!] = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(named: "upload_pic"), diameter: 45)
-                        }
-                        
+                        self.avatars[attendee.objectId!] = JSQMessagesAvatarImageFactory.avatarImageWithImage(cachedImage, diameter: 45)
+
                         if self.avatars.count == attendeeIDs.count {
                             self.forceReload()
                         }
-                    })
+                        
+                        // Update cache
+                        ImageCacheManager.sharedManager.downloadImage(avatarImageURL, completion: { (response) in
+                            
+                            if let image = response.result.value {
+                                self.avatars[attendee.objectId!] = JSQMessagesAvatarImageFactory.avatarImageWithImage(image, diameter: 45)
+                            }
+                        })
+                    }else{
+                        ImageCacheManager.sharedManager.downloadImage(avatarImageURL, completion: { (response) in
+                            
+                            if let image = response.result.value {
+                                self.avatars[attendee.objectId!] = JSQMessagesAvatarImageFactory.avatarImageWithImage(image, diameter: 45)
+                            }else{
+                                self.avatars[attendee.objectId!] = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(named: "upload_pic"), diameter: 45)
+                            }
+                            
+                            if self.avatars.count == attendeeIDs.count {
+                                self.forceReload()
+                            }
+                        })
+                    }
                 }
 
                 /*attendee.getImage({
