@@ -22,6 +22,8 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
     var group: Category?
     var messages:[JSQMessage] = []
     
+    private var attendeesImageURLArray: [String: NSURL!] = [:]
+
     var avatars:[String:JSQMessagesAvatarImage] = [:]
     
     var chatHead : Int!
@@ -103,38 +105,38 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
             title = group?.name
         }
         
-        /*if event != nil {
+        if event != nil {
             ParseHelper.fetchObject(event!, completion: {
-            result, error in
-            
-            self.processAttendees(self.event!.attendeeIDs)
-            
-            ParseHelper.getMessages(self.event!, block: {
                 result, error in
-                if error == nil {
-                    self.processMessages(result!)
-                    self.finishReceivingMessage()
-                } else {
-                    MessageToUser.showDefaultErrorMessage("Something went wrong.")
-                }
-            })
-        })
-
-        } else {
-            ParseHelper.fetchObject(group!, completion: { result, error in
                 
-                self.processAttendees(self.group!.attendeeIDs)
+                self.processAttendees(self.event!.attendeeIDs)
                 
-                ParseHelper.getMessages(self.group!, block: { result, error in
+               /* ParseHelper.getMessages(self.event!, block: {
+                    result, error in
                     if error == nil {
                         self.processMessages(result!)
                         self.finishReceivingMessage()
                     } else {
                         MessageToUser.showDefaultErrorMessage("Something went wrong.")
                     }
-                })
+                })*/
             })
-        }*/
+            
+        } else {
+            ParseHelper.fetchObject(group!, completion: { result, error in
+                
+                self.processAttendees(self.group!.attendeeIDs)
+                
+                /*ParseHelper.getMessages(self.group!, block: { result, error in
+                    if error == nil {
+                        self.processMessages(result!)
+                        self.finishReceivingMessage()
+                    } else {
+                        MessageToUser.showDefaultErrorMessage("Something went wrong.")
+                    }
+                })*/
+            })
+        }
         
         self.senderId = ParseHelper.sharedInstance.currentUser!.objectId;
         self.senderDisplayName = ParseHelper.sharedInstance.currentUser?.name
@@ -148,21 +150,35 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
     }
     
     func processAttendees(attendeeIDs: [String]) {
+        attendeesImageURLArray = [:]
+        
         for attendeeID in attendeeIDs {
             ParseHelper.fetchUser(attendeeID, completion: { fetchedAttendee, error in
                 guard let attendee = fetchedAttendee where error == nil else {
-                    self.avatars[attendeeID] = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(named: "upload_pic"), diameter: 45)
+                    //self.avatars[attendeeID] = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(named: "upload_pic"), diameter: 45)
+                    
+                    self.attendeesImageURLArray[attendeeID] = nil
+                    if self.attendeesImageURLArray.count == attendeeIDs.count {
+                        self.forceReload()
+                    }
                     return
                 }
-                    attendee.getImage({
-                        result in
-                        guard let result = result else {
-                            self.avatars[attendee.objectId!] = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(named: "upload_pic"), diameter: 45)
-                            return
-                        }
-                        
-                        self.avatars[attendee.objectId!] = JSQMessagesAvatarImageFactory.avatarImageWithImage(result, diameter: 45)
-                    })
+                
+                self.attendeesImageURLArray[attendeeID] = attendee.avatarImageURL
+                
+                /*attendee.getImage({
+                    result in
+                    guard let result = result else {
+                        self.avatars[attendee.objectId!] = JSQMessagesAvatarImageFactory.avatarImageWithImage(UIImage(named: "upload_pic"), diameter: 45)
+                        return
+                    }
+                    
+                    self.avatars[attendee.objectId!] = JSQMessagesAvatarImageFactory.avatarImageWithImage(result, diameter: 45)
+                })*/
+                
+                if self.attendeesImageURLArray.count == attendeeIDs.count {
+                    self.forceReload()
+                }
             })
         }
     }
@@ -293,10 +309,11 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
     
     override func collectionView(collectionView: JSQMessagesCollectionView!, layoutImageView imageView: UIImageView!, imageViewForItemAtIndexPath indexPath: NSIndexPath!) {
         
-        if let imageURL = NSURL(string: "http://www.chud.com/wp-content/uploads/2013/08/Avatar-Wallpaper-Neytiri7.jpg") {
-            imageView.af_setImageWithURL(imageURL)
+        let message = self.messages[indexPath.item];
+        if let avatarURL = attendeesImageURLArray[message.senderId] {
+            imageView.af_setImageWithURL(avatarURL)
         }else{
-            imageView.image = nil
+            imageView.image = UIImage(named: "upload_pic")
         }
         
         imageView.clipsToBounds = true
