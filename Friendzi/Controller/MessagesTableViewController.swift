@@ -24,7 +24,7 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
     
     private var attendeesImageURLArray: [String: NSURL!] = [:]
 
-    var avatars:[String:JSQMessagesAvatarImage] = [:]
+    //var avatars:[String:JSQMessagesAvatarImage] = [:]
     
     var chatHead : Int!
     
@@ -321,10 +321,10 @@ final class MessagesTableViewController: JSQMessagesViewController, UIImagePicke
         imageView.layer.cornerRadius = imageView.frame.height / 2
     }
     
-    override func collectionView(collectionView:JSQMessagesCollectionView, avatarImageDataForItemAtIndexPath indexPath:NSIndexPath) -> JSQMessageAvatarImageDataSource! {
+    /*override func collectionView(collectionView:JSQMessagesCollectionView, avatarImageDataForItemAtIndexPath indexPath:NSIndexPath) -> JSQMessageAvatarImageDataSource! {
         let message = self.messages[indexPath.item];
         return avatars[message.senderId]
-    }
+    }*/
     
     override func collectionView(collectionView:JSQMessagesCollectionView, messageDataForItemAtIndexPath indexPath:NSIndexPath) -> JSQMessageData {
         return self.messages[indexPath.item];
